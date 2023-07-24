@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    Onboarding -->
+    <string name="onboarding_one_title">Easily raise funds for your business or project</string>
+    <string name="onboarding_one_description">Start a business or project and get your family,
+        friends or well-wishers to financially support from anywhere in the world.
+    </string>
+    <string name="onboarding_two_title">Get guided execution. Create a budget and action steps
+    </string>
+    <string name="onboarding_two_description">Follow the guided steps on execution of your business
+        or project to unlock funds and stay accountable to your sponsors.
+    </string>
+    <string name="onboarding_three_title">Support, incubate and mentor with your financial
+        contributions
+    </string>
+    <string name="onboarding_three_description">Ensure your financial contributions are meaningfully
+        used to establish success in the business or project funded.
+    </string>
+    <string name="onboarding_four_title">Discover diligently executed ideas to invest in</string>
+    <string name="onboarding_four_description">Discover investment opportunities in star performing
+        businesses or projects on the platform.
+    </string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create Account</string>
+    <string name="welcome_to_the_closed_circuit">Welcome to The Closed Circuit!</string>
+    <string name="welcome_quote">To run fast, run alone. To run far, run together. Together we can achieve greater things</string>
+    <string name="terms_of_service_quote">By clicking create account, you are agreeing to our terms of services, payment terms, privacy policy and terms of use.</string>
+</resources>

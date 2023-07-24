@@ -1,0 +1,58 @@
+[versions]
+
+kotlin = "1.8.20"
+agp = "8.0.2"
+compose = "1.4.0"
+androidx-appcompat = "1.6.1"
+androidx-activityCompose = "1.7.0"
+compose-uitooling = "1.4.1"
+libres = "1.1.8"
+voyager = "1.0.0-rc05"
+composeImageLoader = "1.4.1"
+napier = "2.6.1"
+buildConfig = "3.1.0"
+kotlinx-coroutines = "1.7.1"
+insetsx = "0.1.0-alpha10"
+ktor = "2.3.0"
+kotlinx-serialization = "1.5.1"
+kotlinx-datetime = "0.4.0"
+koin = "3.2.0"
+kstore = "0.6.0"
+androidx-composeCompiler = "1.4.6"
+atomicfu = "0.17.3"
+mokoResources = "0.23.0"
+
+[libraries]
+
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
+libres = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
+napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+insetsx = { module = "com.moriatsushi.insetsx:insetsx", version.ref = "insetsx" }
+ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
+moko-resources = { module = "dev.icerock.moko:resources", version.ref = "mokoResources" }
+moko-resources-compose = { module = "dev.icerock.moko:resources-compose", version.ref = "mokoResources" }
+
+[plugins]
+
+multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version = "8.0.0" }
+libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+mokoResources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "mokoResources" }
+atomicfu = {id = "org.jetbrains.kotlinx.atomicfu-gradle-plugin", version.ref = "atomicfu"}
