@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.mokoResources)
+    alias(libs.plugins.ktorfit)
+    alias(libs.plugins.ksp)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -28,11 +30,8 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-
-//        extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
-//        extraSpecAttributes["exclude_files"] = "['src/commonMain/resources/MR/**']"
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -43,23 +42,32 @@ kotlin {
                 implementation(compose.material3)
 //                implementation(libs.composeImageLoader)
 
-                // logger
-//                implementation(libs.libres)
-
                 // navigation
                 implementation(libs.voyager.navigator)
+                implementation(libs.voyager.koin)
 
+                // res
                 api(libs.moko.resources)
                 api(libs.moko.resources.compose)
 
-//                implementation(libs.napier)
-//                implementation(libs.kotlinx.coroutines.core)
+                // network
+                implementation(libs.ktorfit)
+                implementation(libs.ktor.serialization)
+                implementation(libs.ktor.json)
+                implementation(libs.ktor.content.negotiation)
+                implementation(libs.ktor.client.logging)
+
+                api(libs.napier)
+
+
+                implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.insetsx)
 //                implementation(libs.ktor.core)
-//                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.serialization.json)
 //                implementation(libs.kotlinx.datetime)
-//                implementation(libs.koin.core)
-//                implementation(libs.kstore)
+                implementation(libs.koin.core)
+                implementation(libs.kstore)
+                implementation(libs.kstore.file)
             }
         }
 
@@ -74,6 +82,9 @@ kotlin {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.activityCompose)
                 implementation(libs.compose.uitooling)
+                implementation(libs.napier)
+                implementation(libs.koin.compose)
+                implementation(libs.kstore.file)
 //                implementation(libs.kotlinx.coroutines.android)
 //                implementation(libs.ktor.client.okhttp)
             }
@@ -102,4 +113,17 @@ android {
 multiplatformResources {
     multiplatformResourcesPackage = "com.closedcircuit.closedcircuitapplication.resources"
     multiplatformResourcesClassName = "SharedRes"
+}
+
+dependencies {
+    listOf(
+        "kspCommonMainMetadata",
+        "kspAndroid",
+        "kspIosX64",
+        "kspIosArm64",
+//        "kspIosSimulatorArm64"
+    ).forEach {
+        add(it, libs.kotlinInject.compiler)
+        add(it, libs.ktorfit.ksp)
+    }
 }

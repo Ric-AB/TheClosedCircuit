@@ -39,6 +39,10 @@ android {
 }
 
 dependencies {
+    // Koin dependencies
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+
     implementation(project(":shared"))
     implementation("androidx.compose.ui:ui:1.4.3")
     implementation("androidx.compose.ui:ui-tooling:1.4.3")

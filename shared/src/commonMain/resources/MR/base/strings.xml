@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    Onboarding -->
+    <!--    Onboarding -->
     <string name="onboarding_one_title">Easily raise funds for your business or project</string>
     <string name="onboarding_one_description">Start a business or project and get your family,
         friends or well-wishers to financially support from anywhere in the world.
@@ -26,6 +26,34 @@
     <string name="login">Login</string>
     <string name="create_account">Create Account</string>
     <string name="welcome_to_the_closed_circuit">Welcome to The Closed Circuit!</string>
-    <string name="welcome_quote">To run fast, run alone. To run far, run together. Together we can achieve greater things</string>
-    <string name="terms_of_service_quote">By clicking create account, you are agreeing to our terms of services, payment terms, privacy policy and terms of use.</string>
+    <string name="welcome_quote">To run fast, run alone. To run far, run together. Together we can
+        achieve greater things
+    </string>
+    <string name="terms_of_service_quote">By clicking create account, you are agreeing to our terms
+        of services, payment terms, privacy policy and terms of use.
+    </string>
+    <string name="welcome_back">Welcome Back 👋</string>
+    <string name="login_prompt">We are happy to see you, login into your account to continue
+        managing your dreams with us.
+    </string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="login">Login</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="create_account">Create account</string>
+    <string name="email">Email</string>
+    <string name="shared_build_shared_prosperity">Shared Building. Shared Prosperity.</string>
+    <string name="create_a_new_account">Create a New Account</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="nick_name">Nick Name</string>
+    <string name="preferred">Preferred</string>
+    <string name="first_name">First Name</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="password_recovery">Password Recovery</string>
+    <string name="recover_password">Recover Password</string>
+    <string name="remember_password">Remember password?</string>
+    <string name="we_are_here_to_help_you_recover_password">We are here to help you recover your password, please enter your registered email address below.</string>
 </resources>
