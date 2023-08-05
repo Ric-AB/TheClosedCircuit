@@ -1,7 +1,6 @@
 @file:OptIn(
     ExperimentalFoundationApi::class,
     ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class,
     ExperimentalAnimationApi::class
 )
 

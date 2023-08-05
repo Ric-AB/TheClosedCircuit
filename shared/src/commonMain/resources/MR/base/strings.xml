@@ -53,7 +53,21 @@
     <string name="first_name">First Name</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="password_recovery">Password Recovery</string>
-    <string name="recover_password">Recover Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
     <string name="remember_password">Remember password?</string>
-    <string name="we_are_here_to_help_you_recover_password">We are here to help you recover your password, please enter your registered email address below.</string>
+    <string name="we_are_here_to_help_you_recover_password">We are here to help you recover your
+        password, please enter your registered email address below.
+    </string>
+    <string name="youre_almost_close_to_recovering_your_password">You’re almost close to recovering
+        your password. A code has been sent to your email address, please enter code to proceed.
+    </string>
+    <string name="didnt_receive_code">Didn\'t receive code?</string>
+    <string name="resend">Resend</string>
+    <string name="invalid_code">Invalid code</string>
+    <string name="reset_your_password">Reset your password</string>
+    <string name="finally_were_here">Finally we are here!\nCreate new password and let’s continue.
+    </string>
+    <string name="enter_a_new_password">Enter a new password</string>
+
 </resources>

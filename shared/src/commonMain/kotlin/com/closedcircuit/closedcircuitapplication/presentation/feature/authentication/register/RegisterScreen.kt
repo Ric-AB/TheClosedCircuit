@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -41,10 +42,12 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BodyTex
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibility
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibilityOff
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginUIEvent
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.moriatsushi.insetsx.imePadding
 import dev.icerock.moko.resources.compose.stringResource
@@ -158,46 +161,24 @@ private fun ScreenContent(
                     )
 
                     Spacer(modifier = Modifier.height(40.dp))
-                    DefaultOutlinedTextField(
+                    PasswordOutlinedTextField(
                         value = state.password,
                         onValueChange = { onEvent(RegisterUIEvent.PasswordChange(it)) },
                         label = stringResource(SharedRes.strings.password),
-                        trailingIcon = {
-                            IconButton(onClick = { showPassword = !showPassword }) {
-                                Icon(
-                                    imageVector = if (showPassword) rememberVisibilityOff() else rememberVisibility(),
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier.fillMaxWidth()
+                        onPasswordVisibilityChange = { showPassword = it },
+                        showPassword = showPassword,
+                        imeAction = ImeAction.Next,
+                        keyboardActions = KeyboardActions(onNext = {})
                     )
 
-                    DefaultOutlinedTextField(
+                    PasswordOutlinedTextField(
                         value = state.confirmPassword,
                         onValueChange = { onEvent(RegisterUIEvent.ConfirmPasswordChange(it)) },
                         label = stringResource(SharedRes.strings.confirm_password),
-                        trailingIcon = {
-                            IconButton(onClick = { showConfirmPassword = !showConfirmPassword }) {
-                                Icon(
-                                    imageVector = if (showConfirmPassword) rememberVisibilityOff() else rememberVisibility(),
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done
-                        ),
-                        modifier = Modifier.fillMaxWidth()
+                        onPasswordVisibilityChange = { showConfirmPassword = it },
+                        showPassword = showConfirmPassword,
+                        imeAction = ImeAction.Done,
+                        keyboardActions = KeyboardActions(onDone = {})
                     )
 
                     Spacer(modifier = Modifier.height(40.dp))

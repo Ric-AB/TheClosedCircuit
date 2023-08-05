@@ -3,6 +3,7 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.onboardi
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.closedcircuit.closedcircuitapplication.domain.app.AppSettingsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 internal class OnboardingViewModel(
@@ -13,7 +14,7 @@ internal class OnboardingViewModel(
     fun onEvent(onboardingEvent: OnboardingEvent) {
         when (onboardingEvent) {
             OnboardingEvent.OnboardingFinished -> {
-                coroutineScope.launch {
+                coroutineScope.launch(Dispatchers.Main) {
                     appSettingsRepository.updateOnboardingState()
                 }
             }

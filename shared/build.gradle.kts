@@ -98,6 +98,9 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation(libs.ktor.ios)
+            }
         }
     }
 }
@@ -110,20 +113,30 @@ android {
     }
 }
 
-multiplatformResources {
-    multiplatformResourcesPackage = "com.closedcircuit.closedcircuitapplication.resources"
-    multiplatformResourcesClassName = "SharedRes"
-}
-
 dependencies {
     listOf(
         "kspCommonMainMetadata",
         "kspAndroid",
         "kspIosX64",
         "kspIosArm64",
-//        "kspIosSimulatorArm64"
+        "kspIosSimulatorArm64"
     ).forEach {
         add(it, libs.kotlinInject.compiler)
         add(it, libs.ktorfit.ksp)
     }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.closedcircuit.closedcircuitapplication.resources"
+    multiplatformResourcesClassName = "SharedRes"
+}
+
+//tasks.matching { it.name == ":shared:kspKotlinIosSimulatorArm64" }.configureEach {
+//    dependsOn(tasks.getByName(":shared:generateMRiosSimulatorArm64Main"))
+//}
+//tasks.matching { it.name == ":shared:kspKotlinIosSimulatorArm64" }.configureEach {
+//    dependsOn(tasks.getByName(":shared:generateMRcommonMain"))
+//}
+tasks.matching { it.name == "kspKotlinIosSimulatorArm64" }.configureEach {
+    dependsOn(tasks.getByName("generateMRiosSimulatorArm64Main"))
 }

@@ -1,6 +1,5 @@
 package com.closedcircuit.closedcircuitapplication
 
-import com.closedcircuit.closedcircuitapplication.data.datasource.local.appSettingsStore
 import com.closedcircuit.closedcircuitapplication.di.appSettingsStorage
 import com.moriatsushi.insetsx.WindowInsetsUIViewController
 import platform.Foundation.NSHomeDirectory

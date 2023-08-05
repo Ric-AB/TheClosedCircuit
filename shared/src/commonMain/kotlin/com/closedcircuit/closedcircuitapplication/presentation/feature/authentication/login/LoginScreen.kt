@@ -39,6 +39,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibility
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibilityOff
@@ -115,24 +116,13 @@ private fun ScreenContent(
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
-                    DefaultOutlinedTextField(
+                    PasswordOutlinedTextField(
                         value = state.password,
                         onValueChange = { onEvent(LoginUIEvent.PasswordChange(it)) },
                         label = stringResource(SharedRes.strings.password),
-                        trailingIcon = {
-                            IconButton(onClick = { showPassword = !showPassword }) {
-                                Icon(
-                                    imageVector = if (showPassword) rememberVisibilityOff() else rememberVisibility(),
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done
-                        ),
+                        onPasswordVisibilityChange = { showPassword = it },
+                        showPassword = showPassword,
+                        imeAction = ImeAction.Done
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
