@@ -1,6 +1,5 @@
 package com.closedcircuit.closedcircuitapplication.data.app
 
-import com.closedcircuit.closedcircuitapplication.data.datasource.local.appSettingsStore
 import com.closedcircuit.closedcircuitapplication.domain.app.AppSettings
 import com.closedcircuit.closedcircuitapplication.domain.app.AppSettingsRepository
 import io.github.xxfast.kstore.KStore
@@ -9,7 +8,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 
 class AppSettingsRepositoryImpl(
-    appSettingsStore: KStore<AppSettings>
+    private val appSettingsStore: KStore<AppSettings>
 ) : AppSettingsRepository {
 
     private val appSettings = appSettingsStore.updates

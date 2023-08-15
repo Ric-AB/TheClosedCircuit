@@ -8,6 +8,6 @@ import org.koin.dsl.module
 val viewModelModule = module {
     // onboarding
     factory { OnboardingViewModel(appSettingsRepository = get()) }
-    factory { LoginViewModel(userRepository = get()) }
+    factory { LoginViewModel(get()) }
     factory { RegisterViewModel() }
 }

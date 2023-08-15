@@ -4,10 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
+import com.closedcircuit.closedcircuitapplication.domain.usecase.LoginUseCase
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
+import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val userRepository: UserRepository
+    private val loginUseCase: LoginUseCase
 ) : ScreenModel {
 
     var state by mutableStateOf(LoginUIState())
@@ -22,7 +25,11 @@ class LoginViewModel(
     }
 
     private fun attemptLogin() {
-
+        coroutineScope.launch {
+            state = state.copy(loading = true)
+            loginUseCase(state.email, state.password)
+            state = state.copy(loading = false)
+        }
     }
 
     private fun updateEmail(email: String) {

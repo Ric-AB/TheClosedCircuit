@@ -59,7 +59,6 @@ kotlin {
 
                 api(libs.napier)
 
-
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.insetsx)
 //                implementation(libs.ktor.core)

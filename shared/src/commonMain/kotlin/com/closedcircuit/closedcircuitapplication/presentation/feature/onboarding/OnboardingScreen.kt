@@ -96,7 +96,7 @@ private fun ScreenContent(
         OnboardingPage.Fourth,
     )
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { onboardingPages.size }
     val scope = rememberCoroutineScope()
     Scaffold { innerPadding ->
         Column(
@@ -106,7 +106,6 @@ private fun ScreenContent(
         ) {
             HorizontalPager(
                 state = pagerState,
-                pageCount = onboardingPages.size,
                 modifier = Modifier.weight(10F)
             ) { page ->
                 PagerScreen(onboardingPages[page])

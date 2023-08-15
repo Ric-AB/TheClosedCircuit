@@ -1,17 +1,11 @@
 package com.closedcircuit.closedcircuitapplication.data.user
 
-import de.jensklingenberg.ktorfit.http.Body
-import de.jensklingenberg.ktorfit.http.Headers
-import de.jensklingenberg.ktorfit.http.POST
-import kotlinx.serialization.Serializable
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Path
 
 interface KtorfitUserService {
-    @Headers("Content-Type: application/json")
-    @POST("https://theclosedcircuit-staging.herokuapp.com/api/user/login/")
-    suspend fun loginWithEmailAndPassword(@Body loginRequest: LoginRequest): String
+    @GET("user/manage-user/{id}/")
+    suspend fun getUserDetails(
+        @Path("id") userId: String
+    ): String
 }
-@Serializable
-data class LoginRequest(
-    val email: String,
-    val password: String
-)

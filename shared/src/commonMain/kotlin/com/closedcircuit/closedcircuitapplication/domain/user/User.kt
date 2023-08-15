@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.domain.user
 
-import com.closedcircuit.closedcircuitapplication.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.domain.value.ID
 
 data class User(
     val id: ID

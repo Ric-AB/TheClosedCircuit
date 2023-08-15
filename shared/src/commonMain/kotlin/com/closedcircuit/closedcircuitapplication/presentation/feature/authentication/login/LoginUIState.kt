@@ -2,5 +2,6 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.authenti
 
 data class LoginUIState(
     val email: String = "",
-    val password: String = ""
+    val password: String = "",
+    val loading: Boolean = false
 )
