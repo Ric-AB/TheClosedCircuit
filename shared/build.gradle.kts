@@ -106,7 +106,7 @@ kotlin {
 
 android {
     namespace = "com.closedcircuit.closedcircuitapplication"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         minSdk = 26
     }

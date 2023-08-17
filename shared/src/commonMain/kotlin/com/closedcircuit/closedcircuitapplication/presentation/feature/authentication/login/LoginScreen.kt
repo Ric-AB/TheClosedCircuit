@@ -2,6 +2,7 @@
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login
 
+//import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -9,10 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-//import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,14 +34,15 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.presentation.component.ContentWithMessageBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.LoadingDialog
 import com.closedcircuit.closedcircuitapplication.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
+import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery.RecoverPasswordEmailScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
@@ -62,10 +61,11 @@ object LoginScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val state = viewModel.state
+        val messageBarState = rememberMessageBarState()
 
         LaunchedEffect(state.loginResult) {
             when (state.loginResult) {
-                is LoginResult.Failure -> {}
+                is LoginResult.Failure -> messageBarState.addError(Exception(state.loginResult.message))
                 LoginResult.Success -> {
                     delay(300) //wait for loader to hide
                     navigator.replaceAll(DashboardScreen)
@@ -75,13 +75,15 @@ object LoginScreen : Screen, KoinComponent {
             }
         }
 
-        ScreenContent(
-            state = state,
-            onEvent = viewModel::onEvent,
-            navigateToWelcomeScreen = { navigator.replaceAll(WelcomeScreen) },
-            navigateToCreateAccount = { navigator.push(RegisterScreen) },
-            navigateToRecoverPassword = { navigator.push(RecoverPasswordEmailScreen) }
-        )
+        ContentWithMessageBar(messageBarState = messageBarState) {
+            ScreenContent(
+                state = state,
+                onEvent = viewModel::onEvent,
+                navigateToWelcomeScreen = { navigator.replaceAll(WelcomeScreen) },
+                navigateToCreateAccount = { navigator.push(RegisterScreen) },
+                navigateToRecoverPassword = { navigator.push(RecoverPasswordEmailScreen) }
+            )
+        }
     }
 }
 

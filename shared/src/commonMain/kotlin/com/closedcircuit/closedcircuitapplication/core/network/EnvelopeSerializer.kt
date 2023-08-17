@@ -4,7 +4,6 @@ import com.closedcircuit.closedcircuitapplication.core.network.dto.Envelope
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
@@ -23,10 +22,7 @@ class EnvelopeSerializer<T>(private val dataSerializer: KSerializer<T>) :
             val dataDescriptor = dataSerializer.descriptor
             element("message", String.serializer().descriptor.nullable)
             element("data", dataDescriptor)
-            element(
-                "errors",
-                MapSerializer(String.serializer(), String.serializer()).descriptor.nullable
-            )
+            element("errors", KotlinxGenericMapSerializer.descriptor.nullable)
         }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -34,7 +30,7 @@ class EnvelopeSerializer<T>(private val dataSerializer: KSerializer<T>) :
         return decoder.decodeStructure(descriptor) {
             var data: T? = null
             var message: String? = null
-            var errors: Map<String, String>? = null
+            var errors: Map<String, Any?>? = null
             loop@ while (true) {
                 when (val i = decodeElementIndex(descriptor)) {
                     0 -> message = decodeStringElement(descriptor, i)
@@ -42,7 +38,7 @@ class EnvelopeSerializer<T>(private val dataSerializer: KSerializer<T>) :
                     2 -> errors = decodeNullableSerializableElement(
                         descriptor,
                         i,
-                        MapSerializer(String.serializer(), String.serializer())
+                        KotlinxGenericMapSerializer
                     )
 
                     CompositeDecoder.DECODE_DONE -> break

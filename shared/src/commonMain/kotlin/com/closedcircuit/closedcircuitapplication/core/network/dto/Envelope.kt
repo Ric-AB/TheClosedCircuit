@@ -8,7 +8,7 @@ import kotlinx.serialization.modules.SerializersModule
 class Envelope<T>(
     val message: String? = null,
     val data: T? = null,
-    val errors: Map<String, String>? = null
+    val errors: Map<String, Any?>? = null
 )
 
 val envelopeModule = SerializersModule {
