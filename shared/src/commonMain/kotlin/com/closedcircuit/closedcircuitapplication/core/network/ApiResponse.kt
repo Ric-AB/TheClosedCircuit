@@ -5,6 +5,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.dto.Envelope
 
 sealed class ApiResponse<T> {
     companion object {
+        val f = Result
         fun <T> create(error: Throwable): ApiResponse<T> {
             return ApiErrorResponse(
                 errorMessage = error.message ?: "Unknown error",
@@ -48,12 +49,24 @@ data class ApiErrorResponse<T>(
     val httpStatusCode: Int
 ) : ApiResponse<T>()
 
+val <T> ApiResponse<T>.isSuccessful: Boolean
+    get() = this is ApiSuccessResponse<T>
 
 suspend fun <T : Any> ApiResponse<T>.onSuccess(
     executable: suspend (T) -> Unit
 ): ApiResponse<T> = apply {
     if (this is ApiSuccessResponse<T>) {
         executable(body)
+    }
+}
+
+fun <T, R> ApiResponse<T>.mapOnSuccess(
+    transform: (T) -> R
+): ApiResponse<R> {
+    return when (this) {
+        is ApiSuccessResponse<T> -> ApiSuccessResponse(transform(body))
+        is ApiErrorResponse<T> -> ApiErrorResponse(errorMessage, httpStatusCode)
+        else -> ApiEmptyResponse()
     }
 }
 

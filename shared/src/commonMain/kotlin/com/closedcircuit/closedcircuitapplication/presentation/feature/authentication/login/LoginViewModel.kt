@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.closedcircuit.closedcircuitapplication.core.network.onError
+import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.usecase.LoginUseCase
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import kotlinx.coroutines.launch
@@ -27,8 +29,11 @@ class LoginViewModel(
     private fun attemptLogin() {
         coroutineScope.launch {
             state = state.copy(loading = true)
-            loginUseCase(state.email, state.password)
-            state = state.copy(loading = false)
+            loginUseCase(state.email, state.password).onSuccess {
+                state = state.copy(loading = false, loginResult = LoginResult.Success)
+            }.onError { _, message ->
+                state = state.copy(loading = false, loginResult = LoginResult.Failure(message))
+            }
         }
     }
 

@@ -130,12 +130,10 @@ multiplatformResources {
     multiplatformResourcesClassName = "SharedRes"
 }
 
-//tasks.matching { it.name == ":shared:kspKotlinIosSimulatorArm64" }.configureEach {
-//    dependsOn(tasks.getByName(":shared:generateMRiosSimulatorArm64Main"))
-//}
-//tasks.matching { it.name == ":shared:kspKotlinIosSimulatorArm64" }.configureEach {
-//    dependsOn(tasks.getByName(":shared:generateMRcommonMain"))
-//}
 tasks.matching { it.name == "kspKotlinIosSimulatorArm64" }.configureEach {
     dependsOn(tasks.getByName("generateMRiosSimulatorArm64Main"))
 }
+
+//tasks.matching { it.name == "syncPodComposeResourcesForIos" }.configureEach {
+//    dependsOn(tasks.getByName("generateMRiosSimulatorArm64Main"))
+//}

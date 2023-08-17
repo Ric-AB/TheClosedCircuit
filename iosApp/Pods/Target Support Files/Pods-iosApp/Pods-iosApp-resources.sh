@@ -97,11 +97,9 @@ EOM
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_resource "${PODS_ROOT}/../../shared/build/compose/ios/shared/compose-resources"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/shared/LibresShared.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_resource "${PODS_ROOT}/../../shared/build/compose/ios/shared/compose-resources"
   install_resource "${PODS_CONFIGURATION_BUILD_DIR}/shared/LibresShared.bundle"
 fi
 

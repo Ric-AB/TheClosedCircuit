@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Shapes
@@ -30,12 +29,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
+//import androidx.compose.ui.window.PopupProperties
 
 @Composable
 fun LoadingDialog() {
     Popup(
-        properties = PopupProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+//        properties = PopupProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
         alignment = Alignment.Center
     ) {
         Box(

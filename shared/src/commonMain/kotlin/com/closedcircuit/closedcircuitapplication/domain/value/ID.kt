@@ -1,10 +1,14 @@
 package com.closedcircuit.closedcircuitapplication.domain.value
 
+import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
+@Serializable
 @JvmInline
 value class ID(val value: String) {
     init {
-        require(value.isNotEmpty())
+        val regex =
+            Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\$")
+        require(regex.matches(value)) { "Invalid ID- $value" }
     }
 }

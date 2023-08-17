@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
+//import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,21 +46,34 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Passwor
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery.RecoverPasswordEmailScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.delay
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 object LoginScreen : Screen, KoinComponent {
     private val viewModel: LoginViewModel by inject()
-    private val repo: UserRepository by inject()
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val state = viewModel.state
+
+        LaunchedEffect(state.loginResult) {
+            when (state.loginResult) {
+                is LoginResult.Failure -> {}
+                LoginResult.Success -> {
+                    delay(300) //wait for loader to hide
+                    navigator.replaceAll(DashboardScreen)
+                }
+
+                null -> Unit
+            }
+        }
 
         ScreenContent(
             state = state,
@@ -81,7 +95,7 @@ private fun ScreenContent(
 ) {
     Scaffold(
         topBar = { DefaultAppBar(mainAction = navigateToWelcomeScreen) },
-        contentWindowInsets = WindowInsets.ime
+//        contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
 
         Box(modifier = Modifier.fillMaxSize()) {

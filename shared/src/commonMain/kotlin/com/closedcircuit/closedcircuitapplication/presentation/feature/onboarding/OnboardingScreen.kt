@@ -96,7 +96,7 @@ private fun ScreenContent(
         OnboardingPage.Fourth,
     )
 
-    val pagerState = rememberPagerState { onboardingPages.size }
+//    val pagerState = rememberPagerState { onboardingPages.size }
     val scope = rememberCoroutineScope()
     Scaffold { innerPadding ->
         Column(
@@ -104,34 +104,34 @@ private fun ScreenContent(
             modifier = Modifier.padding(innerPadding)
                 .padding(horizontal = 12.dp)
         ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.weight(10F)
-            ) { page ->
-                PagerScreen(onboardingPages[page])
-            }
+//            HorizontalPager(
+//                state = pagerState,
+//                modifier = Modifier.weight(10F)
+//            ) { page ->
+//                PagerScreen(onboardingPages[page])
+//            }
 
-            HorizontalIndicator(
-                modifier = Modifier.align(Alignment.CenterHorizontally).weight(1F),
-                pagerState = pagerState,
-                pageCount = onboardingPages.size
-            )
+//            HorizontalIndicator(
+//                modifier = Modifier.align(Alignment.CenterHorizontally).weight(1F),
+//                pagerState = pagerState,
+//                pageCount = onboardingPages.size
+//            )
 
-            ActionButtons(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp)
-                    .weight(1F),
-                isLastPage = pagerState.currentPage == onboardingPages.lastIndex,
-                onSkipClick = navigateToLoginScreen,
-                onNextClick = {
-                    scope.launch {
-                        if (pagerState.canScrollForward)
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                    }
-                },
-                onFinishClick = navigateToWelcomeScreen
-            )
+//            ActionButtons(
+//                modifier = Modifier
+//                    .align(Alignment.CenterHorizontally)
+//                    .padding(bottom = 24.dp)
+//                    .weight(1F),
+//                isLastPage = pagerState.currentPage == onboardingPages.lastIndex,
+//                onSkipClick = navigateToLoginScreen,
+//                onNextClick = {
+//                    scope.launch {
+//                        if (pagerState.canScrollForward)
+//                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+//                    }
+//                },
+//                onFinishClick = navigateToWelcomeScreen
+//            )
         }
     }
 }

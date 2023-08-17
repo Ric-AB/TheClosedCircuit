@@ -10,5 +10,5 @@ interface UserRepository {
         password: String
     ): ApiResponse<LoginResponse>
 
-    suspend fun getUser(userId: String)
+    suspend fun getUser(userId: String): ApiResponse<User>
 }

@@ -35,7 +35,6 @@ Pod::Spec.new do |spec|
             SCRIPT
         }
     ]
-    spec.resources = ['build/compose/ios/shared/compose-resources']
     spec.resource_bundles = {
         'LibresShared' => ['build/generated/libres/apple/resources/images/LibresShared.xcassets']
     }
