@@ -2,6 +2,7 @@ package com.closedcircuit.closedcircuitapplication.domain.user
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.LoginResponse
+import com.closedcircuit.closedcircuitapplication.data.auth.dto.RegisterResponse
 
 interface UserRepository {
 
@@ -9,6 +10,15 @@ interface UserRepository {
         email: String,
         password: String
     ): ApiResponse<LoginResponse>
+
+    suspend fun register(
+        fullName: String,
+        email: String,
+        roles: String,
+        phoneNumber: String,
+        password: String,
+        confirmPassword: String
+    ): ApiResponse<Unit>
 
     suspend fun getUser(userId: String): ApiResponse<User>
 }

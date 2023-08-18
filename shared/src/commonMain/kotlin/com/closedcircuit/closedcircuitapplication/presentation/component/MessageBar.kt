@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.core.timer
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Job
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -58,18 +57,24 @@ class MessageBarState {
         private set
     var error by mutableStateOf<Exception?>(null)
         private set
+    var successCallback: (() -> Unit)? by mutableStateOf(null)
+        private set
+    var errorCallback: (() -> Unit)? by mutableStateOf(null)
+        private set
     internal var updated by mutableStateOf(false)
         private set
 
-    fun addSuccess(message: String) {
+    fun addSuccess(message: String, callback: (() -> Unit)? = null) {
         error = null
         success = message
+        successCallback = callback
         updated = !updated
     }
 
-    fun addError(exception: Exception) {
+    fun addError(exception: Exception, callback: (() -> Unit)? = null) {
         success = null
         error = exception
+        errorCallback = callback
         updated = !updated
     }
 }
@@ -89,7 +94,7 @@ fun ContentWithMessageBar(
     modifier: Modifier = Modifier,
     messageBarState: MessageBarState,
     position: MessageBarPosition = MessageBarPosition.TOP,
-    visibilityDuration: Duration = 3_000.seconds,
+    visibilityDuration: Duration = 3.seconds,
     successIcon: ImageVector = Icons.Default.Check,
     errorIcon: ImageVector = Icons.Default.Warning,
     errorMaxLines: Int = 1,
@@ -162,12 +167,20 @@ private fun MessageBarComponent(
     val scope = rememberCoroutineScope()
     val error by rememberUpdatedState(newValue = messageBarState.error?.message)
     val message by rememberUpdatedState(newValue = messageBarState.success)
+    val successCallback by rememberUpdatedState(newValue = messageBarState.successCallback)
+    val errorCallback by rememberUpdatedState(newValue = messageBarState.errorCallback)
 
     DisposableEffect(key1 = messageBarState.updated) {
         showMessageBar = true
         job = scope.timer(startDelay = visibilityDuration) {
-            Napier.d("SETTOFALSE")
             showMessageBar = false
+            if (error != null) {
+                errorCallback?.let { it() }
+            }
+
+            if (message != null) {
+                successCallback?.let { it() }
+            }
         }
         onDispose {
             job?.cancel()

@@ -7,5 +7,12 @@ data class RegisterUIState(
     val email: String = "",
     val phoneNumber: String = "",
     val password: String = "",
-    val confirmPassword: String = ""
+    val confirmPassword: String = "",
+    val loading: Boolean = false,
+    val registerResult: RegisterResult? = null
 )
+
+sealed interface RegisterResult {
+    object Success : RegisterResult
+    data class Failure(val message: String) : RegisterResult
+}

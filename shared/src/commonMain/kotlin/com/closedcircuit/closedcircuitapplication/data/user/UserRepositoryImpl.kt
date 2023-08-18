@@ -5,6 +5,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.data.auth.KtorfitAuthService
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.LoginRequest
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.LoginResponse
+import com.closedcircuit.closedcircuitapplication.data.auth.dto.RegisterRequest
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +22,23 @@ class UserRepositoryImpl(
         password: String
     ): ApiResponse<LoginResponse> {
         return withContext(Dispatchers.IO) {
-            val req = LoginRequest(email, password)
-            authService.loginWithEmailAndPassword(req)
+            val request = LoginRequest(email, password)
+            authService.loginWithEmailAndPassword(request)
+        }
+    }
+
+    override suspend fun register(
+        fullName: String,
+        email: String,
+        roles: String,
+        phoneNumber: String,
+        password: String,
+        confirmPassword: String
+    ): ApiResponse<Unit> {
+        return withContext(Dispatchers.IO) {
+            val request =
+                RegisterRequest(email, fullName, roles, phoneNumber, password, confirmPassword)
+            authService.register(request).mapOnSuccess { }
         }
     }
 

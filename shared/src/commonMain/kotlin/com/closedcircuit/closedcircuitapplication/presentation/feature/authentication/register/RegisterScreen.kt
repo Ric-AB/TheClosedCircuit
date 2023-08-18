@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -17,12 +16,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,25 +30,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.presentation.component.ContentWithMessageBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
-import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibility
-import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibilityOff
+import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginUIEvent
+import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.moriatsushi.insetsx.imePadding
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.delay
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -61,11 +58,32 @@ object RegisterScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val state = viewModel.state
-        ScreenContent(
-            state = state,
-            onEvent = viewModel::onEvent,
-            navigateToLogin = { navigator.replaceAll(LoginScreen) }
-        )
+        val messageBarState = rememberMessageBarState()
+
+        LaunchedEffect(state.registerResult) {
+            when (state.registerResult) {
+                is RegisterResult.Failure -> {
+                    messageBarState.addError(Exception(state.registerResult.message))
+                    viewModel.onEvent(RegisterUIEvent.RegisterResultHandled)
+                }
+
+                RegisterResult.Success -> {
+                    delay(500)
+                    navigator.replaceAll(DashboardScreen)
+                    viewModel.onEvent(RegisterUIEvent.RegisterResultHandled)
+                }
+
+                null -> Unit
+            }
+        }
+
+        ContentWithMessageBar(messageBarState = messageBarState) {
+            ScreenContent(
+                state = state,
+                onEvent = viewModel::onEvent,
+                navigateToLogin = { navigator.replaceAll(LoginScreen) }
+            )
+        }
     }
 }
 

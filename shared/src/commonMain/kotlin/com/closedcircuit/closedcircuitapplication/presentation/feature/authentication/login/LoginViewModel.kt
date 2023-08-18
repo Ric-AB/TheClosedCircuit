@@ -23,6 +23,7 @@ class LoginViewModel(
             is LoginUIEvent.EmailChange -> updateEmail(event.email)
             is LoginUIEvent.PasswordChange -> updatePassword(event.password)
             LoginUIEvent.Submit -> attemptLogin()
+            LoginUIEvent.LoginResultHandled -> updateLoginResult()
         }
     }
 
@@ -43,5 +44,9 @@ class LoginViewModel(
 
     private fun updatePassword(password: String) {
         state = state.copy(password = password)
+    }
+
+    private fun updateLoginResult() {
+        state = state.copy(loginResult = null)
     }
 }

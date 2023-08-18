@@ -4,8 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
+import com.closedcircuit.closedcircuitapplication.core.network.onError
+import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
+import com.closedcircuit.closedcircuitapplication.domain.usecase.RegisterUseCase
+import kotlinx.coroutines.launch
 
-class RegisterViewModel : ScreenModel {
+class RegisterViewModel(
+    private val registerUseCase: RegisterUseCase
+) : ScreenModel {
 
     var state by mutableStateOf(RegisterUIState())
         private set
@@ -19,6 +26,33 @@ class RegisterViewModel : ScreenModel {
             is RegisterUIEvent.NickNameChange -> updateNickName(event.nickName)
             is RegisterUIEvent.PasswordChange -> updatePassword(event.password)
             is RegisterUIEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
+            RegisterUIEvent.Submit -> attemptRegistration()
+            RegisterUIEvent.RegisterResultHandled -> updateRegisterResult()
+        }
+    }
+
+    private fun attemptRegistration() {
+        val email = state.email.lowercase().trim()
+        val fullName = "${state.firstName.trim()} ${state.nickName.trim()} ${state.lastName.trim()}"
+        val phoneNumber = state.phoneNumber.trim()
+        val password = state.password
+        val confirmPassword = state.confirmPassword
+
+        state = state.copy(loading = true)
+        coroutineScope.launch {
+            registerUseCase.invoke(
+                fullName,
+                email,
+                "Beneficiary",
+                phoneNumber,
+                password,
+                confirmPassword
+            ).onSuccess {
+                state = state.copy(loading = false, registerResult = RegisterResult.Success)
+            }.onError { _, message ->
+                state =
+                    state.copy(loading = false, registerResult = RegisterResult.Failure(message))
+            }
         }
     }
 
@@ -48,5 +82,9 @@ class RegisterViewModel : ScreenModel {
 
     private fun updateConfirmPassword(confirmPassword: String) {
         state = state.copy(confirmPassword = confirmPassword)
+    }
+
+    private fun updateRegisterResult() {
+        state = state.copy(registerResult = null)
     }
 }

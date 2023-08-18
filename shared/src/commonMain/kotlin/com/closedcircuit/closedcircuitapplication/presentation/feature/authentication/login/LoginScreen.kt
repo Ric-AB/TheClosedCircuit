@@ -65,10 +65,15 @@ object LoginScreen : Screen, KoinComponent {
 
         LaunchedEffect(state.loginResult) {
             when (state.loginResult) {
-                is LoginResult.Failure -> messageBarState.addError(Exception(state.loginResult.message))
+                is LoginResult.Failure -> {
+                    messageBarState.addError(Exception(state.loginResult.message))
+                    viewModel.onEvent(LoginUIEvent.LoginResultHandled)
+                }
+
                 LoginResult.Success -> {
-                    delay(300) //wait for loader to hide
+                    delay(500) //wait for loader to hide
                     navigator.replaceAll(DashboardScreen)
+                    viewModel.onEvent(LoginUIEvent.LoginResultHandled)
                 }
 
                 null -> Unit
