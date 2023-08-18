@@ -77,6 +77,13 @@ class MessageBarState {
         errorCallback = callback
         updated = !updated
     }
+
+    fun addError(errorMessage: String, callback: (() -> Unit)? = null) {
+        success = null
+        error = Exception(errorMessage)
+        errorCallback = callback
+        updated = !updated
+    }
 }
 
 @Composable

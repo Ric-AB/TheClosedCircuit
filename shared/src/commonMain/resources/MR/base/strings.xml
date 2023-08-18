@@ -69,5 +69,6 @@
     <string name="finally_were_here">Finally we are here!\nCreate new password and let’s continue.
     </string>
     <string name="enter_a_new_password">Enter a new password</string>
+    <string name="invalid_code_try_again">Invalid code. Please try again</string>
 
 </resources>

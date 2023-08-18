@@ -20,5 +20,16 @@ interface UserRepository {
         confirmPassword: String
     ): ApiResponse<Unit>
 
+    suspend fun generateOtp(email: String): ApiResponse<Unit>
+
+    suspend fun verifyOtp(otpCode: String, email: String): ApiResponse<Unit>
+
+    suspend fun resetPassword(
+        otpCode: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): ApiResponse<Unit>
+
     suspend fun getUser(userId: String): ApiResponse<User>
 }

@@ -3,9 +3,12 @@ package com.closedcircuit.closedcircuitapplication.data.user
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.data.auth.KtorfitAuthService
+import com.closedcircuit.closedcircuitapplication.data.auth.dto.GenerateOtpRequest
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.LoginRequest
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.LoginResponse
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.RegisterRequest
+import com.closedcircuit.closedcircuitapplication.data.auth.dto.ResetPasswordRequest
+import com.closedcircuit.closedcircuitapplication.data.auth.dto.VerifyOtpRequest
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +42,32 @@ class UserRepositoryImpl(
             val request =
                 RegisterRequest(email, fullName, roles, phoneNumber, password, confirmPassword)
             authService.register(request).mapOnSuccess { }
+        }
+    }
+
+    override suspend fun generateOtp(email: String): ApiResponse<Unit> {
+        return withContext(Dispatchers.IO) {
+            val request = GenerateOtpRequest(email)
+            authService.generateOtp(request).mapOnSuccess { }
+        }
+    }
+
+    override suspend fun verifyOtp(otpCode: String, email: String): ApiResponse<Unit> {
+        return withContext(Dispatchers.IO) {
+            val request = VerifyOtpRequest(otpCode, email)
+            authService.verifyOtp(request).mapOnSuccess { }
+        }
+    }
+
+    override suspend fun resetPassword(
+        otpCode: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): ApiResponse<Unit> {
+        return withContext(Dispatchers.IO) {
+            val request = ResetPasswordRequest(email, otpCode, password, confirmPassword)
+            authService.resetPassword(request).mapOnSuccess { }
         }
     }
 

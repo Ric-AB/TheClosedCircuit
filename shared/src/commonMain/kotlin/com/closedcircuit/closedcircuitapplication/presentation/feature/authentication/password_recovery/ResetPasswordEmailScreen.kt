@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -26,29 +28,68 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.presentation.component.ContentWithMessageBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.presentation.component.LoadingDialog
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
+import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.delay
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.component.getOrCreateScope
+import org.koin.core.component.inject
+import org.koin.core.scope.Scope
 
 
-internal object RecoverPasswordEmailScreen : Screen, KoinComponent {
+internal object ResetPasswordEmailScreen : Screen, KoinComponent {
+    private val resetPasswordKoinContainer: ResetPasswordKoinContainer by inject()
+    private val viewModel: ResetPasswordViewModel = resetPasswordKoinContainer.scope.get()
+
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(
-            navigateToOtpScreen = { navigator.push(RecoverPasswordOtpScreen) },
-            goBack = navigator::pop
-        )
+        val state = viewModel.state
+        val onEvent = viewModel::onEvent
+        val messageBarState = rememberMessageBarState()
+
+        LaunchedEffect(state.requestOtpResult) {
+            when (state.requestOtpResult) {
+                is RequestOtpResult.Failure -> {
+                    messageBarState.addError(state.requestOtpResult.message)
+                    onEvent(ResetPasswordUIEvent.ResultHandled)
+                }
+
+                RequestOtpResult.Success -> {
+                    delay(500)
+                    navigator.push(ResetPasswordOtpScreen)
+                    onEvent(ResetPasswordUIEvent.ResultHandled)
+                }
+
+                null -> Unit
+            }
+        }
+
+        ContentWithMessageBar(messageBarState = messageBarState) {
+            ScreenContent(
+                state = state,
+                onEvent = onEvent,
+                goBack = navigator::pop
+            )
+        }
     }
 }
 
 @Composable
-private fun ScreenContent(navigateToOtpScreen: () -> Unit, goBack: () -> Unit) {
+private fun ScreenContent(
+    state: ResetPasswordUIState,
+    onEvent: (ResetPasswordUIEvent) -> Unit,
+    goBack: () -> Unit
+) {
     Scaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -65,13 +106,14 @@ private fun ScreenContent(navigateToOtpScreen: () -> Unit, goBack: () -> Unit) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Image(
                     painter = painterResource(SharedRes.images.recover_password_illurstration),
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.size(200.dp)
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
                 DefaultOutlinedTextField(
-                    value = "",
-                    onValueChange = {},
+                    value = state.email,
+                    onValueChange = { onEvent(ResetPasswordUIEvent.EmailChange(it)) },
                     label = stringResource(SharedRes.strings.email),
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
@@ -81,7 +123,7 @@ private fun ScreenContent(navigateToOtpScreen: () -> Unit, goBack: () -> Unit) {
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-                DefaultButton(onClick = navigateToOtpScreen) {
+                DefaultButton(onClick = { onEvent(ResetPasswordUIEvent.SubmitEmail) }) {
                     Text(stringResource(SharedRes.strings.reset_password))
                 }
 
@@ -97,6 +139,10 @@ private fun ScreenContent(navigateToOtpScreen: () -> Unit, goBack: () -> Unit) {
                     )
                 }
             }
+        }
+
+        if (state.loading) {
+            LoadingDialog()
         }
     }
 }

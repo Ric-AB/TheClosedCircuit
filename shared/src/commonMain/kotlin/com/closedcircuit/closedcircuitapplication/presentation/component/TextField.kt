@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +46,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibility
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibilityOff
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -155,7 +158,7 @@ fun OtpView(
     borderWidth: Dp = 2.dp,
     itemSpacing: Dp = 8.dp,
     itemWidth: Dp = 54.dp,
-    itemHeight: Dp = 48.dp,
+    itemHeight: Dp = 54.dp,
     itemBackground: Color = MaterialTheme.colorScheme.inverseOnSurface,
     onOtpTextChange: (String, Boolean) -> Unit
 ) {
@@ -172,24 +175,33 @@ fun OtpView(
             imeAction = ImeAction.Next
         ),
         decorationBox = {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                repeat(itemCount) { index ->
-                    OtpItem(
-                        index = index,
-                        text = otpCode,
-                        modifier = modifier,
-                        textStyle = textStyle,
-                        withBorder = withBorders,
-                        borderWidth = borderWidth,
-                        isError = isError,
-                        itemWidth = itemWidth,
-                        itemHeight = itemHeight,
-                        itemBackground = itemBackground
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    repeat(itemCount) { index ->
+                        OtpItem(
+                            index = index,
+                            text = otpCode,
+                            modifier = modifier,
+                            textStyle = textStyle,
+                            withBorder = withBorders,
+                            borderWidth = borderWidth,
+                            isError = isError,
+                            itemWidth = itemWidth,
+                            itemHeight = itemHeight,
+                            itemBackground = itemBackground
+                        )
+                        Spacer(modifier = Modifier.width(itemSpacing))
+                    }
+                }
+
+                if (isError) {
+                    BodyText(
+                        text = stringResource(SharedRes.strings.invalid_code_try_again),
+                        color = MaterialTheme.colorScheme.error
                     )
-                    Spacer(modifier = Modifier.width(itemSpacing))
                 }
             }
         },
@@ -205,7 +217,7 @@ fun OtpItem(
     withBorder: Boolean,
     isError: Boolean,
     borderWidth: Dp,
-    shape: Shape = Shapes().medium,
+    shape: Shape = Shapes().small,
     itemWidth: Dp,
     itemHeight: Dp,
     itemBackground: Color

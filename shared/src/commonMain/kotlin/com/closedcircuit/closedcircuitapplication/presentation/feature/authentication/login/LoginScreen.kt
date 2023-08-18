@@ -43,7 +43,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Loading
 import com.closedcircuit.closedcircuitapplication.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery.RecoverPasswordEmailScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery.ResetPasswordEmailScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
@@ -86,7 +86,7 @@ object LoginScreen : Screen, KoinComponent {
                 onEvent = viewModel::onEvent,
                 navigateToWelcomeScreen = { navigator.replaceAll(WelcomeScreen) },
                 navigateToCreateAccount = { navigator.push(RegisterScreen) },
-                navigateToRecoverPassword = { navigator.push(RecoverPasswordEmailScreen) }
+                navigateToRecoverPassword = { navigator.push(ResetPasswordEmailScreen) }
             )
         }
     }
