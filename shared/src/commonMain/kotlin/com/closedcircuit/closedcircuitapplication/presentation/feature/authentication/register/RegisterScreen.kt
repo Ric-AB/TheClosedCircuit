@@ -34,11 +34,13 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.ContentWithMessageBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
@@ -77,23 +79,27 @@ object RegisterScreen : Screen, KoinComponent {
             }
         }
 
-        ContentWithMessageBar(messageBarState = messageBarState) {
-            ScreenContent(
-                state = state,
-                onEvent = viewModel::onEvent,
-                navigateToLogin = { navigator.replaceAll(LoginScreen) }
-            )
-        }
+        ScreenContent(
+            messageBarState = messageBarState,
+            state = state,
+            onEvent = viewModel::onEvent,
+            navigateToLogin = { navigator.replaceAll(LoginScreen) }
+        )
     }
 }
 
 @Composable
 private fun ScreenContent(
+    messageBarState: MessageBarState,
     state: RegisterUIState,
     onEvent: (RegisterUIEvent) -> Unit,
     navigateToLogin: () -> Unit
 ) {
-    Scaffold(topBar = { DefaultAppBar(mainAction = navigateToLogin) }) { innerPadding ->
+    BaseScaffold(
+        topBar = { DefaultAppBar(mainAction = navigateToLogin) },
+        messageBarState = messageBarState,
+        isLoading = state.loading
+    ) { innerPadding ->
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         var showConfirmPassword by rememberSaveable { mutableStateOf(false) }
@@ -101,7 +107,7 @@ private fun ScreenContent(
             contentPadding = PaddingValues(bottom = 24.dp),
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 20.dp)
                 .imePadding()
         ) {
             item {

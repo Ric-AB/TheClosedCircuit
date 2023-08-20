@@ -21,9 +21,11 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.LoadingDialog
+import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.OtpView
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
@@ -56,6 +58,7 @@ internal object ResetPasswordOtpScreen : Screen, KoinComponent {
             }
         }
         ScreenContent(
+            messageBarState = messageBarState,
             state = state,
             onEvent = onEvent,
             goBack = navigator::pop
@@ -65,11 +68,16 @@ internal object ResetPasswordOtpScreen : Screen, KoinComponent {
 
 @Composable
 private fun ScreenContent(
+    messageBarState: MessageBarState,
     state: ResetPasswordUIState,
     onEvent: (ResetPasswordUIEvent) -> Unit,
     goBack: () -> Unit
 ) {
-    Scaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
+    BaseScaffold(
+        topBar = { DefaultAppBar(mainAction = goBack) },
+        messageBarState = messageBarState,
+        isLoading = state.loading
+    ) { innerPadding ->
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)

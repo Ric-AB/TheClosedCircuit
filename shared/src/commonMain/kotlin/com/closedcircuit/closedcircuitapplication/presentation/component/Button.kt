@@ -17,13 +17,15 @@ fun DefaultButton(
     modifier: Modifier = Modifier.fillMaxWidth(),
     height: Dp = 50.dp,
     shape: Shape = ButtonDefaults.shape,
+    enabled: Boolean = true,
     onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
-        shape = shape
+        shape = shape,
+        enabled = enabled
     ) {
         content()
     }

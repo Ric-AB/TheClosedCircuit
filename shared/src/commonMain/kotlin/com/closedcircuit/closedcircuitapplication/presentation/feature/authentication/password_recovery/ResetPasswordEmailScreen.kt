@@ -27,12 +27,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.ContentWithMessageBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.LoadingDialog
+import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -74,23 +76,27 @@ internal object ResetPasswordEmailScreen : Screen, KoinComponent {
             }
         }
 
-        ContentWithMessageBar(messageBarState = messageBarState) {
-            ScreenContent(
-                state = state,
-                onEvent = onEvent,
-                goBack = navigator::pop
-            )
-        }
+        ScreenContent(
+            messageBarState = messageBarState,
+            state = state,
+            onEvent = onEvent,
+            goBack = navigator::pop
+        )
     }
 }
 
 @Composable
 private fun ScreenContent(
+    messageBarState: MessageBarState,
     state: ResetPasswordUIState,
     onEvent: (ResetPasswordUIEvent) -> Unit,
     goBack: () -> Unit
 ) {
-    Scaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
+    BaseScaffold(
+        topBar = { DefaultAppBar(mainAction = goBack) },
+        messageBarState = messageBarState,
+        isLoading = state.loading
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -139,10 +145,6 @@ private fun ScreenContent(
                     )
                 }
             }
-        }
-
-        if (state.loading) {
-            LoadingDialog()
         }
     }
 }

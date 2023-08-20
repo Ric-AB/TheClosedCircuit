@@ -11,5 +11,5 @@ fun MainViewController() = WindowInsetsUIViewController {
     storageDir = NSHomeDirectory()
     val isDarkTheme =
         UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.UIUserInterfaceStyleDark
-    EntryPoint(isDarkTheme)
+    EntryPoint(useDarkTheme = isDarkTheme, dynamicColors = false)
 }

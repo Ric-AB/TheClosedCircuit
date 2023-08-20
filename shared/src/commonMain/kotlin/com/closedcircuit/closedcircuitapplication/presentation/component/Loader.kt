@@ -1,11 +1,14 @@
 package com.closedcircuit.closedcircuitapplication.presentation.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.animateValue
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,29 +32,32 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+
 //import androidx.compose.ui.window.PopupProperties
 
 @Composable
-fun LoadingDialog() {
-    Popup(
+fun LoadingDialog(visible: Boolean = false) {
+    AnimatedVisibility(visible, enter = fadeIn(), exit = fadeOut()) {
+        Popup(
 //        properties = PopupProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
-        alignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize().background(Color.White.copy(0.8f)),
-            contentAlignment = Alignment.Center
+            alignment = Alignment.Center
         ) {
-            Surface(
-                modifier = Modifier.size(100.dp)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.tertiary,
-                        shape = Shapes().medium
-                    ),
-                shape = Shapes().medium
+            Box(
+                modifier = Modifier.fillMaxSize().background(Color.White.copy(0.8f)),
+                contentAlignment = Alignment.Center
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    CircularIndicator()
+                Surface(
+                    modifier = Modifier.size(100.dp)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            shape = Shapes().medium
+                        ),
+                    shape = Shapes().medium
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        CircularIndicator()
+                    }
                 }
             }
         }

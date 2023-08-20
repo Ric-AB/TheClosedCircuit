@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         storageDir = filesDir.path
         setContent {
-            EntryPoint(isSystemInDarkTheme())
+            EntryPoint(useDarkTheme = isSystemInDarkTheme(), dynamicColors = true)
         }
     }
 }

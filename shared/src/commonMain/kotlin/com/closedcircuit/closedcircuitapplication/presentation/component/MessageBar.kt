@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -46,7 +48,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.closedcircuit.closedcircuitapplication.core.timer
+import com.moriatsushi.insetsx.statusBars
 import kotlinx.coroutines.Job
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -170,7 +174,7 @@ private fun MessageBarComponent(
     horizontalPadding: Dp,
 ) {
     var showMessageBar by remember { mutableStateOf(false) }
-    var job: Job?
+    var job: Job
     val scope = rememberCoroutineScope()
     val error by rememberUpdatedState(newValue = messageBarState.error?.message)
     val message by rememberUpdatedState(newValue = messageBarState.success)
@@ -190,7 +194,7 @@ private fun MessageBarComponent(
             }
         }
         onDispose {
-            job?.cancel()
+            job.cancel()
         }
     }
 
@@ -247,7 +251,8 @@ private fun MessageBar(
                 if (error != null) errorContainerColor
                 else successContainerColor
             )
-            .padding(vertical = verticalPadding)
+            .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
+//            .padding(vertical = verticalPadding)
             .padding(horizontal = horizontalPadding)
             .animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,

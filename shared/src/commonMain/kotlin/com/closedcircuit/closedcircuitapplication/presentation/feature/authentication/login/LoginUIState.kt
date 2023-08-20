@@ -1,11 +1,16 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login
 
+import com.closedcircuit.closedcircuitapplication.presentation.util.InputField
+
 data class LoginUIState(
-    val email: String = "",
-    val password: String = "",
+    val emailField: InputField = InputField(),
+    val passwordField: InputField = InputField(),
     val loading: Boolean = false,
-    val loginResult: LoginResult? = null
-)
+) {
+    fun canSubmit(): Boolean {
+        return emailField.inputValue.value.isNotBlank() && passwordField.inputValue.value.isNotEmpty()
+    }
+}
 
 sealed interface LoginResult {
     object Success : LoginResult

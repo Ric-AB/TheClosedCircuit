@@ -8,7 +8,8 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.usecase.LoginUseCase
-import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -18,35 +19,39 @@ class LoginViewModel(
     var state by mutableStateOf(LoginUIState())
         private set
 
+    private val _loginResultChannel = Channel<LoginResult>()
+    val loginResultChannel: ReceiveChannel<LoginResult> = _loginResultChannel
+
+
     fun onEvent(event: LoginUIEvent) {
         when (event) {
             is LoginUIEvent.EmailChange -> updateEmail(event.email)
             is LoginUIEvent.PasswordChange -> updatePassword(event.password)
             LoginUIEvent.Submit -> attemptLogin()
-            LoginUIEvent.LoginResultHandled -> updateLoginResult()
         }
     }
 
     private fun attemptLogin() {
         coroutineScope.launch {
             state = state.copy(loading = true)
-            loginUseCase(state.email, state.password).onSuccess {
-                state = state.copy(loading = false, loginResult = LoginResult.Success)
+
+            val email by state.emailField.inputValue
+            val password by state.emailField.inputValue
+            loginUseCase(email, password).onSuccess {
+                state = state.copy(loading = false)
+                _loginResultChannel.send(LoginResult.Success)
             }.onError { _, message ->
-                state = state.copy(loading = false, loginResult = LoginResult.Failure(message))
+                state = state.copy(loading = false)
+                _loginResultChannel.send(LoginResult.Failure(message))
             }
         }
     }
 
     private fun updateEmail(email: String) {
-        state = state.copy(email = email)
+        state.emailField.onValueChange(email)
     }
 
     private fun updatePassword(password: String) {
-        state = state.copy(password = password)
-    }
-
-    private fun updateLoginResult() {
-        state = state.copy(loginResult = null)
+        state.passwordField.onValueChange(password)
     }
 }
