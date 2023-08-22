@@ -1,10 +1,18 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
 
+import com.closedcircuit.closedcircuitapplication.core.validation.EmailValidator
+import com.closedcircuit.closedcircuitapplication.core.validation.PasswordValidator
+import com.closedcircuit.closedcircuitapplication.presentation.util.InputField
+
 data class ResetPasswordUIState(
-    val email: String = "",
-    val otpCode: String = "",
-    val password: String = "",
-    val confirmPassword: String = "",
+    val emailField: InputField = InputField(validator = EmailValidator()),
+    val otpCodeField: InputField = InputField(),
+    val passwordField: InputField = InputField(
+        validator = PasswordValidator(),
+        validateOnChange = true
+    ),
+
+    val confirmPasswordField: InputField = InputField(),
     val loading: Boolean = false,
 )
 

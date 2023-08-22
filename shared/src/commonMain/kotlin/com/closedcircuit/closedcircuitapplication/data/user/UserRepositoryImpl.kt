@@ -45,7 +45,7 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun generateOtp(email: String): ApiResponse<Unit> {
+    override suspend fun requestOtp(email: String): ApiResponse<Unit> {
         return withContext(Dispatchers.IO) {
             val request = GenerateOtpRequest(email)
             authService.generateOtp(request).mapOnSuccess { }

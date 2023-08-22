@@ -8,6 +8,8 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class ResetPasswordViewModel(
@@ -16,6 +18,15 @@ class ResetPasswordViewModel(
 
     var state by mutableStateOf(ResetPasswordUIState())
         private set
+
+    private val _requestOtpResult = Channel<RequestOtpResult>()
+    val requestOtpResult: ReceiveChannel<RequestOtpResult> = _requestOtpResult
+
+    private val _verifyOtpResult = Channel<VerifyOtpResult>()
+    val verifyOtpResult: ReceiveChannel<VerifyOtpResult> = _verifyOtpResult
+
+    private val _resetPasswordResult = Channel<ResetPasswordResult>()
+    val resetPasswordResult: ReceiveChannel<ResetPasswordResult> = _resetPasswordResult
 
     fun onEvent(event: ResetPasswordUIEvent) {
         when (event) {
@@ -30,61 +41,100 @@ class ResetPasswordViewModel(
     }
 
     private fun submitEmail() {
-        state = state.copy(loading = true)
-        coroutineScope.launch {
-            val email = state.email.lowercase().trim()
-            userRepository.generateOtp(email)
-                .onSuccess {
-                    state = state.copy(loading = false)
-                }.onError { _, message ->
-                    state = state.copy(loading = false)
-                }
+        if (isEmailValid()) {
+            val email = state.emailField.value.lowercase().trim()
+            state = state.copy(loading = true)
+            coroutineScope.launch {
+                userRepository.requestOtp(email)
+                    .onSuccess {
+                        state = state.copy(loading = false)
+                        _requestOtpResult.send(RequestOtpResult.Success)
+                    }.onError { _, message ->
+                        state = state.copy(loading = false)
+                        _requestOtpResult.send(RequestOtpResult.Failure(message))
+                    }
+            }
         }
     }
 
     private fun submitOtp() {
+        val email = state.emailField.value.lowercase().trim()
+        val otpCode = state.otpCodeField.value
+
         state = state.copy(loading = true)
         coroutineScope.launch {
-            val email = state.email.lowercase().trim()
-            userRepository.verifyOtp(otpCode = state.otpCode, email = email)
+            userRepository.verifyOtp(otpCode = otpCode, email = email)
                 .onSuccess {
                     state = state.copy(loading = false)
+                    _verifyOtpResult.send(VerifyOtpResult.Success)
                 }.onError { _, message ->
                     state = state.copy(loading = false)
+                    _verifyOtpResult.send(VerifyOtpResult.Failure(message))
                 }
         }
     }
 
     private fun submitPassword() {
-        state = state.copy(loading = true)
-        coroutineScope.launch {
-            val email = state.email.lowercase().trim()
-            userRepository.resetPassword(
-                otpCode = state.otpCode,
-                email = email,
-                password = state.password,
-                confirmPassword = state.confirmPassword
-            ).onSuccess {
-                state = state.copy(loading = false)
-            }.onError { _, message ->
-                state = state.copy(loading = false)
+        val isValid = doPasswordsMatch()
+        if (isValid) {
+            val otpCode = state.otpCodeField.value
+            val email = state.emailField.value.lowercase().trim()
+            val password = state.passwordField.value
+            val confirmPassword = state.confirmPasswordField.value
+
+            state = state.copy(loading = true)
+            coroutineScope.launch {
+                userRepository.resetPassword(
+                    otpCode = otpCode,
+                    email = email,
+                    password = password,
+                    confirmPassword = confirmPassword
+                ).onSuccess {
+                    state = state.copy(loading = false)
+                    _resetPasswordResult.send(ResetPasswordResult.Success)
+                }.onError { _, message ->
+                    state = state.copy(loading = false)
+                    _resetPasswordResult.send(ResetPasswordResult.Failure(message))
+                }
             }
         }
     }
 
     private fun updateEmail(email: String) {
-        state = state.copy(email = email)
+        state.emailField.onValueChange(email)
+    }
+
+    private fun isEmailValid(): Boolean {
+        val emailField = state.emailField
+        val trimmedEmail = emailField.value.trim()
+        emailField.onValueChange(trimmedEmail)
+        emailField.validateInput()
+        return emailField.error.isEmpty()
     }
 
     private fun updateOtpCode(otp: String) {
-        state = state.copy(otpCode = otp)
+        state.otpCodeField.onValueChange(otp)
     }
 
     private fun updatePassword(password: String) {
-        state = state.copy(password = password)
+        state.passwordField.onValueChange(password)
     }
 
     private fun updateConfirmPassword(confirmPassword: String) {
-        state = state.copy(confirmPassword = confirmPassword)
+        state.confirmPasswordField.onValueChange(confirmPassword)
+        validateConfirmPassword()
+    }
+
+    private fun doPasswordsMatch(): Boolean {
+        validateConfirmPassword()
+        return state.passwordField.value == state.confirmPasswordField.value
+    }
+
+    private fun validateConfirmPassword() {
+        if (state.confirmPasswordField.value != state.passwordField.value) {
+            state.confirmPasswordField.error = "Passwords do not match"
+        } else {
+            state.confirmPasswordField.error = ""
+        }
     }
 }

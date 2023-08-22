@@ -23,10 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,15 +52,12 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
+import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.moriatsushi.insetsx.imePadding
 import dev.icerock.moko.resources.compose.stringResource
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -74,28 +69,18 @@ object RegisterScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val state = viewModel.state
         val messageBarState = rememberMessageBarState()
-        val scope = rememberCoroutineScope()
-        var job: Job
 
-        DisposableEffect(Unit) {
-            job = scope.launch {
-                viewModel.resultResultChannel.receiveAsFlow().cancellable().collect {
-                    Napier.d("$it")
-                    when (it) {
-                        is RegisterResult.Failure -> {
-                            messageBarState.addError(it.message)
-                        }
 
-                        RegisterResult.Success -> {
-                            delay(500) //wait for loader to hide
-                            navigator.replaceAll(DashboardScreen)
-                        }
-                    }
+        viewModel.resultResultChannel.receiveAsFlow().observerWithScreen {
+            when (it) {
+                is RegisterResult.Failure -> {
+                    messageBarState.addError(it.message)
                 }
-            }
 
-            onDispose {
-                job.cancel()
+                RegisterResult.Success -> {
+                    delay(500) //wait for loader to hide
+                    navigator.replaceAll(DashboardScreen)
+                }
             }
         }
 

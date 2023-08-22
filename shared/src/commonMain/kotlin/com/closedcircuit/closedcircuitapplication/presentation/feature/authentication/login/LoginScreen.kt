@@ -19,10 +19,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,15 +44,12 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
+import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -66,28 +61,17 @@ object LoginScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val state = viewModel.state
         val messageBarState = rememberMessageBarState()
-        val scope = rememberCoroutineScope()
-        var job: Job
 
-        DisposableEffect(Unit) {
-            job = scope.launch {
-                viewModel.loginResultChannel.receiveAsFlow().cancellable().collect {
-                    Napier.d("$it")
-                    when (it) {
-                        is LoginResult.Failure -> {
-                            messageBarState.addError(it.message)
-                        }
-
-                        LoginResult.Success -> {
-                            delay(500) //wait for loader to hide
-                            navigator.replaceAll(DashboardScreen)
-                        }
-                    }
+        viewModel.loginResultChannel.receiveAsFlow().observerWithScreen {
+            when (it) {
+                is LoginResult.Failure -> {
+                    messageBarState.addError(it.message)
                 }
-            }
 
-            onDispose {
-                job.cancel()
+                LoginResult.Success -> {
+                    delay(500) //wait for loader to hide
+                    navigator.replaceAll(DashboardScreen)
+                }
             }
         }
 

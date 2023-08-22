@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -22,7 +24,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
-import com.closedcircuit.closedcircuitapplication.presentation.component.ContentWithMessageBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.LoadingDialog
@@ -31,9 +32,11 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Passwor
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -49,6 +52,18 @@ internal object NewPasswordScreen : Screen, KoinComponent {
         val onEvent = viewModel::onEvent
         val messageBarState = rememberMessageBarState()
 
+        viewModel.resetPasswordResult.receiveAsFlow().observerWithScreen {
+            when (it) {
+                is ResetPasswordResult.Failure -> {
+                    messageBarState.addError(it.message)
+                }
+
+                ResetPasswordResult.Success -> {
+                    delay(300)
+                    navigator.replaceAll(LoginScreen)
+                }
+            }
+        }
 
         ScreenContent(
             messageBarState = messageBarState,
@@ -71,6 +86,10 @@ private fun ScreenContent(
         messageBarState = messageBarState,
         isLoading = state.loading
     ) { innerPadding ->
+        val (_, _, passwordField, confirmPasswordField, _) = state
+        var showPassword by rememberSaveable { mutableStateOf(false) }
+        var showConfirmPassword by rememberSaveable { mutableStateOf(false) }
+
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
@@ -84,38 +103,38 @@ private fun ScreenContent(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.height(40.dp))
                 PasswordOutlinedTextField(
-                    value = state.password,
+                    value = passwordField.value,
                     onValueChange = { onEvent(ResetPasswordUIEvent.PasswordChange(it)) },
                     label = stringResource(SharedRes.strings.new_password),
                     placeholder = { Text(stringResource(SharedRes.strings.enter_a_new_password)) },
-                    onPasswordVisibilityChange = {},
-                    isError = false,
-                    showPassword = false,
+                    onPasswordVisibilityChange = { showPassword = !showConfirmPassword },
+                    showPassword = showPassword,
+                    showCriteria = true,
+                    errors = passwordField.error.split(Regex("\n")),
                     imeAction = ImeAction.Next,
-                    keyboardActions = KeyboardActions(onNext = {})
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
                 PasswordOutlinedTextField(
-                    value = state.confirmPassword,
+                    value = confirmPasswordField.value,
                     onValueChange = { onEvent(ResetPasswordUIEvent.ConfirmPasswordChange(it)) },
                     label = stringResource(SharedRes.strings.confirm_password),
                     placeholder = { Text(stringResource(SharedRes.strings.confirm_password)) },
-                    onPasswordVisibilityChange = {},
-                    isError = false,
-                    showPassword = false,
+                    onPasswordVisibilityChange = { showConfirmPassword = !showConfirmPassword },
+                    isError = confirmPasswordField.isError,
+                    showPassword = showConfirmPassword,
+                    supportingText = {
+                        if (confirmPasswordField.isError) {
+                            Text(text = confirmPasswordField.error)
+                        }
+                    },
                     imeAction = ImeAction.Done,
-                    keyboardActions = KeyboardActions(onDone = {})
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
                 DefaultButton(onClick = { onEvent(ResetPasswordUIEvent.SubmitPassword) }) {
                     Text(stringResource(SharedRes.strings.reset_password))
                 }
-            }
-
-            if (state.loading) {
-                LoadingDialog()
             }
         }
     }

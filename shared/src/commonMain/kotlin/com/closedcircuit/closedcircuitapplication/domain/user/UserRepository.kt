@@ -2,7 +2,6 @@ package com.closedcircuit.closedcircuitapplication.domain.user
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.LoginResponse
-import com.closedcircuit.closedcircuitapplication.data.auth.dto.RegisterResponse
 
 interface UserRepository {
 
@@ -20,7 +19,7 @@ interface UserRepository {
         confirmPassword: String
     ): ApiResponse<Unit>
 
-    suspend fun generateOtp(email: String): ApiResponse<Unit>
+    suspend fun requestOtp(email: String): ApiResponse<Unit>
 
     suspend fun verifyOtp(otpCode: String, email: String): ApiResponse<Unit>
 
