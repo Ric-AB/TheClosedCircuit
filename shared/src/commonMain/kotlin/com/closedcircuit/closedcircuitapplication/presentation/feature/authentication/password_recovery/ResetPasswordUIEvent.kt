@@ -8,6 +8,4 @@ sealed interface ResetPasswordUIEvent {
     object SubmitEmail : ResetPasswordUIEvent
     object SubmitOtp : ResetPasswordUIEvent
     object SubmitPassword : ResetPasswordUIEvent
-
-    object ResultHandled : ResetPasswordUIEvent
 }

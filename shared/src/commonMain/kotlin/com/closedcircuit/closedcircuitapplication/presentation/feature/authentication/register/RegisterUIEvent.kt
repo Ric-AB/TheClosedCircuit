@@ -9,6 +9,7 @@ sealed interface RegisterUIEvent {
     data class EmailChange(val email: String) : RegisterUIEvent
     data class PasswordChange(val password: String) : RegisterUIEvent
     data class ConfirmPasswordChange(val confirmPassword: String) : RegisterUIEvent
+    data class InputFieldFocusReceived(val fieldName: String) : RegisterUIEvent
+    object InputFieldFocusLost : RegisterUIEvent
     object Submit : RegisterUIEvent
-    object RegisterResultHandled : RegisterUIEvent
 }

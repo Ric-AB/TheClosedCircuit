@@ -6,7 +6,7 @@ class NameValidator : InputValidator {
         if (input.length < 2) {
             return ValidationResult(
                 isValid = false,
-                validationErrors = listOf("Please enter at least two characters")
+                validationError = "Please enter at least two characters"
             )
         }
 

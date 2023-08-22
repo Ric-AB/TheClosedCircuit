@@ -8,7 +8,7 @@ data class LoginUIState(
     val loading: Boolean = false,
 ) {
     fun canSubmit(): Boolean {
-        return emailField.inputValue.value.isNotBlank() && passwordField.inputValue.value.isNotEmpty()
+        return emailField.value.isNotBlank() && passwordField.value.isNotEmpty()
     }
 }
 

@@ -33,6 +33,8 @@
         of services, payment terms, privacy policy and terms of use.
     </string>
     <string name="welcome_back">Welcome Back 👋</string>
+
+    <!--    Authentication-->
     <string name="login_prompt">We are happy to see you, login into your account to continue
         managing your dreams with us.
     </string>
@@ -70,5 +72,5 @@
     </string>
     <string name="enter_a_new_password">Enter a new password</string>
     <string name="invalid_code_try_again">Invalid code. Please try again</string>
-
+    <string name="name_check_prompt">Enter name as seen on your government-issued ID</string>
 </resources>

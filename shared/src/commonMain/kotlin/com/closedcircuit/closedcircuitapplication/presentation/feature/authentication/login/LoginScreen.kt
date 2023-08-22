@@ -142,15 +142,11 @@ private fun ScreenContent(
 
                     Spacer(modifier = Modifier.height(40.dp))
                     DefaultOutlinedTextField(
-                        value = emailField.inputValue.value,
+                        value = emailField.value,
                         onValueChange = { email -> onEvent(LoginUIEvent.EmailChange(email)) },
                         label = stringResource(SharedRes.strings.email),
-                        isError = emailField.errors.isNotEmpty(),
-                        supportingText = {
-                            if (emailField.errors.isNotEmpty()) {
-                                Text(emailField.errors[0])
-                            }
-                        },
+                        isError = emailField.isError,
+                        supportingText = { Text(text = emailField.error) },
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
@@ -161,7 +157,7 @@ private fun ScreenContent(
 
                     Spacer(modifier = Modifier.height(20.dp))
                     PasswordOutlinedTextField(
-                        value = passwordField.inputValue.value,
+                        value = passwordField.value,
                         onValueChange = { onEvent(LoginUIEvent.PasswordChange(it)) },
                         label = stringResource(SharedRes.strings.password),
                         onPasswordVisibilityChange = { showPassword = it },

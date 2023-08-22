@@ -59,22 +59,6 @@ internal object ResetPasswordEmailScreen : Screen, KoinComponent {
         val onEvent = viewModel::onEvent
         val messageBarState = rememberMessageBarState()
 
-        LaunchedEffect(state.requestOtpResult) {
-            when (state.requestOtpResult) {
-                is RequestOtpResult.Failure -> {
-                    messageBarState.addError(state.requestOtpResult.message)
-                    onEvent(ResetPasswordUIEvent.ResultHandled)
-                }
-
-                RequestOtpResult.Success -> {
-                    delay(500)
-                    navigator.push(ResetPasswordOtpScreen)
-                    onEvent(ResetPasswordUIEvent.ResultHandled)
-                }
-
-                null -> Unit
-            }
-        }
 
         ScreenContent(
             messageBarState = messageBarState,

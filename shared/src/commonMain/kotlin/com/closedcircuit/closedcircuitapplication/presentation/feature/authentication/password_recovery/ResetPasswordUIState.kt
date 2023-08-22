@@ -6,9 +6,6 @@ data class ResetPasswordUIState(
     val password: String = "",
     val confirmPassword: String = "",
     val loading: Boolean = false,
-    val requestOtpResult: RequestOtpResult? = null,
-    val verifyOtpResult: VerifyOtpResult? = null,
-    val resetPasswordResult: ResetPasswordResult? = null
 )
 
 sealed interface RequestOtpResult {

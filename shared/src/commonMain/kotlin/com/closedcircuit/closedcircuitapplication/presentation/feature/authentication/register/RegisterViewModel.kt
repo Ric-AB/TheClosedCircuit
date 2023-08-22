@@ -8,6 +8,8 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.usecase.RegisterUseCase
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
@@ -16,6 +18,11 @@ class RegisterViewModel(
 
     var state by mutableStateOf(RegisterUIState())
         private set
+
+    private val _registerResultChannel = Channel<RegisterResult>()
+    val resultResultChannel: ReceiveChannel<RegisterResult> = _registerResultChannel
+
+    private var lastFocusedField: String? = null
 
     fun onEvent(event: RegisterUIEvent) {
         when (event) {
@@ -26,65 +33,94 @@ class RegisterViewModel(
             is RegisterUIEvent.NickNameChange -> updateNickName(event.nickName)
             is RegisterUIEvent.PasswordChange -> updatePassword(event.password)
             is RegisterUIEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
+            is RegisterUIEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
+            RegisterUIEvent.InputFieldFocusLost -> validateField()
             RegisterUIEvent.Submit -> attemptRegistration()
-            RegisterUIEvent.RegisterResultHandled -> updateRegisterResult()
         }
     }
 
     private fun attemptRegistration() {
-        val email = state.email.lowercase().trim()
-        val fullName = "${state.firstName.trim()} ${state.nickName.trim()} ${state.lastName.trim()}"
-        val phoneNumber = state.phoneNumber.trim()
-        val password = state.password
-        val confirmPassword = state.confirmPassword
+        val isValid = areFieldsValid()
+        if (isValid) {
+            val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
+            val email = emailField.value.lowercase().trim()
+            val fullName =
+                "${firstNameField.value.trim()} ${nickNameField.value.trim()} ${lastNameField.value.trim()}"
+            val phoneNumber = phoneNumberField.value.trim()
+            val password = passwordField.value
+            val confirmPassword = confirmPasswordField.value
 
-        state = state.copy(loading = true)
-        coroutineScope.launch {
-            registerUseCase.invoke(
-                fullName,
-                email,
-                "Beneficiary",
-                phoneNumber,
-                password,
-                confirmPassword
-            ).onSuccess {
-                state = state.copy(loading = false, registerResult = RegisterResult.Success)
-            }.onError { _, message ->
-                state =
-                    state.copy(loading = false, registerResult = RegisterResult.Failure(message))
+            state = state.copy(loading = true)
+            coroutineScope.launch {
+                registerUseCase(
+                    fullName,
+                    email,
+                    "Beneficiary",
+                    phoneNumber,
+                    password,
+                    confirmPassword
+                ).onSuccess {
+                    state = state.copy(loading = false)
+                    _registerResultChannel.send(RegisterResult.Success)
+                }.onError { _, message ->
+                    state = state.copy(loading = false)
+                    _registerResultChannel.send(RegisterResult.Failure(message))
+                }
             }
         }
     }
 
+    private fun validateField() {
+        if (lastFocusedField == null) return
+        val fieldToValidate = state.fieldsToValidateAsList().find { it.name == lastFocusedField }
+        fieldToValidate?.validateInput()
+    }
+
+    private fun areFieldsValid(): Boolean {
+        val fields = state.fieldsToValidateAsList()
+        fields.forEach { inputField -> inputField.validateInput() }
+        validateConfirmPassword()
+        return fields.all { inputField -> inputField.error.isEmpty() }
+    }
+
+    private fun updateLastFocusedField(fieldName: String) {
+        lastFocusedField = fieldName
+    }
+
     private fun updateFirstName(firstName: String) {
-        state = state.copy(firstName = firstName)
+        state.firstNameField.onValueChange(firstName)
     }
 
     private fun updateNickName(nickName: String) {
-        state = state.copy(nickName = nickName)
+        state.nickNameField.onValueChange(nickName)
     }
 
     private fun updateLastName(lastName: String) {
-        state = state.copy(lastName = lastName)
+        state.lastNameField.onValueChange(lastName)
     }
 
     private fun updateEmail(email: String) {
-        state = state.copy(email = email)
+        state.emailField.onValueChange(email)
     }
 
     private fun updatePhoneNumber(phoneNumber: String) {
-        state = state.copy(phoneNumber = phoneNumber)
+        state.phoneNumberField.onValueChange(phoneNumber)
     }
 
     private fun updatePassword(password: String) {
-        state = state.copy(password = password)
+        state.passwordField.onValueChange(password)
     }
 
     private fun updateConfirmPassword(confirmPassword: String) {
-        state = state.copy(confirmPassword = confirmPassword)
+        state.confirmPasswordField.onValueChange(confirmPassword)
+        validateConfirmPassword()
     }
 
-    private fun updateRegisterResult() {
-        state = state.copy(registerResult = null)
+    private fun validateConfirmPassword() {
+        if (state.confirmPasswordField.value != state.passwordField.value) {
+            state.confirmPasswordField.error = "Passwords do not match"
+        } else {
+            state.confirmPasswordField.error = ""
+        }
     }
 }

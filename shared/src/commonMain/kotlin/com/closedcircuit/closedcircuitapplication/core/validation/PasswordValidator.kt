@@ -22,27 +22,30 @@ class PasswordValidator : InputValidator {
 
     override fun validate(input: String): ValidationResult {
 
-        val validationErrors = mutableListOf<String>()
+        val validationErrors = StringBuilder()
         if (input.length < minPasswordLength) {
-            validationErrors.add(criteriaMessage[PasswordCriteria.Length]!!)
+            validationErrors.append(criteriaMessage[PasswordCriteria.Length]!!)
         }
 
         if (!input.contains(uppercaseRegex) || !input.contains(lowercaseRegex)) {
-            validationErrors.add(criteriaMessage[PasswordCriteria.Case]!!)
+            validationErrors.append("\n")
+            validationErrors.append(criteriaMessage[PasswordCriteria.Case]!!)
         }
 
         if (!input.contains(digitRegex)) {
-            validationErrors.add(criteriaMessage[PasswordCriteria.Digit]!!)
+            validationErrors.append("\n")
+            validationErrors.append(criteriaMessage[PasswordCriteria.Digit]!!)
         }
 
         if (!input.contains(specialCharacterRegex)) {
-            validationErrors.add(criteriaMessage[PasswordCriteria.SpecialCharacter]!!)
+            validationErrors.append("\n")
+            validationErrors.append(criteriaMessage[PasswordCriteria.SpecialCharacter]!!)
         }
 
         return if (validationErrors.isEmpty()) {
             ValidationResult(isValid = true)
         } else {
-            ValidationResult(isValid = false, validationErrors = validationErrors)
+            ValidationResult(isValid = false, validationError = validationErrors.toString())
         }
     }
 }

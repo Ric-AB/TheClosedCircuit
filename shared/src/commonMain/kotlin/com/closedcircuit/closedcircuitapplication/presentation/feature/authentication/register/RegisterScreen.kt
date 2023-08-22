@@ -9,34 +9,40 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
-import com.closedcircuit.closedcircuitapplication.presentation.component.ContentWithMessageBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
@@ -46,10 +52,17 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.TitleTe
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
+import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.moriatsushi.insetsx.imePadding
 import dev.icerock.moko.resources.compose.stringResource
+import io.github.aakira.napier.Napier
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -61,21 +74,28 @@ object RegisterScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val state = viewModel.state
         val messageBarState = rememberMessageBarState()
+        val scope = rememberCoroutineScope()
+        var job: Job
 
-        LaunchedEffect(state.registerResult) {
-            when (state.registerResult) {
-                is RegisterResult.Failure -> {
-                    messageBarState.addError(Exception(state.registerResult.message))
-                    viewModel.onEvent(RegisterUIEvent.RegisterResultHandled)
+        DisposableEffect(Unit) {
+            job = scope.launch {
+                viewModel.resultResultChannel.receiveAsFlow().cancellable().collect {
+                    Napier.d("$it")
+                    when (it) {
+                        is RegisterResult.Failure -> {
+                            messageBarState.addError(it.message)
+                        }
+
+                        RegisterResult.Success -> {
+                            delay(500) //wait for loader to hide
+                            navigator.replaceAll(DashboardScreen)
+                        }
+                    }
                 }
+            }
 
-                RegisterResult.Success -> {
-                    delay(500)
-                    navigator.replaceAll(DashboardScreen)
-                    viewModel.onEvent(RegisterUIEvent.RegisterResultHandled)
-                }
-
-                null -> Unit
+            onDispose {
+                job.cancel()
             }
         }
 
@@ -103,11 +123,12 @@ private fun ScreenContent(
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         var showConfirmPassword by rememberSaveable { mutableStateOf(false) }
+        val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
         LazyColumn(
-            contentPadding = PaddingValues(bottom = 24.dp),
+            contentPadding = PaddingValues(bottom = screenContentPadding.calculateBottomPadding()),
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = screenContentPadding.calculateHorizontalPadding())
                 .imePadding()
         ) {
             item {
@@ -124,21 +145,37 @@ private fun ScreenContent(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    val inputFieldCommonModifier = Modifier.fillMaxWidth()
                     Spacer(modifier = Modifier.height(20.dp))
                     DefaultOutlinedTextField(
-                        value = state.firstName,
+                        value = firstNameField.value,
                         onValueChange = { onEvent(RegisterUIEvent.FirstNameChange(it)) },
                         label = stringResource(SharedRes.strings.first_name),
+                        isError = firstNameField.isError,
+                        supportingText = {
+                            if (firstNameField.isError) {
+                                Text(text = firstNameField.error)
+                            } else {
+                                NamePrompt()
+                            }
+                        },
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next,
                             capitalization = KeyboardCapitalization.Words
                         ),
+                        modifier = inputFieldCommonModifier.onFocusChanged {
+                            if (it.isFocused) {
+                                onEvent(RegisterUIEvent.InputFieldFocusReceived(firstNameField.name))
+                            } else {
+                                onEvent(RegisterUIEvent.InputFieldFocusLost)
+                            }
+                        }
                     )
 
                     DefaultOutlinedTextField(
-                        value = state.nickName,
+                        value = nickNameField.value,
                         onValueChange = { onEvent(RegisterUIEvent.NickNameChange(it)) },
                         label = stringResource(SharedRes.strings.preferred) + "/" +
                                 stringResource(SharedRes.strings.nick_name),
@@ -151,62 +188,101 @@ private fun ScreenContent(
                     )
 
                     DefaultOutlinedTextField(
-                        value = state.lastName,
+                        value = lastNameField.value,
                         onValueChange = { onEvent(RegisterUIEvent.LastNameChange(it)) },
                         label = stringResource(SharedRes.strings.last_name),
+                        isError = lastNameField.isError,
+                        supportingText = {
+                            if (lastNameField.isError) {
+                                Text(text = lastNameField.error)
+                            } else {
+                                NamePrompt()
+                            }
+                        },
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next,
                             capitalization = KeyboardCapitalization.Words
                         ),
+                        modifier = inputFieldCommonModifier.onFocusChanged {
+                            if (it.isFocused) {
+                                onEvent(RegisterUIEvent.InputFieldFocusReceived(lastNameField.name))
+                            } else {
+                                onEvent(RegisterUIEvent.InputFieldFocusLost)
+                            }
+                        }
                     )
 
                     DefaultOutlinedTextField(
-                        value = state.email,
+                        value = emailField.value,
                         onValueChange = { onEvent(RegisterUIEvent.EmailChange(it)) },
                         label = stringResource(SharedRes.strings.email),
+                        isError = emailField.isError,
+                        supportingText = { Text(text = emailField.error) },
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
+                        modifier = inputFieldCommonModifier.onFocusChanged {
+                            if (it.isFocused) {
+                                onEvent(RegisterUIEvent.InputFieldFocusReceived(emailField.name))
+                            } else {
+                                onEvent(RegisterUIEvent.InputFieldFocusLost)
+                            }
+                        }
                     )
 
                     DefaultOutlinedTextField(
-                        value = state.phoneNumber,
+                        value = phoneNumberField.value,
                         onValueChange = { onEvent(RegisterUIEvent.PhoneNumberChange(it)) },
                         label = stringResource(SharedRes.strings.phone_number),
+                        isError = phoneNumberField.isError,
+                        supportingText = { Text(text = phoneNumberField.error) },
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
                             keyboardType = KeyboardType.Phone,
                             imeAction = ImeAction.Next
                         ),
+                        modifier = inputFieldCommonModifier.onFocusChanged {
+                            if (it.isFocused) {
+                                onEvent(RegisterUIEvent.InputFieldFocusReceived(phoneNumberField.name))
+                            } else {
+                                onEvent(RegisterUIEvent.InputFieldFocusLost)
+                            }
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(40.dp))
                     PasswordOutlinedTextField(
-                        value = state.password,
+                        value = passwordField.value,
                         onValueChange = { onEvent(RegisterUIEvent.PasswordChange(it)) },
                         label = stringResource(SharedRes.strings.password),
                         onPasswordVisibilityChange = { showPassword = it },
                         showPassword = showPassword,
+                        showCriteria = true,
+                        errors = passwordField.error.split(Regex("\n")),
                         imeAction = ImeAction.Next,
-                        keyboardActions = KeyboardActions(onNext = {})
                     )
 
                     PasswordOutlinedTextField(
-                        value = state.confirmPassword,
+                        value = confirmPasswordField.value,
                         onValueChange = { onEvent(RegisterUIEvent.ConfirmPasswordChange(it)) },
                         label = stringResource(SharedRes.strings.confirm_password),
                         onPasswordVisibilityChange = { showConfirmPassword = it },
                         showPassword = showConfirmPassword,
+                        isError = confirmPasswordField.isError,
+                        supportingText = {
+                            if (confirmPasswordField.isError) {
+                                Text(confirmPasswordField.error)
+                            }
+                        },
                         imeAction = ImeAction.Done,
-                        keyboardActions = KeyboardActions(onDone = {})
                     )
 
                     Spacer(modifier = Modifier.height(40.dp))
-                    DefaultButton(onClick = {}) {
+                    DefaultButton(onClick = { onEvent(RegisterUIEvent.Submit) }) {
                         Text(text = stringResource(SharedRes.strings.create_account))
                     }
 
@@ -224,5 +300,24 @@ private fun ScreenContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun NamePrompt() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Outlined.Info,
+            contentDescription = null,
+            tint = Color.Gray,
+            modifier = Modifier.size(12.dp)
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = stringResource(SharedRes.strings.name_check_prompt),
+            color = Color.Gray,
+            fontSize = 12.sp
+        )
     }
 }

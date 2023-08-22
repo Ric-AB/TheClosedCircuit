@@ -49,24 +49,6 @@ internal object NewPasswordScreen : Screen, KoinComponent {
         val onEvent = viewModel::onEvent
         val messageBarState = rememberMessageBarState()
 
-        LaunchedEffect(state.resetPasswordResult) {
-            when (state.resetPasswordResult) {
-                is ResetPasswordResult.Failure -> {
-                    messageBarState.addError(state.resetPasswordResult.message)
-                    onEvent(ResetPasswordUIEvent.ResultHandled)
-                }
-
-                ResetPasswordResult.Success -> {
-                    delay(500)
-                    messageBarState.addSuccess("Password reset successfully") {
-                        onEvent(ResetPasswordUIEvent.ResultHandled)
-                        navigator.replaceAll(LoginScreen)
-                    }
-                }
-
-                null -> Unit
-            }
-        }
 
         ScreenContent(
             messageBarState = messageBarState,

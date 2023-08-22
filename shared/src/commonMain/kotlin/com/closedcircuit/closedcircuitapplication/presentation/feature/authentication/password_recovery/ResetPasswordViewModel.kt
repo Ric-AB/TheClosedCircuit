@@ -26,7 +26,6 @@ class ResetPasswordViewModel(
             ResetPasswordUIEvent.SubmitEmail -> submitEmail()
             ResetPasswordUIEvent.SubmitOtp -> submitOtp()
             ResetPasswordUIEvent.SubmitPassword -> submitPassword()
-            ResetPasswordUIEvent.ResultHandled -> updateResults()
         }
     }
 
@@ -36,12 +35,9 @@ class ResetPasswordViewModel(
             val email = state.email.lowercase().trim()
             userRepository.generateOtp(email)
                 .onSuccess {
-                    state = state.copy(loading = false, requestOtpResult = RequestOtpResult.Success)
+                    state = state.copy(loading = false)
                 }.onError { _, message ->
-                    state = state.copy(
-                        loading = false,
-                        requestOtpResult = RequestOtpResult.Failure(message)
-                    )
+                    state = state.copy(loading = false)
                 }
         }
     }
@@ -52,12 +48,9 @@ class ResetPasswordViewModel(
             val email = state.email.lowercase().trim()
             userRepository.verifyOtp(otpCode = state.otpCode, email = email)
                 .onSuccess {
-                    state = state.copy(loading = false, verifyOtpResult = VerifyOtpResult.Success)
+                    state = state.copy(loading = false)
                 }.onError { _, message ->
-                    state = state.copy(
-                        loading = false,
-                        verifyOtpResult = VerifyOtpResult.Failure(message)
-                    )
+                    state = state.copy(loading = false)
                 }
         }
     }
@@ -72,25 +65,11 @@ class ResetPasswordViewModel(
                 password = state.password,
                 confirmPassword = state.confirmPassword
             ).onSuccess {
-                state = state.copy(
-                    loading = false,
-                    resetPasswordResult = ResetPasswordResult.Success
-                )
+                state = state.copy(loading = false)
             }.onError { _, message ->
-                state = state.copy(
-                    loading = false,
-                    resetPasswordResult = ResetPasswordResult.Failure(message)
-                )
+                state = state.copy(loading = false)
             }
         }
-    }
-
-    private fun updateResults() {
-        state = state.copy(
-            requestOtpResult = null,
-            verifyOtpResult = null,
-            resetPasswordResult = null
-        )
     }
 
     private fun updateEmail(email: String) {
@@ -99,7 +78,6 @@ class ResetPasswordViewModel(
 
     private fun updateOtpCode(otp: String) {
         state = state.copy(otpCode = otp)
-        updateResults()
     }
 
     private fun updatePassword(password: String) {

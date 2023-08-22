@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.closedcircuit.closedcircuitapplication.core.validation.PasswordValidator
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibility
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibilityOff
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -111,40 +112,58 @@ fun PasswordOutlinedTextField(
     placeholder: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
+    errors: List<String> = emptyList(),
     singleLine: Boolean = true,
+    showCriteria: Boolean = false,
     showPassword: Boolean,
     onPasswordVisibilityChange: (Boolean) -> Unit,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     shape: Shape = Shapes().medium,
 ) {
-    DefaultOutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        label = label,
-        placeholder = placeholder,
-        supportingText = supportingText,
-        isError = isError,
-        singleLine = singleLine,
-        shape = shape,
-        trailingIcon = {
-            IconButton(onClick = { onPasswordVisibilityChange(!showPassword) }) {
-                Icon(
-                    imageVector = if (showPassword) rememberVisibilityOff() else rememberVisibility(),
-                    contentDescription = null
-                )
-            }
-        },
-        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(
-            autoCorrect = false,
-            keyboardType = KeyboardType.Password,
-            imeAction = imeAction
-        ),
-        keyboardActions = keyboardActions,
-        maxLines = 1
-    )
+    Column {
+        DefaultOutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            label = label,
+            placeholder = placeholder,
+            supportingText = {
+                if (showCriteria) {
+                    Column {
+                        PasswordValidator.criteriaMessage.values.map { criteria ->
+                            Text(
+                                text = criteria,
+                                color = if (errors.contains(criteria)) MaterialTheme.colorScheme.error else Color.Gray
+                            )
+                        }
+                    }
+                } else if (supportingText != null) {
+                    supportingText()
+                }
+            },
+            isError = isError,
+            singleLine = singleLine,
+            shape = shape,
+            trailingIcon = {
+                IconButton(onClick = { onPasswordVisibilityChange(!showPassword) }) {
+                    Icon(
+                        imageVector = if (showPassword) rememberVisibilityOff() else rememberVisibility(),
+                        contentDescription = null
+                    )
+                }
+            },
+            visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                autoCorrect = false,
+                keyboardType = KeyboardType.Password,
+                imeAction = imeAction
+            ),
+            keyboardActions = keyboardActions,
+            maxLines = 1
+        )
+    }
+
 }
 
 @Composable

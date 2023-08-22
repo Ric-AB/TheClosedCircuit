@@ -1,8 +1,13 @@
 package com.closedcircuit.closedcircuitapplication.presentation.theme
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 
 
 val LightColorScheme = lightColorScheme(
@@ -69,6 +74,11 @@ val DarkColorScheme = darkColorScheme(
     outlineVariant = md_theme_dark_outlineVariant,
     scrim = md_theme_dark_scrim,
 )
+
+val screenContentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 24.dp)
+fun PaddingValues.calculateHorizontalPadding(): Dp {
+    return this.calculateStartPadding(LayoutDirection.Ltr)
+}
 
 @Composable
 expect fun AppTheme(

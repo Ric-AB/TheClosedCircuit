@@ -8,7 +8,7 @@ class EmailValidator : InputValidator {
         if (!Email.emailRegex.matches(input)) {
             return ValidationResult(
                 isValid = false,
-                validationErrors = listOf("Please enter a valid email")
+                validationError = "Please enter a valid email"
             )
         }
 
