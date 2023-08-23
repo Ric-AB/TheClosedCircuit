@@ -7,5 +7,5 @@ interface AppSettingsRepository {
     suspend fun updateOnboardingState()
 
     fun onboardingStateFlow(): Flow<Boolean>
-    suspend fun onboardingState(): Boolean
+    suspend fun hasOnboarded(): Boolean
 }

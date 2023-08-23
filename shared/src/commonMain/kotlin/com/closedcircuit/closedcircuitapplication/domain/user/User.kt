@@ -7,7 +7,7 @@ import com.closedcircuit.closedcircuitapplication.domain.value.ID
 import com.closedcircuit.closedcircuitapplication.domain.value.VerificationStatus
 import com.closedcircuit.closedcircuitapplication.domain.value.Name
 import com.closedcircuit.closedcircuitapplication.domain.value.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.domain.value.RawDate
+import com.closedcircuit.closedcircuitapplication.domain.value.Date
 import com.closedcircuit.closedcircuitapplication.domain.value.Avatar
 import kotlinx.serialization.Serializable
 
@@ -25,6 +25,6 @@ data class User(
     val phoneNumberStatus: VerificationStatus,
     val currency: Currency?,
     val isCardTokenized: Boolean,
-    val createdAt: RawDate,
-    val updatedAt: RawDate,
+    val createdAt: Date,
+    val updatedAt: Date,
 )

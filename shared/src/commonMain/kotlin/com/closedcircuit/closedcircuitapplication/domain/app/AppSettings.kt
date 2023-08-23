@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AppSettings(
-    val shouldShowOnboarding: Boolean = true
+    val hasOnboarded: Boolean = false
 )

@@ -35,8 +35,8 @@ class LoginViewModel(
         coroutineScope.launch {
             state = state.copy(loading = true)
 
-            val email by state.emailField.inputValue
-            val password by state.emailField.inputValue
+            val email = state.emailField.value
+            val password = state.passwordField.value
             loginUseCase(email, password).onSuccess {
                 state = state.copy(loading = false)
                 _loginResultChannel.send(LoginResult.Success)

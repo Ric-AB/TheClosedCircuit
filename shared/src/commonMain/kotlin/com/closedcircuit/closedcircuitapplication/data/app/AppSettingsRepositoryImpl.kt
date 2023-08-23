@@ -15,17 +15,17 @@ class AppSettingsRepositoryImpl(
 
     override suspend fun updateOnboardingState() {
         appSettingsStore.update { currentSettings ->
-            currentSettings?.copy(shouldShowOnboarding = false)
+            currentSettings?.copy(hasOnboarded = true)
         }
     }
 
     override fun onboardingStateFlow(): Flow<Boolean> {
         return appSettings.filterNotNull().map {
-            it.shouldShowOnboarding
+            it.hasOnboarded
         }
     }
 
-    override suspend fun onboardingState(): Boolean {
-        return appSettingsStore.get()?.shouldShowOnboarding ?: true
+    override suspend fun hasOnboarded(): Boolean {
+        return appSettingsStore.get()?.hasOnboarded ?: false
     }
 }

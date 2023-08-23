@@ -15,7 +15,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.app.AppSettingsRepository
+import com.closedcircuit.closedcircuitapplication.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -25,7 +27,6 @@ import org.koin.core.component.inject
 
 @Composable
 internal fun AppNavigation() {
-    val authState = rememberAuthState()
     Navigator(SplashScreen)
 }
 
@@ -44,7 +45,7 @@ internal class AuthState(scope: CoroutineScope) : KoinComponent {
     init {
         scope.launch {
             appSettingsRepository.onboardingStateFlow().collectLatest {
-                authState = if (it) AuthenticationState.NEVER
+                authState = if (it) AuthenticationState.FIRST_TIME
                 else AuthenticationState.LOGGED_OUT
             }
         }
@@ -52,20 +53,21 @@ internal class AuthState(scope: CoroutineScope) : KoinComponent {
 }
 
 enum class AuthenticationState {
-    LOGGED_IN, LOGGED_OUT, NEVER
+    LOGGED_IN, LOGGED_OUT, FIRST_TIME
 }
 
 object SplashScreen : Screen, KoinComponent {
-    private val appSettingsRepo by inject<AppSettingsRepository>()
+    private val isLoggedInUseCase by inject<IsLoggedInUseCase>()
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(Unit) {
-            val authState = when (appSettingsRepo.onboardingState()) {
-                true -> navigator.replace(OnboardingScreen)
-                else -> navigator.replace(LoginScreen)
+            when (isLoggedInUseCase()) {
+                AuthenticationState.LOGGED_IN -> navigator.replace(DashboardScreen)
+                AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen)
+                AuthenticationState.FIRST_TIME -> navigator.replace(OnboardingScreen)
             }
         }
 

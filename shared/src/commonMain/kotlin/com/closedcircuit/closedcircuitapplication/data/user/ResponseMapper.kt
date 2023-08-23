@@ -8,7 +8,7 @@ import com.closedcircuit.closedcircuitapplication.domain.value.Email
 import com.closedcircuit.closedcircuitapplication.domain.value.ID
 import com.closedcircuit.closedcircuitapplication.domain.value.Name
 import com.closedcircuit.closedcircuitapplication.domain.value.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.domain.value.RawDate
+import com.closedcircuit.closedcircuitapplication.domain.value.Date
 import com.closedcircuit.closedcircuitapplication.domain.value.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.value.VerificationStatus
 
@@ -25,6 +25,6 @@ fun UserResponse.toUser() = User(
     phoneNumberStatus = VerificationStatus.valueOf(phoneNumberVerified),
     currency = currency?.let { Currency(it) },
     isCardTokenized = !cardToken.isNullOrBlank(),
-    createdAt = RawDate(createdAt),
-    updatedAt = RawDate(updatedAt)
+    createdAt = Date(createdAt),
+    updatedAt = Date(updatedAt)
 )
