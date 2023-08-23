@@ -61,6 +61,7 @@ internal object NewPasswordScreen : Screen, KoinComponent {
                 ResetPasswordResult.Success -> {
                     delay(300)
                     navigator.replaceAll(LoginScreen)
+                    viewModel.onDispose()
                 }
             }
         }

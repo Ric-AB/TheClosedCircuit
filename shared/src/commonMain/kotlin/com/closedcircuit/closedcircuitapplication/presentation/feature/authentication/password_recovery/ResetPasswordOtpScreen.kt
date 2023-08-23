@@ -57,6 +57,19 @@ internal object ResetPasswordOtpScreen : Screen, KoinComponent {
             }
         }
 
+        viewModel.requestOtpResult.receiveAsFlow().observerWithScreen {
+            when (it) {
+                is RequestOtpResult.Failure -> {
+                    messageBarState.addError(it.message)
+                }
+
+                is RequestOtpResult.Success -> {
+                    if (it.isResend)
+                        messageBarState.addSuccess("Otp code has been sent to ${state.emailField.value}")
+                }
+            }
+        }
+
         viewModel.verifyOtpResult.receiveAsFlow().observerWithScreen {
             when (it) {
                 is VerifyOtpResult.Failure -> {
@@ -73,6 +86,7 @@ internal object ResetPasswordOtpScreen : Screen, KoinComponent {
             messageBarState = messageBarState,
             state = state,
             otpChange = onOtpChange,
+            resendOtp = { onEvent(ResetPasswordUIEvent.RequestOtp(true)) },
             otpError = otpError,
             goBack = navigator::pop
         )
@@ -85,6 +99,7 @@ private fun ScreenContent(
     state: ResetPasswordUIState,
     otpError: Boolean,
     otpChange: (String, Boolean) -> Unit,
+    resendOtp: () -> Unit,
     goBack: () -> Unit
 ) {
     BaseScaffold(

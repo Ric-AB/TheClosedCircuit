@@ -60,7 +60,7 @@ internal object ResetPasswordEmailScreen : Screen, KoinComponent {
                     messageBarState.addError(it.message)
                 }
 
-                RequestOtpResult.Success -> {
+                is RequestOtpResult.Success -> {
                     delay(300)
                     navigator.push(ResetPasswordOtpScreen)
                 }
@@ -120,7 +120,7 @@ private fun ScreenContent(
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-                DefaultButton(onClick = { onEvent(ResetPasswordUIEvent.SubmitEmail) }) {
+                DefaultButton(onClick = { onEvent(ResetPasswordUIEvent.RequestOtp()) }) {
                     Text(stringResource(SharedRes.strings.reset_password))
                 }
 

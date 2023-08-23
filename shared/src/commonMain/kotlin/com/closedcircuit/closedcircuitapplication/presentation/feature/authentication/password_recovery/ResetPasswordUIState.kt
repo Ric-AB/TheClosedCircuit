@@ -17,7 +17,7 @@ data class ResetPasswordUIState(
 )
 
 sealed interface RequestOtpResult {
-    object Success : RequestOtpResult
+    data class Success(val isResend: Boolean = false) : RequestOtpResult
     data class Failure(val message: String) : RequestOtpResult
 }
 

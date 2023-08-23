@@ -34,13 +34,13 @@ class ResetPasswordViewModel(
             is ResetPasswordUIEvent.EmailChange -> updateEmail(event.email)
             is ResetPasswordUIEvent.OtpCodeChange -> updateOtpCode(event.otpCode)
             is ResetPasswordUIEvent.PasswordChange -> updatePassword(event.password)
-            ResetPasswordUIEvent.SubmitEmail -> submitEmail()
+            is ResetPasswordUIEvent.RequestOtp -> submitEmail(event.isResend)
             ResetPasswordUIEvent.SubmitOtp -> submitOtp()
             ResetPasswordUIEvent.SubmitPassword -> submitPassword()
         }
     }
 
-    private fun submitEmail() {
+    private fun submitEmail(resend: Boolean) {
         if (isEmailValid()) {
             val email = state.emailField.value.lowercase().trim()
             state = state.copy(loading = true)
@@ -48,7 +48,11 @@ class ResetPasswordViewModel(
                 userRepository.requestOtp(email)
                     .onSuccess {
                         state = state.copy(loading = false)
-                        _requestOtpResult.send(RequestOtpResult.Success)
+                        if (resend) {
+                            _requestOtpResult.send(RequestOtpResult.Success(true))
+                        } else {
+                            _requestOtpResult.send(RequestOtpResult.Success())
+                        }
                     }.onError { _, message ->
                         state = state.copy(loading = false)
                         _requestOtpResult.send(RequestOtpResult.Failure(message))

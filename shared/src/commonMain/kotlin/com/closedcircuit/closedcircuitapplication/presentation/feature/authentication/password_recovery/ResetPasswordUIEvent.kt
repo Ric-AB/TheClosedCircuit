@@ -5,7 +5,7 @@ sealed interface ResetPasswordUIEvent {
     data class OtpCodeChange(val otpCode: String) : ResetPasswordUIEvent
     data class PasswordChange(val password: String) : ResetPasswordUIEvent
     data class ConfirmPasswordChange(val confirmPassword: String) : ResetPasswordUIEvent
-    object SubmitEmail : ResetPasswordUIEvent
+    data class RequestOtp(val isResend: Boolean = false) : ResetPasswordUIEvent
     object SubmitOtp : ResetPasswordUIEvent
     object SubmitPassword : ResetPasswordUIEvent
 }

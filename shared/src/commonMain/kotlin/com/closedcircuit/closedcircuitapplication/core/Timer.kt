@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
@@ -62,3 +63,15 @@ fun CoroutineScope.timerExact(
 /** Returns the amount of time remaining until this mark (opposite of [TimeMark.elapsedNow]) */
 @ExperimentalTime
 fun TimeMark.remaining(): Duration = -elapsedNow()
+
+
+data class Timer(val duration: Duration) {
+    val elapsed: Boolean
+        get() = duration.inWholeSeconds <= 0
+
+    suspend fun tick(): Duration {
+        check(!elapsed)
+        delay(1.seconds)
+        return duration - 1.seconds
+    }
+}
