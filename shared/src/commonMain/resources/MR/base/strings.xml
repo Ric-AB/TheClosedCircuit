@@ -73,4 +73,9 @@
     <string name="enter_a_new_password">Enter a new password</string>
     <string name="invalid_code_try_again">Invalid code. Please try again</string>
     <string name="name_check_prompt">Enter name as seen on your government-issued ID</string>
+
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="message">Message</string>
+    <string name="account">Account</string>
 </resources>

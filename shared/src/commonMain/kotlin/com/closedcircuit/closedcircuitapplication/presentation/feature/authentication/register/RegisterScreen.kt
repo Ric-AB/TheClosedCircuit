@@ -49,7 +49,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Passwor
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
@@ -79,7 +79,7 @@ object RegisterScreen : Screen, KoinComponent {
 
                 RegisterResult.Success -> {
                     delay(500) //wait for loader to hide
-                    navigator.replaceAll(DashboardScreen)
+                    navigator.replaceAll(DashboardTab)
                 }
             }
         }

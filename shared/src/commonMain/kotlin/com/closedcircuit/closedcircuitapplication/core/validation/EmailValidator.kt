@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.core.validation
 
-import com.closedcircuit.closedcircuitapplication.domain.value.Email
+import com.closedcircuit.closedcircuitapplication.domain.model.Email
 
 class EmailValidator : InputValidator {
 

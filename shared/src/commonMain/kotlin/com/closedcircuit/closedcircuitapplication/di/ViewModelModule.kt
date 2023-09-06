@@ -4,6 +4,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery.ResetPasswordKoinContainer
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery.ResetPasswordViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
 import org.koin.dsl.module
 
@@ -16,4 +17,6 @@ val viewModelModule = module {
     scope<ResetPasswordKoinContainer> {
         scoped { ResetPasswordViewModel(get()) }
     }
+
+    factory { DashboardViewModel(get(), get(), get(), get()) }
 }

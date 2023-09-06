@@ -33,6 +33,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
@@ -92,7 +94,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = screenContentPadding.calculateHorizontalPadding())
         ) {
             TitleText(text = stringResource(SharedRes.strings.password_recovery))
 

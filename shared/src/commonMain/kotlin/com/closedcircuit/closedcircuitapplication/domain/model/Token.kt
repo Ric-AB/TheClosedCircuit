@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.domain.value
+package com.closedcircuit.closedcircuitapplication.domain.model
 
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline

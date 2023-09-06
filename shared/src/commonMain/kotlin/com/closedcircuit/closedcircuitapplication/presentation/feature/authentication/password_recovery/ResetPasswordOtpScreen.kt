@@ -26,11 +26,12 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.presentation.component.LoadingDialog
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.OtpView
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
@@ -110,7 +111,7 @@ private fun ScreenContent(
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = screenContentPadding.calculateHorizontalPadding())
         ) {
             TitleText(text = stringResource(SharedRes.strings.password_recovery))
 
@@ -137,15 +138,11 @@ private fun ScreenContent(
                     BodyText(
                         text = stringResource(SharedRes.strings.resend),
                         color = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.clickable { }
+                        modifier = Modifier.clickable { resendOtp() }
                     )
                 }
 
             }
-        }
-
-        if (state.loading) {
-            LoadingDialog()
         }
     }
 }

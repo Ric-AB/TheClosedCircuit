@@ -42,8 +42,10 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.TitleTe
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery.ResetPasswordEmailScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.BottomNavigation
+import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
@@ -70,7 +72,7 @@ object LoginScreen : Screen, KoinComponent {
 
                 LoginResult.Success -> {
                     delay(500) //wait for loader to hide
-                    navigator.replaceAll(DashboardScreen)
+                    navigator.replaceAll(BottomNavigation)
                 }
             }
         }
@@ -104,7 +106,7 @@ private fun ScreenContent(
         var showPassword by rememberSaveable { mutableStateOf(false) }
         LazyColumn(
             modifier = Modifier.padding(innerPadding)
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = screenContentPadding.calculateHorizontalPadding()),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
             item {

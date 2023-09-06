@@ -2,8 +2,8 @@ package com.closedcircuit.closedcircuitapplication.di
 
 import com.closedcircuit.closedcircuitapplication.core.logger.CustomLogger
 import com.closedcircuit.closedcircuitapplication.core.network.DefaultResponseConverter
-import com.closedcircuit.closedcircuitapplication.data.auth.KtorfitAuthService
-import com.closedcircuit.closedcircuitapplication.data.user.KtorfitUserService
+import com.closedcircuit.closedcircuitapplication.data.auth.AuthService
+import com.closedcircuit.closedcircuitapplication.data.user.UserService
 import com.closedcircuit.closedcircuitapplication.domain.session.SessionRepository
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
@@ -99,5 +99,5 @@ private fun createHttpClient(sessionRepository: SessionRepository): HttpClient {
     return client
 }
 
-private fun createUserService(ktorfit: Ktorfit): KtorfitUserService = ktorfit.create()
-private fun createAuthService(ktorfit: Ktorfit): KtorfitAuthService = ktorfit.create()
+private fun createUserService(ktorfit: Ktorfit): UserService = ktorfit.create()
+private fun createAuthService(ktorfit: Ktorfit): AuthService = ktorfit.create()

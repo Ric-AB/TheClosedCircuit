@@ -17,7 +17,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.home.DashboardScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -65,7 +65,7 @@ object SplashScreen : Screen, KoinComponent {
 
         LaunchedEffect(Unit) {
             when (isLoggedInUseCase()) {
-                AuthenticationState.LOGGED_IN -> navigator.replace(DashboardScreen)
+                AuthenticationState.LOGGED_IN -> navigator.replace(BottomNavigation)
                 AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen)
                 AuthenticationState.FIRST_TIME -> navigator.replace(OnboardingScreen)
             }

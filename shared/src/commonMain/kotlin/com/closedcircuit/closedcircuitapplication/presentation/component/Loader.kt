@@ -37,7 +37,7 @@ import androidx.compose.ui.window.Popup
 
 @Composable
 fun LoadingDialog(visible: Boolean = false) {
-    AnimatedVisibility(visible, enter = fadeIn(), exit = fadeOut()) {
+    AnimatedVisibility(visible, enter = fadeIn(tween(500)), exit = fadeOut(tween(100))) {
         Popup(
 //        properties = PopupProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
             alignment = Alignment.Center

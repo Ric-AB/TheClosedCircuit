@@ -20,7 +20,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 
-interface KtorfitAuthService {
+interface AuthService {
 
     @Headers("Content-Type: application/json")
     @POST(LOGIN)

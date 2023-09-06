@@ -2,8 +2,8 @@ package com.closedcircuit.closedcircuitapplication.data.session
 
 import com.closedcircuit.closedcircuitapplication.domain.session.Session
 import com.closedcircuit.closedcircuitapplication.domain.session.SessionRepository
-import com.closedcircuit.closedcircuitapplication.domain.value.Date
-import com.closedcircuit.closedcircuitapplication.domain.value.Token
+import com.closedcircuit.closedcircuitapplication.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.domain.model.Token
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.extensions.cached
 import io.github.xxfast.kstore.utils.ExperimentalKStoreApi

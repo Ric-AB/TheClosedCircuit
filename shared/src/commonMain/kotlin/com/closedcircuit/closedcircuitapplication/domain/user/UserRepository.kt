@@ -1,34 +1,16 @@
 package com.closedcircuit.closedcircuitapplication.domain.user
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.data.auth.dto.LoginResponse
+import com.closedcircuit.closedcircuitapplication.data.user.dto.UserDashboardResponse
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
+    val userFlow: Flow<User?>
+    suspend fun fetchUser(userId: String): ApiResponse<User>
 
-    suspend fun loginWithEmailAndPassword(
-        email: String,
-        password: String
-    ): ApiResponse<LoginResponse>
+    suspend fun getCurrentUser(): User
 
-    suspend fun register(
-        fullName: String,
-        email: String,
-        roles: String,
-        phoneNumber: String,
-        password: String,
-        confirmPassword: String
-    ): ApiResponse<Unit>
+    fun getCurrentUserFlow(): Flow<User>
 
-    suspend fun requestOtp(email: String): ApiResponse<Unit>
-
-    suspend fun verifyOtp(otpCode: String, email: String): ApiResponse<Unit>
-
-    suspend fun resetPassword(
-        otpCode: String,
-        email: String,
-        password: String,
-        confirmPassword: String
-    ): ApiResponse<Unit>
-
-    suspend fun getUser(userId: String): ApiResponse<User>
+    suspend fun getUserDashboard(): ApiResponse<UserDashboardResponse>
 }

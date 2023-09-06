@@ -7,13 +7,13 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.domain.auth.AuthenticationRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class ResetPasswordViewModel(
-    private val userRepository: UserRepository
+    private val authenticationRepository: AuthenticationRepository
 ) : ScreenModel {
 
     var state by mutableStateOf(ResetPasswordUIState())
@@ -45,7 +45,7 @@ class ResetPasswordViewModel(
             val email = state.emailField.value.lowercase().trim()
             state = state.copy(loading = true)
             coroutineScope.launch {
-                userRepository.requestOtp(email)
+                authenticationRepository.requestOtp(email)
                     .onSuccess {
                         state = state.copy(loading = false)
                         if (resend) {
@@ -67,7 +67,7 @@ class ResetPasswordViewModel(
 
         state = state.copy(loading = true)
         coroutineScope.launch {
-            userRepository.verifyOtp(otpCode = otpCode, email = email)
+            authenticationRepository.verifyOtp(otpCode = otpCode, email = email)
                 .onSuccess {
                     state = state.copy(loading = false)
                     _verifyOtpResult.send(VerifyOtpResult.Success)
@@ -88,7 +88,7 @@ class ResetPasswordViewModel(
 
             state = state.copy(loading = true)
             coroutineScope.launch {
-                userRepository.resetPassword(
+                authenticationRepository.resetPassword(
                     otpCode = otpCode,
                     email = email,
                     password = password,

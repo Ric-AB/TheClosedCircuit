@@ -1,14 +1,14 @@
 package com.closedcircuit.closedcircuitapplication.domain.user
 
-import com.closedcircuit.closedcircuitapplication.domain.value.Country
-import com.closedcircuit.closedcircuitapplication.domain.value.Currency
-import com.closedcircuit.closedcircuitapplication.domain.value.Email
-import com.closedcircuit.closedcircuitapplication.domain.value.ID
-import com.closedcircuit.closedcircuitapplication.domain.value.VerificationStatus
-import com.closedcircuit.closedcircuitapplication.domain.value.Name
-import com.closedcircuit.closedcircuitapplication.domain.value.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.domain.value.Date
-import com.closedcircuit.closedcircuitapplication.domain.value.Avatar
+import com.closedcircuit.closedcircuitapplication.domain.model.Country
+import com.closedcircuit.closedcircuitapplication.domain.model.Currency
+import com.closedcircuit.closedcircuitapplication.domain.model.Email
+import com.closedcircuit.closedcircuitapplication.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
+import com.closedcircuit.closedcircuitapplication.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
+import com.closedcircuit.closedcircuitapplication.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import kotlinx.serialization.Serializable
 
 @Serializable
