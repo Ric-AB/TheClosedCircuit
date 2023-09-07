@@ -62,7 +62,6 @@ kotlin {
                 api(libs.napier)
 
                 implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.insetsx)
 //                implementation(libs.ktor.core)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.datetime)

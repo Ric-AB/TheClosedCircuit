@@ -1,19 +1,16 @@
 @file:OptIn(
     ExperimentalFoundationApi::class,
-    ExperimentalMaterial3Api::class,
-    ExperimentalAnimationApi::class
 )
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,7 +32,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -96,7 +92,7 @@ private fun ScreenContent(
         OnboardingPage.Fourth,
     )
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { onboardingPages.size }
     val scope = rememberCoroutineScope()
     Scaffold { innerPadding ->
         Column(
@@ -107,7 +103,6 @@ private fun ScreenContent(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.weight(10F),
-                pageCount = onboardingPages.size
             ) { page ->
                 PagerScreen(onboardingPages[page])
             }
@@ -148,7 +143,7 @@ private fun ActionButtons(
 
     AnimatedContent(
         targetState = isLastPage,
-        transitionSpec = { fadeIn(tween()) with fadeOut(tween()) },
+        transitionSpec = { fadeIn(tween()) togetherWith fadeOut(tween()) },
         contentAlignment = Alignment.Center,
         modifier = modifier
     ) { isLastPageState ->

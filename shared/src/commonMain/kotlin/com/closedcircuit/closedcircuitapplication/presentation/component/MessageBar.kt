@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalTime::class)
 
 package com.closedcircuit.closedcircuitapplication.presentation.component
 
@@ -21,6 +20,7 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -48,9 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.closedcircuit.closedcircuitapplication.core.timer
-import com.moriatsushi.insetsx.statusBars
 import kotlinx.coroutines.Job
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -155,6 +153,7 @@ fun ContentWithMessageBar(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 private fun MessageBarComponent(
     messageBarState: MessageBarState,

@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
-
 package com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding
 
 import androidx.compose.foundation.Image
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedButton
+import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource

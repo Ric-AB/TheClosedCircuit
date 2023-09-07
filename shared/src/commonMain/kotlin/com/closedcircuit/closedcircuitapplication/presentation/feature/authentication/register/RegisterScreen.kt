@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register
 
 import androidx.compose.foundation.clickable
@@ -8,9 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,11 +49,10 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.TitleTe
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
-import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.moriatsushi.insetsx.imePadding
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -103,7 +101,8 @@ private fun ScreenContent(
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = navigateToLogin) },
         messageBarState = messageBarState,
-        isLoading = state.loading
+        isLoading = state.loading,
+        contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -113,8 +112,7 @@ private fun ScreenContent(
             contentPadding = PaddingValues(bottom = screenContentPadding.calculateBottomPadding()),
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = screenContentPadding.calculateHorizontalPadding())
-                .imePadding()
+                .padding(horizontal = defaultHorizontalScreenPadding)
         ) {
             item {
                 BodyText(

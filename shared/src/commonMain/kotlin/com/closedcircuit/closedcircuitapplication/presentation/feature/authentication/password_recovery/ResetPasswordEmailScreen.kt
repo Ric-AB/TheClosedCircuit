@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
 
@@ -7,13 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,8 +33,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
@@ -88,13 +87,14 @@ private fun ScreenContent(
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
-        isLoading = state.loading
+        isLoading = state.loading,
+        contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = screenContentPadding.calculateHorizontalPadding())
+                .padding(horizontal = defaultHorizontalScreenPadding)
         ) {
             TitleText(text = stringResource(SharedRes.strings.password_recovery))
 

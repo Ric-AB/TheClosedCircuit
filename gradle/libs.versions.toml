@@ -6,20 +6,19 @@ androidx-appcompat = "1.6.1"
 androidx-composeCompiler = "1.4.7"
 atomicfu = "0.17.3"
 buildConfig = "3.1.0"
-compose = "1.4.3" #"1.5.0-beta01"
-compose-uitooling = "1.4.3"
+compose = "1.5.0"
+compose-uitooling = "1.5.1"
 composeImageLoader = "1.4.1"
-insetsx = "0.1.0-alpha10"
 koin = "3.4.2"
 koin-compose = "3.4.5"
 koin-compose-kmm = "1.0.3"
 kotlin = "1.8.21"
 kotlin-inject = '0.6.1'
-kotlinx-coroutines = "1.7.2"
+kotlinx-coroutines = "1.7.3"
 kotlinx-datetime = "0.4.0"
 kotlinx-serialization = "1.5.1"
 kstore = "0.6.0"
-ktor = "2.3.2"
+ktor = "2.3.3"
 ktorfit = "1.4.4"
 ktorfit-compiler = '1.0.0'
 libres = "1.1.8"
@@ -33,7 +32,6 @@ androidx-activityCompose = { module = "androidx.activity:activity-compose", vers
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
 composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
-insetsx = { module = "com.moriatsushi.insetsx:insetsx", version.ref = "insetsx" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
 koin-compose-kmm = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose-kmm" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }

@@ -1,8 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login
 
-//import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -15,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,8 +40,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.BottomNavigation
-import com.closedcircuit.closedcircuitapplication.presentation.theme.calculateHorizontalPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
@@ -105,9 +100,10 @@ private fun ScreenContent(
         val (emailField, passwordField, _) = state
         var showPassword by rememberSaveable { mutableStateOf(false) }
         LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-                .padding(horizontal = screenContentPadding.calculateHorizontalPadding()),
-            contentPadding = PaddingValues(bottom = 24.dp)
+            contentPadding = PaddingValues(bottom = 24.dp),
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = defaultHorizontalScreenPadding)
         ) {
             item {
                 TitleText(text = stringResource(SharedRes.strings.welcome_back))
