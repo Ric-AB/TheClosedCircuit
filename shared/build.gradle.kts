@@ -40,7 +40,6 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
                 implementation(compose.material3)
-//                implementation(libs.composeImageLoader)
 
                 // navigation
                 implementation(libs.voyager.navigator)
@@ -61,8 +60,8 @@ kotlin {
 
                 api(libs.napier)
 
+                implementation(libs.kotlinx.collections)
                 implementation(libs.kotlinx.coroutines.core)
-//                implementation(libs.ktor.core)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.koin.core)

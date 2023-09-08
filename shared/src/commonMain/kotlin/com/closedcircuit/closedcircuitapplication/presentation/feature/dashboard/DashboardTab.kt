@@ -59,6 +59,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableList
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -161,7 +162,7 @@ private fun NoSponsors(modifier: Modifier) {
 }
 
 @Composable
-private fun RecentPlans(recentPlans: List<Plan>, modifier: Modifier, headerModifier: Modifier) {
+private fun RecentPlans(recentPlans: ImmutableList<Plan>, modifier: Modifier, headerModifier: Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = headerModifier.fillMaxWidth(),
@@ -234,7 +235,7 @@ private fun RecentPlans(recentPlans: List<Plan>, modifier: Modifier, headerModif
 }
 
 @Composable
-private fun TopSponsors(topSponsors: List<Sponsor>, modifier: Modifier) {
+private fun TopSponsors(topSponsors: ImmutableList<Sponsor>, modifier: Modifier) {
     if (topSponsors.isNotEmpty()) {
         Card(modifier = modifier.width(250.dp)) {
             Row(

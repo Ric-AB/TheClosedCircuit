@@ -14,6 +14,7 @@ koin-compose = "3.4.5"
 koin-compose-kmm = "1.0.3"
 kotlin = "1.8.21"
 kotlin-inject = '0.6.1'
+kotlinx-collections = "0.3.5"
 kotlinx-coroutines = "1.7.3"
 kotlinx-datetime = "0.4.0"
 kotlinx-serialization = "1.5.1"
@@ -36,6 +37,7 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = 
 koin-compose-kmm = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose-kmm" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 kotlinInject-compiler = { module = 'me.tatarka.inject:kotlin-inject-compiler-ksp', version.ref = 'kotlin-inject' }
+kotlinx-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }

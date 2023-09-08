@@ -2,6 +2,7 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.dashboar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.GetUserDashboardUseCase
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
@@ -15,19 +16,22 @@ class DashboardViewModel(
     private val getUserDashboardUseCase: GetUserDashboardUseCase,
     private val userRepository: UserRepository,
     private val walletRepository: WalletRepository,
-    private val planRepository: PlanRepository
+    private val planRepository: PlanRepository,
+    private val donationRepository: DonationRepository
 ) : ScreenModel {
 
     val state =
         combine(
             userRepository.userFlow,
             walletRepository.walletFlow,
-            planRepository.allPlansFlow
-        ) { user, wallet, allPlans ->
+            planRepository.allPlansFlow,
+            donationRepository.recentDonationsFlow
+        ) { user, wallet, allPlans, recentDonations ->
             DashboardUIState(
                 currentUser = user,
                 wallet = wallet,
-                recentPlans = allPlans
+                recentPlans = allPlans,
+                recentDonation = recentDonations
             )
         }.stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000L), DashboardUIState())
 
