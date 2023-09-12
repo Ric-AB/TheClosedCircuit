@@ -85,4 +85,5 @@
     <string name="country">Country</string>
     <string name="hello_user">Hello, %s!</string>
     <string name="full_name">Full name</string>
+    <string name="save_changes">Save changes</string>
 </resources>

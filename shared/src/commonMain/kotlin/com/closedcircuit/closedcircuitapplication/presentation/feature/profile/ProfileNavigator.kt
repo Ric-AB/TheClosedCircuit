@@ -9,6 +9,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home.ProfileScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
@@ -32,6 +33,8 @@ internal object ProfileNavigator : Tab, KoinComponent {
 
     @Composable
     override fun Content() {
-        Navigator(ProfileScreen)
+        Navigator(ProfileScreen) {
+            ScreenBasedTransition(it)
+        }
     }
 }

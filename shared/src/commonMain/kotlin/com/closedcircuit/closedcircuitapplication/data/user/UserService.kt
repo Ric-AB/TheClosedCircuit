@@ -9,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndp
 import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.USER_DETAILS
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.Path
 
@@ -21,6 +22,7 @@ interface UserService {
     @GET(DASHBOARD)
     suspend fun getUserDashboard(): ApiResponse<UserDashboardResponse>
 
+    @Headers("Content-Type: application/json")
     @PATCH(UPDATE_USER)
     suspend fun updateUser(
         @Body updateUserRequest: UpdateUserRequest,

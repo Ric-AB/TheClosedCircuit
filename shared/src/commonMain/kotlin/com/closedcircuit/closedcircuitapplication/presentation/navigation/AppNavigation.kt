@@ -17,8 +17,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ScreenBasedTransition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,7 +27,9 @@ import org.koin.core.component.inject
 
 @Composable
 internal fun AppNavigation() {
-    Navigator(SplashScreen)
+    Navigator(SplashScreen) {
+        ScreenBasedTransition(it)
+    }
 }
 
 @Composable

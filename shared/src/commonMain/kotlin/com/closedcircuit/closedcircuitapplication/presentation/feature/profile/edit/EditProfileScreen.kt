@@ -31,9 +31,12 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ModalTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -43,7 +46,10 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
-internal data class EditProfileScreen(private val user: User) : Screen, KoinComponent {
+internal data class EditProfileScreen(private val user: User) :
+    Screen,
+    KoinComponent,
+    CustomScreenTransition by ModalTransition {
     private val viewModel: EditProfileViewModel by inject { parametersOf(user) }
 
     @Composable
@@ -84,6 +90,7 @@ private fun ScreenContent(
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
+        isLoading = uiState?.isLoading ?: false,
         topBar = {
             DefaultAppBar(
                 title = stringResource(SharedRes.strings.edit_profile),
@@ -210,6 +217,10 @@ private fun ScreenContent(
                         }
                     }
                 )
+
+                DefaultButton(onClick = { onEvent(EditProfileUIEvent.OnSubmit) }) {
+                    Text(text = stringResource(SharedRes.strings.save_changes))
+                }
             }
         }
     }
