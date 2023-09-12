@@ -94,7 +94,7 @@ private fun ScreenContent(
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
-        isLoading = state.loading,
+        isLoading = state.isLoading,
         topBar = { DefaultAppBar(mainAction = navigateToWelcomeScreen) },
     ) { innerPadding ->
         val (emailField, passwordField, _) = state

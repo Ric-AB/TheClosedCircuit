@@ -2,15 +2,13 @@ package com.closedcircuit.closedcircuitapplication.domain.user
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.user.dto.UserDashboardResponse
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface UserRepository {
-    val userFlow: Flow<User?>
+    val userFlow: StateFlow<User?>
     suspend fun fetchUser(userId: String): ApiResponse<User>
+    suspend fun nonNullUser(): User
 
-    suspend fun getCurrentUser(): User
-
-    fun getCurrentUserFlow(): Flow<User>
-
+    suspend fun updateUser(user: User): ApiResponse<User>
     suspend fun getUserDashboard(): ApiResponse<UserDashboardResponse>
 }

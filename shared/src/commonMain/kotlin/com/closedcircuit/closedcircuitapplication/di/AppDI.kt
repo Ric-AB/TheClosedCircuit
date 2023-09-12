@@ -5,7 +5,7 @@ import org.koin.dsl.KoinAppDeclaration
 
 fun startAppDI(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     modules(
-        dataModule + viewModelModule + networkModule + useCaseModule
+        dataModule + viewModelModule + networkModule + useCaseModule + coroutineModule
     )
     appDeclaration()
 }

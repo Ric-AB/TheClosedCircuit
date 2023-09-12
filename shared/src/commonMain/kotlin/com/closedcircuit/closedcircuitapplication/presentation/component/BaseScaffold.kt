@@ -27,7 +27,7 @@ fun BaseScaffold(
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
-    contentWindowInsets: WindowInsets = WindowInsets.navigationBars,
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit
 ) {
     if (messageBarState != null) {

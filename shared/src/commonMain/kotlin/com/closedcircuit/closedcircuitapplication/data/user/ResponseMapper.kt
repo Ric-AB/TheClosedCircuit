@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.data.user
 
 import com.closedcircuit.closedcircuitapplication.data.user.dto.SponsorResponse
-import com.closedcircuit.closedcircuitapplication.data.user.dto.UserResponse
+import com.closedcircuit.closedcircuitapplication.data.user.dto.ApiUser
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.domain.model.Currency
@@ -15,7 +15,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
 import com.closedcircuit.closedcircuitapplication.domain.user.Sponsor
 
-fun UserResponse.toUser() = User(
+fun ApiUser.asUser() = User(
     id = ID(id),
     email = Email(email),
     fullName = Name(fullName),
@@ -30,6 +30,23 @@ fun UserResponse.toUser() = User(
     isCardTokenized = !cardToken.isNullOrBlank(),
     createdAt = Date(createdAt),
     updatedAt = Date(updatedAt)
+)
+
+fun User.asApiUser() = ApiUser(
+    id = id.value,
+    email = email.value,
+    fullName = fullName.value,
+    preferredName = preferredName?.value,
+    avatar = avatar.value,
+    country = country.value,
+    isVerified = isVerified,
+    phoneNumber = phoneNumber.value,
+    kycStatus = kycStatus.toString(),
+    phoneNumberVerified = phoneNumberStatus.toString(),
+    cardToken = null,
+    currency = currency?.value,
+    createdAt = createdAt.value,
+    updatedAt = updatedAt.value
 )
 
 fun SponsorResponse.toSponsor() = Sponsor(

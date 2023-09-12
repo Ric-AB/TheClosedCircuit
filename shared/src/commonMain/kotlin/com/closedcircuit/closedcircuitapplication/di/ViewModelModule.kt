@@ -6,6 +6,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home.ProfileViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit.EditProfileViewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -18,5 +20,7 @@ val viewModelModule = module {
         scoped { ResetPasswordViewModel(get()) }
     }
 
-    factory { DashboardViewModel(get(), get(), get(), get()) }
+    factory { DashboardViewModel(get(), get(), get(), get(), get()) }
+    factory { ProfileViewModel(get(), get()) }
+    factory { parameters -> EditProfileViewModel(parameters.get(), get()) }
 }

@@ -34,14 +34,13 @@ class RegisterViewModel(
             is RegisterUIEvent.PasswordChange -> updatePassword(event.password)
             is RegisterUIEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
             is RegisterUIEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
-            RegisterUIEvent.InputFieldFocusLost -> validateField()
+            RegisterUIEvent.InputFieldFocusLost -> validateLastFocusedField()
             RegisterUIEvent.Submit -> attemptRegistration()
         }
     }
 
     private fun attemptRegistration() {
-        val isValid = areFieldsValid()
-        if (isValid) {
+        if (areFieldsValid()) {
             val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
             val email = emailField.value.lowercase().trim()
             val fullName =
@@ -50,7 +49,7 @@ class RegisterViewModel(
             val password = passwordField.value
             val confirmPassword = confirmPasswordField.value
 
-            state = state.copy(loading = true)
+            state = state.copy(isLoading = true)
             coroutineScope.launch {
                 registerUseCase(
                     fullName,
@@ -60,17 +59,17 @@ class RegisterViewModel(
                     password,
                     confirmPassword
                 ).onSuccess {
-                    state = state.copy(loading = false)
+                    state = state.copy(isLoading = false)
                     _registerResultChannel.send(RegisterResult.Success)
                 }.onError { _, message ->
-                    state = state.copy(loading = false)
+                    state = state.copy(isLoading = false)
                     _registerResultChannel.send(RegisterResult.Failure(message))
                 }
             }
         }
     }
 
-    private fun validateField() {
+    private fun validateLastFocusedField() {
         if (lastFocusedField == null) return
         val fieldToValidate = state.fieldsToValidateAsList().find { it.name == lastFocusedField }
         fieldToValidate?.validateInput()

@@ -27,4 +27,7 @@ data class User(
     val isCardTokenized: Boolean,
     val createdAt: Date,
     val updatedAt: Date,
-)
+) {
+    val firstName = Name(fullName.value.split(Regex("\\s")).first())
+    val lastName = Name(fullName.value.split(Regex("\\s")).last())
+}

@@ -54,6 +54,7 @@ import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.user.Sponsor
 import com.closedcircuit.closedcircuitapplication.domain.wallet.Wallet
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
@@ -83,17 +84,17 @@ internal object DashboardTab : Tab, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val state by viewModel.state.collectAsState()
+        val uiState by viewModel.state.collectAsState()
         val messageBarState = rememberMessageBarState()
 
-        ScreenContent(state)
+        ScreenContent(messageBarState = messageBarState, uiState = uiState)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ScreenContent(state: DashboardUIState) {
-    BaseScaffold { innerPadding ->
+private fun ScreenContent(messageBarState: MessageBarState, uiState: DashboardUIState) {
+    BaseScaffold(messageBarState = messageBarState) { innerPadding ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.fillMaxSize()
@@ -102,13 +103,13 @@ private fun ScreenContent(state: DashboardUIState) {
             item {
                 Spacer(modifier = Modifier.height(24.dp))
                 WalletCard(
-                    wallet = state.wallet,
+                    wallet = uiState.wallet,
                     modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
                 )
             }
 
             item {
-                val topSponsors = state.topSponsors
+                val topSponsors = uiState.topSponsors
                 if (topSponsors != null) {
                     TopSponsors(
                         topSponsors = topSponsors,
@@ -118,7 +119,7 @@ private fun ScreenContent(state: DashboardUIState) {
             }
 
             item {
-                val recentPlans = state.recentPlans
+                val recentPlans = uiState.recentPlans
                 if (recentPlans.isNotEmpty()) {
                     RecentPlans(
                         recentPlans = recentPlans,
@@ -162,7 +163,11 @@ private fun NoSponsors(modifier: Modifier) {
 }
 
 @Composable
-private fun RecentPlans(recentPlans: ImmutableList<Plan>, modifier: Modifier, headerModifier: Modifier) {
+private fun RecentPlans(
+    recentPlans: ImmutableList<Plan>,
+    modifier: Modifier,
+    headerModifier: Modifier
+) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = headerModifier.fillMaxWidth(),

@@ -6,7 +6,7 @@ object ClosedCircuitApiEndpoints {
     const val REGISTER = "user/register/"
     const val REGISTER_SPONSOR = "user/register/sponsor/"
     const val USER_DETAILS = "user/manage-user/{id}/"
-    const val UPDATE_PROFILE = "user/manage-user/{id}/"
+    const val UPDATE_USER = "user/manage-user/{id}/"
     const val CHANGE_PASSWORD = "user/change-password/{id}/"
     const val GENERATE_OTP = "user/generate-otp/"
     const val VERIFY_OTP = "user/verify-otp/"

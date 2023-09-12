@@ -101,13 +101,15 @@ private fun ScreenContent(
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = navigateToLogin) },
         messageBarState = messageBarState,
-        isLoading = state.loading,
+        isLoading = state.isLoading,
         contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         var showConfirmPassword by rememberSaveable { mutableStateOf(false) }
         val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
+        val inputFieldCommonModifier = Modifier.fillMaxWidth()
+
         LazyColumn(
             contentPadding = PaddingValues(bottom = screenContentPadding.calculateBottomPadding()),
             modifier = Modifier
@@ -128,7 +130,6 @@ private fun ScreenContent(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val inputFieldCommonModifier = Modifier.fillMaxWidth()
                     Spacer(modifier = Modifier.height(20.dp))
                     DefaultOutlinedTextField(
                         value = firstNameField.value,

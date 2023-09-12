@@ -1,7 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.presentation.navigation
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -15,11 +14,10 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.feature.account.AccountTab
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.presentation.feature.message.MessageTab
-import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.ProfileTab
+import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.ProfileNavigator
 
 object BottomNavigation : Screen {
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         TabNavigator(tab = DashboardTab) {
@@ -28,7 +26,7 @@ object BottomNavigation : Screen {
                 bottomBar = {
                     NavigationBar {
                         TabNavigationItem(DashboardTab)
-                        TabNavigationItem(ProfileTab)
+                        TabNavigationItem(ProfileNavigator)
                         TabNavigationItem(MessageTab)
                         TabNavigationItem(AccountTab)
                     }

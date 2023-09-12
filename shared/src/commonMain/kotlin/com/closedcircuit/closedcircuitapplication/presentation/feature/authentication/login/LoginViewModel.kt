@@ -33,15 +33,15 @@ class LoginViewModel(
 
     private fun attemptLogin() {
         coroutineScope.launch {
-            state = state.copy(loading = true)
+            state = state.copy(isLoading = true)
 
             val email = state.emailField.value
             val password = state.passwordField.value
             loginUseCase(email, password).onSuccess {
-                state = state.copy(loading = false)
+                state = state.copy(isLoading = false)
                 _loginResultChannel.send(LoginResult.Success)
             }.onError { _, message ->
-                state = state.copy(loading = false)
+                state = state.copy(isLoading = false)
                 _loginResultChannel.send(LoginResult.Failure(message))
             }
         }

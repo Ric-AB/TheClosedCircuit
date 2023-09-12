@@ -23,7 +23,7 @@ data class RegisterUIState(
     ),
 
     val confirmPasswordField: InputField = InputField(name = "confirmPassword"),
-    val loading: Boolean = false,
+    val isLoading: Boolean = false,
 ) {
     fun fieldsToValidateAsList() = listOf(
         firstNameField,

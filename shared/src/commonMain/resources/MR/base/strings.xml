@@ -45,14 +45,13 @@
     <string name="login">Login</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="create_account">Create account</string>
-    <string name="email">Email</string>
+    <string name="email">E-mail</string>
     <string name="shared_build_shared_prosperity">Shared Building. Shared Prosperity.</string>
     <string name="create_a_new_account">Create a New Account</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="nick_name">Nick Name</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="nick_name">Nick name</string>
     <string name="preferred">Preferred</string>
-    <string name="first_name">First Name</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="password_recovery">Password Recovery</string>
     <string name="reset_password">Reset Password</string>
@@ -78,4 +77,12 @@
     <string name="profile">Profile</string>
     <string name="message">Message</string>
     <string name="account">Account</string>
+
+    <!--    Profile-->
+    <string name="personal_data">Personal data</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="profile_status">Profile status</string>
+    <string name="country">Country</string>
+    <string name="hello_user">Hello, %s!</string>
+    <string name="full_name">Full name</string>
 </resources>
