@@ -213,7 +213,7 @@ private fun RecentPlans(
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = it.businessName)
+                        Text(text = it.name)
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
