@@ -13,7 +13,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class PlanRepositoryImpl(
+    db: TheClosedCircuitDatabase
 ) : PlanRepository {
+    private val queries = db.planEntityQueries
     private val _allPlans = MutableStateFlow(plans)
     override val allPlansFlow: Flow<Plans>
         get() = _allPlans

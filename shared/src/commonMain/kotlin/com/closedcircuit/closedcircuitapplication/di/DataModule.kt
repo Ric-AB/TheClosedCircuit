@@ -27,6 +27,6 @@ val dataModule = module {
     single<UserRepository> { UserRepositoryImpl(get(), userStore, get(named(namedIODispatcher))) }
     single<AuthenticationRepository> { AuthenticationRepositoryImpl(get()) }
     single<WalletRepository> { WalletRepositoryImpl() }
-    single<PlanRepository> { PlanRepositoryImpl() }
+    single<PlanRepository> { PlanRepositoryImpl(get()) }
     single<DonationRepository> { DonationRepositoryImpl() }
 }

@@ -4,12 +4,12 @@ plugins {
     alias(libs.plugins.cocoapods)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose)
-    alias(libs.plugins.libres)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.mokoResources)
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.sqlDelight)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -67,6 +67,10 @@ kotlin {
                 implementation(libs.koin.core)
                 implementation(libs.kstore)
                 implementation(libs.kstore.file)
+
+                // sqlDelight
+                implementation(libs.sqldelight.coroutines)
+                implementation(libs.sqldelight.primitiveAdapters)
             }
         }
 
@@ -84,6 +88,7 @@ kotlin {
                 implementation(libs.napier)
                 implementation(libs.koin.compose)
                 implementation(libs.kstore.file)
+                implementation(libs.sqldelight.androidDriver)
 //                implementation(libs.kotlinx.coroutines.android)
 //                implementation(libs.ktor.client.okhttp)
             }
@@ -99,6 +104,7 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation(libs.ktor.ios)
+                implementation(libs.sqldelight.nativeDriver)
             }
         }
     }
@@ -125,6 +131,14 @@ dependencies {
     }
 }
 
+sqldelight {
+    databases {
+        create("TheClosedCircuitDatabase") {
+            packageName.set("com.closedcircuit.closedcircuitapplication.database")
+        }
+    }
+}
+
 multiplatformResources {
     multiplatformResourcesPackage = "com.closedcircuit.closedcircuitapplication.resources"
     multiplatformResourcesClassName = "SharedRes"
@@ -134,6 +148,6 @@ tasks.matching { it.name == "kspKotlinIosSimulatorArm64" }.configureEach {
     dependsOn(tasks.getByName("generateMRiosSimulatorArm64Main"))
 }
 
-//tasks.matching { it.name == "syncPodComposeResourcesForIos" }.configureEach {
-//    dependsOn(tasks.getByName("generateMRiosSimulatorArm64Main"))
-//}
+tasks.matching { it.name == "kspKotlinIosArm64" }.configureEach {
+    dependsOn(tasks.getByName("generateMRiosArm64Main"))
+}

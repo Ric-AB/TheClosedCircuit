@@ -12,7 +12,6 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
-import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
@@ -94,7 +93,7 @@ class EditProfileViewModel(
     }
 
     private fun areFieldsValid(): Boolean {
-        val fields = state.fieldsToValidateAsList() ?: return false
+        val fields = state.fieldsToValidateAsList()
         fields.forEach { inputField -> inputField.validateInput() }
         return fields.all { inputField -> inputField.error.isEmpty() }
     }

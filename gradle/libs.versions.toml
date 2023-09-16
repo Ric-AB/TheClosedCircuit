@@ -22,9 +22,9 @@ kstore = "0.6.0"
 ktor = "2.3.3"
 ktorfit = "1.4.4"
 ktorfit-compiler = '1.0.0'
-libres = "1.1.8"
 mokoResources = "0.23.0"
 napier = "2.6.1"
+sqlDelight = "2.0.0"
 voyager = "1.0.0-rc06"
 
 [libraries]
@@ -54,10 +54,14 @@ ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = 
 ktor-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 ktorfit-ksp = { module = 'de.jensklingenberg.ktorfit:ktorfit-ksp', version.ref = 'ktorfit' }
-libres = { module = "io.github.skeptick.libres:libres-compose", version.ref = "libres" }
 moko-resources = { module = "dev.icerock.moko:resources", version.ref = "mokoResources" }
 moko-resources-compose = { module = "dev.icerock.moko:resources-compose", version.ref = "mokoResources" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+sqldelight-androidDriver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqldelight-jvmDriver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+sqldelight-nativeDriver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
+sqldelight-primitiveAdapters = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-tab = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
@@ -74,6 +78,7 @@ compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit-compiler" }
-libres = { id = "io.github.skeptick.libres", version.ref = "libres" }
 mokoResources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "mokoResources" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+
