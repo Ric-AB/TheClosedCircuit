@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.multiplatform)
@@ -15,6 +18,12 @@ plugins {
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     android()
+    project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
+        targets
+            .filterIsInstance<KotlinNativeTarget>()
+            .flatMap { it.binaries }
+            .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()

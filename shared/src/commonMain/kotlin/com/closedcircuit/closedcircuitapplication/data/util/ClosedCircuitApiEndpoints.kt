@@ -5,8 +5,7 @@ object ClosedCircuitApiEndpoints {
     const val LOGIN = "user/login/"
     const val REGISTER = "user/register/"
     const val REGISTER_SPONSOR = "user/register/sponsor/"
-    const val USER_DETAILS = "user/manage-user/{id}/"
-    const val UPDATE_USER = "user/manage-user/{id}/"
+    const val USER = "user/manage-user/{id}/"
     const val CHANGE_PASSWORD = "user/change-password/{id}/"
     const val GENERATE_OTP = "user/generate-otp/"
     const val VERIFY_OTP = "user/verify-otp/"
@@ -17,26 +16,38 @@ object ClosedCircuitApiEndpoints {
 
     //beneficiary
     const val DASHBOARD = "user/beneficiary/get_details/"
-    const val DELETE_PLAN = "user/plans/{id}/"
-    const val UPDATE_PLAN = "user/plans/{id}/"
-    const val PLANS = "user/plans/{id}"
-    const val GET_MY_PLANS = "user/plans/get-plans/"
-    const val DELETE_STEP = "user/steps/{id}/"
-    const val UPDATE_BUDGET = "user/budget/{id}/"
-    const val STEPS = "user/steps/"
-    const val BUDGET = "user/budget/"
-    const val DELETE_BUDGET = "user/budget/{id}/"
-    const val PLAN = "user/plans/"
-    const val GET_STEP = "user/steps/{id}/"
+
+
+    // fund request
     const val FUND_REQUEST = "v1/fund_request/"
+
+    // loans
     const val GET_LOAN_OFFERS_PLANS = "v1/loan_offer/plans/"
     const val GET_LOAN_OFFERS_PLAN = "v1/loan_offer/plans/{id}"
     const val GET_LOAN_OFFER = "v1/loan_offer/{id}"
     const val ACCEPT_DELCINE_OFFER = "v1/loan_offer/{id}/"
+
+    // donations
     const val RECENT_DONATIONS = "v1/donations/"
+
+    // kyc
     const val KYC = "v1/kyc/"
+
+    // notifications
     const val NOTIFICATIONS = "v1/notifications/"
     const val BULK_DELETE_NOTIFICATION = "v1/notifications/bulk-delete/"
+
+    // plans
+    const val PLANS = "user/plans/get-plans/"
+    const val PLAN = "user/plans/{id}"
+
+    // steps
+    const val STEPS = "user/steps/"
+    const val STEP = "user/steps/{id}/"
+
+    // budget
+    const val BUDGETS = "user/budget/"
+    const val BUDGET = "user/budget/{id}/"
 
     //sponsor
     const val MAKE_OFFER = "v1/loan_offer/"

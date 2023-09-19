@@ -1,0 +1,70 @@
+import kotlin.Boolean;
+
+CREATE TABLE PlanEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    avatar TEXT NOT NULL,
+    category TEXT NOT NULL,
+    sector TEXT NOT NULL,
+    type TEXT,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    duration INTEGER NOT NULL,
+    estimatedSellingPrice REAL NOT NULL ,
+    estimatedCostPrice REAL NOT NULL ,
+    fundsRaised REAL NOT NULL ,
+    tasksCompleted TEXT NOT NULL ,
+    targetAmount REAL NOT NULL,
+    totalFundsRaised REAL NOT NULL ,
+    analytics TEXT,
+    userID TEXT NOT NULL,
+    hasRequestedFund INTEGER AS Boolean NOT NULL DEFAULT 0,
+    isSponsored INTEGER AS Boolean NOT NULL DEFAULT 0,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL
+);
+
+getPlanEntities:
+SELECT *
+FROM PlanEntity
+ORDER BY updatedAt DESC;
+
+getRecentPlanEntities:
+SELECT *
+FROM PlanEntity
+ORDER BY updatedAt DESC
+LIMIT :amount;
+
+
+upsertPlanEntity:
+INSERT OR REPLACE
+INTO PlanEntity(
+id,
+avatar,
+category,
+sector,
+type,
+name,
+description,
+duration,
+estimatedSellingPrice,
+estimatedCostPrice,
+fundsRaised,
+tasksCompleted,
+targetAmount,
+totalFundsRaised,
+analytics,
+userID,
+hasRequestedFund,
+isSponsored,
+createdAt,
+updatedAt
+) VALUES (?, ?, ?, ?,?, ?, ?, ?,? ,?, ?, ?, ?, ?, ?, ?,?, ?, ?,  ?);
+
+deletPlanEntity:
+DELETE FROM PlanEntity
+WHERE id = :id;
+
+getPlanEntityByID:
+SELECT *
+FROM PlanEntity
+WHERE id = :id;

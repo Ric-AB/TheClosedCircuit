@@ -6,8 +6,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 const val namedIODispatcher = "IODispatcher"
+const val namedDefaultDispatcher = "DefaultDispatcher"
 val coroutineModule = module {
-    single(named(namedIODispatcher)) {
-        Dispatchers.IO
-    }
+    single(named(namedIODispatcher)) { Dispatchers.IO }
+    single(named(namedDefaultDispatcher)) { Dispatchers.Default }
 }

@@ -1,0 +1,52 @@
+import kotlin.Boolean;
+
+CREATE TABLE StepEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    duration INTEGER NOT NULL,
+    targetFunds REAL NOT NULL,
+    totalFundsRaised REAL NOT NULL,
+    planID TEXT NOT NULL,
+    userID TEXT NOT NULL,
+    isSponsored INTEGER AS Boolean NOT NULL DEFAULT 0,
+    status TEXT NOT NULL,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL
+);
+
+getStepEntities:
+SELECT *
+FROM StepEntity
+ORDER BY createdAt DESC;
+
+upsertStepEntity:
+INSERT OR REPLACE
+INTO StepEntity(
+id,
+name,
+description,
+duration,
+targetFunds,
+totalFundsRaised,
+planID,
+userID,
+isSponsored,
+status,
+createdAt,
+updatedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getStepEntityByID:
+SELECT *
+FROM StepEntity
+WHERE id = :id;
+
+getStepEntitiesForPlan:
+SELECT *
+FROM StepEntity
+WHERE planID = :planID;
+
+deleteStepEntity:
+DELETE FROM StepEntity
+WHERE id = :id;

@@ -1,48 +1,68 @@
 package com.closedcircuit.closedcircuitapplication.data.plan
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
-import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
-import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
-import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
-import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plans
-import kotlinx.collections.immutable.toImmutableList
+import io.github.aakira.napier.Napier
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class PlanRepositoryImpl(
-    db: TheClosedCircuitDatabase
+    database: TheClosedCircuitDatabase,
+    private val planService: PlanService,
+    private val ioDispatcher: CoroutineDispatcher,
+    defaultDispatcher: CoroutineDispatcher
 ) : PlanRepository {
-    private val queries = db.planEntityQueries
-    private val _allPlans = MutableStateFlow(plans)
-    override val allPlansFlow: Flow<Plans>
-        get() = _allPlans
+    private val queries = database.planEntityQueries
 
+    override val plansFlow: Flow<Plans> = queries.getPlanEntities()
+        .asFlow()
+        .mapToList(defaultDispatcher)
+        .map { plans ->
+            plans.asPlans()
+        }
 
+    override suspend fun fetchPlans(): ApiResponse<Plans> {
+        return withContext(ioDispatcher + NonCancellable) {
+            planService.getPlans()
+                .mapOnSuccess { response ->
+                    val planEntities = response.plans.asPlanEntities()
+                    queries.transaction {
+                        planEntities.forEach { planEntity ->
+                            queries.upsertPlanEntity(
+                                id = planEntity.id,
+                                avatar = planEntity.avatar,
+                                category = planEntity.category,
+                                sector = planEntity.sector,
+                                type = planEntity.type,
+                                name = planEntity.name,
+                                description = planEntity.description,
+                                duration = planEntity.duration,
+                                estimatedSellingPrice = planEntity.estimatedSellingPrice,
+                                estimatedCostPrice = planEntity.estimatedCostPrice,
+                                fundsRaised = planEntity.fundsRaised,
+                                tasksCompleted = planEntity.tasksCompleted,
+                                targetAmount = planEntity.targetAmount,
+                                totalFundsRaised = planEntity.totalFundsRaised,
+                                analytics = planEntity.analytics,
+                                userID = planEntity.userID,
+                                hasRequestedFund = planEntity.hasRequestedFund,
+                                isSponsored = planEntity.isSponsored,
+                                createdAt = planEntity.createdAt,
+                                updatedAt = planEntity.updatedAt
+                            )
+                        }
+                    }
+                    Napier.d("Plans:: Finished")
+                    planEntities.asPlans()
+                }
+        }
+    }
 }
-
-private val plans = (1..10).map {
-    Plan(
-        id = ID("0d410f4e-4cd6-11ee-be56-0242ac120002"),
-        avatar = Avatar(""),
-        category = "Business",
-        sector = "Tech",
-        type = "Plan type",
-        name = "New name",
-        description = "",
-        duration = TaskDuration(3),
-        estimatedSellingPrice = Price("10000"),
-        estimatedCostPrice = Price("5000"),
-        fundsRaised = Price("2000"),
-        tasksCompleted = "",
-        targetAmount = Price("3000"),
-        totalFundsRaised = Price("2000"),
-        planAnalytics = "Completed",
-        user = "",
-        hasRequestedFund = true,
-        isSponsored = true,
-        accountabilityPartners = emptyList()
-    )
-}.toImmutableList()

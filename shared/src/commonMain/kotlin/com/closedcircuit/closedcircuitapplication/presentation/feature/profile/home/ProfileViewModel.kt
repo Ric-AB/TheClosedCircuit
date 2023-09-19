@@ -15,7 +15,7 @@ class ProfileViewModel(
 ) : ScreenModel {
 
     private val userFlow = userRepository.userFlow
-    private val plansFlow = planRepository.allPlansFlow
+    private val plansFlow = planRepository.plansFlow
 
     val state: StateFlow<ProfileUIState?> = combine(userFlow, plansFlow) { user, plans ->
         if (user == null) return@combine null

@@ -9,5 +9,5 @@ val databaseModule = module {
 }
 
 fun createDatabase(driver: SqlDriver): TheClosedCircuitDatabase {
-    return TheClosedCircuitDatabase(driver)
+    return TheClosedCircuitDatabase(driver = driver)
 }

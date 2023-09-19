@@ -2,11 +2,13 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.dashboar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
+import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.GetUserDashboardUseCase
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.domain.wallet.WalletRepository
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
@@ -24,9 +26,10 @@ class DashboardViewModel(
         combine(
             userRepository.userFlow,
             walletRepository.walletFlow,
-            planRepository.allPlansFlow,
+            planRepository.plansFlow,
             donationRepository.recentDonationsFlow
         ) { user, wallet, allPlans, recentDonations ->
+            Napier.d("Plans:: $allPlans")
             DashboardUIState(
                 currentUser = user,
                 wallet = wallet,
@@ -47,6 +50,9 @@ class DashboardViewModel(
 
     private fun fetchData() {
         coroutineScope.launch {
+//            launch { planRepository.fetchPlans() }
+              val res = planRepository.fetchPlans()
+            Napier.d("Plans:: $res")
         }
     }
 }

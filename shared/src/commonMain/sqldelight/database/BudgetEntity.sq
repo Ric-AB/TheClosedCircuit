@@ -1,0 +1,59 @@
+import kotlin.Boolean;
+
+CREATE TABLE BudgetEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    planID TEXT NOT NULL,
+    stepID TEXT NOT NULL,
+    userID TEXT NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    cost REAL NOT NULL,
+    isSponsored INTEGER AS Boolean NOT NULL DEFAULT 0,
+    fundsRaised REAL NOT NULL,
+    isCompleted INTEGER AS Boolean NOT NULL DEFAULT 0,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL
+);
+
+getBudgetEntities:
+SELECT *
+FROM BudgetEntity
+ORDER BY createdAt DESC;
+
+upsertBudgetEntity:
+INSERT OR REPLACE
+INTO BudgetEntity(
+    id,
+    planID,
+    stepID,
+    userID,
+    name,
+    description,
+    cost,
+    isSponsored,
+    fundsRaised,
+    isCompleted,
+    createdAt,
+    updatedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ? ,?);
+
+getBudgetEntityByID:
+SELECT *
+FROM BudgetEntity
+WHERE id = :id;
+
+getBudgetEntitiesForPlan:
+SELECT *
+FROM BudgetEntity
+WHERE planID = :planID
+ORDER BY createdAt DESC;
+
+getBudgetEntitiesForStep:
+SELECT *
+FROM BudgetEntity
+WHERE stepID = :stepID
+ORDER BY createdAt DESC;
+
+deleteBudgetEntity:
+DELETE FROM BudgetEntity
+WHERE id = :id;

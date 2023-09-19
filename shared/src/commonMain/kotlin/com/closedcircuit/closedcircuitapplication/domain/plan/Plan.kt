@@ -21,7 +21,7 @@ data class Plan(
     val targetAmount: Price,
     val totalFundsRaised: Price,
     val planAnalytics: String,
-    val user: String,
+    val userID: ID,
     val hasRequestedFund: Boolean,
     val isSponsored: Boolean,
     val accountabilityPartners: List<String>,
