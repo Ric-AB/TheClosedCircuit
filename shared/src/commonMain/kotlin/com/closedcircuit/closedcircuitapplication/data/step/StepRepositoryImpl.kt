@@ -7,7 +7,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.domain.step.StepRepository
 import com.closedcircuit.closedcircuitapplication.domain.step.Steps
-import kotlinx.collections.immutable.toImmutableList
+import com.closedcircuit.closedcircuitapplication.domain.step.TempStep
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -20,27 +20,52 @@ class StepRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher,
     defaultDispatcher: CoroutineDispatcher
 ) : StepRepository {
-
+    private val queries = database.stepEntityQueries
     override val stepsFlow: Flow<Steps> = flowOf()
 
     override suspend fun fetchSteps(): ApiResponse<Steps> {
         return withContext(ioDispatcher + NonCancellable) {
             stepService.fetchSteps().mapOnSuccess { response ->
-                val apiSteps = response.steps.asStepEntities()
-                emptyList<Step>().toImmutableList()
+                val stepEntities = response.steps.asStepEntities()
+                queries.transaction {
+                    stepEntities.forEach { stepEntity ->
+                        queries.upsertStepEntity(stepEntity)
+                    }
+                }
+
+                stepEntities.asSteps()
             }
         }
     }
 
-    override suspend fun createStep(): ApiResponse<Step> {
-        TODO("Not yet implemented")
+    override suspend fun createStep(tempStep: TempStep): ApiResponse<Step> {
+        return withContext(ioDispatcher + NonCancellable) {
+            stepService.createStep(tempStep.asRequest()).mapOnSuccess { apiStep ->
+                val stepEntity = apiStep.asStepEntity()
+                queries.upsertStepEntity(stepEntity)
+                stepEntity.asStep()
+            }
+        }
     }
 
-    override suspend fun updateStep(): ApiResponse<Step> {
-        TODO("Not yet implemented")
+    override suspend fun updateStep(step: Step): ApiResponse<Step> {
+        return withContext(ioDispatcher + NonCancellable) {
+            stepService.updateStep(id = step.id.value, step.asRequest()).mapOnSuccess { apiStep ->
+                val stepEntity = apiStep.asStepEntity()
+                queries.upsertStepEntity(stepEntity)
+                stepEntity.asStep()
+            }
+        }
     }
 
     override suspend fun deleteStep(id: ID): ApiResponse<Step> {
-        TODO("Not yet implemented")
+        val idValue = id.value
+        return withContext(ioDispatcher + NonCancellable) {
+            stepService.deleteStep(idValue).mapOnSuccess {
+                val stepEntity = queries.getStepEntityByID(idValue).executeAsOne()
+                queries.deleteStepEntity(idValue)
+                stepEntity.asStep()
+            }
+        }
     }
 }

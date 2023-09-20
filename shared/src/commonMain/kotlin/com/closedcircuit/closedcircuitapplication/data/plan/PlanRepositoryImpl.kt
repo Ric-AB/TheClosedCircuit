@@ -31,38 +31,16 @@ class PlanRepositoryImpl(
 
     override suspend fun fetchPlans(): ApiResponse<Plans> {
         return withContext(ioDispatcher + NonCancellable) {
-            planService.getPlans()
-                .mapOnSuccess { response ->
-                    val planEntities = response.plans.asPlanEntities()
-                    queries.transaction {
-                        planEntities.forEach { planEntity ->
-                            queries.upsertPlanEntity(
-                                id = planEntity.id,
-                                avatar = planEntity.avatar,
-                                category = planEntity.category,
-                                sector = planEntity.sector,
-                                type = planEntity.type,
-                                name = planEntity.name,
-                                description = planEntity.description,
-                                duration = planEntity.duration,
-                                estimatedSellingPrice = planEntity.estimatedSellingPrice,
-                                estimatedCostPrice = planEntity.estimatedCostPrice,
-                                fundsRaised = planEntity.fundsRaised,
-                                tasksCompleted = planEntity.tasksCompleted,
-                                targetAmount = planEntity.targetAmount,
-                                totalFundsRaised = planEntity.totalFundsRaised,
-                                analytics = planEntity.analytics,
-                                userID = planEntity.userID,
-                                hasRequestedFund = planEntity.hasRequestedFund,
-                                isSponsored = planEntity.isSponsored,
-                                createdAt = planEntity.createdAt,
-                                updatedAt = planEntity.updatedAt
-                            )
-                        }
+            planService.getPlans().mapOnSuccess { response ->
+                val planEntities = response.plans.asPlanEntities()
+                queries.transaction {
+                    planEntities.forEach { planEntity ->
+                        queries.upsertPlanEntity(planEntity)
                     }
-                    Napier.d("Plans:: Finished")
-                    planEntities.asPlans()
                 }
+
+                planEntities.asPlans()
+            }
         }
     }
 }

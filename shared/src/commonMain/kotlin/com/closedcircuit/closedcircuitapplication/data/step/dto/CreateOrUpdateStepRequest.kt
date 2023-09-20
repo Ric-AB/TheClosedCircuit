@@ -9,9 +9,9 @@ data class CreateOrUpdateStepRequest(
     val name: String,
     @SerialName("step_description")
     val description: String,
-    val duration: String,
+    val duration: Int,
     @SerialName("target_funds")
-    val targetFunds: Int,
+    val targetFunds: Double,
     @SerialName("plan")
     val planID: String,
     @SerialName("user")

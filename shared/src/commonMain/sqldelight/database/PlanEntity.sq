@@ -37,28 +37,8 @@ LIMIT :amount;
 
 upsertPlanEntity:
 INSERT OR REPLACE
-INTO PlanEntity(
-id,
-avatar,
-category,
-sector,
-type,
-name,
-description,
-duration,
-estimatedSellingPrice,
-estimatedCostPrice,
-fundsRaised,
-tasksCompleted,
-targetAmount,
-totalFundsRaised,
-analytics,
-userID,
-hasRequestedFund,
-isSponsored,
-createdAt,
-updatedAt
-) VALUES (?, ?, ?, ?,?, ?, ?, ?,? ,?, ?, ?, ?, ?, ?, ?,?, ?, ?,  ?);
+INTO PlanEntity
+VALUES ?;
 
 deletPlanEntity:
 DELETE FROM PlanEntity

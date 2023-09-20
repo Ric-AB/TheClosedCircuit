@@ -1,7 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.data.budget
 
 import com.closedcircuit.closedcircuitapplication.data.budget.dto.ApiBudget
+import com.closedcircuit.closedcircuitapplication.data.budget.dto.CreateOrUpdateBudgetRequest
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budget
+import com.closedcircuit.closedcircuitapplication.domain.budget.TempBudget
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
@@ -37,6 +39,22 @@ fun BudgetEntity.asBudget() = Budget(
     approvers = emptyList(),
     createdAt = Date(createdAt),
     updatedAt = Date(updatedAt)
+)
+
+fun Budget.asRequest() = CreateOrUpdateBudgetRequest(
+    name = name,
+    description = description,
+    cost = cost.value.toDouble(),
+    planID = planID.value,
+    stepID = stepID.value
+)
+
+fun TempBudget.asRequest() = CreateOrUpdateBudgetRequest(
+    name = name,
+    description = description,
+    cost = cost,
+    planID = planID,
+    stepID = stepID
 )
 
 fun List<ApiBudget>.asBudgetEntities() = this.map { it.asBudgetEntity() }

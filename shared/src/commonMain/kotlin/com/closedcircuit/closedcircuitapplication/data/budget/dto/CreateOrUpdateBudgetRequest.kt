@@ -8,7 +8,7 @@ data class CreateOrUpdateBudgetRequest(
     @SerialName("budget_description")
     val description: String,
     @SerialName("budget_cost")
-    val cost: String,
+    val cost: Double,
     @SerialName("plan")
     val planID: String,
     @SerialName("step")

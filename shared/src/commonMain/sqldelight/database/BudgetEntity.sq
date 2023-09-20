@@ -22,20 +22,8 @@ ORDER BY createdAt DESC;
 
 upsertBudgetEntity:
 INSERT OR REPLACE
-INTO BudgetEntity(
-    id,
-    planID,
-    stepID,
-    userID,
-    name,
-    description,
-    cost,
-    isSponsored,
-    fundsRaised,
-    isCompleted,
-    createdAt,
-    updatedAt
-) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ? ,?);
+INTO BudgetEntity
+VALUES ?;
 
 getBudgetEntityByID:
 SELECT *
