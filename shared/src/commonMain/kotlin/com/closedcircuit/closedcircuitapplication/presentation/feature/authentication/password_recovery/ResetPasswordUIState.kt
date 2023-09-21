@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.authenti
 
 import com.closedcircuit.closedcircuitapplication.core.validation.EmailValidator
 import com.closedcircuit.closedcircuitapplication.core.validation.PasswordValidator
-import com.closedcircuit.closedcircuitapplication.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.util.InputField
 
 data class ResetPasswordUIState(
     val emailField: InputField = InputField(validator = EmailValidator()),

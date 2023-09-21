@@ -16,4 +16,10 @@ value class Date(val value: String) {
 
     fun toInstant(): Instant = Instant.parse(value)
 
+    companion object {
+        fun now(): Date {
+            return Date("2023-09-21T08:15:05.674")
+        }
+    }
+
 }

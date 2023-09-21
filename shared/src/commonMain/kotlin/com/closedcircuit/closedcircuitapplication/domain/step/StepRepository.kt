@@ -13,7 +13,7 @@ interface StepRepository {
 
     suspend fun fetchSteps(): ApiResponse<Steps>
 
-    suspend fun createStep(tempStep: TempStep): ApiResponse<Step>
+    suspend fun createStep(step: Step): ApiResponse<Step>
 
     suspend fun updateStep(step: Step): ApiResponse<Step>
 

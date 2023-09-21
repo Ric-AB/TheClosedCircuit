@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.presentation.util
+package com.closedcircuit.closedcircuitapplication.util
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue

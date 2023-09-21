@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.data.util
+package com.closedcircuit.closedcircuitapplication.util
 
 object ClosedCircuitApiEndpoints {
     //no auth

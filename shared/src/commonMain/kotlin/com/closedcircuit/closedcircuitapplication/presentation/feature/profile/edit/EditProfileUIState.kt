@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.core.validation.EmailValidator
 import com.closedcircuit.closedcircuitapplication.core.validation.NameValidator
 import com.closedcircuit.closedcircuitapplication.core.validation.PhoneNumberValidator
 import com.closedcircuit.closedcircuitapplication.domain.user.User
-import com.closedcircuit.closedcircuitapplication.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.util.InputField
 
 data class EditProfileUIState(
     val firstNameField: InputField,

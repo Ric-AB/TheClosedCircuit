@@ -13,7 +13,7 @@ interface BudgetRepository {
 
     suspend fun fetchBudgets(): ApiResponse<Budgets>
 
-    suspend fun createBudget(tempBudget: TempBudget): ApiResponse<Budget>
+    suspend fun createBudget(budget: Budget): ApiResponse<Budget>
 
     suspend fun updateBudget(budget: Budget): ApiResponse<Budget>
 

@@ -4,8 +4,8 @@ import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.step.dto.ApiStep
 import com.closedcircuit.closedcircuitapplication.data.step.dto.CreateOrUpdateStepRequest
 import com.closedcircuit.closedcircuitapplication.data.step.dto.GetStepsResponse
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.STEP
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.STEPS
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.STEP
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.STEPS
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET

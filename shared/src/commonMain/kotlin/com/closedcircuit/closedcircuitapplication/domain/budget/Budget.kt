@@ -18,4 +18,38 @@ data class Budget(
     val approvers: List<String>,
     val createdAt: Date,
     val updatedAt: Date
-)
+) {
+    companion object {
+        fun buildBudget(
+            id: ID = ID.generateRandomUUID(),
+            planID: ID = ID.generateRandomUUID(),
+            stepID: ID = ID.generateRandomUUID(),
+            userID: ID = ID.generateRandomUUID(),
+            name: String = "",
+            description: String = "",
+            cost: Price = Price(0.0),
+            isSponsored: Boolean = false,
+            fundsRaised: Price = Price(0.0),
+            isCompleted: Boolean = false,
+            approvers: List<String> = emptyList(),
+            createdAt: Date = Date.now(),
+            updatedAt: Date = Date.now()
+        ): Budget {
+            return Budget(
+                id = id,
+                planID = planID,
+                stepID = stepID,
+                userID = userID,
+                name = name,
+                description = description,
+                cost = cost,
+                isSponsored = isSponsored,
+                fundsRaised = fundsRaised,
+                isCompleted = isCompleted,
+                approvers = approvers,
+                createdAt = createdAt,
+                updatedAt = updatedAt
+            )
+        }
+    }
+}

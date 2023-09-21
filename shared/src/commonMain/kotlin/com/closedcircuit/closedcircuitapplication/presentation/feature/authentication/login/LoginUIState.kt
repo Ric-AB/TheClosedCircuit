@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login
 
-import com.closedcircuit.closedcircuitapplication.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.util.InputField
 
 data class LoginUIState(
     val emailField: InputField = InputField(),

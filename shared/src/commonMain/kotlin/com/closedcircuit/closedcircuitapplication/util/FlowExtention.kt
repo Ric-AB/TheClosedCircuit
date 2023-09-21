@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.presentation.util
+package com.closedcircuit.closedcircuitapplication.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

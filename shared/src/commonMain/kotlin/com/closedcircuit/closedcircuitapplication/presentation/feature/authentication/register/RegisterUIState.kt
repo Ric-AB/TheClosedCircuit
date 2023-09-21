@@ -4,7 +4,7 @@ import com.closedcircuit.closedcircuitapplication.core.validation.EmailValidator
 import com.closedcircuit.closedcircuitapplication.core.validation.NameValidator
 import com.closedcircuit.closedcircuitapplication.core.validation.PasswordValidator
 import com.closedcircuit.closedcircuitapplication.core.validation.PhoneNumberValidator
-import com.closedcircuit.closedcircuitapplication.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.util.InputField
 
 data class RegisterUIState(
     val firstNameField: InputField = InputField(name = "firstName", validator = NameValidator()),

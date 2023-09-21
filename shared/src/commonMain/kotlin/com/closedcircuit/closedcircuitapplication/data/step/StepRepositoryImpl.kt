@@ -7,7 +7,6 @@ import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.domain.step.StepRepository
 import com.closedcircuit.closedcircuitapplication.domain.step.Steps
-import com.closedcircuit.closedcircuitapplication.domain.step.TempStep
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -38,9 +37,9 @@ class StepRepositoryImpl(
         }
     }
 
-    override suspend fun createStep(tempStep: TempStep): ApiResponse<Step> {
+    override suspend fun createStep(step: Step): ApiResponse<Step> {
         return withContext(ioDispatcher + NonCancellable) {
-            stepService.createStep(tempStep.asRequest()).mapOnSuccess { apiStep ->
+            stepService.createStep(step.asRequest()).mapOnSuccess { apiStep ->
                 val stepEntity = apiStep.asStepEntity()
                 queries.upsertStepEntity(stepEntity)
                 stepEntity.asStep()

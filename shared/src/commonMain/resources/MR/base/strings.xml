@@ -86,4 +86,10 @@
     <string name="hello_user">Hello, %s!</string>
     <string name="full_name">Full name</string>
     <string name="save_changes">Save changes</string>
+
+    <!--    Plan management-->
+    <string name="plans">Plans</string>
+    <string name="percentage_funds_raised">%s funds raised</string>
+    <string name="percentage_task_completed">%s task completed</string>
+    <string name="start_a_plan">Start a plan</string>
 </resources>

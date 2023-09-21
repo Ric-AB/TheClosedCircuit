@@ -63,7 +63,52 @@ internal object ProfileScreen : Screen, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             uiState = uiState,
-            navigateToEditProfileScreen = { navigator.push(EditProfileScreen(it)) })
+            navigateToEditProfileScreen = { navigator.push(EditProfileScreen(it)) }
+        )
+    }
+}
+
+@Composable
+private fun ScreenContent(
+    messageBarState: MessageBarState,
+    uiState: ProfileUIState?,
+    navigateToEditProfileScreen: (User) -> Unit
+) {
+    BaseScaffold(
+        messageBarState = messageBarState,
+        topBar = {
+            DefaultAppBar(
+                title = stringResource(SharedRes.strings.profile),
+                mainIcon = null
+            )
+        }
+    ) { innerPadding ->
+
+        uiState?.let {
+            val user = it.user
+
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = defaultHorizontalScreenPadding)
+            ) {
+                ProfileHeader(
+                    modifier = Modifier.fillMaxWidth(),
+                    firstName = user.firstName,
+                    avatar = user.avatar
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+                PersonalData(
+                    modifier = Modifier.fillMaxWidth(),
+                    fullName = user.fullName,
+                    email = user.email,
+                    phoneNumber = user.phoneNumber,
+                    country = user.country,
+                    onEditClick = { navigateToEditProfileScreen(user) }
+                )
+            }
+        }
     }
 }
 
@@ -197,49 +242,5 @@ private fun ScreenCard(modifier: Modifier = Modifier, content: @Composable () ->
         )
     ) {
         content()
-    }
-}
-
-@Composable
-private fun ScreenContent(
-    messageBarState: MessageBarState,
-    uiState: ProfileUIState?,
-    navigateToEditProfileScreen: (User) -> Unit
-) {
-    BaseScaffold(
-        messageBarState = messageBarState,
-        topBar = {
-            DefaultAppBar(
-                title = stringResource(SharedRes.strings.profile),
-                mainIcon = null
-            )
-        }
-    ) { innerPadding ->
-
-        uiState?.let {
-            val user = it.user
-
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(horizontal = defaultHorizontalScreenPadding)
-            ) {
-                ProfileHeader(
-                    modifier = Modifier.fillMaxWidth(),
-                    firstName = user.firstName,
-                    avatar = user.avatar
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-                PersonalData(
-                    modifier = Modifier.fillMaxWidth(),
-                    fullName = user.fullName,
-                    email = user.email,
-                    phoneNumber = user.phoneNumber,
-                    country = user.country,
-                    onEditClick = { navigateToEditProfileScreen(user) }
-                )
-            }
-        }
     }
 }

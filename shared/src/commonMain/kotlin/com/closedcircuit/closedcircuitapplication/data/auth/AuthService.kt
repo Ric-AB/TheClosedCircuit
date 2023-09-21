@@ -11,11 +11,11 @@ import com.closedcircuit.closedcircuitapplication.data.auth.dto.ResetPasswordReq
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.ResetPasswordResponse
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.VerifyOtpRequest
 import com.closedcircuit.closedcircuitapplication.data.auth.dto.VerifyOtpResponse
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.GENERATE_OTP
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.LOGIN
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.REGISTER
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.RESET_PASSWORD
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.VERIFY_OTP
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.GENERATE_OTP
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.LOGIN
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.REGISTER
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.RESET_PASSWORD
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.VERIFY_OTP
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST

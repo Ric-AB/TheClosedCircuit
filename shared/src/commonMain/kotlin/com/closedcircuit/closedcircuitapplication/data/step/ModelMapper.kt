@@ -7,7 +7,6 @@ import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
-import com.closedcircuit.closedcircuitapplication.domain.step.TempStep
 import database.StepEntity
 import kotlinx.collections.immutable.toImmutableList
 
@@ -39,15 +38,6 @@ fun ApiStep.asStepEntity() = StepEntity(
     status = status,
     createdAt = createdAt,
     updatedAt = updatedAt
-)
-
-fun TempStep.asRequest() = CreateOrUpdateStepRequest(
-    name = name,
-    description = description,
-    duration = duration,
-    targetFunds = targetFunds,
-    planID = planID,
-    userID = userID
 )
 
 fun Step.asRequest() = CreateOrUpdateStepRequest(

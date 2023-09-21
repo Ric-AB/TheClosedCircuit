@@ -6,7 +6,6 @@ import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatab
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budgets
-import com.closedcircuit.closedcircuitapplication.domain.budget.TempBudget
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
@@ -39,9 +38,9 @@ class BudgetRepositoryImpl(
         }
     }
 
-    override suspend fun createBudget(tempBudget: TempBudget): ApiResponse<Budget> {
+    override suspend fun createBudget(budget: Budget): ApiResponse<Budget> {
         return withContext(ioDispatcher + NonCancellable) {
-            budgetService.createBudget(tempBudget.asRequest()).mapOnSuccess { apiBudget ->
+            budgetService.createBudget(budget.asRequest()).mapOnSuccess { apiBudget ->
                 val budgetEntity = apiBudget.asBudgetEntity()
                 queries.upsertBudgetEntity(budgetEntity)
                 budgetEntity.asBudget()

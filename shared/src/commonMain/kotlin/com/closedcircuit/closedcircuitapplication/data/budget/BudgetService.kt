@@ -4,8 +4,8 @@ import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.budget.dto.ApiBudget
 import com.closedcircuit.closedcircuitapplication.data.budget.dto.CreateOrUpdateBudgetRequest
 import com.closedcircuit.closedcircuitapplication.data.budget.dto.GetBudgetsResponse
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.BUDGET
-import com.closedcircuit.closedcircuitapplication.data.util.ClosedCircuitApiEndpoints.BUDGETS
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.BUDGET
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.BUDGETS
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
