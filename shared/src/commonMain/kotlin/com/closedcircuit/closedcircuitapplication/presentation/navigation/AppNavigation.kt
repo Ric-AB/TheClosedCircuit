@@ -18,6 +18,7 @@ import com.closedcircuit.closedcircuitapplication.domain.app.AppSettingsReposito
 import com.closedcircuit.closedcircuitapplication.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanWrapperScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ScreenBasedTransition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -67,7 +68,7 @@ object SplashScreen : Screen, KoinComponent {
 
         LaunchedEffect(Unit) {
             when (isLoggedInUseCase()) {
-                AuthenticationState.LOGGED_IN -> navigator.replace(BottomNavigation)
+                AuthenticationState.LOGGED_IN -> navigator.replace(CreatePlanWrapperScreen)
                 AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen)
                 AuthenticationState.FIRST_TIME -> navigator.replace(OnboardingScreen)
             }

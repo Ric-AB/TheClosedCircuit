@@ -32,8 +32,8 @@ fun BodyText(text: String, color: Color = Color.Gray, modifier: Modifier = Modif
 fun TopAppBarTitle(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.headlineSmall,
-        fontWeight = FontWeight(590),
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.SemiBold,
         modifier = modifier
     )
 }

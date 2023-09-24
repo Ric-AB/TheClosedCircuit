@@ -92,4 +92,14 @@
     <string name="percentage_funds_raised">%s funds raised</string>
     <string name="percentage_task_completed">%s task completed</string>
     <string name="start_a_plan">Start a plan</string>
+    <string name="new_plan">New plan</string>
+    <string name="select_category">Select category</string>
+    <string name="select_sector">Select sector</string>
+    <string name="select_business_type">Select business type</string>
+    <string name="enter_plan_name">Enter plan name</string>
+    <string name="describe_your_plan">Describe your plan</string>
+    <string name="enter_plan_duration">Enter plan duration</string>
+    <string name="what_your_estimated_selling_price">What’s your estimated selling price?</string>
+    <string name="what_your_estimated_cost_price">What’s your estimated cost price?</string>
+    <string name="create_plan">Create plan</string>
 </resources>

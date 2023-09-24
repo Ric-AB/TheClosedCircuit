@@ -59,7 +59,7 @@ fun BaseScaffold(
             contentColor = contentColor,
             contentWindowInsets = contentWindowInsets,
         ) { innerPadding ->
-            Box(modifier = modifier.padding(innerPadding)) {
+            Box(modifier = modifier) {
                 content(innerPadding)
                 LoadingDialog(isLoading)
             }
