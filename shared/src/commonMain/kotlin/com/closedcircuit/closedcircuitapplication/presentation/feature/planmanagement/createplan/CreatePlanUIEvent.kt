@@ -11,5 +11,7 @@ sealed interface CreatePlanUIEvent {
     data class DurationChange(val duration: String) : CreatePlanUIEvent
     data class SellingPriceChange(val price: String) : CreatePlanUIEvent
     data class CostPriceChange(val price: String) : CreatePlanUIEvent
+    data class InputFieldFocusReceived(val fieldName: String) : CreatePlanUIEvent
+    object InputFieldFocusLost : CreatePlanUIEvent
     object Submit : CreatePlanUIEvent
 }

@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.core.validation
+package com.closedcircuit.closedcircuitapplication.util.validation
 
 class NameValidator : InputValidator {
 

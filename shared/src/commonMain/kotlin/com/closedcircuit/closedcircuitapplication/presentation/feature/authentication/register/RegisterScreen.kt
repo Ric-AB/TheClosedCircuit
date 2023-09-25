@@ -51,8 +51,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -69,7 +69,7 @@ object RegisterScreen : Screen, KoinComponent {
         val messageBarState = rememberMessageBarState()
 
 
-        viewModel.resultResultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.registerResultChannel.receiveAsFlow().observerWithScreen {
             when (it) {
                 is RegisterResult.Failure -> {
                     messageBarState.addError(it.message)
@@ -109,6 +109,10 @@ private fun ScreenContent(
         var showConfirmPassword by rememberSaveable { mutableStateOf(false) }
         val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
         val inputFieldCommonModifier = Modifier.fillMaxWidth()
+        val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
+            if (isFocused) onEvent(RegisterUIEvent.InputFieldFocusReceived(fieldName))
+            else onEvent(RegisterUIEvent.InputFieldFocusLost)
+        }
 
         LazyColumn(
             contentPadding = PaddingValues(bottom = screenContentPadding.calculateBottomPadding()),
@@ -132,10 +136,9 @@ private fun ScreenContent(
                 ) {
                     Spacer(modifier = Modifier.height(20.dp))
                     DefaultOutlinedTextField(
-                        value = firstNameField.value,
+                        inputField = firstNameField,
                         onValueChange = { onEvent(RegisterUIEvent.FirstNameChange(it)) },
                         label = stringResource(SharedRes.strings.first_name),
-                        isError = firstNameField.isError,
                         supportingText = {
                             if (firstNameField.isError) {
                                 Text(text = firstNameField.error)
@@ -150,19 +153,15 @@ private fun ScreenContent(
                             capitalization = KeyboardCapitalization.Words
                         ),
                         modifier = inputFieldCommonModifier.onFocusChanged {
-                            if (it.isFocused) {
-                                onEvent(RegisterUIEvent.InputFieldFocusReceived(firstNameField.name))
-                            } else {
-                                onEvent(RegisterUIEvent.InputFieldFocusLost)
-                            }
+                            handleFocusChange(it.isFocused, firstNameField.name)
                         }
                     )
 
                     DefaultOutlinedTextField(
-                        value = nickNameField.value,
+                        inputField = nickNameField,
                         onValueChange = { onEvent(RegisterUIEvent.NickNameChange(it)) },
                         label = stringResource(SharedRes.strings.preferred) + "/" +
-                                stringResource(SharedRes.strings.nick_name),
+                                stringResource(SharedRes.strings.nick_name) + "(optional)",
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
                             keyboardType = KeyboardType.Text,
@@ -172,10 +171,9 @@ private fun ScreenContent(
                     )
 
                     DefaultOutlinedTextField(
-                        value = lastNameField.value,
+                        inputField = lastNameField,
                         onValueChange = { onEvent(RegisterUIEvent.LastNameChange(it)) },
                         label = stringResource(SharedRes.strings.last_name),
-                        isError = lastNameField.isError,
                         supportingText = {
                             if (lastNameField.isError) {
                                 Text(text = lastNameField.error)
@@ -190,57 +188,41 @@ private fun ScreenContent(
                             capitalization = KeyboardCapitalization.Words
                         ),
                         modifier = inputFieldCommonModifier.onFocusChanged {
-                            if (it.isFocused) {
-                                onEvent(RegisterUIEvent.InputFieldFocusReceived(lastNameField.name))
-                            } else {
-                                onEvent(RegisterUIEvent.InputFieldFocusLost)
-                            }
+                            handleFocusChange(it.isFocused, lastNameField.name)
                         }
                     )
 
                     DefaultOutlinedTextField(
-                        value = emailField.value,
+                        inputField = emailField,
                         onValueChange = { onEvent(RegisterUIEvent.EmailChange(it)) },
                         label = stringResource(SharedRes.strings.email),
-                        isError = emailField.isError,
-                        supportingText = { Text(text = emailField.error) },
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
                         modifier = inputFieldCommonModifier.onFocusChanged {
-                            if (it.isFocused) {
-                                onEvent(RegisterUIEvent.InputFieldFocusReceived(emailField.name))
-                            } else {
-                                onEvent(RegisterUIEvent.InputFieldFocusLost)
-                            }
+                            handleFocusChange(it.isFocused, emailField.name)
                         }
                     )
 
                     DefaultOutlinedTextField(
-                        value = phoneNumberField.value,
+                        inputField = phoneNumberField,
                         onValueChange = { onEvent(RegisterUIEvent.PhoneNumberChange(it)) },
                         label = stringResource(SharedRes.strings.phone_number),
-                        isError = phoneNumberField.isError,
-                        supportingText = { Text(text = phoneNumberField.error) },
                         keyboardOptions = KeyboardOptions(
                             autoCorrect = false,
                             keyboardType = KeyboardType.Phone,
                             imeAction = ImeAction.Next
                         ),
                         modifier = inputFieldCommonModifier.onFocusChanged {
-                            if (it.isFocused) {
-                                onEvent(RegisterUIEvent.InputFieldFocusReceived(phoneNumberField.name))
-                            } else {
-                                onEvent(RegisterUIEvent.InputFieldFocusLost)
-                            }
+                            handleFocusChange(it.isFocused, phoneNumberField.name)
                         }
                     )
 
                     Spacer(modifier = Modifier.height(40.dp))
                     PasswordOutlinedTextField(
-                        value = passwordField.value,
+                        inputField = passwordField,
                         onValueChange = { onEvent(RegisterUIEvent.PasswordChange(it)) },
                         label = stringResource(SharedRes.strings.password),
                         onPasswordVisibilityChange = { showPassword = it },
@@ -251,17 +233,13 @@ private fun ScreenContent(
                     )
 
                     PasswordOutlinedTextField(
-                        value = confirmPasswordField.value,
+                        inputField = confirmPasswordField,
                         onValueChange = { onEvent(RegisterUIEvent.ConfirmPasswordChange(it)) },
                         label = stringResource(SharedRes.strings.confirm_password),
                         onPasswordVisibilityChange = { showConfirmPassword = it },
                         showPassword = showConfirmPassword,
                         isError = confirmPasswordField.isError,
-                        supportingText = {
-                            if (confirmPasswordField.isError) {
-                                Text(confirmPasswordField.error)
-                            }
-                        },
+                        supportingText = { Text(confirmPasswordField.error) },
                         imeAction = ImeAction.Done,
                     )
 

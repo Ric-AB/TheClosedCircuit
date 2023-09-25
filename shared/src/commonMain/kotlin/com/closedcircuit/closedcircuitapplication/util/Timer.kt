@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.core
+package com.closedcircuit.closedcircuitapplication.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

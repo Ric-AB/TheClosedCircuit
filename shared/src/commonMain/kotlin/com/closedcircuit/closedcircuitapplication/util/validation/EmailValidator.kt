@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.core.validation
+package com.closedcircuit.closedcircuitapplication.util.validation
 
 import com.closedcircuit.closedcircuitapplication.domain.model.Email
 

@@ -6,8 +6,6 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
-import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanKoinContainer
-import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit.EditProfileViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home.ProfileViewModel
 import org.koin.dsl.module
@@ -25,7 +23,4 @@ val viewModelModule = module {
     factory { DashboardViewModel(get(), get(), get(), get(), get()) }
     factory { ProfileViewModel(get(), get()) }
     factory { parameters -> EditProfileViewModel(parameters.get(), get()) }
-    scope<CreatePlanKoinContainer> {
-        scoped { CreatePlanViewModel() }
-    }
 }

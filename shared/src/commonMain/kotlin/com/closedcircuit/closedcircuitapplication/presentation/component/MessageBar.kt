@@ -48,7 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.core.timer
+import com.closedcircuit.closedcircuitapplication.util.timer
 import kotlinx.coroutines.Job
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds

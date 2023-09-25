@@ -102,4 +102,5 @@
     <string name="what_your_estimated_selling_price">What’s your estimated selling price?</string>
     <string name="what_your_estimated_cost_price">What’s your estimated cost price?</string>
     <string name="create_plan">Create plan</string>
+    <string name="months">Months</string>
 </resources>

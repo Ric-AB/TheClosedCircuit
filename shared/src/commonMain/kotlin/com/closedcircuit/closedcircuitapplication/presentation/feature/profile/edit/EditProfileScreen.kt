@@ -38,8 +38,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.remembe
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ModalTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -103,6 +103,10 @@ private fun ScreenContent(
         uiState?.let { uiState ->
             val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField) = uiState
             val inputFieldCommonModifier = Modifier.fillMaxWidth()
+            val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
+                if (isFocused) onEvent(EditProfileUIEvent.InputFieldFocusReceived(fieldName))
+                else onEvent(EditProfileUIEvent.InputFieldFocusLost)
+            }
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -112,10 +116,9 @@ private fun ScreenContent(
                     .padding(horizontal = defaultHorizontalScreenPadding)
             ) {
                 DefaultOutlinedTextField(
-                    value = firstNameField.value,
+                    inputField = firstNameField,
                     onValueChange = { onEvent(EditProfileUIEvent.FirstNameChange(it)) },
                     label = stringResource(SharedRes.strings.first_name),
-                    isError = firstNameField.isError,
                     supportingText = {
                         if (firstNameField.isError) {
                             Text(text = firstNameField.error)
@@ -130,16 +133,12 @@ private fun ScreenContent(
                         capitalization = KeyboardCapitalization.Words
                     ),
                     modifier = inputFieldCommonModifier.onFocusChanged {
-                        if (it.isFocused) {
-                            onEvent(EditProfileUIEvent.InputFieldFocusReceived(firstNameField.name))
-                        } else {
-                            onEvent(EditProfileUIEvent.InputFieldFocusLost)
-                        }
+                        handleFocusChange(it.isFocused, firstNameField.name)
                     }
                 )
 
                 DefaultOutlinedTextField(
-                    value = nickNameField.value,
+                    inputField = nickNameField,
                     onValueChange = { onEvent(EditProfileUIEvent.NickNameChange(it)) },
                     label = stringResource(SharedRes.strings.preferred) + "/" +
                             stringResource(SharedRes.strings.nick_name),
@@ -152,10 +151,9 @@ private fun ScreenContent(
                 )
 
                 DefaultOutlinedTextField(
-                    value = lastNameField.value,
+                    inputField = lastNameField,
                     onValueChange = { onEvent(EditProfileUIEvent.LastNameChange(it)) },
                     label = stringResource(SharedRes.strings.last_name),
-                    isError = lastNameField.isError,
                     supportingText = {
                         if (lastNameField.isError) {
                             Text(text = lastNameField.error)
@@ -170,51 +168,35 @@ private fun ScreenContent(
                         capitalization = KeyboardCapitalization.Words
                     ),
                     modifier = inputFieldCommonModifier.onFocusChanged {
-                        if (it.isFocused) {
-                            onEvent(EditProfileUIEvent.InputFieldFocusReceived(lastNameField.name))
-                        } else {
-                            onEvent(EditProfileUIEvent.InputFieldFocusLost)
-                        }
+                        handleFocusChange(it.isFocused, lastNameField.name)
                     }
                 )
 
                 DefaultOutlinedTextField(
-                    value = emailField.value,
+                    inputField = emailField,
                     onValueChange = { onEvent(EditProfileUIEvent.EmailChange(it)) },
                     label = stringResource(SharedRes.strings.email),
-                    isError = emailField.isError,
-                    supportingText = { Text(text = emailField.error) },
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next
                     ),
                     modifier = inputFieldCommonModifier.onFocusChanged {
-                        if (it.isFocused) {
-                            onEvent(EditProfileUIEvent.InputFieldFocusReceived(emailField.name))
-                        } else {
-                            onEvent(EditProfileUIEvent.InputFieldFocusLost)
-                        }
+                        handleFocusChange(it.isFocused, emailField.name)
                     }
                 )
 
                 DefaultOutlinedTextField(
-                    value = phoneNumberField.value,
+                    inputField = phoneNumberField,
                     onValueChange = { onEvent(EditProfileUIEvent.PhoneNumberChange(it)) },
                     label = stringResource(SharedRes.strings.phone_number),
-                    isError = phoneNumberField.isError,
-                    supportingText = { Text(text = phoneNumberField.error) },
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
                         keyboardType = KeyboardType.Phone,
                         imeAction = ImeAction.Next
                     ),
                     modifier = inputFieldCommonModifier.onFocusChanged {
-                        if (it.isFocused) {
-                            onEvent(EditProfileUIEvent.InputFieldFocusReceived(phoneNumberField.name))
-                        } else {
-                            onEvent(EditProfileUIEvent.InputFieldFocusLost)
-                        }
+                        handleFocusChange(it.isFocused, phoneNumberField.name)
                     }
                 )
 

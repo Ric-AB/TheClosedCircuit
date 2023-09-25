@@ -1,4 +1,3 @@
-
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
 
 import androidx.compose.foundation.layout.Column
@@ -31,8 +30,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.TitleTe
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -105,7 +104,7 @@ private fun ScreenContent(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.height(40.dp))
                 PasswordOutlinedTextField(
-                    value = passwordField.value,
+                    inputField = passwordField,
                     onValueChange = { onEvent(ResetPasswordUIEvent.PasswordChange(it)) },
                     label = stringResource(SharedRes.strings.new_password),
                     placeholder = { Text(stringResource(SharedRes.strings.enter_a_new_password)) },
@@ -118,7 +117,7 @@ private fun ScreenContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 PasswordOutlinedTextField(
-                    value = confirmPasswordField.value,
+                    inputField = confirmPasswordField,
                     onValueChange = { onEvent(ResetPasswordUIEvent.ConfirmPasswordChange(it)) },
                     label = stringResource(SharedRes.strings.confirm_password),
                     placeholder = { Text(stringResource(SharedRes.strings.confirm_password)) },

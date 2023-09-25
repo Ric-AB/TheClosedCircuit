@@ -1,42 +1,43 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
-import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 internal object PlanInfoScreen : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
+    private val planRepository: PlanRepository by inject()
+
     @Composable
     override fun Content() {
         val viewModel =
-            CreatePlanWrapperScreen.rememberScreenModel(tag = CreatePlanWrapperScreen.key) { CreatePlanViewModel() }
+            CreatePlanWrapperScreen.rememberScreenModel { CreatePlanViewModel(planRepository) }
 
 
         ScreenContent(
@@ -48,43 +49,86 @@ internal object PlanInfoScreen : Screen, KoinComponent,
 
 @Composable
 private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEvent) -> Unit) {
-    val (_, _, _, nameField, descriptionField, durationField, estimatedSellingPriceField, estimatedCostPriceField, _, _, _) = uiState
+    val (_, _, _, _, nameField, descriptionField, durationField, estimatedSellingPriceField, estimatedCostPriceField, _, _, _) = uiState
+    val commonModifier = Modifier.fillMaxWidth()
+    val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
+        if (isFocused) onEvent(CreatePlanUIEvent.InputFieldFocusReceived(fieldName))
+        else onEvent(CreatePlanUIEvent.InputFieldFocusLost)
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         TopLabeledTextField(
-            value = nameField.value,
+            inputField = nameField,
             onValueChange = { onEvent(CreatePlanUIEvent.NameChange(it)) },
-            label = stringResource(SharedRes.strings.enter_plan_name)
+            label = stringResource(SharedRes.strings.enter_plan_name),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
+                imeAction = ImeAction.Next
+            ),
+            modifier = commonModifier.onFocusChanged {
+                handleFocusChange(it.isFocused, nameField.name)
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TopLabeledTextField(
-            value = descriptionField.value,
+            inputField = descriptionField,
             onValueChange = { onEvent(CreatePlanUIEvent.DescriptionChange(it)) },
             label = stringResource(SharedRes.strings.describe_your_plan),
             singleLine = false,
-            modifier = Modifier.fillMaxWidth()
-                .height(150.dp)
+            modifier = commonModifier.height(150.dp).onFocusChanged {
+                handleFocusChange(it.isFocused, descriptionField.name)
+            },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = ImeAction.Next
+            )
         )
 
         Spacer(modifier = Modifier.height(40.dp))
         TopLabeledTextField(
-            value = durationField.value,
+            inputField = durationField,
             onValueChange = { onEvent(CreatePlanUIEvent.DurationChange(it)) },
-            label = stringResource(SharedRes.strings.enter_plan_duration)
+            label = stringResource(SharedRes.strings.enter_plan_duration),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            trailingIcon = { TrailingText(text = stringResource(SharedRes.strings.months)) },
+            modifier = commonModifier.onFocusChanged {
+                handleFocusChange(it.isFocused, durationField.name)
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TopLabeledTextField(
-            value = estimatedSellingPriceField.value,
+            inputField = estimatedSellingPriceField,
             onValueChange = { onEvent(CreatePlanUIEvent.SellingPriceChange(it)) },
-            label = stringResource(SharedRes.strings.what_your_estimated_selling_price)
+            label = stringResource(SharedRes.strings.what_your_estimated_selling_price),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            visualTransformation = NumberCommaTransformation(),
+            trailingIcon = { TrailingText(text = "NGN") },
+            modifier = commonModifier.onFocusChanged {
+                handleFocusChange(it.isFocused, estimatedSellingPriceField.name)
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TopLabeledTextField(
-            value = estimatedCostPriceField.value,
+            inputField = estimatedCostPriceField,
             onValueChange = { onEvent(CreatePlanUIEvent.CostPriceChange(it)) },
-            label = stringResource(SharedRes.strings.what_your_estimated_cost_price)
+            label = stringResource(SharedRes.strings.what_your_estimated_cost_price),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
+            trailingIcon = { TrailingText(text = "NGN") },
+            modifier = commonModifier.onFocusChanged {
+                handleFocusChange(it.isFocused, estimatedCostPriceField.name)
+            }
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -95,54 +139,11 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
 }
 
 @Composable
-private fun TopLabeledTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier.fillMaxWidth(),
-    enabled: Boolean = true,
-    readOnly: Boolean = false,
-    textStyle: TextStyle = LocalTextStyle.current,
-    label: String,
-    placeholder: @Composable (() -> Unit)? = null,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    supportingText: @Composable (() -> Unit)? = null,
-    isError: Boolean = false,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = true,
-    maxLines: Int = Int.MAX_VALUE,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    shape: Shape = Shapes().medium,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
-        unfocusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
-        focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+private fun TrailingText(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelLarge,
+        color = Color.Gray,
+        modifier = Modifier.padding(horizontal = 8.dp)
     )
-) {
-    Column {
-        Text(text = label, style = MaterialTheme.typography.labelMedium)
-        DefaultOutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = modifier,
-            enabled = enabled,
-            readOnly = readOnly,
-            textStyle = textStyle,
-            label = null,
-            placeholder = placeholder,
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            supportingText = supportingText,
-            isError = isError,
-            visualTransformation = visualTransformation,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            interactionSource = interactionSource,
-            shape = shape,
-            colors = colors
-        )
-    }
 }

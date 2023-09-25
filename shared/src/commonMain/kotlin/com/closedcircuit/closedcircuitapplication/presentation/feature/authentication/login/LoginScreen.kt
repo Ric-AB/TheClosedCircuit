@@ -40,10 +40,9 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanWrapperScreen
-import com.closedcircuit.closedcircuitapplication.presentation.navigation.BottomNavigation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
@@ -125,7 +124,7 @@ private fun ScreenContent(
 
                     Spacer(modifier = Modifier.height(40.dp))
                     DefaultOutlinedTextField(
-                        value = emailField.value,
+                        inputField = emailField,
                         onValueChange = { email -> onEvent(LoginUIEvent.EmailChange(email)) },
                         label = stringResource(SharedRes.strings.email),
                         isError = emailField.isError,
@@ -140,7 +139,7 @@ private fun ScreenContent(
 
                     Spacer(modifier = Modifier.height(20.dp))
                     PasswordOutlinedTextField(
-                        value = passwordField.value,
+                        inputField = passwordField,
                         onValueChange = { onEvent(LoginUIEvent.PasswordChange(it)) },
                         label = stringResource(SharedRes.strings.password),
                         onPasswordVisibilityChange = { showPassword = it },

@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
 
-import com.closedcircuit.closedcircuitapplication.core.validation.EmailValidator
-import com.closedcircuit.closedcircuitapplication.core.validation.PasswordValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.EmailValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.PasswordValidator
 import com.closedcircuit.closedcircuitapplication.util.InputField
 
 data class ResetPasswordUIState(

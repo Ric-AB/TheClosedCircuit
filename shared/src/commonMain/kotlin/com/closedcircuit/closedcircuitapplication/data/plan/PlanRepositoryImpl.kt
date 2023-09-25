@@ -5,9 +5,10 @@ import app.cash.sqldelight.coroutines.mapToList
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
+import com.closedcircuit.closedcircuitapplication.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plans
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +41,38 @@ class PlanRepositoryImpl(
                 }
 
                 planEntities.asPlans()
+            }
+        }
+    }
+
+    override suspend fun createPlan(plan: Plan): ApiResponse<Plan> {
+        return withContext(ioDispatcher + NonCancellable) {
+            planService.createPlan(plan.asRequest()).mapOnSuccess { apiPlan ->
+                val planEntity = apiPlan.asPlanEntity()
+                queries.upsertPlanEntity(planEntity)
+                planEntity.asPlan()
+            }
+        }
+    }
+
+    override suspend fun updatePlan(plan: Plan): ApiResponse<Plan> {
+        return withContext(ioDispatcher + NonCancellable) {
+            planService.updateUserPlan(planId = plan.id.value, request = plan.asRequest())
+                .mapOnSuccess { apiPlan ->
+                    val planEntity = apiPlan.asPlanEntity()
+                    queries.upsertPlanEntity(planEntity)
+                    planEntity.asPlan()
+                }
+        }
+    }
+
+    override suspend fun deletePlan(id: ID): ApiResponse<Plan> {
+        val idValue = id.value
+        return withContext(ioDispatcher + NonCancellable) {
+            planService.deletePlan(idValue).mapOnSuccess {
+                val planEntity = queries.getPlanEntityByID(idValue).executeAsOne()
+                queries.deletPlanEntity(idValue)
+                planEntity.asPlan()
             }
         }
     }

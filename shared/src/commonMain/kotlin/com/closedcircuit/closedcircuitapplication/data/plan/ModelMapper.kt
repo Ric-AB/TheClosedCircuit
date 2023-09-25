@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.data.plan
 
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.ApiPlan
+import com.closedcircuit.closedcircuitapplication.data.plan.dto.CreateOrUpdatePlanRequest
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
@@ -52,6 +53,18 @@ fun ApiPlan.asPlanEntity() = PlanEntity(
     isSponsored = isSponsored ?: false,
     createdAt = createdAt,
     updatedAt = updatedAt
+)
+
+fun Plan.asRequest() = CreateOrUpdatePlanRequest(
+    avatar = avatar.value,
+    category = category,
+    sector = sector,
+    type = type.orEmpty(),
+    name = name,
+    description = description,
+    duration = duration.value,
+    estimatedSellingPrice = estimatedSellingPrice.value.toDouble(),
+    estimatedCostPrice = estimatedCostPrice.value.toDouble()
 )
 
 fun List<ApiPlan>.asPlanEntities() = this.map { it.asPlanEntity() }

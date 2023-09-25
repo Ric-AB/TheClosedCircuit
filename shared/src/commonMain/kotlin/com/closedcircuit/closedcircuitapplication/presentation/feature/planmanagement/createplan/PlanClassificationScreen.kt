@@ -13,17 +13,21 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.LargeDropdownMenu
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 internal object PlanClassificationScreen : Screen, KoinComponent {
+    private val planRepository: PlanRepository by inject()
+
     @Composable
     override fun Content() {
         val viewModel =
-            CreatePlanWrapperScreen.rememberScreenModel(tag = CreatePlanWrapperScreen.key) { CreatePlanViewModel() }
+            CreatePlanWrapperScreen.rememberScreenModel { CreatePlanViewModel(planRepository) }
 
         val navigator = LocalNavigator.currentOrThrow
         ScreenContent(
@@ -67,14 +71,18 @@ private fun ScreenContent(
             LargeDropdownMenu(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_business_type),
-                items = uiState.businessTypes ,
+                items = uiState.businessTypes,
                 selectedItemToString = { it.value },
                 selectedItem = uiState.businessType,
                 onItemSelected = { _, item -> onEvent(CreatePlanUIEvent.BusinessType(item)) },
             )
         }
 
-        DefaultButton(onClick = navigateToPlanInfoScreen) {
+        val isEnabled = when (uiState.category?.id) {
+            "project" -> true
+            else -> uiState.category != null && uiState.businessType != null && uiState.sector != null
+        }
+        DefaultButton(onClick = navigateToPlanInfoScreen, enabled = isEnabled) {
             Text(text = stringResource(SharedRes.strings.next))
         }
     }

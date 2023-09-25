@@ -1,9 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register
 
-import com.closedcircuit.closedcircuitapplication.core.validation.EmailValidator
-import com.closedcircuit.closedcircuitapplication.core.validation.NameValidator
-import com.closedcircuit.closedcircuitapplication.core.validation.PasswordValidator
-import com.closedcircuit.closedcircuitapplication.core.validation.PhoneNumberValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.EmailValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.NameValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.PasswordValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.PhoneNumberValidator
 import com.closedcircuit.closedcircuitapplication.util.InputField
 
 data class RegisterUIState(
@@ -25,7 +25,7 @@ data class RegisterUIState(
     val confirmPasswordField: InputField = InputField(name = "confirmPassword"),
     val isLoading: Boolean = false,
 ) {
-    fun fieldsToValidateAsList() = listOf(
+    val fieldsToValidate = listOf(
         firstNameField,
         lastNameField,
         emailField,

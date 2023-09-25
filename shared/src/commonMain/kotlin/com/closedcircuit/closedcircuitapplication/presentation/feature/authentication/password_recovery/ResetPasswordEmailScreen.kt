@@ -34,8 +34,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Message
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
@@ -111,7 +111,7 @@ private fun ScreenContent(
 
                 Spacer(modifier = Modifier.height(40.dp))
                 DefaultOutlinedTextField(
-                    value = state.emailField.value,
+                    inputField = state.emailField,
                     onValueChange = { onEvent(ResetPasswordUIEvent.EmailChange(it)) },
                     label = stringResource(SharedRes.strings.email),
                     keyboardOptions = KeyboardOptions(

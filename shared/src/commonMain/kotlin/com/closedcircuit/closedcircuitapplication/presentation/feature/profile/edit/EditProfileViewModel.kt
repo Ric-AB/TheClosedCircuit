@@ -93,14 +93,14 @@ class EditProfileViewModel(
     }
 
     private fun areFieldsValid(): Boolean {
-        val fields = state.fieldsToValidateAsList()
-        fields.forEach { inputField -> inputField.validateInput() }
-        return fields.all { inputField -> inputField.error.isEmpty() }
+        return state.fieldsToValidate.let { inputFields ->
+            inputFields.forEach {inputField ->  inputField.validateInput() }
+            inputFields.all {inputField ->  !inputField.isError }
+        }
     }
 
     private fun validateLastFocusedField() {
-        if (lastFocusedField == null) return
-        val fieldToValidate = state.fieldsToValidateAsList().find { it.name == lastFocusedField }
+        val fieldToValidate = state.fieldsToValidate.find { it.name == lastFocusedField }
         fieldToValidate?.validateInput()
     }
 }

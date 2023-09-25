@@ -18,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
@@ -30,31 +30,47 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 internal object CreatePlanWrapperScreen : Screen, KoinComponent {
-
-    override val key: ScreenKey
-        get() = "CreatePlanWrapperScreen"
+    private val planRepository: PlanRepository by inject()
 
     @Composable
     override fun Content() {
-        val viewModel =
-            rememberScreenModel(tag = key) { CreatePlanViewModel() }
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = rememberScreenModel { CreatePlanViewModel(planRepository) }
         val messageBarState = rememberMessageBarState()
 
-        val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(messageBarState = messageBarState, goBack = navigator::pop)
+        viewModel.createPlanResultChannel.receiveAsFlow().observerWithScreen {
+            when (it) {
+                is CreatePlanResult.Failure -> messageBarState.addError(it.message)
+                CreatePlanResult.Success -> navigator.pop()
+            }
+        }
+
+        ScreenContent(
+            messageBarState = messageBarState,
+            uiState = viewModel.state,
+            goBack = navigator::pop
+        )
     }
 }
 
 @Composable
-private fun ScreenContent(messageBarState: MessageBarState, goBack: () -> Unit) {
+private fun ScreenContent(
+    messageBarState: MessageBarState,
+    uiState: CreatePlanUIState,
+    goBack: () -> Unit
+) {
     var innerNavigator: Navigator? by remember { mutableStateOf(null) }
 
     BaseScaffold(
         messageBarState = messageBarState,
+        isLoading = uiState.isLoading,
         topBar = {
             CreatePlanAppBar(
                 progress = innerNavigator?.size?.div(2F) ?: 0.5F,

@@ -38,6 +38,7 @@ object ClosedCircuitApiEndpoints {
     const val BULK_DELETE_NOTIFICATION = "v1/notifications/bulk-delete/"
 
     // plans
+    const val CREATE_PLAN = "user/plans/"
     const val PLANS = "user/plans/get-plans/"
     const val PLAN = "user/plans/{id}"
 

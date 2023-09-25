@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.closedcircuit.closedcircuitapplication.core.validation.InputValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.InputValidator
 
 
 data class InputField(

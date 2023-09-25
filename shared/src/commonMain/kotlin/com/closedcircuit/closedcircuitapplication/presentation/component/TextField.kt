@@ -27,7 +27,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -45,17 +44,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.core.validation.PasswordValidator
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibility
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberVisibilityOff
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.InputField
+import com.closedcircuit.closedcircuitapplication.util.validation.PasswordValidator
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun DefaultOutlinedTextField(
-    value: String,
+    inputField: InputField,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier.fillMaxWidth(),
     enabled: Boolean = true,
@@ -65,8 +65,8 @@ fun DefaultOutlinedTextField(
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    supportingText: @Composable (() -> Unit)? = null,
-    isError: Boolean = false,
+    supportingText: @Composable (() -> Unit)? = { Text(text = inputField.error) },
+    isError: Boolean = inputField.isError,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -76,11 +76,12 @@ fun DefaultOutlinedTextField(
     shape: Shape = Shapes().medium,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
         unfocusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
-        focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+        focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+        errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface
     )
 ) {
     OutlinedTextField(
-        value = value,
+        value = inputField.value,
         onValueChange = onValueChange,
         modifier = modifier,
         enabled = enabled,
@@ -109,7 +110,7 @@ fun DefaultOutlinedTextField(
 
 @Composable
 fun PasswordOutlinedTextField(
-    value: String,
+    inputField: InputField,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier.fillMaxWidth(),
     label: String? = null,
@@ -127,7 +128,7 @@ fun PasswordOutlinedTextField(
 ) {
     Column {
         DefaultOutlinedTextField(
-            value = value,
+            inputField = inputField,
             onValueChange = onValueChange,
             modifier = modifier,
             label = label,
@@ -167,7 +168,60 @@ fun PasswordOutlinedTextField(
             maxLines = 1
         )
     }
+}
 
+@Composable
+fun TopLabeledTextField(
+    inputField: InputField,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    label: String,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = { Text(text = inputField.error) },
+    isError: Boolean = inputField.isError,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape = Shapes().medium,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
+        unfocusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+        focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+        errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+    )
+) {
+    Column {
+        Text(text = label, style = MaterialTheme.typography.labelMedium)
+        DefaultOutlinedTextField(
+            inputField = inputField,
+            onValueChange = onValueChange,
+            modifier = modifier,
+            enabled = enabled,
+            readOnly = readOnly,
+            textStyle = textStyle,
+            label = null,
+            placeholder = placeholder,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            supportingText = supportingText,
+            isError = isError,
+            visualTransformation = visualTransformation,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            singleLine = singleLine,
+            maxLines = maxLines,
+            interactionSource = interactionSource,
+            shape = shape,
+            colors = colors
+        )
+    }
 }
 
 @Composable

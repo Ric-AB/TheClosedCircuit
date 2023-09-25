@@ -1,11 +1,11 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit
 
 import androidx.compose.runtime.mutableStateOf
-import com.closedcircuit.closedcircuitapplication.core.validation.EmailValidator
-import com.closedcircuit.closedcircuitapplication.core.validation.NameValidator
-import com.closedcircuit.closedcircuitapplication.core.validation.PhoneNumberValidator
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.util.InputField
+import com.closedcircuit.closedcircuitapplication.util.validation.EmailValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.NameValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.PhoneNumberValidator
 
 data class EditProfileUIState(
     val firstNameField: InputField,
@@ -52,7 +52,7 @@ data class EditProfileUIState(
         }
     }
 
-    fun fieldsToValidateAsList() = listOf(
+    val fieldsToValidate = listOf(
         firstNameField,
         lastNameField,
         emailField,

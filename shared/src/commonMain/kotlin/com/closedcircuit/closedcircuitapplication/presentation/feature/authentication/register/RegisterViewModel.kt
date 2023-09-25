@@ -20,7 +20,7 @@ class RegisterViewModel(
         private set
 
     private val _registerResultChannel = Channel<RegisterResult>()
-    val resultResultChannel: ReceiveChannel<RegisterResult> = _registerResultChannel
+    val registerResultChannel: ReceiveChannel<RegisterResult> = _registerResultChannel
 
     private var lastFocusedField: String? = null
 
@@ -70,16 +70,15 @@ class RegisterViewModel(
     }
 
     private fun validateLastFocusedField() {
-        if (lastFocusedField == null) return
-        val fieldToValidate = state.fieldsToValidateAsList().find { it.name == lastFocusedField }
+        val fieldToValidate = state.fieldsToValidate.find { it.name == lastFocusedField }
         fieldToValidate?.validateInput()
     }
 
     private fun areFieldsValid(): Boolean {
-        val fields = state.fieldsToValidateAsList()
+        val fields = state.fieldsToValidate
         fields.forEach { inputField -> inputField.validateInput() }
         validateConfirmPassword()
-        return fields.all { inputField -> inputField.error.isEmpty() }
+        return fields.all { inputField -> !inputField.isError }
     }
 
     private fun updateLastFocusedField(fieldName: String) {
