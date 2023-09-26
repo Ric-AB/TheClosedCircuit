@@ -54,8 +54,11 @@ import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.user.Sponsor
 import com.closedcircuit.closedcircuitapplication.domain.wallet.Wallet
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -83,17 +86,25 @@ internal object DashboardTab : Tab, KoinComponent {
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
         val uiState by viewModel.state.collectAsState()
         val messageBarState = rememberMessageBarState()
 
-        ScreenContent(messageBarState = messageBarState, uiState = uiState)
+        ScreenContent(
+            messageBarState = messageBarState,
+            uiState = uiState,
+            navigateToPlanListScreen = { navigator.push(PlanListScreen) }
+        )
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ScreenContent(messageBarState: MessageBarState, uiState: DashboardUIState) {
+private fun ScreenContent(
+    messageBarState: MessageBarState,
+    uiState: DashboardUIState,
+    navigateToPlanListScreen: () -> Unit
+) {
     BaseScaffold(messageBarState = messageBarState) { innerPadding ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -126,6 +137,12 @@ private fun ScreenContent(messageBarState: MessageBarState, uiState: DashboardUI
                         modifier = Modifier.animateItemPlacement(),
                         headerModifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
                     )
+                }
+            }
+
+            item {
+                DefaultButton(onClick = navigateToPlanListScreen) {
+                    Text("Go")
                 }
             }
         }

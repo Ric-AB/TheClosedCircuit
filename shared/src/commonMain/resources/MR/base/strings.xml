@@ -103,4 +103,17 @@
     <string name="what_your_estimated_cost_price">What’s your estimated cost price?</string>
     <string name="create_plan">Create plan</string>
     <string name="months">Months</string>
+    <string name="steps">Steps</string>
+    <string name="budgets">Budgets</string>
+    <string name="edit_plan">Edit plan</string>
+    <string name="delete_plan">Delete plan</string>
+    <string name="request_funds">Request funds</string>
+    <string name="edit_plan">Edit plan</string>
+    <string name="edit_plan">Edit plan</string>
+    <string name="total_funds_raised">Total funds raised</string>
+    <string name="funds_raised_progress">Funds raised progress</string>
+    <string name="add_step">Add step</string>
+    <string name="target_amount">Target amount</string>
+    <string name="business_sector">Business sector</string>
+    <string name="plan_duration">Plan duration</string>
 </resources>

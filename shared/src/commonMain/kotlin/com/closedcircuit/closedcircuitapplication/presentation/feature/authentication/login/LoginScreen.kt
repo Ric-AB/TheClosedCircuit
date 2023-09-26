@@ -40,6 +40,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanWrapperScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.BottomNavigation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
@@ -67,7 +68,7 @@ object LoginScreen : Screen, KoinComponent {
 
                 LoginResult.Success -> {
                     delay(500) //wait for loader to hide
-                    navigator.replaceAll(CreatePlanWrapperScreen)
+                    navigator.replaceAll(BottomNavigation)
                 }
             }
         }

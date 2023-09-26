@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +27,10 @@ fun ProgressIndicator(
         )
 
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = displayText, modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(
+            text = displayText,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.labelMedium
+        )
     }
 }
