@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
+package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.passwordrecovery
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

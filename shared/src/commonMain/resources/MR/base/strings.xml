@@ -108,12 +108,16 @@
     <string name="edit_plan">Edit plan</string>
     <string name="delete_plan">Delete plan</string>
     <string name="request_funds">Request funds</string>
-    <string name="edit_plan">Edit plan</string>
-    <string name="edit_plan">Edit plan</string>
+    <string name="edit_step">Edit step</string>
     <string name="total_funds_raised">Total funds raised</string>
     <string name="funds_raised_progress">Funds raised progress</string>
     <string name="add_step">Add step</string>
     <string name="target_amount">Target amount</string>
     <string name="business_sector">Business sector</string>
     <string name="plan_duration">Plan duration</string>
+    <string name="step_name">Step name</string>
+    <string name="step_description">Step description</string>
+    <string name="step_duration">Step description</string>
+    <string name="add_budget">Add budget</string>
+    <string name="save">Save</string>
 </resources>

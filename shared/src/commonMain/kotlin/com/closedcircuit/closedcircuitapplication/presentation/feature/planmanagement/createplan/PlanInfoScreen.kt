@@ -21,6 +21,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.presentation.component.TextFieldTrailingText
 import com.closedcircuit.closedcircuitapplication.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
@@ -94,7 +95,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
             ),
-            trailingIcon = { TrailingText(text = stringResource(SharedRes.strings.months)) },
+            trailingIcon = { TextFieldTrailingText(text = stringResource(SharedRes.strings.months)) },
             modifier = commonModifier.onFocusChanged {
                 handleFocusChange(it.isFocused, durationField.name)
             }
@@ -110,7 +111,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
                 imeAction = ImeAction.Next
             ),
             visualTransformation = NumberCommaTransformation(),
-            trailingIcon = { TrailingText(text = "NGN") },
+            trailingIcon = { TextFieldTrailingText(text = "NGN") },
             modifier = commonModifier.onFocusChanged {
                 handleFocusChange(it.isFocused, estimatedSellingPriceField.name)
             }
@@ -125,7 +126,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
-            trailingIcon = { TrailingText(text = "NGN") },
+            trailingIcon = { TextFieldTrailingText(text = "NGN") },
             modifier = commonModifier.onFocusChanged {
                 handleFocusChange(it.isFocused, estimatedCostPriceField.name)
             }
@@ -136,14 +137,4 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
             Text(text = stringResource(SharedRes.strings.create_plan))
         }
     }
-}
-
-@Composable
-private fun TrailingText(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelLarge,
-        color = Color.Gray,
-        modifier = Modifier.padding(horizontal = 8.dp)
-    )
 }

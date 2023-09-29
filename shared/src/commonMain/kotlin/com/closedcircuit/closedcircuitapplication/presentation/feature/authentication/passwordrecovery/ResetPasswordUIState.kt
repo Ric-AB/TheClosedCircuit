@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
+package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.passwordrecovery
 
 import com.closedcircuit.closedcircuitapplication.util.validation.EmailValidator
 import com.closedcircuit.closedcircuitapplication.util.validation.PasswordValidator

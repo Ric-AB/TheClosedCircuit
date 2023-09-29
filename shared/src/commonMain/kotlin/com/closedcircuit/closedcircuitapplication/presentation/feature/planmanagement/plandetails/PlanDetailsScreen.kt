@@ -1,10 +1,8 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
-    ExperimentalLayoutApi::class
-)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.plandetails
 
+import StepDetailsScreen
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,7 +37,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Tab
@@ -58,7 +54,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -73,7 +68,9 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
+import com.closedcircuit.closedcircuitapplication.presentation.feature.fundrequest.FundRequestScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import kotlinx.coroutines.launch
@@ -83,13 +80,26 @@ internal object PlanDetailsScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(goBack = navigator::pop)
+        ScreenContent(
+            goBack = navigator::pop,
+            navigateToStepDetails = { navigator.push(StepDetailsScreen) },
+            navigateToFundRequest = { navigator.push(FundRequestScreen) }
+        )
     }
 }
 
 @Composable
-private fun ScreenContent(goBack: () -> Unit) {
-    BaseScaffold(topBar = { PlanDetailsAppBar(goBack) }) { innerPadding ->
+private fun ScreenContent(
+    goBack: () -> Unit,
+    navigateToStepDetails: () -> Unit,
+    navigateToFundRequest: () -> Unit
+) {
+    BaseScaffold(topBar = {
+        PlanDetailsAppBar(
+            onNavClick = goBack,
+            navigateToFundRequest = navigateToFundRequest
+        )
+    }) { innerPadding ->
         BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
             val screenHeight = maxHeight
             val scrollState = rememberScrollState()
@@ -101,7 +111,11 @@ private fun ScreenContent(goBack: () -> Unit) {
                 Header()
 
                 Spacer(modifier = Modifier.height(16.dp))
-                ActionItemsTabs(modifier = Modifier.height(screenHeight), scrollState = scrollState)
+                ActionItemsTabs(
+                    modifier = Modifier.height(screenHeight),
+                    scrollState = scrollState,
+                    navigateToStepDetails = navigateToStepDetails
+                )
             }
         }
     }
@@ -191,7 +205,11 @@ private fun PlanSummary() {
 }
 
 @Composable
-private fun ActionItemsTabs(modifier: Modifier, scrollState: ScrollState) {
+private fun ActionItemsTabs(
+    modifier: Modifier,
+    scrollState: ScrollState,
+    navigateToStepDetails: () -> Unit
+) {
     val list = listOf("Steps", "Budget")
     val pagerState = rememberPagerState(initialPage = 0) { list.size }
     val coroutineScope = rememberCoroutineScope()
@@ -235,7 +253,11 @@ private fun ActionItemsTabs(modifier: Modifier, scrollState: ScrollState) {
                 .padding(horizontal = 12.dp)
 
             when (page) {
-                0 -> StepList(modifier = listModifier)
+                0 -> StepList(
+                    modifier = listModifier,
+                    navigateToStepDetails = navigateToStepDetails
+                )
+
                 1 -> BudgetList(modifier = listModifier)
             }
         }
@@ -243,7 +265,13 @@ private fun ActionItemsTabs(modifier: Modifier, scrollState: ScrollState) {
 }
 
 @Composable
-private fun StepItem(modifier: Modifier, name: String, targetAmount: String, amountRaised: String) {
+private fun StepItem(
+    modifier: Modifier,
+    name: String,
+    targetAmount: String,
+    amountRaised: String,
+    onClick: () -> Unit
+) {
     @Composable
     fun AmountItem(label: String, value: String) {
         Row(
@@ -262,7 +290,7 @@ private fun StepItem(modifier: Modifier, name: String, targetAmount: String, amo
 
     Card(
         shape = Shapes().large,
-        onClick = {},
+        onClick = onClick,
         modifier = modifier,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level1)
@@ -283,50 +311,7 @@ private fun StepItem(modifier: Modifier, name: String, targetAmount: String, amo
 }
 
 @Composable
-private fun BudgetItem(
-    modifier: Modifier,
-    name: String,
-    targetAmount: String,
-    amountRaised: String
-) {
-    Card(
-        shape = Shapes().large,
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level1)
-        )
-    ) {
-        Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = targetAmount)
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Funds raised progress", style = MaterialTheme.typography.labelSmall)
-                Text(text = amountRaised, style = MaterialTheme.typography.labelSmall)
-            }
-
-            LinearProgressIndicator(
-                modifier = Modifier.fillMaxWidth(),
-                progress = 0.7F,
-                strokeCap = StrokeCap.Round
-            )
-        }
-    }
-}
-
-@Composable
-private fun StepList(modifier: Modifier) {
+private fun StepList(modifier: Modifier, navigateToStepDetails: () -> Unit) {
     val itemModifier = Modifier.fillMaxWidth()
     LazyColumn(
         modifier = modifier,
@@ -338,7 +323,8 @@ private fun StepList(modifier: Modifier) {
                 modifier = itemModifier,
                 name = "Conduct Market Research",
                 targetAmount = "NGN 500",
-                amountRaised = "NGN 200"
+                amountRaised = "NGN 200",
+                onClick = navigateToStepDetails
             )
         }
     }
@@ -364,7 +350,7 @@ private fun BudgetList(modifier: Modifier) {
 }
 
 @Composable
-fun DropDownMenu() {
+private fun DropDownMenu(navigateToFundRequest: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(
@@ -394,14 +380,14 @@ fun DropDownMenu() {
 
             DropdownMenuItem(
                 text = { Text("Request Funds") },
-                onClick = { }
+                onClick = navigateToFundRequest
             )
         }
     }
 }
 
 @Composable
-private fun PlanDetailsAppBar(onNavClick: () -> Unit) {
+private fun PlanDetailsAppBar(onNavClick: () -> Unit, navigateToFundRequest: () -> Unit) {
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = onNavClick) {
@@ -410,7 +396,7 @@ private fun PlanDetailsAppBar(onNavClick: () -> Unit) {
         },
         title = {},
         actions = {
-            DropDownMenu()
+            DropDownMenu(navigateToFundRequest)
         }
     )
 }

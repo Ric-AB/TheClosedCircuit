@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
+package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.passwordrecovery
 
 sealed interface ResetPasswordUIEvent {
     data class EmailChange(val email: String) : ResetPasswordUIEvent

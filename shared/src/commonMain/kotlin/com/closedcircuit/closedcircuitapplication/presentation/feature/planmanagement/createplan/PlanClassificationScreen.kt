@@ -55,8 +55,6 @@ private fun ScreenContent(
                 onItemSelected = { _, item -> onEvent(CreatePlanUIEvent.CategoryChange(item)) },
             )
 
-
-
             Spacer(modifier = Modifier.height(24.dp))
             LargeDropdownMenu(
                 modifier = Modifier.fillMaxWidth(),

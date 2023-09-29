@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.password_recovery
+package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.passwordrecovery
 
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.getOrCreateScope
