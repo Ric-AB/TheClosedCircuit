@@ -16,7 +16,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard
 import com.closedcircuit.closedcircuitapplication.presentation.feature.message.MessageTab
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.ProfileNavigator
 
-object BottomNavigation : Screen {
+internal object BottomNavigation : Screen {
 
     @Composable
     override fun Content() {

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -17,6 +18,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
@@ -35,12 +39,17 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHori
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 internal object PlanListScreen : Screen, KoinComponent {
+    private val viewModel: PlanListViewModel by inject()
+
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val state = viewModel.stateFlow.collectAsState()
         ScreenContent(
+            state = state.value,
             goBack = navigator::pop,
             navigateToCreatePlanScreen = { navigator.push(CreatePlanWrapperScreen) },
             navigateToPlanDetailsScreen = { navigator.push(PlanDetailsScreen) }
@@ -50,6 +59,7 @@ internal object PlanListScreen : Screen, KoinComponent {
 
 @Composable
 private fun ScreenContent(
+    state: PlanListUIState,
     goBack: () -> Unit,
     navigateToCreatePlanScreen: () -> Unit,
     navigateToPlanDetailsScreen: () -> Unit
@@ -70,8 +80,9 @@ private fun ScreenContent(
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
         ) {
-            items(10) {
+            items(state.plans) { plan ->
                 PlanCard(
+                    plan = plan,
                     modifier = Modifier.fillMaxWidth()
                         .clickable(enabled = true, onClick = navigateToPlanDetailsScreen)
                 )
@@ -81,36 +92,42 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun PlanCard(modifier: Modifier) {
+private fun PlanCard(plan: Plan, modifier: Modifier) {
+    val fundsRaised = remember {
+        val value = (plan.fundsRaised / plan.targetAmount).value.toFloat()
+        val percentage = value * 100
+        Pair(value, "$percentage%")
+    }
     OutlinedCard(modifier = modifier) {
         Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
             Avatar(
-                avatar = com.closedcircuit.closedcircuitapplication.domain.model.Avatar(""),
+                avatar = plan.avatar,
                 size = DpSize(50.dp, 50.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "E-commerce",
+                text = plan.name,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold
             )
 
-            BodyText(
-                text = "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat...",
+            BodyText(text = plan.description)
+
+            Spacer(modifier = Modifier.height(16.dp))
+            ProgressIndicator(
+                modifier = Modifier.fillMaxWidth(),
+                progress = fundsRaised.first,
+                displayText = stringResource(
+                    SharedRes.strings.percentage_funds_raised,
+                    fundsRaised.second
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
             ProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
-                progress = 0.4F,
-                displayText = stringResource(SharedRes.strings.percentage_funds_raised, "40")
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            ProgressIndicator(
-                modifier = Modifier.fillMaxWidth(),
-                progress = 0.5F,
+                progress = plan.tasksCompleted.toFloat(),
                 displayText = stringResource(SharedRes.strings.percentage_task_completed, "50")
             )
         }
@@ -121,7 +138,7 @@ private fun PlanCard(modifier: Modifier) {
 private fun PlansExtendedFab(onClick: () -> Unit) {
     ExtendedFloatingActionButton(
         onClick = onClick,
-        text = { Text("New plan") },
+        text = { Text(text = stringResource(SharedRes.strings.new_plan)) },
         icon = { Icon(imageVector = Icons.Default.Add, contentDescription = null) }
     )
 }

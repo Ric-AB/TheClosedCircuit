@@ -3,6 +3,7 @@ package com.closedcircuit.closedcircuitapplication.data.plan
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.CreateOrUpdatePlanRequest
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
@@ -25,7 +26,7 @@ fun PlanEntity.asPlan() = Plan(
     tasksCompleted = tasksCompleted,
     targetAmount = Price(targetAmount),
     totalFundsRaised = Price(totalFundsRaised),
-    planAnalytics = analytics.orEmpty(),
+    analytics = analytics.orEmpty(),
     userID = ID(userID),
     hasRequestedFund = hasRequestedFund,
     isSponsored = isSponsored,
@@ -63,8 +64,31 @@ fun Plan.asRequest() = CreateOrUpdatePlanRequest(
     name = name,
     description = description,
     duration = duration.value,
-    estimatedSellingPrice = estimatedSellingPrice.value.toDouble(),
-    estimatedCostPrice = estimatedCostPrice.value.toDouble()
+    estimatedSellingPrice = estimatedSellingPrice.value,
+    estimatedCostPrice = estimatedCostPrice.value
+)
+
+fun Plan.asEntity() = PlanEntity(
+    id = id.value,
+    avatar = avatar.value,
+    category = category,
+    sector = sector,
+    type = type,
+    name = name,
+    description = description,
+    duration = duration.value.toLong(),
+    estimatedSellingPrice = estimatedSellingPrice.value,
+    estimatedCostPrice = estimatedCostPrice.value,
+    fundsRaised = fundsRaised.value,
+    tasksCompleted = tasksCompleted,
+    targetAmount = targetAmount.value,
+    totalFundsRaised = totalFundsRaised.value,
+    analytics = analytics,
+    userID = userID.value,
+    hasRequestedFund = hasRequestedFund,
+    isSponsored = isSponsored,
+    createdAt = Date.now().value,
+    updatedAt = Date.now().value
 )
 
 fun List<ApiPlan>.asPlanEntities() = this.map { it.asPlanEntity() }

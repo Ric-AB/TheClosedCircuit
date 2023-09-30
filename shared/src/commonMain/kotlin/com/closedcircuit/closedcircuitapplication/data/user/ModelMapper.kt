@@ -52,5 +52,5 @@ fun User.asApiUser() = ApiUser(
 fun SponsorResponse.toSponsor() = Sponsor(
     avatar = Avatar(sponsorAvatar),
     fullName = Name(sponsorFullName),
-    loanAmount = Price(loanAmount)
+    loanAmount = Price(loanAmount.toDouble())
 )

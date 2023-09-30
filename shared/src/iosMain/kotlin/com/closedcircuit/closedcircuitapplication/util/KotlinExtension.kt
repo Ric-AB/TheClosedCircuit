@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.util
 
 import platform.Foundation.NSString
+import platform.Foundation.NSUUID
 import platform.Foundation.stringWithFormat
 
 actual fun String.Companion.format(format: String, vararg args: Any?): String {
@@ -65,3 +66,5 @@ actual fun String.Companion.format(format: String, vararg args: Any?): String {
         else -> throw IllegalStateException("ios String.format() can only accept up to 10 arguments")
     }
 }
+
+actual fun randomUUID(): String = NSUUID().UUIDString()

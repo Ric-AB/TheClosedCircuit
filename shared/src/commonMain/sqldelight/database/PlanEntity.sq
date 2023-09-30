@@ -12,7 +12,7 @@ CREATE TABLE PlanEntity (
     estimatedSellingPrice REAL NOT NULL ,
     estimatedCostPrice REAL NOT NULL ,
     fundsRaised REAL NOT NULL ,
-    tasksCompleted TEXT NOT NULL ,
+    tasksCompleted REAL NOT NULL ,
     targetAmount REAL NOT NULL,
     totalFundsRaised REAL NOT NULL ,
     analytics TEXT,
@@ -40,7 +40,7 @@ INSERT OR REPLACE
 INTO PlanEntity
 VALUES ?;
 
-deletPlanEntity:
+deletePlanEntity:
 DELETE FROM PlanEntity
 WHERE id = :id;
 

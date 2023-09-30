@@ -1,9 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.domain.model
 
-import com.closedcircuit.closedcircuitapplication.util.format
+import com.closedcircuit.closedcircuitapplication.util.randomUUID
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
-import kotlin.random.Random
 
 @Serializable
 @JvmInline
@@ -16,15 +15,8 @@ value class ID(val value: String) {
 
     companion object {
         fun generateRandomUUID(): ID {
-            val random = Random
 
-            val firstPart = String.format("%08x", random.nextLong(0x100000000))
-            val secondPart = String.format("%04x", random.nextInt(0x10000))
-            val thirdPart = String.format("%04x", random.nextInt(0x10000))
-            val fourthPart = String.format("%04x", random.nextInt(0x10000))
-            val fifthPart = String.format("%012x", random.nextLong())
-
-            return ID("$firstPart-$secondPart-$thirdPart-$fourthPart-$fifthPart")
+            return ID(randomUUID())
         }
     }
 }

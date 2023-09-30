@@ -43,7 +43,7 @@ fun BudgetEntity.asBudget() = Budget(
 fun Budget.asRequest() = CreateOrUpdateBudgetRequest(
     name = name,
     description = description,
-    cost = cost.value.toDouble(),
+    cost = cost.value,
     planID = planID.value,
     stepID = stepID.value
 )

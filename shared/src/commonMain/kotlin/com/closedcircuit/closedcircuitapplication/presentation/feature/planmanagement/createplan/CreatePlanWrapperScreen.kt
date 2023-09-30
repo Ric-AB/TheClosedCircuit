@@ -25,7 +25,9 @@ import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.component.SuccessScreen
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
@@ -48,7 +50,15 @@ internal object CreatePlanWrapperScreen : Screen, KoinComponent {
         viewModel.createPlanResultChannel.receiveAsFlow().observerWithScreen {
             when (it) {
                 is CreatePlanResult.Failure -> messageBarState.addError(it.message)
-                CreatePlanResult.Success -> navigator.pop()
+                CreatePlanResult.Success -> {
+                    navigator.push(
+                        SuccessScreen(
+                            title = "",
+                            message = "",
+                            primaryAction = { navigator.popUntil { screen -> screen == PlanListScreen } }
+                        )
+                    )
+                }
             }
         }
 

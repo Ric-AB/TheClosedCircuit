@@ -5,14 +5,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -126,6 +123,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
+            visualTransformation = NumberCommaTransformation(),
             trailingIcon = { TextFieldTrailingText(text = "NGN") },
             modifier = commonModifier.onFocusChanged {
                 handleFocusChange(it.isFocused, estimatedCostPriceField.name)

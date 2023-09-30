@@ -10,7 +10,7 @@ class WalletRepositoryImpl : WalletRepository {
 
     private val _walletFlow = MutableStateFlow(
         Wallet(
-            totalFunds = Price("4000"),
+            totalFunds = Price(4000.0),
             percentageIncrease = 10
         )
     )
@@ -19,7 +19,7 @@ class WalletRepositoryImpl : WalletRepository {
 
     override suspend fun getUserWallet(): Wallet {
         return Wallet(
-            totalFunds = Price("4000"),
+            totalFunds = Price(4000.0),
             percentageIncrease = 10
         )
     }

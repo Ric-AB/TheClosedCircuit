@@ -30,6 +30,6 @@ private val donations = List(10) {
         sponsorAvatar = Avatar(""),
         sponsorFullName = Name("Walter White"),
         planName = "Drugs",
-        amount = Price("5000")
+        amount = Price(5000.0)
     )
 }.toImmutableList()

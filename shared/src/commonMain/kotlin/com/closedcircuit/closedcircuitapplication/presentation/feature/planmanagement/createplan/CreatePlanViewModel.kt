@@ -56,10 +56,11 @@ class CreatePlanViewModel(private val planRepository: PlanRepository) : ScreenMo
     }
 
     private fun buildPlan(): Plan {
+        val defaultSectorAndType = "others"
         return Plan.buildPlan(
             category = state.category?.id.orEmpty(),
-            sector = state.sector?.id.orEmpty(),
-            type = state.businessType?.id.orEmpty(),
+            sector = state.sector?.id ?: defaultSectorAndType,
+            type = state.businessType?.id ?: defaultSectorAndType,
             name = state.nameField.value,
             description = state.descriptionField.value,
             duration = TaskDuration(state.durationField.value.toInt()),
@@ -115,4 +116,4 @@ class CreatePlanViewModel(private val planRepository: PlanRepository) : ScreenMo
     private fun updateLastFocusedField(fieldName: String) {
         lastFocusedField = fieldName
     }
-}
+}//

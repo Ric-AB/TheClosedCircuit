@@ -319,7 +319,7 @@ private fun WalletCard(wallet: Wallet?, modifier: Modifier) {
         )
 
         Text(
-            text = wallet?.totalFunds?.value ?: "--",
+            text = wallet?.totalFunds?.value?.toString() ?: "--",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center

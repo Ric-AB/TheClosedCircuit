@@ -1,7 +1,10 @@
 package com.closedcircuit.closedcircuitapplication.domain.model
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
@@ -18,8 +21,10 @@ value class Date(val value: String) {
 
     companion object {
         fun now(): Date {
-            return Date("2023-09-21T08:15:05.674")
+            return Date(Clock.System.now().toString())
         }
     }
 
 }
+
+//
