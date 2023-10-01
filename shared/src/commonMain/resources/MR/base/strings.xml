@@ -120,4 +120,6 @@
     <string name="step_duration">Step description</string>
     <string name="add_budget">Add budget</string>
     <string name="save">Save</string>
+    <string name="x_months">%s Months</string>
+    <string name="x_weeks">%s Weeks</string>
 </resources>

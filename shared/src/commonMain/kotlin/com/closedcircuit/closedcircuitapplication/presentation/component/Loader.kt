@@ -32,18 +32,25 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 
 //import androidx.compose.ui.window.PopupProperties
 
 @Composable
 fun LoadingDialog(visible: Boolean = false) {
-    AnimatedVisibility(visible, enter = fadeIn(tween(500)), exit = fadeOut(tween(100))) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn(tween(500)),
+        exit = fadeOut(tween(100)),
+        modifier = Modifier.fillMaxSize()
+    ) {
         Popup(
-//        properties = PopupProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+            properties = PopupProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
             alignment = Alignment.Center
         ) {
             Box(
-                modifier = Modifier.fillMaxSize().background(Color.White.copy(0.8f)),
+                modifier = Modifier.fillMaxSize()
+                    .background(Color.White.copy(0.8f)),
                 contentAlignment = Alignment.Center
             ) {
                 Surface(

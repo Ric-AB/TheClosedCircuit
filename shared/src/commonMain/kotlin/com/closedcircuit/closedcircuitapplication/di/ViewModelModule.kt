@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.plandetails.PlanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit.EditProfileViewModel
@@ -23,8 +24,13 @@ val viewModelModule = module {
     }
 
     factory { DashboardViewModel(get(), get(), get(), get(), get()) }
+
+    // profile
     factory { ProfileViewModel(get(), get()) }
     factory { parameters -> EditProfileViewModel(parameters.get(), get()) }
+
+    // plan management
     factory { PlanListViewModel(get()) }
     factory { SaveStepViewModel() }
+    factory { parameters -> PlanDetailsViewModel(parameters.get()) }
 }

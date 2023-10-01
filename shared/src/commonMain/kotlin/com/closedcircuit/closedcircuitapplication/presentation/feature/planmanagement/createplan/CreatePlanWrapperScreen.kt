@@ -91,8 +91,7 @@ private fun ScreenContent(
             )
         },
     ) { innerPadding ->
-        Column(
-        ) {
+        Column {
             Navigator(PlanClassificationScreen) {
                 innerNavigator = it
                 ScreenBasedTransition(

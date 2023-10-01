@@ -52,7 +52,7 @@ internal object PlanListScreen : Screen, KoinComponent {
             state = state.value,
             goBack = navigator::pop,
             navigateToCreatePlanScreen = { navigator.push(CreatePlanWrapperScreen) },
-            navigateToPlanDetailsScreen = { navigator.push(PlanDetailsScreen) }
+            navigateToPlanDetailsScreen = { plan -> navigator.push(PlanDetailsScreen(plan)) }
         )
     }
 }
@@ -62,7 +62,7 @@ private fun ScreenContent(
     state: PlanListUIState,
     goBack: () -> Unit,
     navigateToCreatePlanScreen: () -> Unit,
-    navigateToPlanDetailsScreen: () -> Unit
+    navigateToPlanDetailsScreen: (Plan) -> Unit
 ) {
     BaseScaffold(
         topBar = {
@@ -84,7 +84,7 @@ private fun ScreenContent(
                 PlanCard(
                     plan = plan,
                     modifier = Modifier.fillMaxWidth()
-                        .clickable(enabled = true, onClick = navigateToPlanDetailsScreen)
+                        .clickable(enabled = true, onClick = { navigateToPlanDetailsScreen(plan) })
                 )
             }
         }

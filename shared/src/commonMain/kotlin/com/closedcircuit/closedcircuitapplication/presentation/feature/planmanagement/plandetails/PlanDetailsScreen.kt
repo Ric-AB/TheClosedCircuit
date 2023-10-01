@@ -65,22 +65,36 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
+import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
 import com.closedcircuit.closedcircuitapplication.presentation.feature.fundrequest.FundRequestScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 
-internal object PlanDetailsScreen : Screen, KoinComponent {
+internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
+    private val viewModel: PlanDetailsViewModel by inject { parametersOf(plan) }
+
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val uiState = viewModel.state
         ScreenContent(
+            uiState = uiState,
             goBack = navigator::pop,
             navigateToStepDetails = { navigator.push(StepDetailsScreen) },
             navigateToFundRequest = { navigator.push(FundRequestScreen) }
@@ -90,6 +104,7 @@ internal object PlanDetailsScreen : Screen, KoinComponent {
 
 @Composable
 private fun ScreenContent(
+    uiState: PlanDetailsUIState,
     goBack: () -> Unit,
     navigateToStepDetails: () -> Unit,
     navigateToFundRequest: () -> Unit
@@ -108,7 +123,7 @@ private fun ScreenContent(
                 modifier = Modifier.fillMaxSize()
                     .verticalScroll(state = scrollState)
             ) {
-                Header()
+                Header(plan = uiState.plan)
 
                 Spacer(modifier = Modifier.height(16.dp))
                 ActionItemsTabs(
@@ -123,36 +138,52 @@ private fun ScreenContent(
 
 
 @Composable
-private fun Header() {
+private fun Header(plan: Plan) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)) {
             Avatar(
-                avatar = com.closedcircuit.closedcircuitapplication.domain.model.Avatar(""),
+                avatar = plan.avatar,
                 size = DpSize(80.dp, 80.dp),
                 shape = Shapes().large
             )
 
             Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = "Marvins LTD",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
+            Column(modifier = Modifier.padding(top = 8.dp)) {
+                Text(
+                    text = plan.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Text(
+                    text = plan.sector,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.W400
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        PlanSummary()
+        PlanSummary(
+            planDuration = plan.duration,
+            targetAmount = plan.targetAmount,
+            amountRaised = plan.fundsRaised,
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
         BodyText(
-            text = "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat...",
+            text = plan.description,
             modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
         )
     }
 }
 
 @Composable
-private fun PlanSummary() {
+private fun PlanSummary(
+    planDuration: TaskDuration,
+    targetAmount: Price,
+    amountRaised: Price,
+) {
     @Composable
     fun Item(imageVector: ImageVector, text: String, contentDescription: String? = null) {
         Column(
@@ -178,28 +209,21 @@ private fun PlanSummary() {
         val dividerModifier = Modifier.fillMaxHeight(.5f).width(1.dp)
         Item(
             imageVector = rememberCalendarMonth(),
-            text = "3 Months"
+            text = stringResource(SharedRes.strings.x_months, planDuration.value)
         )
 
         Divider(modifier = dividerModifier)
 
         Item(
             imageVector = rememberCalendarMonth(),
-            text = "NGN 3,000"
+            text = "NGN ${targetAmount.value}"
         )
 
         Divider(modifier = dividerModifier)
 
         Item(
             imageVector = rememberCalendarMonth(),
-            text = "NGN 4,000"
-        )
-
-        Divider(modifier = dividerModifier)
-
-        Item(
-            imageVector = rememberCalendarMonth(),
-            text = "E-commerce"
+            text = "NGN ${amountRaised.value}"
         )
     }
 }
@@ -210,7 +234,7 @@ private fun ActionItemsTabs(
     scrollState: ScrollState,
     navigateToStepDetails: () -> Unit
 ) {
-    val list = listOf("Steps", "Budget")
+    val list = listOf("Steps", "Budgets")
     val pagerState = rememberPagerState(initialPage = 0) { list.size }
     val coroutineScope = rememberCoroutineScope()
 
