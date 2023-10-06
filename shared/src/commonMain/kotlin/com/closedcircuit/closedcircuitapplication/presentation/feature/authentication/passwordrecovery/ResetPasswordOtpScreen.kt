@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +30,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Message
 import com.closedcircuit.closedcircuitapplication.presentation.component.OtpView
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -37,7 +40,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object ResetPasswordOtpScreen : Screen, KoinComponent {
+internal object ResetPasswordOtpScreen : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     private val resetPasswordKoinContainer: ResetPasswordKoinContainer by inject()
     private val viewModel: ResetPasswordViewModel = resetPasswordKoinContainer.scope.get()
 
@@ -105,13 +109,13 @@ private fun ScreenContent(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
         isLoading = state.loading,
-        contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
+                .windowInsetsPadding(WindowInsets.ime)
         ) {
             TitleText(text = stringResource(SharedRes.strings.password_recovery))
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +30,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Passwor
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
@@ -38,7 +41,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object NewPasswordScreen : Screen, KoinComponent {
+internal object NewPasswordScreen : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     private val resetPasswordKoinContainer: ResetPasswordKoinContainer by inject()
     private val viewModel: ResetPasswordViewModel = resetPasswordKoinContainer.scope.get()
 
@@ -84,7 +88,6 @@ private fun ScreenContent(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
         isLoading = state.loading,
-        contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
         val (_, _, passwordField, confirmPasswordField, _) = state
         var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -95,6 +98,7 @@ private fun ScreenContent(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
+                .windowInsetsPadding(WindowInsets.ime)
         ) {
             TitleText(stringResource(SharedRes.strings.reset_your_password))
 

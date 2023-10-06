@@ -8,7 +8,9 @@ import androidx.compose.animation.togetherWith
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.stack.StackEvent.Pop
 import cafe.adriel.voyager.navigator.Navigator
+import kotlinx.serialization.Serializable
 
+@Serializable
 object NoTransition : CustomScreenTransition {
 
     override fun screenTransition(

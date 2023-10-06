@@ -11,7 +11,7 @@ data class CreatePlanUIState(
     val category: PlanOption? = null,
     val sector: PlanOption? = null,
     val businessType: PlanOption? = null,
-    val nameField: InputField,
+    val nameField: InputField = InputField(name = "planName", validator = TextValidator()),
     val descriptionField: InputField = InputField(
         name = "planDescription",
         validator = TextValidator()
@@ -39,6 +39,6 @@ data class CreatePlanUIState(
 }
 
 sealed interface CreatePlanResult {
-    object Success: CreatePlanResult
-    data class Failure(val message: String): CreatePlanResult
+    object Success : CreatePlanResult
+    data class Failure(val message: String) : CreatePlanResult
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -49,6 +50,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.TitleTe
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -59,7 +62,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object RegisterScreen : Screen, KoinComponent {
+object RegisterScreen : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
     private val viewModel: RegisterViewModel by inject()
 
     @Composable
@@ -86,7 +89,7 @@ object RegisterScreen : Screen, KoinComponent {
             messageBarState = messageBarState,
             state = state,
             onEvent = viewModel::onEvent,
-            navigateToLogin = { navigator.replaceAll(LoginScreen) }
+            navigateToLogin = { navigator.pop() }
         )
     }
 }
@@ -102,7 +105,6 @@ private fun ScreenContent(
         topBar = { DefaultAppBar(mainAction = navigateToLogin) },
         messageBarState = messageBarState,
         isLoading = state.isLoading,
-        contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -119,6 +121,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
+                .windowInsetsPadding(WindowInsets.ime)
         ) {
             item {
                 BodyText(

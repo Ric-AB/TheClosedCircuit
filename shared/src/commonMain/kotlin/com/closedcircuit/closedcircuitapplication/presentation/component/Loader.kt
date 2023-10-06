@@ -13,9 +13,14 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -43,6 +48,7 @@ fun LoadingDialog(visible: Boolean = false) {
         enter = fadeIn(tween(500)),
         exit = fadeOut(tween(100)),
         modifier = Modifier.fillMaxSize()
+            .windowInsetsPadding(WindowInsets.safeContent)
     ) {
         Popup(
             properties = PopupProperties(dismissOnBackPress = false, dismissOnClickOutside = false),

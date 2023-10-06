@@ -1,4 +1,3 @@
-
 package com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.passwordrecovery
 
 import androidx.compose.foundation.Image
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,6 +33,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
@@ -44,7 +46,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-internal object ResetPasswordEmailScreen : Screen, KoinComponent {
+internal object ResetPasswordEmailScreen : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     private val resetPasswordKoinContainer: ResetPasswordKoinContainer by inject()
     private val viewModel: ResetPasswordViewModel = resetPasswordKoinContainer.scope.get()
 
@@ -88,13 +91,13 @@ private fun ScreenContent(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
         isLoading = state.loading,
-        contentWindowInsets = WindowInsets.ime
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
+                .windowInsetsPadding(WindowInsets.ime)
         ) {
             TitleText(text = stringResource(SharedRes.strings.password_recovery))
 

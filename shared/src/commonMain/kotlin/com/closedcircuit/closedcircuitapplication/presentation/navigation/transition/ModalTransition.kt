@@ -12,7 +12,9 @@ import androidx.compose.animation.togetherWith
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.stack.StackEvent.Pop
 import cafe.adriel.voyager.navigator.Navigator
+import kotlinx.serialization.Serializable
 
+@Serializable
 object ModalTransition : CustomScreenTransition {
 
     private const val risingScale = 1.2f

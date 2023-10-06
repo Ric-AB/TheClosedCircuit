@@ -48,6 +48,21 @@ fun Budget.asRequest() = CreateOrUpdateBudgetRequest(
     stepID = stepID.value
 )
 
+fun Budget.asEntity() = BudgetEntity(
+    id = id.value,
+    planID = planID.value,
+    stepID = stepID.value,
+    userID = userID.value,
+    name = name,
+    description = description,
+    cost = cost.value,
+    isSponsored = isSponsored,
+    isCompleted = isCompleted,
+    fundsRaised = fundsRaised.value,
+    createdAt = createdAt.value,
+    updatedAt = updatedAt.value
+)
+
 fun List<ApiBudget>.asBudgetEntities() = this.map { it.asBudgetEntity() }
 
 fun List<BudgetEntity>.asBudgets() = this.map { it.asBudget() }.toImmutableList()

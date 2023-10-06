@@ -44,9 +44,24 @@ fun Step.asRequest() = CreateOrUpdateStepRequest(
     name = name,
     description = description,
     duration = duration.value,
-    targetFunds = targetFunds.value.toDouble(),
+    targetFunds = targetFunds.value,
     planID = planID.value,
     userID = userID.value
+)
+
+fun Step.asEntity() = StepEntity(
+    id = id.value,
+    name = name,
+    description = description,
+    duration = duration.value.toLong(),
+    targetFunds = targetFunds.value,
+    totalFundsRaised = totalFundsRaised.value,
+    planID = planID.value,
+    userID = userID.value,
+    isSponsored = isSponsored,
+    status = status,
+    createdAt = createdAt.value,
+    updatedAt = updatedAt.value
 )
 
 fun List<ApiStep>.asStepEntities() = this.map { it.asStepEntity() }

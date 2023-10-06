@@ -3,9 +3,12 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.planmana
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LinearProgressIndicator
@@ -22,6 +25,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
@@ -39,12 +43,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 internal object CreatePlanWrapperScreen : Screen, KoinComponent {
-    private val planRepository: PlanRepository by inject()
+    private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = rememberScreenModel { CreatePlanViewModel(planRepository) }
+        val viewModel = rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
         val messageBarState = rememberMessageBarState()
 
         viewModel.createPlanResultChannel.receiveAsFlow().observerWithScreen {
@@ -103,6 +107,7 @@ private fun ScreenContent(
                             horizontal = defaultHorizontalScreenPadding,
                             vertical = defaultVerticalScreenPadding
                         )
+                        .windowInsetsPadding(WindowInsets.ime)
                 )
             }
         }

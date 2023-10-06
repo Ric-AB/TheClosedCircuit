@@ -2,7 +2,6 @@
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.plandetails
 
-import StepDetailsScreen
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
@@ -22,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -45,6 +45,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,20 +61,26 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.domain.budget.Budgets
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
 import com.closedcircuit.closedcircuitapplication.presentation.feature.fundrequest.FundRequestScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails.StepDetailsScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
@@ -92,12 +99,13 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val uiState = viewModel.state
+        val uiState by viewModel.state.collectAsState()
         ScreenContent(
             uiState = uiState,
             goBack = navigator::pop,
-            navigateToStepDetails = { navigator.push(StepDetailsScreen) },
-            navigateToFundRequest = { navigator.push(FundRequestScreen) }
+            navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
+            navigateToFundRequest = { navigator.push(FundRequestScreen) },
+            navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) }
         )
     }
 }
@@ -106,29 +114,34 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
 private fun ScreenContent(
     uiState: PlanDetailsUIState,
     goBack: () -> Unit,
-    navigateToStepDetails: () -> Unit,
-    navigateToFundRequest: () -> Unit
+    navigateToStepDetails: (Step) -> Unit,
+    navigateToFundRequest: () -> Unit,
+    navigateToEditPlan: () -> Unit
 ) {
     BaseScaffold(topBar = {
         PlanDetailsAppBar(
             onNavClick = goBack,
-            navigateToFundRequest = navigateToFundRequest
+            navigateToFundRequest = navigateToFundRequest,
+            navigateToEditPlan = navigateToEditPlan
         )
     }) { innerPadding ->
         BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
             val screenHeight = maxHeight
+            val screenWidth = maxWidth
             val scrollState = rememberScrollState()
 
             Column(
                 modifier = Modifier.fillMaxSize()
                     .verticalScroll(state = scrollState)
             ) {
-                Header(plan = uiState.plan)
+                Header(plan = uiState.plan, screenWidth = screenWidth)
 
                 Spacer(modifier = Modifier.height(16.dp))
                 ActionItemsTabs(
                     modifier = Modifier.height(screenHeight),
                     scrollState = scrollState,
+                    steps = uiState.steps,
+                    budgets = uiState.budgets,
                     navigateToStepDetails = navigateToStepDetails
                 )
             }
@@ -138,7 +151,7 @@ private fun ScreenContent(
 
 
 @Composable
-private fun Header(plan: Plan) {
+private fun Header(plan: Plan, screenWidth: Dp) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)) {
             Avatar(
@@ -168,6 +181,7 @@ private fun Header(plan: Plan) {
             planDuration = plan.duration,
             targetAmount = plan.targetAmount,
             amountRaised = plan.fundsRaised,
+            screenWidth = screenWidth
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -183,12 +197,18 @@ private fun PlanSummary(
     planDuration: TaskDuration,
     targetAmount: Price,
     amountRaised: Price,
+    screenWidth: Dp,
 ) {
     @Composable
-    fun Item(imageVector: ImageVector, text: String, contentDescription: String? = null) {
+    fun Item(
+        imageVector: ImageVector,
+        text: String,
+        contentDescription: String? = null,
+        modifier: Modifier
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.width(100.dp)
+            modifier = modifier
         ) {
             Icon(
                 imageVector = imageVector,
@@ -199,31 +219,38 @@ private fun PlanSummary(
         }
     }
 
+    val dividerWidth = 1.dp
+    val horizontalPadding = 8.dp
+    val itemWidth = remember { (screenWidth - (dividerWidth * 2 + horizontalPadding * 2)) / 3 }
+    val dividerModifier = Modifier.fillMaxHeight(.5f).width(dividerWidth)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
             .height(IntrinsicSize.Min)
             .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = horizontalPadding)
     ) {
-        val dividerModifier = Modifier.fillMaxHeight(.5f).width(1.dp)
+
         Item(
             imageVector = rememberCalendarMonth(),
-            text = stringResource(SharedRes.strings.x_months, planDuration.value)
+            text = stringResource(SharedRes.strings.x_months, planDuration.value),
+            modifier = Modifier.width(itemWidth)
         )
 
         Divider(modifier = dividerModifier)
 
         Item(
             imageVector = rememberCalendarMonth(),
-            text = "NGN ${targetAmount.value}"
+            text = "NGN ${targetAmount.value}",
+            modifier = Modifier.width(itemWidth)
         )
 
         Divider(modifier = dividerModifier)
 
         Item(
             imageVector = rememberCalendarMonth(),
-            text = "NGN ${amountRaised.value}"
+            text = "NGN ${amountRaised.value}",
+            modifier = Modifier.width(itemWidth)
         )
     }
 }
@@ -232,7 +259,9 @@ private fun PlanSummary(
 private fun ActionItemsTabs(
     modifier: Modifier,
     scrollState: ScrollState,
-    navigateToStepDetails: () -> Unit
+    steps: Steps,
+    budgets: Budgets,
+    navigateToStepDetails: (Step) -> Unit
 ) {
     val list = listOf("Steps", "Budgets")
     val pagerState = rememberPagerState(initialPage = 0) { list.size }
@@ -279,10 +308,11 @@ private fun ActionItemsTabs(
             when (page) {
                 0 -> StepList(
                     modifier = listModifier,
+                    steps = steps,
                     navigateToStepDetails = navigateToStepDetails
                 )
 
-                1 -> BudgetList(modifier = listModifier)
+                1 -> BudgetList(modifier = listModifier, budgets = budgets)
             }
         }
     }
@@ -335,46 +365,49 @@ private fun StepItem(
 }
 
 @Composable
-private fun StepList(modifier: Modifier, navigateToStepDetails: () -> Unit) {
+private fun StepList(modifier: Modifier, steps: Steps, navigateToStepDetails: (Step) -> Unit) {
     val itemModifier = Modifier.fillMaxWidth()
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 12.dp)
     ) {
-        items(10) {
+        items(steps) {
             StepItem(
                 modifier = itemModifier,
-                name = "Conduct Market Research",
-                targetAmount = "NGN 500",
-                amountRaised = "NGN 200",
-                onClick = navigateToStepDetails
+                name = it.name,
+                targetAmount = "NGN ${it.targetFunds.value}",
+                amountRaised = "NGN ${it.totalFundsRaised.value}",
+                onClick = { navigateToStepDetails(it) }
             )
         }
     }
 }
 
 @Composable
-private fun BudgetList(modifier: Modifier) {
+private fun BudgetList(modifier: Modifier, budgets: Budgets) {
     val itemModifier = Modifier.fillMaxWidth()
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 12.dp)
     ) {
-        items(10) {
+        items(budgets) {
             BudgetItem(
                 modifier = itemModifier,
-                name = "Website hosting fee",
-                targetAmount = "NGN 20,000",
-                amountRaised = "NGN 14,000"
+                name = it.name,
+                targetAmount = it.cost,
+                amountRaised = it.fundsRaised
             )
         }
     }
 }
 
 @Composable
-private fun DropDownMenu(navigateToFundRequest: () -> Unit) {
+private fun DropDownMenu(
+    navigateToFundRequest: () -> Unit,
+    navigateToEditPlan: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(
@@ -384,26 +417,27 @@ private fun DropDownMenu(navigateToFundRequest: () -> Unit) {
         IconButton(onClick = { expanded = !expanded }) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
-                contentDescription = "More"
+                contentDescription = "more"
             )
         }
 
         DropdownMenu(
+            modifier = Modifier.width(100.dp),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("Edit Plan") },
+                text = { Text(text = stringResource(SharedRes.strings.edit_plan)) },
+                onClick = navigateToEditPlan
+            )
+
+            DropdownMenuItem(
+                text = { Text(text = stringResource(SharedRes.strings.delete_plan)) },
                 onClick = { }
             )
 
             DropdownMenuItem(
-                text = { Text("Delete Plan") },
-                onClick = { }
-            )
-
-            DropdownMenuItem(
-                text = { Text("Request Funds") },
+                text = { Text(text = stringResource(SharedRes.strings.request_funds)) },
                 onClick = navigateToFundRequest
             )
         }
@@ -411,7 +445,11 @@ private fun DropDownMenu(navigateToFundRequest: () -> Unit) {
 }
 
 @Composable
-private fun PlanDetailsAppBar(onNavClick: () -> Unit, navigateToFundRequest: () -> Unit) {
+private fun PlanDetailsAppBar(
+    onNavClick: () -> Unit,
+    navigateToFundRequest: () -> Unit,
+    navigateToEditPlan: () -> Unit
+) {
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = onNavClick) {
@@ -420,7 +458,10 @@ private fun PlanDetailsAppBar(onNavClick: () -> Unit, navigateToFundRequest: () 
         },
         title = {},
         actions = {
-            DropDownMenu(navigateToFundRequest)
+            DropDownMenu(
+                navigateToFundRequest = navigateToFundRequest,
+                navigateToEditPlan = navigateToEditPlan
+            )
         }
     )
 }

@@ -18,4 +18,10 @@ interface BudgetRepository {
     suspend fun updateBudget(budget: Budget): ApiResponse<Budget>
 
     suspend fun deleteBudget(id: ID): ApiResponse<Budget>
+
+    fun getBudgetsForPlanAsFlow(planID: ID): Flow<Budgets>
+
+    fun getBudgetsForStepAsFlow(stepID: ID): Flow<Budgets>
+
+    suspend fun getBudgetsForStep(stepID: ID): Budgets
 }

@@ -3,7 +3,9 @@ package com.closedcircuit.closedcircuitapplication.domain.budget
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Budget(
     val id: ID,
     val planID: ID,

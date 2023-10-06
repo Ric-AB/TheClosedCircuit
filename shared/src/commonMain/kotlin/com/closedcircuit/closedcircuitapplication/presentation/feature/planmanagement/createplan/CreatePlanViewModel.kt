@@ -11,15 +11,14 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanOption
-import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
-import com.closedcircuit.closedcircuitapplication.util.InputField
+import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
-class CreatePlanViewModel(private val planRepository: PlanRepository) : ScreenModel {
+class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : ScreenModel {
 
-    var state by mutableStateOf(CreatePlanUIState(nameField = InputField("WIINSN")))
+    var state by mutableStateOf(CreatePlanUIState())
 
     private val _createPlanResultChannel = Channel<CreatePlanResult>()
     val createPlanResultChannel: ReceiveChannel<CreatePlanResult> = _createPlanResultChannel
@@ -46,11 +45,14 @@ class CreatePlanViewModel(private val planRepository: PlanRepository) : ScreenMo
         if (areFieldsValid()) {
             state = state.copy(isLoading = true)
             coroutineScope.launch {
-                planRepository.createPlan(buildPlan()).onSuccess {
-                    _createPlanResultChannel.send(CreatePlanResult.Success)
-                }.onError { _, message ->
-                    _createPlanResultChannel.send(CreatePlanResult.Failure(message))
-                }
+                createPlanUseCase(buildPlan())
+                    .onSuccess {
+                        state = state.copy(isLoading = false)
+                        _createPlanResultChannel.send(CreatePlanResult.Success)
+                    }.onError { _, message ->
+                        state = state.copy(isLoading = false)
+                        _createPlanResultChannel.send(CreatePlanResult.Failure(message))
+                    }
             }
         }
     }
@@ -116,4 +118,4 @@ class CreatePlanViewModel(private val planRepository: PlanRepository) : ScreenMo
     private fun updateLastFocusedField(fieldName: String) {
         lastFocusedField = fieldName
     }
-}//
+}

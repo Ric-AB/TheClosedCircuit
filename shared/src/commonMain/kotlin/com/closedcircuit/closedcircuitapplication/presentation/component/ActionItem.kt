@@ -20,14 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 
 @Composable
 fun BudgetItem(
     modifier: Modifier,
     name: String,
-    targetAmount: String,
-    amountRaised: String
+    targetAmount: Price,
+    amountRaised: Price
 ) {
     Card(
         shape = Shapes().large,
@@ -44,7 +45,7 @@ fun BudgetItem(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = targetAmount)
+            Text(text = targetAmount.value.toString())
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -53,7 +54,10 @@ fun BudgetItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = "Funds raised progress", style = MaterialTheme.typography.labelSmall)
-                Text(text = amountRaised, style = MaterialTheme.typography.labelSmall)
+                Text(
+                    text = amountRaised.value.toString(),
+                    style = MaterialTheme.typography.labelSmall
+                )
             }
 
             LinearProgressIndicator(

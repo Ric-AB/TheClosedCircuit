@@ -23,6 +23,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -70,7 +71,12 @@ fun ExposedDropDownMenu(
                     readOnly = true,
                     shape = Shapes().medium,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = commonModifier.menuAnchor()
+                    modifier = commonModifier.menuAnchor(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                        focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                        errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+                    )
                 )
 
                 DropdownMenu(
@@ -127,6 +133,11 @@ fun <T> LargeDropdownMenu(
                 onValueChange = { },
                 readOnly = true,
                 shape = Shapes().medium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+                )
             )
 
             // Transparent clickable surface on top of OutlinedTextField

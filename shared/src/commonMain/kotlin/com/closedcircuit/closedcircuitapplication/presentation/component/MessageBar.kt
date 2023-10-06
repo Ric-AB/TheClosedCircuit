@@ -1,4 +1,3 @@
-
 package com.closedcircuit.closedcircuitapplication.presentation.component
 
 import androidx.compose.animation.AnimatedVisibility
@@ -251,7 +250,6 @@ private fun MessageBar(
                 else successContainerColor
             )
             .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
-//            .padding(vertical = verticalPadding)
             .padding(horizontal = horizontalPadding)
             .animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
@@ -262,16 +260,17 @@ private fun MessageBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector =
-                if (error != null) errorIcon
+                imageVector = if (error != null) errorIcon
                 else successIcon,
                 contentDescription = "Message Bar Icon",
                 tint = if (error != null) errorContentColor
-                else successContentColor
+                else successContentColor,
+                modifier = Modifier.padding(vertical = verticalPadding)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                modifier = Modifier.testTag(tag = "MESSAGE_BAR_TEXT"),
+                modifier = Modifier.testTag(tag = "MESSAGE_BAR_TEXT")
+                    .padding(vertical = verticalPadding),
                 text = message ?: (error ?: "Unknown"),
                 color = if (error != null) errorContentColor
                 else successContentColor,
@@ -283,13 +282,12 @@ private fun MessageBar(
         if (error != null) {
             Row(
                 modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 TextButton(
                     modifier = Modifier.testTag(tag = "COPY_BUTTON"),
-                    onClick = {
-                        clipboardManager.setText(AnnotatedString(text = "$error"))
-                    },
+                    onClick = { clipboardManager.setText(AnnotatedString(text = "$error")) },
                     contentPadding = PaddingValues(vertical = 0.dp)
                 ) {
                     Text(

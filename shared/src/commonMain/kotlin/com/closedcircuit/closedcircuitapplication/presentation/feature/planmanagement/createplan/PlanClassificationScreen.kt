@@ -14,6 +14,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.LargeDropdownMenu
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -22,12 +23,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 internal object PlanClassificationScreen : Screen, KoinComponent {
-    private val planRepository: PlanRepository by inject()
+    private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
     override fun Content() {
         val viewModel =
-            CreatePlanWrapperScreen.rememberScreenModel { CreatePlanViewModel(planRepository) }
+            CreatePlanWrapperScreen.rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
 
         val navigator = LocalNavigator.currentOrThrow
         ScreenContent(

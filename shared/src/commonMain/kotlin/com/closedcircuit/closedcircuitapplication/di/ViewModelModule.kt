@@ -6,9 +6,11 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.plandetails.PlanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails.StepDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit.EditProfileViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home.ProfileViewModel
 import org.koin.dsl.module
@@ -31,6 +33,8 @@ val viewModelModule = module {
 
     // plan management
     factory { PlanListViewModel(get()) }
-    factory { SaveStepViewModel() }
-    factory { parameters -> PlanDetailsViewModel(parameters.get()) }
+    factory { parameters -> SaveStepViewModel(parameters.get(), parameters.get(), get(), get()) }
+    factory { parameters -> PlanDetailsViewModel(parameters.get(), get(), get(), get()) }
+    factory { parameters -> EditPlanViewModel(parameters.get(), get()) }
+    factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }
 }

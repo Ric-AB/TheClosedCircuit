@@ -5,7 +5,9 @@ import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.util.Empty
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Step(
     val id: ID,
     val name: String,

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.TextFieldTrailingText
 import com.closedcircuit.closedcircuitapplication.presentation.component.TopLabeledTextField
@@ -30,12 +31,12 @@ import org.koin.core.component.inject
 
 internal object PlanInfoScreen : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
-    private val planRepository: PlanRepository by inject()
+    private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
     override fun Content() {
         val viewModel =
-            CreatePlanWrapperScreen.rememberScreenModel { CreatePlanViewModel(planRepository) }
+            CreatePlanWrapperScreen.rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
 
 
         ScreenContent(

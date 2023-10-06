@@ -12,9 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 class PlanListViewModel(planRepository: PlanRepository) : ScreenModel {
 
     val stateFlow = planRepository.plansFlow
-        .map {
-            Napier.d("PLANS: $it")
-            PlanListUIState(it) }
+        .map { PlanListUIState(it) }
         .stateIn(
             coroutineScope,
             SharingStarted.WhileSubscribed(5_000L),

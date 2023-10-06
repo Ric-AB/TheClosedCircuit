@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.di
 
+import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.domain.usecase.GetUserDashboardUseCase
 import com.closedcircuit.closedcircuitapplication.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.domain.usecase.LoginUseCase
@@ -11,4 +12,5 @@ val useCaseModule = module {
     single { RegisterUseCase(get(), get()) }
     single { IsLoggedInUseCase(get(), get()) }
     single { GetUserDashboardUseCase(get(), get()) }
+    single { CreatePlanUseCase(get(), get(), get()) }
 }
