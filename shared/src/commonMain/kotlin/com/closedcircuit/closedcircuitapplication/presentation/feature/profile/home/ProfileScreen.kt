@@ -394,21 +394,23 @@ private fun ProfileModalBottomSheet(
                     .padding(bottom = 16.dp)
             ) {
                 Text(
-                    text = "Your account",
+                    text = stringResource(SharedRes.strings.your_account),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.SemiBold
                 )
 
+                val emailStatus = if (isEmailVerified) stringResource(SharedRes.strings.verified)
+                else stringResource(SharedRes.strings.unverified)
                 Item(
-                    label = "Email verification",
-                    status = if (isEmailVerified) "Verified" else "Unverified",
+                    label = stringResource(SharedRes.strings.email_verification),
+                    status = emailStatus,
                     icon = Icons.Outlined.Done,
                     onClick = if (!isEmailVerified) navigateToProfileVerificationScreen else null
                 )
 
                 Divider()
                 Item(
-                    label = "Document verification",
+                    label = stringResource(SharedRes.strings.document_verification),
                     status = documentStatusValues.first,
                     icon = documentStatusValues.second,
                     onClick = navigateToKycScreen
@@ -416,7 +418,7 @@ private fun ProfileModalBottomSheet(
 
                 Divider()
                 Item(
-                    label = "Phone number verification",
+                    label = stringResource(SharedRes.strings.phone_number_verification),
                     status = phoneNumberStatusValues.first,
                     icon = phoneNumberStatusValues.second,
                     onClick = navigateToKycScreen

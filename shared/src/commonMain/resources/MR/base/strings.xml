@@ -79,6 +79,7 @@
     <string name="account">Account</string>
 
     <!--    Profile-->
+    <string name="your_account">Your account</string>
     <string name="personal_data">Personal data</string>
     <string name="edit_profile">Edit profile</string>
     <string name="account_status">Account status</string>
@@ -90,6 +91,11 @@
     <string name="verification_code_prompt">A verification code has been sent to %s, Please enter
         code below to verify.
     </string>
+    <string name="verified">Verified</string>
+    <string name="unverified">Unverified</string>
+    <string name="email_verification">Email verification</string>
+    <string name="document_verification">Document verification</string>
+    <string name="phone_number_verification">Phone number verification</string>
 
     <!--    Plan management-->
     <string name="plans">Plans</string>

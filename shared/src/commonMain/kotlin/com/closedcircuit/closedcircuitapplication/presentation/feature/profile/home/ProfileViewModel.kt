@@ -24,5 +24,4 @@ class ProfileViewModel(
         SharingStarted.WhileSubscribed(),
         ProfileUIState.init(userFlow.value)
     )
-
 }

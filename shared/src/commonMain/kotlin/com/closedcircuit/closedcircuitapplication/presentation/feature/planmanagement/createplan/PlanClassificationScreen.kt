@@ -8,14 +8,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
+import com.closedcircuit.closedcircuitapplication.presentation.LocalImagePicker
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.presentation.component.EditableAvatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.LargeDropdownMenu
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
@@ -46,7 +48,19 @@ private fun ScreenContent(
     navigateToPlanInfoScreen: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
+        val imagePicker = LocalImagePicker.current
+        imagePicker.registerPicker {
+
+        }
+
         Column(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            EditableAvatar(
+                bytes = null,
+                size = DpSize(70.dp, 70.dp),
+                onClick = { imagePicker.pickImage() }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
             LargeDropdownMenu(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_category),
