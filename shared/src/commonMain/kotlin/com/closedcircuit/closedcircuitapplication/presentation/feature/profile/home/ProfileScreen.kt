@@ -1,8 +1,10 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,22 +12,39 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -37,6 +56,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
+import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
@@ -44,6 +64,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit.EditProfileScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.profileverification.ProfileVerificationScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -59,11 +80,21 @@ internal object ProfileScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val messageBarState = rememberMessageBarState()
+        val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         val uiState by viewModel.state.collectAsState()
+        var isSheetVisible by remember { mutableStateOf(false) }
+
         ScreenContent(
             messageBarState = messageBarState,
             uiState = uiState,
-            navigateToEditProfileScreen = { navigator.push(EditProfileScreen(it)) }
+            bottomSheetState = bottomSheetState,
+            sheetExpanded = isSheetVisible,
+            sheetExpandedChange = { isSheetVisible = it },
+            navigateToEditProfileScreen = { navigator.push(EditProfileScreen(it)) },
+            navigateToProfileVerificationScreen = {
+                uiState?.let { navigator.push(ProfileVerificationScreen(it.user.email)) }
+            },
+            navigateToKycScreen = {}
         )
     }
 }
@@ -72,7 +103,12 @@ internal object ProfileScreen : Screen, KoinComponent {
 private fun ScreenContent(
     messageBarState: MessageBarState,
     uiState: ProfileUIState?,
-    navigateToEditProfileScreen: (User) -> Unit
+    bottomSheetState: SheetState,
+    sheetExpanded: Boolean,
+    sheetExpandedChange: (Boolean) -> Unit,
+    navigateToEditProfileScreen: (User) -> Unit,
+    navigateToProfileVerificationScreen: () -> Unit,
+    navigateToKycScreen: () -> Unit
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
@@ -95,7 +131,8 @@ private fun ScreenContent(
                 ProfileHeader(
                     modifier = Modifier.fillMaxWidth(),
                     firstName = user.firstName,
-                    avatar = user.avatar
+                    avatar = user.avatar,
+                    onInfoClick = { sheetExpandedChange(true) }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -108,6 +145,18 @@ private fun ScreenContent(
                     onEditClick = { navigateToEditProfileScreen(user) }
                 )
             }
+
+            ProfileModalBottomSheet(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                bottomSheetState = bottomSheetState,
+                isVisible = sheetExpanded,
+                isEmailVerified = user.isVerified,
+                documentStatus = user.kycStatus,
+                phoneNumberStatus = user.phoneNumberStatus,
+                closeModal = { sheetExpandedChange(false) },
+                navigateToProfileVerificationScreen = navigateToProfileVerificationScreen,
+                navigateToKycScreen = navigateToKycScreen
+            )
         }
     }
 }
@@ -116,7 +165,8 @@ private fun ScreenContent(
 private fun ProfileHeader(
     modifier: Modifier = Modifier,
     firstName: Name,
-    avatar: Avatar
+    avatar: Avatar,
+    onInfoClick: () -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -130,18 +180,26 @@ private fun ProfileHeader(
                 fontWeight = FontWeight.Bold
             )
 
-            Box(
-                contentAlignment = Alignment.Center,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.tertiary,
                     shape = Shapes().extraSmall
-                )
+                ).padding(8.dp)
+                    .clickable(enabled = true, onClick = onInfoClick)
             ) {
                 Text(
-                    text = stringResource(SharedRes.strings.profile_status),
+                    text = stringResource(SharedRes.strings.account_status),
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(8.dp)
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
@@ -177,10 +235,29 @@ private fun PersonalData(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
-                InfoItem(SharedRes.strings.full_name, fullName.value)
-                InfoItem(SharedRes.strings.email, email.value)
-                InfoItem(SharedRes.strings.phone_number, phoneNumber.value)
-                InfoItem(SharedRes.strings.country, country.value)
+                InfoItem(
+                    labelRes = SharedRes.strings.full_name,
+                    value = fullName.value,
+                    icon = Icons.Outlined.Person
+                )
+
+                InfoItem(
+                    labelRes = SharedRes.strings.email,
+                    value = email.value,
+                    icon = Icons.Outlined.Email
+                )
+
+                InfoItem(
+                    labelRes = SharedRes.strings.phone_number,
+                    value = phoneNumber.value,
+                    icon = Icons.Outlined.Phone
+                )
+
+                InfoItem(
+                    labelRes = SharedRes.strings.country,
+                    value = country.value,
+                    icon = Icons.Outlined.LocationOn
+                )
             }
         }
     }
@@ -213,21 +290,30 @@ private fun SectionHeader(modifier: Modifier, text: String, onEditClick: () -> U
 }
 
 @Composable
-private fun InfoItem(labelRes: StringResource, value: String) {
-    Column {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight(500),
-            color = MaterialTheme.colorScheme.onSurface
+private fun InfoItem(labelRes: StringResource, value: String, icon: ImageVector) {
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
         )
 
-        Text(
-            text = stringResource(labelRes),
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight(500),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(
+                text = stringResource(labelRes),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }
 
@@ -243,4 +329,100 @@ private fun ScreenCard(modifier: Modifier = Modifier, content: @Composable () ->
     ) {
         content()
     }
+}
+
+@Composable
+private fun ProfileModalBottomSheet(
+    modifier: Modifier = Modifier,
+    bottomSheetState: SheetState,
+    isVisible: Boolean,
+    isEmailVerified: Boolean,
+    documentStatus: VerificationStatus,
+    phoneNumberStatus: VerificationStatus,
+    closeModal: () -> Unit,
+    navigateToProfileVerificationScreen: () -> Unit,
+    navigateToKycScreen: () -> Unit
+) {
+    val mapStatusToDisplayValues: (VerificationStatus) -> Pair<String, ImageVector> = {
+        when (it) {
+            VerificationStatus.NOT_STARTED -> Pair("Not started", Icons.Outlined.Info)
+            VerificationStatus.PENDING -> Pair("Pending", Icons.Outlined.Info)
+            VerificationStatus.VERIFIED -> Pair("Verified", Icons.Outlined.Info)
+            VerificationStatus.FAILED -> Pair("Failed", Icons.Outlined.Info)
+        }
+    }
+
+    val documentStatusValues =
+        remember(documentStatus) { mapStatusToDisplayValues(documentStatus) }
+    val phoneNumberStatusValues =
+        remember(phoneNumberStatus) { mapStatusToDisplayValues(phoneNumberStatus) }
+
+
+    @Composable
+    fun Item(label: String, status: String, icon: ImageVector, onClick: (() -> Unit)? = null) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .then(
+                    if (onClick != null) Modifier.clickable(enabled = true, onClick = onClick)
+                    else Modifier
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(text = label, style = MaterialTheme.typography.bodySmall)
+                Text(text = status, style = MaterialTheme.typography.bodyMedium)
+            }
+
+            Icon(imageVector = icon, contentDescription = null)
+        }
+    }
+
+    if (isVisible) {
+        ModalBottomSheet(
+            modifier = modifier,
+            onDismissRequest = closeModal,
+            sheetState = bottomSheetState,
+            shape = Shapes().small.copy(
+                bottomStart = CornerSize(0.dp),
+                bottomEnd = CornerSize(0.dp)
+            ),
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp)
+            ) {
+                Text(
+                    text = "Your account",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Item(
+                    label = "Email verification",
+                    status = if (isEmailVerified) "Verified" else "Unverified",
+                    icon = Icons.Outlined.Done,
+                    onClick = if (!isEmailVerified) navigateToProfileVerificationScreen else null
+                )
+
+                Divider()
+                Item(
+                    label = "Document verification",
+                    status = documentStatusValues.first,
+                    icon = documentStatusValues.second,
+                    onClick = navigateToKycScreen
+                )
+
+                Divider()
+                Item(
+                    label = "Phone number verification",
+                    status = phoneNumberStatusValues.first,
+                    icon = phoneNumberStatusValues.second,
+                    onClick = navigateToKycScreen
+                )
+            }
+        }
+    }
+
 }

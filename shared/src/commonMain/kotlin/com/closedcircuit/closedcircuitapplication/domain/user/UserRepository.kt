@@ -8,7 +8,8 @@ interface UserRepository {
     val userFlow: StateFlow<User?>
     suspend fun fetchUser(userId: String): ApiResponse<User>
     suspend fun nonNullUser(): User
-
     suspend fun updateUser(user: User): ApiResponse<User>
     suspend fun getUserDashboard(): ApiResponse<UserDashboardResponse>
+    suspend fun requestEmailVerificationOtp(email: String): ApiResponse<Unit>
+    suspend fun verifyEmailVerificationOtp(email: String, otp: String): ApiResponse<Unit>
 }

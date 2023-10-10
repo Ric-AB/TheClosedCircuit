@@ -13,6 +13,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanag
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails.StepDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit.EditProfileViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home.ProfileViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.profileverification.ProfileVerificationViewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -30,6 +31,7 @@ val viewModelModule = module {
     // profile
     factory { ProfileViewModel(get(), get()) }
     factory { parameters -> EditProfileViewModel(parameters.get(), get()) }
+    factory { parameters -> ProfileVerificationViewModel(parameters.get(), get()) }
 
     // plan management
     factory { PlanListViewModel(get()) }

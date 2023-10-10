@@ -71,6 +71,14 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun requestEmailVerificationOtp(email: String): ApiResponse<Unit> {
+        TODO()
+    }
+
+    override suspend fun verifyEmailVerificationOtp(email: String, otp: String): ApiResponse<Unit> {
+        TODO("Not yet implemented")
+    }
+
     private fun updateUserLocally(user: User) {
         CoroutineScope(ioDispatcher).launch {
             userStore.set(user)

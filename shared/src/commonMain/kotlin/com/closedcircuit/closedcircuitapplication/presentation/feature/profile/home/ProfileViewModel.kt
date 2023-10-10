@@ -18,9 +18,7 @@ class ProfileViewModel(
     private val plansFlow = planRepository.plansFlow
 
     val state: StateFlow<ProfileUIState?> = combine(userFlow, plansFlow) { user, plans ->
-        if (user == null) return@combine null
-
-        ProfileUIState(user = user)
+        ProfileUIState.init(user)
     }.stateIn(
         coroutineScope,
         SharingStarted.WhileSubscribed(),

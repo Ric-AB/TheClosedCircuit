@@ -81,11 +81,15 @@
     <!--    Profile-->
     <string name="personal_data">Personal data</string>
     <string name="edit_profile">Edit profile</string>
-    <string name="profile_status">Profile status</string>
+    <string name="account_status">Account status</string>
     <string name="country">Country</string>
     <string name="hello_user">Hello, %s!</string>
     <string name="full_name">Full name</string>
     <string name="save_changes">Save changes</string>
+    <string name="verify_email_address">Verify Email Address</string>
+    <string name="verification_code_prompt">A verification code has been sent to %s, Please enter
+        code below to verify.
+    </string>
 
     <!--    Plan management-->
     <string name="plans">Plans</string>
@@ -127,4 +131,7 @@
     <string name="budget_items">Budget items</string>
     <string name="budget_name">Budget name</string>
     <string name="budget_cost">Budget cost</string>
+    <string name="you_currently_have_no_step">You currently have no steps associated with this
+        plan
+    </string>
 </resources>

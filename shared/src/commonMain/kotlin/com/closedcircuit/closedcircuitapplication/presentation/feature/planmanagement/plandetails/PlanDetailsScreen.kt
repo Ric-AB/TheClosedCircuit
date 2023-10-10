@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +28,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
@@ -35,6 +37,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +45,7 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
@@ -80,6 +84,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetI
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
 import com.closedcircuit.closedcircuitapplication.presentation.feature.fundrequest.FundRequestScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails.StepDetailsScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
@@ -105,7 +110,8 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
             goBack = navigator::pop,
             navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
             navigateToFundRequest = { navigator.push(FundRequestScreen) },
-            navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) }
+            navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) },
+            navigateToSaveStep = { navigator.push(SaveStepScreen(plan.id)) }
         )
     }
 }
@@ -116,15 +122,19 @@ private fun ScreenContent(
     goBack: () -> Unit,
     navigateToStepDetails: (Step) -> Unit,
     navigateToFundRequest: () -> Unit,
-    navigateToEditPlan: () -> Unit
+    navigateToEditPlan: () -> Unit,
+    navigateToSaveStep: () -> Unit
 ) {
-    BaseScaffold(topBar = {
-        PlanDetailsAppBar(
-            onNavClick = goBack,
-            navigateToFundRequest = navigateToFundRequest,
-            navigateToEditPlan = navigateToEditPlan
-        )
-    }) { innerPadding ->
+    BaseScaffold(
+        topBar = {
+            PlanDetailsAppBar(
+                onNavClick = goBack,
+                navigateToFundRequest = navigateToFundRequest,
+                navigateToEditPlan = navigateToEditPlan
+            )
+        },
+        floatingActionButton = { PlanDetailsExtendedFab(navigateToSaveStep) }
+    ) { innerPadding ->
         BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
             val screenHeight = maxHeight
             val screenWidth = maxWidth
@@ -142,7 +152,8 @@ private fun ScreenContent(
                     scrollState = scrollState,
                     steps = uiState.steps,
                     budgets = uiState.budgets,
-                    navigateToStepDetails = navigateToStepDetails
+                    navigateToStepDetails = navigateToStepDetails,
+                    navigateToSaveStep = navigateToSaveStep
                 )
             }
         }
@@ -261,7 +272,8 @@ private fun ActionItemsTabs(
     scrollState: ScrollState,
     steps: Steps,
     budgets: Budgets,
-    navigateToStepDetails: (Step) -> Unit
+    navigateToStepDetails: (Step) -> Unit,
+    navigateToSaveStep: () -> Unit
 ) {
     val list = listOf("Steps", "Budgets")
     val pagerState = rememberPagerState(initialPage = 0) { list.size }
@@ -305,14 +317,17 @@ private fun ActionItemsTabs(
             val listModifier = Modifier.fillMaxSize()
                 .padding(horizontal = 12.dp)
 
-            when (page) {
-                0 -> StepList(
-                    modifier = listModifier,
-                    steps = steps,
-                    navigateToStepDetails = navigateToStepDetails
-                )
+            when {
+                steps.isEmpty() -> EmptyListView(navigateToSaveStep = navigateToSaveStep)
+                page == 0 -> {
+                    StepList(
+                        modifier = listModifier,
+                        steps = steps,
+                        navigateToStepDetails = navigateToStepDetails
+                    )
+                }
 
-                1 -> BudgetList(modifier = listModifier, budgets = budgets)
+                page == 1 -> BudgetList(modifier = listModifier, budgets = budgets)
             }
         }
     }
@@ -404,6 +419,30 @@ private fun BudgetList(modifier: Modifier, budgets: Budgets) {
 }
 
 @Composable
+private fun EmptyListView(modifier: Modifier = Modifier, navigateToSaveStep: () -> Unit) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(SharedRes.strings.you_currently_have_no_step),
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        TextButton(onClick = navigateToSaveStep) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(stringResource(SharedRes.strings.add_step))
+            }
+        }
+    }
+}
+
+@Composable
 private fun DropDownMenu(
     navigateToFundRequest: () -> Unit,
     navigateToEditPlan: () -> Unit
@@ -442,6 +481,15 @@ private fun DropDownMenu(
             )
         }
     }
+}
+
+@Composable
+private fun PlanDetailsExtendedFab(onClick: () -> Unit) {
+    ExtendedFloatingActionButton(
+        onClick = onClick,
+        text = { Text(text = stringResource(SharedRes.strings.add_step)) },
+        icon = { Icon(imageVector = Icons.Default.Add, contentDescription = null) }
+    )
 }
 
 @Composable

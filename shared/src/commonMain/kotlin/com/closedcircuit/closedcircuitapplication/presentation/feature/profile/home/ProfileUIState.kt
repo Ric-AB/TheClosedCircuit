@@ -1,9 +1,15 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home
 
+import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.domain.model.Country
+import com.closedcircuit.closedcircuitapplication.domain.model.Email
+import com.closedcircuit.closedcircuitapplication.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
+import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 
 data class ProfileUIState(
-    val user: User
+    val user: User,
 ) {
     companion object {
         fun init(user: User?): ProfileUIState? {
@@ -13,3 +19,22 @@ data class ProfileUIState(
         }
     }
 }
+
+data class PersonalData(
+    val avatar: Avatar,
+    val fullName: Name,
+    val firstName: Name,
+    val email: Email,
+    val phoneNumber: PhoneNumber,
+    val country: Country
+)
+
+data class AccountState(
+    val emailVerified: Boolean,
+    val documentStatus: VerificationStatus,
+    val phoneNumberStatus: VerificationStatus
+)
+
+data class PlanSummary(
+    val completedPlans: Int,
+)
