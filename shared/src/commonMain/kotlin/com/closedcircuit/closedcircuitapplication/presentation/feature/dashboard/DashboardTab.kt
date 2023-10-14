@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.ButtonDefaults
@@ -29,11 +30,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -57,6 +60,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BaseSca
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
@@ -93,7 +97,8 @@ internal object DashboardTab : Tab, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             uiState = uiState,
-            navigateToPlanListScreen = { navigator.push(PlanListScreen) }
+            navigateToPlanListScreen = { navigator.push(PlanListScreen) },
+            navigateToNotificationScreen = { navigator.push(NotificationScreen) }
         )
     }
 }
@@ -103,9 +108,13 @@ internal object DashboardTab : Tab, KoinComponent {
 private fun ScreenContent(
     messageBarState: MessageBarState,
     uiState: DashboardUIState,
-    navigateToPlanListScreen: () -> Unit
+    navigateToPlanListScreen: () -> Unit,
+    navigateToNotificationScreen: () -> Unit
 ) {
-    BaseScaffold(messageBarState = messageBarState) { innerPadding ->
+    BaseScaffold(
+        messageBarState = messageBarState,
+        topBar = { DashboardTopAppBar(navigateToNotificationScreen = navigateToNotificationScreen) }
+    ) { innerPadding ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier.fillMaxSize()
@@ -325,4 +334,19 @@ private fun WalletCard(wallet: Wallet?, modifier: Modifier) {
             textAlign = TextAlign.Center
         )
     }
+}
+
+@Composable
+private fun DashboardTopAppBar(navigateToNotificationScreen: () -> Unit) {
+    TopAppBar(
+        title = { },
+        actions = {
+            IconButton(onClick = navigateToNotificationScreen) {
+                Icon(
+                    imageVector = Icons.Outlined.Notifications,
+                    contentDescription = "notifications"
+                )
+            }
+        }
+    )
 }

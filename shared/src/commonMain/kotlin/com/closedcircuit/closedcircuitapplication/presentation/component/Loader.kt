@@ -79,6 +79,7 @@ fun LoadingDialog(visible: Boolean = false) {
 
 @Composable
 fun CircularIndicator(
+    modifier: Modifier = Modifier,
     size: Dp = 32.dp,
     sweepAngle: Float = 90f,
     color: Color = MaterialTheme.colorScheme.primary,
@@ -102,7 +103,7 @@ fun CircularIndicator(
     }
 
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .progressSemantics()
             .size(size)
             .padding(strokeWidth / 2)

@@ -1,0 +1,21 @@
+package com.closedcircuit.closedcircuitapplication.presentation.feature.notification
+
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.closedcircuit.closedcircuitapplication.domain.notification.Notification
+
+
+sealed interface NotificationUIState {
+    object InitialLoading : NotificationUIState
+    data class DataLoaded(
+        val isLoading: Boolean = false,
+        val notificationsState: SnapshotStateList<NotificationState> = mutableStateListOf()
+    ) : NotificationUIState
+
+    data class Error(val message: String) : NotificationUIState
+}
+
+data class NotificationState(
+    val isSelected: Boolean,
+    val notification: Notification
+)

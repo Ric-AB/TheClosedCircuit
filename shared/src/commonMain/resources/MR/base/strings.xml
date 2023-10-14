@@ -140,4 +140,12 @@
     <string name="you_currently_have_no_step">You currently have no steps associated with this
         plan
     </string>
+
+    <!--    Notifications-->
+    <string name="notifications">Notifications</string>
+    <string name="delete_notification">Delete notification</string>
+    <string name="mark_all_as_read">Mark all as read</string>
+    <string name="no_notifications">No notifications</string>
+    <string name="no_notifications_prompt">This is where you’ll see notifications about your plans
+    </string>
 </resources>
