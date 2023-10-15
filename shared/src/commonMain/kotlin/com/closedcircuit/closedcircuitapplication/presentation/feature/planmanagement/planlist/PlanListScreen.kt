@@ -41,7 +41,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object PlanListScreen : Screen, KoinComponent {
+internal class PlanListScreen : Screen, KoinComponent {
     private val viewModel: PlanListViewModel by inject()
 
     @Composable

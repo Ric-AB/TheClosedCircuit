@@ -46,7 +46,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-internal object ResetPasswordEmailScreen : Screen, KoinComponent,
+internal class ResetPasswordEmailScreen : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
     private val resetPasswordKoinContainer: ResetPasswordKoinContainer by inject()
     private val viewModel: ResetPasswordViewModel = resetPasswordKoinContainer.scope.get()
@@ -66,7 +66,7 @@ internal object ResetPasswordEmailScreen : Screen, KoinComponent,
 
                 is RequestOtpResult.Success -> {
                     delay(300)
-                    navigator.push(ResetPasswordOtpScreen)
+                    navigator.push(ResetPasswordOtpScreen())
                 }
             }
         }

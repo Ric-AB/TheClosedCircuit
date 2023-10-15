@@ -24,7 +24,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object PlanClassificationScreen : Screen, KoinComponent {
+internal class PlanClassificationScreen : Screen, KoinComponent {
     private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
@@ -36,7 +36,7 @@ internal object PlanClassificationScreen : Screen, KoinComponent {
         ScreenContent(
             uiState = viewModel.state,
             onEvent = viewModel::onEvent,
-            navigateToPlanInfoScreen = { navigator.push(PlanInfoScreen) }
+            navigateToPlanInfoScreen = { navigator.push(PlanInfoScreen()) }
         )
     }
 }

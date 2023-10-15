@@ -16,7 +16,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.TextFieldTrailingText
@@ -29,7 +28,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object PlanInfoScreen : Screen, KoinComponent,
+internal class PlanInfoScreen : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
     private val createPlanUseCase: CreatePlanUseCase by inject()
 

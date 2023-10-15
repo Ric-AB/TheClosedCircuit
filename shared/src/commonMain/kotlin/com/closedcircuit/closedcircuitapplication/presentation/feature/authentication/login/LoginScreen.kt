@@ -53,7 +53,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object LoginScreen : Screen, KoinComponent {
+internal class LoginScreen : Screen, KoinComponent {
     private val viewModel: LoginViewModel by inject()
 
     @Composable
@@ -80,8 +80,8 @@ object LoginScreen : Screen, KoinComponent {
             state = state,
             onEvent = viewModel::onEvent,
             navigateToWelcomeScreen = { navigator.replaceAll(WelcomeScreen) },
-            navigateToCreateAccount = { navigator.push(RegisterScreen) },
-            navigateToRecoverPassword = { navigator.push(ResetPasswordEmailScreen) }
+            navigateToCreateAccount = { navigator.push(RegisterScreen()) },
+            navigateToRecoverPassword = { navigator.push(ResetPasswordEmailScreen()) }
         )
     }
 }

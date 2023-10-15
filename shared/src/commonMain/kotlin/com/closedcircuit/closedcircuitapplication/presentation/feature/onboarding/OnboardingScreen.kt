@@ -74,7 +74,7 @@ internal object OnboardingScreen : Screen, KoinComponent {
             },
             navigateToLoginScreen = {
                 viewModel.onEvent(OnboardingEvent.OnboardingFinished)
-                navigator.replace(LoginScreen)
+                navigator.replace(LoginScreen())
             }
         )
     }

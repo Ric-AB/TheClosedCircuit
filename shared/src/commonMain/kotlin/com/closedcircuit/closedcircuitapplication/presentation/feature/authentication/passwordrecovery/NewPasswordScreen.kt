@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object NewPasswordScreen : Screen, KoinComponent,
+internal class NewPasswordScreen : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
     private val resetPasswordKoinContainer: ResetPasswordKoinContainer by inject()
     private val viewModel: ResetPasswordViewModel = resetPasswordKoinContainer.scope.get()
@@ -62,7 +62,7 @@ internal object NewPasswordScreen : Screen, KoinComponent,
 
                 ResetPasswordResult.Success -> {
                     delay(300)
-                    navigator.replaceAll(LoginScreen)
+                    navigator.replaceAll(LoginScreen())
                     viewModel.onDispose()
                 }
             }

@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object ResetPasswordOtpScreen : Screen, KoinComponent,
+internal class ResetPasswordOtpScreen : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
     private val resetPasswordKoinContainer: ResetPasswordKoinContainer by inject()
     private val viewModel: ResetPasswordViewModel = resetPasswordKoinContainer.scope.get()
@@ -80,7 +80,7 @@ internal object ResetPasswordOtpScreen : Screen, KoinComponent,
                 }
 
                 VerifyOtpResult.Success -> {
-                    navigator.push(NewPasswordScreen)
+                    navigator.push(NewPasswordScreen())
                 }
             }
         }

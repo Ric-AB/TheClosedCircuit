@@ -33,7 +33,7 @@ internal object ProfileNavigator : Tab, KoinComponent {
 
     @Composable
     override fun Content() {
-        Navigator(ProfileScreen) {
+        Navigator(ProfileScreen()) {
             ScreenBasedTransition(it)
         }
     }

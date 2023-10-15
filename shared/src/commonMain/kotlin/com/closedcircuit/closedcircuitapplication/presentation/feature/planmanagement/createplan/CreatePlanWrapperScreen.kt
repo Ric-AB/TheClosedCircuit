@@ -24,7 +24,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
@@ -59,7 +58,7 @@ internal object CreatePlanWrapperScreen : Screen, KoinComponent {
                         SuccessScreen(
                             title = "",
                             message = "",
-                            primaryAction = { navigator.popUntil { screen -> screen == PlanListScreen } }
+                            primaryAction = { navigator.popUntil { screen -> screen is PlanListScreen } }
                         )
                     )
                 }
@@ -96,7 +95,7 @@ private fun ScreenContent(
         },
     ) { innerPadding ->
         Column {
-            Navigator(PlanClassificationScreen) {
+            Navigator(PlanClassificationScreen()) {
                 innerNavigator = it
                 ScreenBasedTransition(
                     navigator = it,

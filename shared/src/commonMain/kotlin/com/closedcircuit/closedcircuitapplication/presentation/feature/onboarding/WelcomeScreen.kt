@@ -35,8 +35,8 @@ internal object WelcomeScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         ScreenContent(
-            onLoginClick = { navigator.replace(LoginScreen) },
-            onCreateAccountClick = { navigator.replace(RegisterScreen) }
+            onLoginClick = { navigator.replace(LoginScreen()) },
+            onCreateAccountClick = { navigator.replace(RegisterScreen()) }
         )
     }
 }

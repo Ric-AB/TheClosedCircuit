@@ -78,7 +78,7 @@ internal class ProfileVerificationScreen(val email: Email) : Screen, KoinCompone
                         SuccessScreen(
                             title = "Email verification successful",
                             message = "",
-                            primaryAction = { navigator.popUntil { screen -> screen == ProfileScreen } }
+                            primaryAction = { navigator.popUntil { screen -> screen is ProfileScreen } }
                         )
                     )
                 }

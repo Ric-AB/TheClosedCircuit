@@ -73,7 +73,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object ProfileScreen : Screen, KoinComponent {
+internal class ProfileScreen : Screen, KoinComponent {
     private val viewModel: ProfileViewModel by inject()
 
     @Composable

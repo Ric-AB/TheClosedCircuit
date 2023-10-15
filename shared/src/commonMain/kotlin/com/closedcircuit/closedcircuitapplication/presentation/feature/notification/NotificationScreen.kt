@@ -2,6 +2,11 @@
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.notification
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -165,36 +170,49 @@ private fun NotificationBody(
     deleteNotification: (Int, ID) -> Unit,
     updateSelectionState: (Boolean, Boolean, Int) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        if (uiState.notificationsState.isEmpty()) {
-            EmptyNotification(modifier = Modifier.align(Alignment.BottomCenter))
-        } else {
-            LaunchedEffect(uiState.notificationsState.toList()) {
-                var anyUnread = false
-                var anySelected = false
-                var numberOfSelection = 0
-                uiState.notificationsState.toList().forEach {
-                    if (it.isSelected) {
-                        anySelected = true
-                        numberOfSelection++
+    val visibleState = remember {
+        MutableTransitionState(false).apply {
+            targetState = true
+        }
+    }
+
+    AnimatedVisibility(
+        visibleState = visibleState,
+        enter = fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
+
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (uiState.notificationsState.isEmpty()) {
+                EmptyNotification(modifier = Modifier.align(Alignment.BottomCenter))
+            } else {
+                LaunchedEffect(uiState.notificationsState.toList()) {
+                    var anyUnread = false
+                    var anySelected = false
+                    var numberOfSelection = 0
+                    uiState.notificationsState.toList().forEach {
+                        if (it.isSelected) {
+                            anySelected = true
+                            numberOfSelection++
+                        }
+
+                        if (!it.notification.isRead) anyUnread = true
                     }
 
-                    if (!it.notification.isRead) anyUnread = true
+                    updateSelectionState(anyUnread, anySelected, numberOfSelection)
                 }
 
-                updateSelectionState(anyUnread, anySelected, numberOfSelection)
-            }
-
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                itemsIndexed(
-                    items = uiState.notificationsState,
-                    key = { _, item -> item.notification.id.value }) { index, item ->
-                    NotificationItem(
-                        modifier = Modifier.fillMaxWidth().animateItemPlacement(),
-                        notificationState = item,
-                        toggleSelection = { toggleSelection(index) },
-                        deleteNotification = { deleteNotification(index, item.notification.id) }
-                    )
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    itemsIndexed(
+                        items = uiState.notificationsState,
+                        key = { _, item -> item.notification.id.value }) { index, item ->
+                        NotificationItem(
+                            modifier = Modifier.fillMaxWidth().animateItemPlacement(),
+                            notificationState = item,
+                            toggleSelection = { toggleSelection(index) },
+                            deleteNotification = { deleteNotification(index, item.notification.id) }
+                        )
+                    }
                 }
             }
         }
@@ -214,11 +232,12 @@ private fun NotificationItem(
             .conditional(
                 condition = notificationState.isSelected,
                 ifTrue = {
-                    padding(horizontal = 16.dp, vertical = 12.dp)
+                    padding(horizontal = 10.dp)
                         .background(
                             color = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level2),
                             shape = Shapes().medium
                         )
+                        .padding(horizontal = 6.dp, vertical = 12.dp)
                 },
                 ifFalse = {
                     background(color = MaterialTheme.colorScheme.surface)

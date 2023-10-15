@@ -62,7 +62,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object RegisterScreen : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
+internal class RegisterScreen : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
     private val viewModel: RegisterViewModel by inject()
 
     @Composable

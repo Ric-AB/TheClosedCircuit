@@ -68,7 +68,7 @@ object SplashScreen : Screen, KoinComponent {
         LaunchedEffect(Unit) {
             when (isLoggedInUseCase()) {
                 AuthenticationState.LOGGED_IN -> navigator.replace(BottomNavigation)
-                AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen)
+                AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen())
                 AuthenticationState.FIRST_TIME -> navigator.replace(OnboardingScreen)
             }
         }
