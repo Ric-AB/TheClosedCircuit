@@ -148,4 +148,6 @@
     <string name="no_notifications">No notifications</string>
     <string name="no_notifications_prompt">This is where you’ll see notifications about your plans
     </string>
+    <string name="x_selected">%s Selected</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -98,7 +98,7 @@ internal object DashboardTab : Tab, KoinComponent {
             messageBarState = messageBarState,
             uiState = uiState,
             navigateToPlanListScreen = { navigator.push(PlanListScreen) },
-            navigateToNotificationScreen = { navigator.push(NotificationScreen) }
+            navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
         )
     }
 }

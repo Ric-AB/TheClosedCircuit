@@ -1,11 +1,12 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.notification
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,13 +26,13 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.surfaceColorAtElevation
@@ -42,7 +43,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -64,7 +64,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object NotificationScreen : Screen, KoinComponent {
+internal class NotificationScreen : Screen, KoinComponent {
     private val viewModel: NotificationViewModel by inject()
 
     @Composable
@@ -121,40 +121,37 @@ private fun ScreenContent(
             }
         }
     ) { innerPadding ->
-        AnimatedContent(targetState = uiState) { targetUiState ->
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
-            ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            when (uiState) {
+                is NotificationUIState.DataLoaded -> {
+                    LaunchedEffect(uiState.isLoading) {
+                        isLoading = uiState.isLoading
+                    }
 
-                when (targetUiState) {
-                    is NotificationUIState.DataLoaded -> {
-                        LaunchedEffect(targetUiState.isLoading) {
-                            isLoading = targetUiState.isLoading
+                    NotificationBody(
+                        uiState = uiState,
+                        toggleSelection = toggleSelection,
+                        deleteNotification = deleteNotification,
+                        updateSelectionState = { anyUnread, anySelected, numberOfSelected ->
+                            anyUnreadNotification = anyUnread
+                            isInSelectionMode = anySelected
+                            numberOfSelectedItems = numberOfSelected
                         }
+                    )
+                }
 
-                        NotificationBody(
-                            notificationsState = targetUiState.notificationsState,
-                            toggleSelection = toggleSelection,
-                            deleteNotification = deleteNotification,
-                            updateSelectionState = { anyUnread, anySelected, numberOfSelected ->
-                                anyUnreadNotification = anyUnread
-                                isInSelectionMode = anySelected
-                                numberOfSelectedItems = numberOfSelected
-                            }
-                        )
-                    }
+                is NotificationUIState.Error -> {
+                    Text(
+                        text = "ERROR-${uiState.message}",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
 
-                    is NotificationUIState.Error -> {
-                        Text(
-                            text = "ERROR-${targetUiState.message}",
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-
-                    NotificationUIState.InitialLoading -> {
-                        CircularIndicator(size = 50.dp, modifier = Modifier.align(Alignment.Center))
-                    }
+                NotificationUIState.InitialLoading -> {
+                    CircularIndicator(size = 50.dp, modifier = Modifier.align(Alignment.Center))
                 }
             }
         }
@@ -163,20 +160,20 @@ private fun ScreenContent(
 
 @Composable
 private fun NotificationBody(
-    notificationsState: SnapshotStateList<NotificationState>,
+    uiState: NotificationUIState.DataLoaded,
     toggleSelection: (Int) -> Unit,
     deleteNotification: (Int, ID) -> Unit,
     updateSelectionState: (Boolean, Boolean, Int) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        if (notificationsState.isEmpty()) {
+        if (uiState.notificationsState.isEmpty()) {
             EmptyNotification(modifier = Modifier.align(Alignment.BottomCenter))
         } else {
-            LaunchedEffect(notificationsState.toList()) {
+            LaunchedEffect(uiState.notificationsState.toList()) {
                 var anyUnread = false
                 var anySelected = false
                 var numberOfSelection = 0
-                notificationsState.toList().forEach {
+                uiState.notificationsState.toList().forEach {
                     if (it.isSelected) {
                         anySelected = true
                         numberOfSelection++
@@ -188,18 +185,16 @@ private fun NotificationBody(
                 updateSelectionState(anyUnread, anySelected, numberOfSelection)
             }
 
-            LazyColumn {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 itemsIndexed(
-                    items = notificationsState,
+                    items = uiState.notificationsState,
                     key = { _, item -> item.notification.id.value }) { index, item ->
                     NotificationItem(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().animateItemPlacement(),
                         notificationState = item,
                         toggleSelection = { toggleSelection(index) },
                         deleteNotification = { deleteNotification(index, item.notification.id) }
                     )
-
-                    Divider(thickness = 0.5.dp)
                 }
             }
         }
@@ -219,13 +214,22 @@ private fun NotificationItem(
             .conditional(
                 condition = notificationState.isSelected,
                 ifTrue = {
-                    background(
-                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level2)
-                    )
+                    padding(horizontal = 16.dp, vertical = 12.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level2),
+                            shape = Shapes().medium
+                        )
                 },
-                ifFalse = { background(color = MaterialTheme.colorScheme.surface) }
-            ).clickable(enabled = true, onClick = toggleSelection)
-            .padding(horizontal = 8.dp, vertical = 16.dp)
+                ifFalse = {
+                    background(color = MaterialTheme.colorScheme.surface)
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                }
+            ).clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                enabled = true,
+                onClick = toggleSelection
+            )
     ) {
         Avatar(
             avatar = com.closedcircuit.closedcircuitapplication.domain.model.Avatar(""),
@@ -289,7 +293,7 @@ private fun NotificationItemDropDownMenu(onDeleteMenuClick: () -> Unit) {
         IconButton(onClick = { expanded = !expanded }) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
-                contentDescription = "More"
+                contentDescription = "more"
             )
         }
 
@@ -312,7 +316,9 @@ private fun SelectionModeTopAppBar(
     onDeleteIconClick: () -> Unit
 ) {
     TopAppBar(
-        title = { Text(text = "$numberOfSelectedItems Selected") },
+        title = {
+            Text(text = stringResource(SharedRes.strings.x_selected, numberOfSelectedItems))
+        },
         navigationIcon = {
             IconButton(onClick = onCloseIconClick) {
                 Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
@@ -349,7 +355,7 @@ private fun NotificationTopAppBar(
                     IconButton(onClick = { expanded = !expanded }) {
                         Icon(
                             imageVector = Icons.Default.MoreVert,
-                            contentDescription = "More"
+                            contentDescription = "more"
                         )
                     }
 
@@ -358,7 +364,7 @@ private fun NotificationTopAppBar(
                         onDismissRequest = { expanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Mark all as read") },
+                            text = { Text(text = stringResource(SharedRes.strings.mark_all_as_read)) },
                             onClick = { expanded = false; onMarkAsReadMenuClick() }
                         )
                     }
