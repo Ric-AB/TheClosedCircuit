@@ -48,7 +48,6 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Message
 import com.closedcircuit.closedcircuitapplication.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
