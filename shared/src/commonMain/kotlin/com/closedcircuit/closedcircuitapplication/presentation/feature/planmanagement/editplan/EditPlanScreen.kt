@@ -6,9 +6,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -36,7 +35,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.TopLabe
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanResult
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ModalTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -49,7 +48,7 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 internal data class EditPlanScreen(val plan: Plan) : Screen, KoinComponent,
-    CustomScreenTransition by ModalTransition {
+    CustomScreenTransition by SlideUpTransition {
     private val viewModel: EditPlanViewModel by inject { parametersOf(plan) }
 
     @Composable
@@ -80,7 +79,7 @@ internal data class EditPlanScreen(val plan: Plan) : Screen, KoinComponent,
 private fun ScreenContent(
     messageBarState: MessageBarState,
     uiState: EditPlanUIState,
-    onEvent: (EditPlanUIEvent) -> Unit,
+    onEvent: (EditPlanUiEvent) -> Unit,
     goBack: () -> Unit
 ) {
     BaseScaffold(
@@ -93,12 +92,13 @@ private fun ScreenContent(
                 mainIcon = Icons.Default.Close
             )
         },
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         val (_, sector, businessType, nameField, descriptionField, durationField, estimatedSellingPriceField, estimatedCostPriceField, sectors, businessTypes) = uiState
         val commonModifier = Modifier.fillMaxWidth()
         val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
-            if (isFocused) onEvent(EditPlanUIEvent.InputFieldFocusReceived(fieldName))
-            else onEvent(EditPlanUIEvent.InputFieldFocusLost)
+            if (isFocused) onEvent(EditPlanUiEvent.InputFieldFocusReceived(fieldName))
+            else onEvent(EditPlanUiEvent.InputFieldFocusLost)
         }
 
         Column(
@@ -107,7 +107,6 @@ private fun ScreenContent(
                 .padding(horizontal = defaultHorizontalScreenPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(vertical = defaultVerticalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
         ) {
 
             LargeDropdownMenu(
@@ -116,7 +115,7 @@ private fun ScreenContent(
                 items = sectors,
                 selectedItemToString = { it.value },
                 selectedItem = sector,
-                onItemSelected = { _, item -> onEvent(EditPlanUIEvent.SectorChange(item)) },
+                onItemSelected = { _, item -> onEvent(EditPlanUiEvent.SectorChange(item)) },
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -126,13 +125,13 @@ private fun ScreenContent(
                 items = businessTypes,
                 selectedItemToString = { it.value },
                 selectedItem = businessType,
-                onItemSelected = { _, item -> onEvent(EditPlanUIEvent.BusinessType(item)) },
+                onItemSelected = { _, item -> onEvent(EditPlanUiEvent.BusinessType(item)) },
             )
 
             Spacer(modifier = Modifier.height(24.dp))
             TopLabeledTextField(
                 inputField = nameField,
-                onValueChange = { onEvent(EditPlanUIEvent.NameChange(it)) },
+                onValueChange = { onEvent(EditPlanUiEvent.NameChange(it)) },
                 label = stringResource(SharedRes.strings.enter_plan_name),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
@@ -146,7 +145,7 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(20.dp))
             TopLabeledTextField(
                 inputField = descriptionField,
-                onValueChange = { onEvent(EditPlanUIEvent.DescriptionChange(it)) },
+                onValueChange = { onEvent(EditPlanUiEvent.DescriptionChange(it)) },
                 label = stringResource(SharedRes.strings.describe_your_plan),
                 singleLine = false,
                 modifier = commonModifier.height(150.dp).onFocusChanged {
@@ -161,7 +160,7 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(40.dp))
             TopLabeledTextField(
                 inputField = durationField,
-                onValueChange = { onEvent(EditPlanUIEvent.DurationChange(it)) },
+                onValueChange = { onEvent(EditPlanUiEvent.DurationChange(it)) },
                 label = stringResource(SharedRes.strings.enter_plan_duration),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -176,7 +175,7 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(20.dp))
             TopLabeledTextField(
                 inputField = estimatedSellingPriceField,
-                onValueChange = { onEvent(EditPlanUIEvent.SellingPriceChange(it)) },
+                onValueChange = { onEvent(EditPlanUiEvent.SellingPriceChange(it)) },
                 label = stringResource(SharedRes.strings.what_your_estimated_selling_price),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -192,7 +191,7 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(20.dp))
             TopLabeledTextField(
                 inputField = estimatedCostPriceField,
-                onValueChange = { onEvent(EditPlanUIEvent.CostPriceChange(it)) },
+                onValueChange = { onEvent(EditPlanUiEvent.CostPriceChange(it)) },
                 label = stringResource(SharedRes.strings.what_your_estimated_cost_price),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -206,7 +205,7 @@ private fun ScreenContent(
             )
 
             Spacer(modifier = Modifier.height(40.dp))
-            DefaultButton(onClick = { onEvent(EditPlanUIEvent.Submit) }) {
+            DefaultButton(onClick = { onEvent(EditPlanUiEvent.Submit) }) {
                 Text(text = stringResource(SharedRes.strings.save))
             }
         }

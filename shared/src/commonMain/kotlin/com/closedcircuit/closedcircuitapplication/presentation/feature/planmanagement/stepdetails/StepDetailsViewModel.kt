@@ -20,10 +20,10 @@ class StepDetailsViewModel(
         stepRepository.getStepByIDAsFlow(stepID),
         budgetRepository.getBudgetsForStepAsFlow(stepID)
     ) { step, budgets ->
-        StepDetailsUIState(step = step, budgets = budgets)
+        StepDetailsUiState(step = step, budgets = budgets)
     }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = StepDetailsUIState.init(step)
+        initialValue = StepDetailsUiState.init(step)
     )
 }

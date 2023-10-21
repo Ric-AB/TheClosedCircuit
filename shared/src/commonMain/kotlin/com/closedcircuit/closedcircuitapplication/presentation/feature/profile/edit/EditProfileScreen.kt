@@ -7,12 +7,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.Close
@@ -39,8 +40,9 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ModalTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -52,7 +54,7 @@ import org.koin.core.parameter.parametersOf
 internal data class EditProfileScreen(private val user: User) :
     Screen,
     KoinComponent,
-    CustomScreenTransition by ModalTransition {
+    CustomScreenTransition by SlideUpTransition {
     private val viewModel: EditProfileViewModel by inject { parametersOf(user) }
 
     @Composable
@@ -89,7 +91,7 @@ private fun ScreenContent(
     goBack: () -> Unit,
     messageBarState: MessageBarState,
     uiState: EditProfileUIState?,
-    onEvent: (EditProfileUIEvent) -> Unit
+    onEvent: (EditProfileUiEvent) -> Unit
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
@@ -101,14 +103,15 @@ private fun ScreenContent(
                 mainAction = goBack
             )
         },
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
 
         uiState?.let { uiState ->
             val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField) = uiState
             val inputFieldCommonModifier = Modifier.fillMaxWidth()
             val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
-                if (isFocused) onEvent(EditProfileUIEvent.InputFieldFocusReceived(fieldName))
-                else onEvent(EditProfileUIEvent.InputFieldFocusLost)
+                if (isFocused) onEvent(EditProfileUiEvent.InputFieldFocusReceived(fieldName))
+                else onEvent(EditProfileUiEvent.InputFieldFocusLost)
             }
 
             Column(
@@ -117,11 +120,12 @@ private fun ScreenContent(
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(horizontal = defaultHorizontalScreenPadding)
-                    .windowInsetsPadding(WindowInsets.ime)
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = defaultVerticalScreenPadding)
             ) {
                 DefaultOutlinedTextField(
                     inputField = firstNameField,
-                    onValueChange = { onEvent(EditProfileUIEvent.FirstNameChange(it)) },
+                    onValueChange = { onEvent(EditProfileUiEvent.FirstNameChange(it)) },
                     label = stringResource(SharedRes.strings.first_name),
                     supportingText = {
                         if (firstNameField.isError) {
@@ -143,7 +147,7 @@ private fun ScreenContent(
 
                 DefaultOutlinedTextField(
                     inputField = nickNameField,
-                    onValueChange = { onEvent(EditProfileUIEvent.NickNameChange(it)) },
+                    onValueChange = { onEvent(EditProfileUiEvent.NickNameChange(it)) },
                     label = stringResource(SharedRes.strings.preferred) + "/" +
                             stringResource(SharedRes.strings.nick_name),
                     keyboardOptions = KeyboardOptions(
@@ -156,7 +160,7 @@ private fun ScreenContent(
 
                 DefaultOutlinedTextField(
                     inputField = lastNameField,
-                    onValueChange = { onEvent(EditProfileUIEvent.LastNameChange(it)) },
+                    onValueChange = { onEvent(EditProfileUiEvent.LastNameChange(it)) },
                     label = stringResource(SharedRes.strings.last_name),
                     supportingText = {
                         if (lastNameField.isError) {
@@ -178,7 +182,7 @@ private fun ScreenContent(
 
                 DefaultOutlinedTextField(
                     inputField = emailField,
-                    onValueChange = { onEvent(EditProfileUIEvent.EmailChange(it)) },
+                    onValueChange = { onEvent(EditProfileUiEvent.EmailChange(it)) },
                     label = stringResource(SharedRes.strings.email),
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
@@ -192,7 +196,7 @@ private fun ScreenContent(
 
                 DefaultOutlinedTextField(
                     inputField = phoneNumberField,
-                    onValueChange = { onEvent(EditProfileUIEvent.PhoneNumberChange(it)) },
+                    onValueChange = { onEvent(EditProfileUiEvent.PhoneNumberChange(it)) },
                     label = stringResource(SharedRes.strings.phone_number),
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
@@ -204,7 +208,7 @@ private fun ScreenContent(
                     }
                 )
 
-                DefaultButton(onClick = { onEvent(EditProfileUIEvent.OnSubmit) }) {
+                DefaultButton(onClick = { onEvent(EditProfileUiEvent.OnSubmit) }) {
                     Text(text = stringResource(SharedRes.strings.save_changes))
                 }
             }

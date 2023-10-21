@@ -10,11 +10,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -113,7 +112,7 @@ private fun ScreenContent(
     uiState: SaveStepUIState,
     bottomSheetState: SheetState,
     goBack: () -> Unit,
-    onEvent: (SaveStepUIEvent) -> Unit
+    onEvent: (SaveStepUiEvent) -> Unit
 ) {
     val titleRes = remember {
         if (isNewStep) SharedRes.strings.create_step
@@ -123,13 +122,14 @@ private fun ScreenContent(
     BaseScaffold(
         messageBarState = messageBarState,
         isLoading = uiState.isLoading,
-        topBar = { DefaultAppBar(title = stringResource(titleRes), mainAction = goBack) }
+        topBar = { DefaultAppBar(title = stringResource(titleRes), mainAction = goBack) },
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         val (_, nameField, descriptionField, durationField) = uiState
         val commonModifier = Modifier.fillMaxWidth()
         val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
-            if (isFocused) onEvent(SaveStepUIEvent.InputFieldFocusReceived(fieldName))
-            else onEvent(SaveStepUIEvent.InputFieldFocusLost)
+            if (isFocused) onEvent(SaveStepUiEvent.InputFieldFocusReceived(fieldName))
+            else onEvent(SaveStepUiEvent.InputFieldFocusLost)
         }
 
         Column(
@@ -138,11 +138,10 @@ private fun ScreenContent(
                 .padding(horizontal = defaultHorizontalScreenPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(vertical = defaultVerticalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
         ) {
             TopLabeledTextField(
                 inputField = nameField,
-                onValueChange = { onEvent(SaveStepUIEvent.StepNameChange(it)) },
+                onValueChange = { onEvent(SaveStepUiEvent.StepNameChange(it)) },
                 label = stringResource(SharedRes.strings.step_name),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
@@ -156,7 +155,7 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(12.dp))
             TopLabeledTextField(
                 inputField = descriptionField,
-                onValueChange = { onEvent(SaveStepUIEvent.DescriptionChange(it)) },
+                onValueChange = { onEvent(SaveStepUiEvent.DescriptionChange(it)) },
                 label = stringResource(SharedRes.strings.step_description),
                 singleLine = false,
                 modifier = commonModifier.height(150.dp).onFocusChanged {
@@ -171,7 +170,7 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(12.dp))
             TopLabeledTextField(
                 inputField = durationField,
-                onValueChange = { onEvent(SaveStepUIEvent.DurationChange(it)) },
+                onValueChange = { onEvent(SaveStepUiEvent.DurationChange(it)) },
                 label = stringResource(SharedRes.strings.step_duration),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -195,7 +194,7 @@ private fun ScreenContent(
                 )
 
                 TextButton(
-                    onClick = { onEvent(SaveStepUIEvent.InitializeBudgetItem) },
+                    onClick = { onEvent(SaveStepUiEvent.InitializeBudgetItem) },
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
@@ -221,15 +220,15 @@ private fun ScreenContent(
                     BudgetItem(
                         modifier = Modifier.fillMaxWidth(),
                         budgetItemState = budgetItemState,
-                        onEditClick = { onEvent(SaveStepUIEvent.EditBudgetItem(index)) },
-                        onDeleteClick = { onEvent(SaveStepUIEvent.RemoveBudgetItem(index)) }
+                        onEditClick = { onEvent(SaveStepUiEvent.EditBudgetItem(index)) },
+                        onDeleteClick = { onEvent(SaveStepUiEvent.RemoveBudgetItem(index)) }
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(40.dp))
             DefaultButton(
-                onClick = { onEvent(SaveStepUIEvent.SubmitAll) },
+                onClick = { onEvent(SaveStepUiEvent.SubmitAll) },
                 enabled = uiState.canSubmit
             ) {
                 Text(text = stringResource(SharedRes.strings.save))
@@ -321,14 +320,14 @@ private fun BudgetItem(
 private fun SaveStepModal(
     bottomSheetState: SheetState,
     currentBudgetItemState: BudgetItemState,
-    onEvent: (SaveStepUIEvent) -> Unit
+    onEvent: (SaveStepUiEvent) -> Unit
 ) {
     val (indexOfItem, _, budgetNameField, budgetCostField) = currentBudgetItemState
     val commonModifier = Modifier.fillMaxWidth()
-    val closeModal: () -> Unit = { onEvent(SaveStepUIEvent.ClearCurrentBudgetItem) }
+    val closeModal: () -> Unit = { onEvent(SaveStepUiEvent.ClearCurrentBudgetItem) }
     val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
-        if (isFocused) onEvent(SaveStepUIEvent.InputFieldFocusReceived(fieldName))
-        else onEvent(SaveStepUIEvent.InputFieldFocusLost)
+        if (isFocused) onEvent(SaveStepUiEvent.InputFieldFocusReceived(fieldName))
+        else onEvent(SaveStepUiEvent.InputFieldFocusLost)
     }
 
     val titleResource = if (indexOfItem < 0) SharedRes.strings.add_budget
@@ -362,7 +361,7 @@ private fun SaveStepModal(
 
             TopLabeledTextField(
                 inputField = budgetNameField,
-                onValueChange = { onEvent(SaveStepUIEvent.BudgetNameChange(it)) },
+                onValueChange = { onEvent(SaveStepUiEvent.BudgetNameChange(it)) },
                 label = stringResource(SharedRes.strings.budget_name),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 modifier = commonModifier.onFocusChanged {
@@ -374,7 +373,7 @@ private fun SaveStepModal(
             Spacer(modifier = Modifier.height(8.dp))
             TopLabeledTextField(
                 inputField = budgetCostField,
-                onValueChange = { onEvent(SaveStepUIEvent.BudgetCostChange(it)) },
+                onValueChange = { onEvent(SaveStepUiEvent.BudgetCostChange(it)) },
                 label = stringResource(SharedRes.strings.budget_cost),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -388,7 +387,7 @@ private fun SaveStepModal(
             )
 
             Spacer(modifier = Modifier.height(40.dp))
-            DefaultButton(onClick = { onEvent(SaveStepUIEvent.SubmitBudgetItem) }) {
+            DefaultButton(onClick = { onEvent(SaveStepUiEvent.SubmitBudgetItem) }) {
                 Text(text = stringResource(SharedRes.strings.save))
             }
         }

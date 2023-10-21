@@ -54,7 +54,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.domain.user.Sponsor
+import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.domain.wallet.Wallet
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton

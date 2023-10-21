@@ -3,18 +3,17 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.authenti
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +43,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.BottomNavigation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.painterResource
@@ -90,7 +90,7 @@ internal class LoginScreen : Screen, KoinComponent {
 private fun ScreenContent(
     messageBarState: MessageBarState,
     state: LoginUIState,
-    onEvent: (LoginUIEvent) -> Unit,
+    onEvent: (LoginUiEvent) -> Unit,
     navigateToWelcomeScreen: () -> Unit,
     navigateToCreateAccount: () -> Unit,
     navigateToRecoverPassword: () -> Unit
@@ -99,85 +99,85 @@ private fun ScreenContent(
         messageBarState = messageBarState,
         isLoading = state.isLoading,
         topBar = { DefaultAppBar(mainAction = navigateToWelcomeScreen) },
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         val (emailField, passwordField, _) = state
         var showPassword by rememberSaveable { mutableStateOf(false) }
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = 24.dp),
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = defaultHorizontalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
+                .padding(bottom = defaultVerticalScreenPadding)
+
         ) {
-            item {
-                TitleText(text = stringResource(SharedRes.strings.welcome_back))
+            TitleText(text = stringResource(SharedRes.strings.welcome_back))
 
-                Spacer(modifier = Modifier.height(8.dp))
-                BodyText(text = stringResource(SharedRes.strings.login_prompt))
+            Spacer(modifier = Modifier.height(8.dp))
+            BodyText(text = stringResource(SharedRes.strings.login_prompt))
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
+                Image(
+                    painter = painterResource(SharedRes.images.login_illustration),
+                    contentDescription = null,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+                DefaultOutlinedTextField(
+                    inputField = emailField,
+                    onValueChange = { email -> onEvent(LoginUiEvent.EmailChange(email)) },
+                    label = stringResource(SharedRes.strings.email),
+                    isError = emailField.isError,
+                    supportingText = { Text(text = emailField.error) },
+                    maxLines = 1,
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+                PasswordOutlinedTextField(
+                    inputField = passwordField,
+                    onValueChange = { onEvent(LoginUiEvent.PasswordChange(it)) },
+                    label = stringResource(SharedRes.strings.password),
+                    onPasswordVisibilityChange = { showPassword = it },
+                    showPassword = showPassword,
+                    imeAction = ImeAction.Done
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                BodyText(
+                    text = stringResource(SharedRes.strings.forgot_password),
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.align(Alignment.End)
+                        .clickable(onClick = navigateToRecoverPassword),
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+                DefaultButton(
+                    onClick = { onEvent(LoginUiEvent.Submit) },
+                    enabled = state.canSubmit()
                 ) {
-                    Spacer(modifier = Modifier.height(40.dp))
-                    Image(
-                        painter = painterResource(SharedRes.images.login_illustration),
-                        contentDescription = null,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+                    Text(text = stringResource(SharedRes.strings.login))
+                }
 
-                    Spacer(modifier = Modifier.height(40.dp))
-                    DefaultOutlinedTextField(
-                        inputField = emailField,
-                        onValueChange = { email -> onEvent(LoginUIEvent.EmailChange(email)) },
-                        label = stringResource(SharedRes.strings.email),
-                        isError = emailField.isError,
-                        supportingText = { Text(text = emailField.error) },
-                        maxLines = 1,
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        )
-                    )
+                Spacer(modifier = Modifier.height(12.dp))
+                Row {
+                    BodyText(text = stringResource(SharedRes.strings.dont_have_account))
 
-                    Spacer(modifier = Modifier.height(20.dp))
-                    PasswordOutlinedTextField(
-                        inputField = passwordField,
-                        onValueChange = { onEvent(LoginUIEvent.PasswordChange(it)) },
-                        label = stringResource(SharedRes.strings.password),
-                        onPasswordVisibilityChange = { showPassword = it },
-                        showPassword = showPassword,
-                        imeAction = ImeAction.Done
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                     BodyText(
-                        text = stringResource(SharedRes.strings.forgot_password),
+                        text = stringResource(SharedRes.strings.create_account),
                         color = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.align(Alignment.End)
-                            .clickable(onClick = navigateToRecoverPassword),
+                        modifier = Modifier.clickable(onClick = navigateToCreateAccount)
                     )
-
-                    Spacer(modifier = Modifier.height(40.dp))
-                    DefaultButton(
-                        onClick = { onEvent(LoginUIEvent.Submit) },
-                        enabled = state.canSubmit()
-                    ) {
-                        Text(text = stringResource(SharedRes.strings.login))
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row {
-                        BodyText(text = stringResource(SharedRes.strings.dont_have_account))
-
-                        Spacer(modifier = Modifier.width(4.dp))
-                        BodyText(
-                            text = stringResource(SharedRes.strings.create_account),
-                            color = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.clickable(onClick = navigateToCreateAccount)
-                        )
-                    }
                 }
             }
         }

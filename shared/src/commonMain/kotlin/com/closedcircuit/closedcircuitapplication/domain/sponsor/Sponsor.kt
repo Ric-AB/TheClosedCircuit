@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.domain.user
+package com.closedcircuit.closedcircuitapplication.domain.sponsor
 
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Name

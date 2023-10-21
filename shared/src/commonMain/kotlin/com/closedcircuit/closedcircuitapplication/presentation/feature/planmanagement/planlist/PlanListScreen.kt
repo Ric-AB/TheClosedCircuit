@@ -59,7 +59,7 @@ internal class PlanListScreen : Screen, KoinComponent {
 
 @Composable
 private fun ScreenContent(
-    state: PlanListUIState,
+    state: PlanListUiState,
     goBack: () -> Unit,
     navigateToCreatePlanScreen: () -> Unit,
     navigateToPlanDetailsScreen: (Plan) -> Unit

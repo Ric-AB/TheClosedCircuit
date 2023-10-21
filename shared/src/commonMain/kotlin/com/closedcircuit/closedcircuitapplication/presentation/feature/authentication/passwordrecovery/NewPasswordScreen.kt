@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -81,13 +80,14 @@ internal class NewPasswordScreen : Screen, KoinComponent,
 private fun ScreenContent(
     messageBarState: MessageBarState,
     state: ResetPasswordUIState,
-    onEvent: (ResetPasswordUIEvent) -> Unit,
+    onEvent: (ResetPasswordUiEvent) -> Unit,
     goBack: () -> Unit
 ) {
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
         isLoading = state.loading,
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         val (_, _, passwordField, confirmPasswordField, _) = state
         var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -98,7 +98,6 @@ private fun ScreenContent(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
         ) {
             TitleText(stringResource(SharedRes.strings.reset_your_password))
 
@@ -109,7 +108,7 @@ private fun ScreenContent(
                 Spacer(modifier = Modifier.height(40.dp))
                 PasswordOutlinedTextField(
                     inputField = passwordField,
-                    onValueChange = { onEvent(ResetPasswordUIEvent.PasswordChange(it)) },
+                    onValueChange = { onEvent(ResetPasswordUiEvent.PasswordChange(it)) },
                     label = stringResource(SharedRes.strings.new_password),
                     placeholder = { Text(stringResource(SharedRes.strings.enter_a_new_password)) },
                     onPasswordVisibilityChange = { showPassword = !showConfirmPassword },
@@ -122,7 +121,7 @@ private fun ScreenContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 PasswordOutlinedTextField(
                     inputField = confirmPasswordField,
-                    onValueChange = { onEvent(ResetPasswordUIEvent.ConfirmPasswordChange(it)) },
+                    onValueChange = { onEvent(ResetPasswordUiEvent.ConfirmPasswordChange(it)) },
                     label = stringResource(SharedRes.strings.confirm_password),
                     placeholder = { Text(stringResource(SharedRes.strings.confirm_password)) },
                     onPasswordVisibilityChange = { showConfirmPassword = !showConfirmPassword },
@@ -137,7 +136,7 @@ private fun ScreenContent(
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
-                DefaultButton(onClick = { onEvent(ResetPasswordUIEvent.SubmitPassword) }) {
+                DefaultButton(onClick = { onEvent(ResetPasswordUiEvent.SubmitPassword) }) {
                     Text(stringResource(SharedRes.strings.reset_password))
                 }
             }

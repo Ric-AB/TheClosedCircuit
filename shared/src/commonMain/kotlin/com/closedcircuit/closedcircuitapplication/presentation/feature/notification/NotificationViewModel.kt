@@ -54,15 +54,15 @@ class NotificationViewModel(
         getNotifications()
     }
 
-    fun onEvent(event: NotificationUIEvent) {
+    fun onEvent(event: NotificationUiEvent) {
         when (event) {
-            NotificationUIEvent.DeleteMultipleNotifications -> deleteMultipleNotifications()
-            is NotificationUIEvent.DeleteNotification ->
+            NotificationUiEvent.DeleteMultipleNotifications -> deleteMultipleNotifications()
+            is NotificationUiEvent.DeleteNotification ->
                 deleteNotification(index = event.index, id = event.id)
 
-            NotificationUIEvent.MarkAllAsRead -> markAllAsRead()
-            is NotificationUIEvent.ToggleSelection -> toggleSelection(event.index)
-            NotificationUIEvent.ResetSelection -> resetSelection()
+            NotificationUiEvent.MarkAllAsRead -> markAllAsRead()
+            is NotificationUiEvent.ToggleSelection -> toggleSelection(event.index)
+            NotificationUiEvent.ResetSelection -> resetSelection()
         }
     }
 

@@ -15,7 +15,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ModalTransition : CustomScreenTransition {
+object SlideUpTransition : CustomScreenTransition {
 
     private const val risingScale = 1.2f
     override fun screenTransition(

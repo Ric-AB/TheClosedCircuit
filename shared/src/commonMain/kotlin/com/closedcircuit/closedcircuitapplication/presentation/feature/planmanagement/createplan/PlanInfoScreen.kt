@@ -46,18 +46,18 @@ internal class PlanInfoScreen : Screen, KoinComponent,
 }
 
 @Composable
-private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEvent) -> Unit) {
+private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUiEvent) -> Unit) {
     val (_, _, _, _, nameField, descriptionField, durationField, estimatedSellingPriceField, estimatedCostPriceField, _, _, _) = uiState
     val commonModifier = Modifier.fillMaxWidth()
     val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
-        if (isFocused) onEvent(CreatePlanUIEvent.InputFieldFocusReceived(fieldName))
-        else onEvent(CreatePlanUIEvent.InputFieldFocusLost)
+        if (isFocused) onEvent(CreatePlanUiEvent.InputFieldFocusReceived(fieldName))
+        else onEvent(CreatePlanUiEvent.InputFieldFocusLost)
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopLabeledTextField(
             inputField = nameField,
-            onValueChange = { onEvent(CreatePlanUIEvent.NameChange(it)) },
+            onValueChange = { onEvent(CreatePlanUiEvent.NameChange(it)) },
             label = stringResource(SharedRes.strings.enter_plan_name),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
@@ -71,7 +71,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
         Spacer(modifier = Modifier.height(20.dp))
         TopLabeledTextField(
             inputField = descriptionField,
-            onValueChange = { onEvent(CreatePlanUIEvent.DescriptionChange(it)) },
+            onValueChange = { onEvent(CreatePlanUiEvent.DescriptionChange(it)) },
             label = stringResource(SharedRes.strings.describe_your_plan),
             singleLine = false,
             modifier = commonModifier.height(150.dp).onFocusChanged {
@@ -86,7 +86,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
         Spacer(modifier = Modifier.height(40.dp))
         TopLabeledTextField(
             inputField = durationField,
-            onValueChange = { onEvent(CreatePlanUIEvent.DurationChange(it)) },
+            onValueChange = { onEvent(CreatePlanUiEvent.DurationChange(it)) },
             label = stringResource(SharedRes.strings.enter_plan_duration),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -101,7 +101,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
         Spacer(modifier = Modifier.height(20.dp))
         TopLabeledTextField(
             inputField = estimatedSellingPriceField,
-            onValueChange = { onEvent(CreatePlanUIEvent.SellingPriceChange(it)) },
+            onValueChange = { onEvent(CreatePlanUiEvent.SellingPriceChange(it)) },
             label = stringResource(SharedRes.strings.what_your_estimated_selling_price),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -117,7 +117,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
         Spacer(modifier = Modifier.height(20.dp))
         TopLabeledTextField(
             inputField = estimatedCostPriceField,
-            onValueChange = { onEvent(CreatePlanUIEvent.CostPriceChange(it)) },
+            onValueChange = { onEvent(CreatePlanUiEvent.CostPriceChange(it)) },
             label = stringResource(SharedRes.strings.what_your_estimated_cost_price),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -131,7 +131,7 @@ private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUIEven
         )
 
         Spacer(modifier = Modifier.height(40.dp))
-        DefaultButton(onClick = { onEvent(CreatePlanUIEvent.Submit) }) {
+        DefaultButton(onClick = { onEvent(CreatePlanUiEvent.Submit) }) {
             Text(text = stringResource(SharedRes.strings.create_plan))
         }
     }

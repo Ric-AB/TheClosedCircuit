@@ -5,14 +5,14 @@ import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.step.Steps
 import kotlinx.collections.immutable.persistentListOf
 
-data class PlanDetailsUIState(
+data class PlanDetailsUiState(
     val plan: Plan,
     val steps: Steps = persistentListOf(),
     val budgets: Budgets = persistentListOf()
 ) {
     companion object {
-        fun init(plan: Plan): PlanDetailsUIState {
-            return PlanDetailsUIState(plan)
+        fun init(plan: Plan): PlanDetailsUiState {
+            return PlanDetailsUiState(plan)
         }
     }
 }

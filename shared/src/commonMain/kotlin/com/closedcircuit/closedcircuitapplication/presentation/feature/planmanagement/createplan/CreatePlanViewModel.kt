@@ -25,19 +25,19 @@ class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : Sc
 
     private var lastFocusedField: String? = null
 
-    fun onEvent(event: CreatePlanUIEvent) {
+    fun onEvent(event: CreatePlanUiEvent) {
         when (event) {
-            is CreatePlanUIEvent.BusinessType -> updateBusinessType(event.businessType)
-            is CreatePlanUIEvent.CategoryChange -> updateCategory(event.category)
-            is CreatePlanUIEvent.CostPriceChange -> updateCostPrice(event.price)
-            is CreatePlanUIEvent.DurationChange -> updateDuration(event.duration)
-            is CreatePlanUIEvent.DescriptionChange -> updateDescription(event.description)
-            is CreatePlanUIEvent.NameChange -> updateName(event.name)
-            is CreatePlanUIEvent.SectorChange -> updateSector(event.sector)
-            is CreatePlanUIEvent.SellingPriceChange -> updateSellingPrice(event.price)
-            is CreatePlanUIEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
-            CreatePlanUIEvent.InputFieldFocusLost -> validateLastFocusedField()
-            CreatePlanUIEvent.Submit -> attemptPlanCreation()
+            is CreatePlanUiEvent.BusinessType -> updateBusinessType(event.businessType)
+            is CreatePlanUiEvent.CategoryChange -> updateCategory(event.category)
+            is CreatePlanUiEvent.CostPriceChange -> updateCostPrice(event.price)
+            is CreatePlanUiEvent.DurationChange -> updateDuration(event.duration)
+            is CreatePlanUiEvent.DescriptionChange -> updateDescription(event.description)
+            is CreatePlanUiEvent.NameChange -> updateName(event.name)
+            is CreatePlanUiEvent.SectorChange -> updateSector(event.sector)
+            is CreatePlanUiEvent.SellingPriceChange -> updateSellingPrice(event.price)
+            is CreatePlanUiEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
+            CreatePlanUiEvent.InputFieldFocusLost -> validateLastFocusedField()
+            CreatePlanUiEvent.Submit -> attemptPlanCreation()
         }
     }
 

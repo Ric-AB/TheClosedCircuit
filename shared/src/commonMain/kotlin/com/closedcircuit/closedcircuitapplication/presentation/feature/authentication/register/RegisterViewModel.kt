@@ -24,18 +24,18 @@ class RegisterViewModel(
 
     private var lastFocusedField: String? = null
 
-    fun onEvent(event: RegisterUIEvent) {
+    fun onEvent(event: RegisterUiEvent) {
         when (event) {
-            is RegisterUIEvent.ConfirmPasswordChange -> updateConfirmPassword(event.confirmPassword)
-            is RegisterUIEvent.EmailChange -> updateEmail(event.email)
-            is RegisterUIEvent.FirstNameChange -> updateFirstName(event.firstName)
-            is RegisterUIEvent.LastNameChange -> updateLastName(event.lastName)
-            is RegisterUIEvent.NickNameChange -> updateNickName(event.nickName)
-            is RegisterUIEvent.PasswordChange -> updatePassword(event.password)
-            is RegisterUIEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
-            is RegisterUIEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
-            RegisterUIEvent.InputFieldFocusLost -> validateLastFocusedField()
-            RegisterUIEvent.Submit -> attemptRegistration()
+            is RegisterUiEvent.ConfirmPasswordChange -> updateConfirmPassword(event.confirmPassword)
+            is RegisterUiEvent.EmailChange -> updateEmail(event.email)
+            is RegisterUiEvent.FirstNameChange -> updateFirstName(event.firstName)
+            is RegisterUiEvent.LastNameChange -> updateLastName(event.lastName)
+            is RegisterUiEvent.NickNameChange -> updateNickName(event.nickName)
+            is RegisterUiEvent.PasswordChange -> updatePassword(event.password)
+            is RegisterUiEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
+            is RegisterUiEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
+            RegisterUiEvent.InputFieldFocusLost -> validateLastFocusedField()
+            RegisterUiEvent.Submit -> attemptRegistration()
         }
     }
 

@@ -23,11 +23,11 @@ class LoginViewModel(
     val loginResultChannel: ReceiveChannel<LoginResult> = _loginResultChannel
 
 
-    fun onEvent(event: LoginUIEvent) {
+    fun onEvent(event: LoginUiEvent) {
         when (event) {
-            is LoginUIEvent.EmailChange -> updateEmail(event.email)
-            is LoginUIEvent.PasswordChange -> updatePassword(event.password)
-            LoginUIEvent.Submit -> attemptLogin()
+            is LoginUiEvent.EmailChange -> updateEmail(event.email)
+            is LoginUiEvent.PasswordChange -> updatePassword(event.password)
+            LoginUiEvent.Submit -> attemptLogin()
         }
     }
 

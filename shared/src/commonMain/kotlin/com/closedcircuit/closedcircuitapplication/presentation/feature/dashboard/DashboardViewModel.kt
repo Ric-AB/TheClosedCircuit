@@ -2,7 +2,6 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.dashboar
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.GetUserDashboardUseCase
@@ -42,7 +41,7 @@ class DashboardViewModel(
         fetchData()
     }
 
-    fun onEvent(event: DashboardUIEvent) {
+    fun onEvent(event: DashboardUiEvent) {
         when (event) {
             else -> {}
         }

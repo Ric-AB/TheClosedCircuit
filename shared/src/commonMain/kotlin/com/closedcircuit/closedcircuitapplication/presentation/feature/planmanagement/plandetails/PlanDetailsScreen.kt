@@ -118,7 +118,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
 
 @Composable
 private fun ScreenContent(
-    uiState: PlanDetailsUIState,
+    uiState: PlanDetailsUiState,
     goBack: () -> Unit,
     navigateToStepDetails: (Step) -> Unit,
     navigateToFundRequest: () -> Unit,

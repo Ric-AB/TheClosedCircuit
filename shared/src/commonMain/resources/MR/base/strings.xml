@@ -150,4 +150,34 @@
     </string>
     <string name="x_selected">%s Selected</string>
     <string name="delete">Delete</string>
+
+    <!--    Kyc-->
+    <string name="document_verification">Document verification</string>
+    <string name="input_verification_details">Input verification details</string>
+    <string name="id_number">ID number</string>
+    <string name="we_need_to_verify_identity">We need to verify your Means of Identification
+    </string>
+    <string name="verification_requirement_screen_prompt">In order to access a loan, We need to be
+        100% sure You are You. As we’re a financial service. We have to comply with KYC
+        requirements.
+    </string>
+    <string name="select_document_to_verify">Select the type of document you wish to verify</string>
+    <string name="we_need_to_determine_document_is_authentic">We need to determine if an identity
+        document is authentic and belongs to you.
+    </string>
+    <string name="bvn_display_text">Bank Verification Number (BVN)</string>
+    <string name="nin_display_text">National Identity Card</string>
+    <string name="i_dont_have_these">I don’t have these</string>
+    <string name="proceed">Proceed</string>
+    <string name="verify">Verify</string>
+    <string name="check_bvn_hint">To check your BVN dial *565*0# on your registered phone number.
+    </string>
+    <string name="check_nin_hint">To check your NIN dial *346# on your registered phone number.
+    </string>
+    <string name="enter_bvn">Enter BVN Number</string>
+    <string name="enter_nin">Enter National Identification Number</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="verify_phone_number">Verify Phone Number</string>
+    <string name="enter_registered_phone_number">Enter your registered Nigerian phone number
+    </string>
 </resources>

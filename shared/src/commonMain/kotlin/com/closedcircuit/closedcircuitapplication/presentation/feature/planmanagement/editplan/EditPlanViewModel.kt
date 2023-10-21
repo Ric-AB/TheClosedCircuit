@@ -29,18 +29,18 @@ class EditPlanViewModel(
 
     private var lastFocusedField: String? = null
 
-    fun onEvent(event: EditPlanUIEvent) {
+    fun onEvent(event: EditPlanUiEvent) {
         when (event) {
-            is EditPlanUIEvent.BusinessType -> updateBusinessType(event.businessType)
-            is EditPlanUIEvent.CostPriceChange -> updateCostPrice(event.price)
-            is EditPlanUIEvent.DurationChange -> updateDuration(event.duration)
-            is EditPlanUIEvent.DescriptionChange -> updateDescription(event.description)
-            is EditPlanUIEvent.NameChange -> updateName(event.name)
-            is EditPlanUIEvent.SectorChange -> updateSector(event.sector)
-            is EditPlanUIEvent.SellingPriceChange -> updateSellingPrice(event.price)
-            is EditPlanUIEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
-            EditPlanUIEvent.InputFieldFocusLost -> validateLastFocusedField()
-            EditPlanUIEvent.Submit -> attemptPlanCreation()
+            is EditPlanUiEvent.BusinessType -> updateBusinessType(event.businessType)
+            is EditPlanUiEvent.CostPriceChange -> updateCostPrice(event.price)
+            is EditPlanUiEvent.DurationChange -> updateDuration(event.duration)
+            is EditPlanUiEvent.DescriptionChange -> updateDescription(event.description)
+            is EditPlanUiEvent.NameChange -> updateName(event.name)
+            is EditPlanUiEvent.SectorChange -> updateSector(event.sector)
+            is EditPlanUiEvent.SellingPriceChange -> updateSellingPrice(event.price)
+            is EditPlanUiEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
+            EditPlanUiEvent.InputFieldFocusLost -> validateLastFocusedField()
+            EditPlanUiEvent.Submit -> attemptPlanCreation()
         }
     }
 

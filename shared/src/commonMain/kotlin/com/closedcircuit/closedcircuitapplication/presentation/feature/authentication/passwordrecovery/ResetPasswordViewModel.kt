@@ -28,15 +28,15 @@ class ResetPasswordViewModel(
     private val _resetPasswordResult = Channel<ResetPasswordResult>()
     val resetPasswordResult: ReceiveChannel<ResetPasswordResult> = _resetPasswordResult
 
-    fun onEvent(event: ResetPasswordUIEvent) {
+    fun onEvent(event: ResetPasswordUiEvent) {
         when (event) {
-            is ResetPasswordUIEvent.ConfirmPasswordChange -> updateConfirmPassword(event.confirmPassword)
-            is ResetPasswordUIEvent.EmailChange -> updateEmail(event.email)
-            is ResetPasswordUIEvent.OtpCodeChange -> updateOtpCode(event.otpCode)
-            is ResetPasswordUIEvent.PasswordChange -> updatePassword(event.password)
-            is ResetPasswordUIEvent.RequestOtp -> submitEmail(event.isResend)
-            ResetPasswordUIEvent.SubmitOtp -> submitOtp()
-            ResetPasswordUIEvent.SubmitPassword -> submitPassword()
+            is ResetPasswordUiEvent.ConfirmPasswordChange -> updateConfirmPassword(event.confirmPassword)
+            is ResetPasswordUiEvent.EmailChange -> updateEmail(event.email)
+            is ResetPasswordUiEvent.OtpCodeChange -> updateOtpCode(event.otpCode)
+            is ResetPasswordUiEvent.PasswordChange -> updatePassword(event.password)
+            is ResetPasswordUiEvent.RequestOtp -> submitEmail(event.isResend)
+            ResetPasswordUiEvent.SubmitOtp -> submitOtp()
+            ResetPasswordUiEvent.SubmitPassword -> submitPassword()
         }
     }
 

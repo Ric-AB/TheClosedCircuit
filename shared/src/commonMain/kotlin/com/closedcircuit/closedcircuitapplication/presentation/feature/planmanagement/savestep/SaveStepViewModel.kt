@@ -41,21 +41,21 @@ class SaveStepViewModel(
     }
 
 
-    fun onEvent(event: SaveStepUIEvent) {
+    fun onEvent(event: SaveStepUiEvent) {
         when (event) {
-            is SaveStepUIEvent.DescriptionChange -> updateDescription(event.description)
-            is SaveStepUIEvent.DurationChange -> updateDuration(event.duration)
-            is SaveStepUIEvent.StepNameChange -> updateName(event.name)
-            is SaveStepUIEvent.BudgetNameChange -> updateBudgetName(event.name)
-            is SaveStepUIEvent.BudgetCostChange -> updateBudgetCost(event.cost)
-            is SaveStepUIEvent.EditBudgetItem -> setCurrentBudgetItem(event.index)
-            is SaveStepUIEvent.RemoveBudgetItem -> removeBudgetItem(event.index)
-            SaveStepUIEvent.InitializeBudgetItem -> initializeNewBudgetItem()
-            SaveStepUIEvent.ClearCurrentBudgetItem -> clearCurrentBudgetItem()
-            is SaveStepUIEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
-            SaveStepUIEvent.InputFieldFocusLost -> validateLastFocusedField()
-            SaveStepUIEvent.SubmitBudgetItem -> submitCurrentBudgetItem()
-            SaveStepUIEvent.SubmitAll -> submitStepAndBudgets()
+            is SaveStepUiEvent.DescriptionChange -> updateDescription(event.description)
+            is SaveStepUiEvent.DurationChange -> updateDuration(event.duration)
+            is SaveStepUiEvent.StepNameChange -> updateName(event.name)
+            is SaveStepUiEvent.BudgetNameChange -> updateBudgetName(event.name)
+            is SaveStepUiEvent.BudgetCostChange -> updateBudgetCost(event.cost)
+            is SaveStepUiEvent.EditBudgetItem -> setCurrentBudgetItem(event.index)
+            is SaveStepUiEvent.RemoveBudgetItem -> removeBudgetItem(event.index)
+            SaveStepUiEvent.InitializeBudgetItem -> initializeNewBudgetItem()
+            SaveStepUiEvent.ClearCurrentBudgetItem -> clearCurrentBudgetItem()
+            is SaveStepUiEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
+            SaveStepUiEvent.InputFieldFocusLost -> validateLastFocusedField()
+            SaveStepUiEvent.SubmitBudgetItem -> submitCurrentBudgetItem()
+            SaveStepUiEvent.SubmitAll -> submitStepAndBudgets()
         }
     }
 

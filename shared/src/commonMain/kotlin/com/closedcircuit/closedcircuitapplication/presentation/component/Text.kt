@@ -49,3 +49,8 @@ fun TextFieldTrailingText(text: String) {
         modifier = Modifier.padding(horizontal = 8.dp)
     )
 }
+
+@Composable
+fun PlaceHolderText(text: String) {
+    Text(text = text, style = MaterialTheme.typography.bodyMedium, color = Color.LightGray)
+}

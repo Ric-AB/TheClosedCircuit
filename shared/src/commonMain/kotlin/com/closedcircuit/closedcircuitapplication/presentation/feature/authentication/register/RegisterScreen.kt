@@ -3,19 +3,16 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.authenti
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
@@ -52,7 +49,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.screenContentPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -61,7 +58,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal class RegisterScreen : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
+internal class RegisterScreen : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     private val viewModel: RegisterViewModel by inject()
 
     @Composable
@@ -97,13 +95,14 @@ internal class RegisterScreen : Screen, KoinComponent, CustomScreenTransition by
 private fun ScreenContent(
     messageBarState: MessageBarState,
     state: RegisterUIState,
-    onEvent: (RegisterUIEvent) -> Unit,
+    onEvent: (RegisterUiEvent) -> Unit,
     navigateToLogin: () -> Unit
 ) {
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = navigateToLogin) },
         messageBarState = messageBarState,
         isLoading = state.isLoading,
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
@@ -111,156 +110,153 @@ private fun ScreenContent(
         val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
         val inputFieldCommonModifier = Modifier.fillMaxWidth()
         val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
-            if (isFocused) onEvent(RegisterUIEvent.InputFieldFocusReceived(fieldName))
-            else onEvent(RegisterUIEvent.InputFieldFocusLost)
+            if (isFocused) onEvent(RegisterUiEvent.InputFieldFocusReceived(fieldName))
+            else onEvent(RegisterUiEvent.InputFieldFocusLost)
         }
 
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = screenContentPadding.calculateBottomPadding()),
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
+                .padding(bottom = defaultVerticalScreenPadding)
         ) {
-            item {
-                BodyText(
-                    text = stringResource(SharedRes.strings.shared_build_shared_prosperity),
-                    color = MaterialTheme.colorScheme.primary
+            BodyText(
+                text = stringResource(SharedRes.strings.shared_build_shared_prosperity),
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+            TitleText(text = stringResource(SharedRes.strings.create_a_new_account))
+
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(20.dp))
+                DefaultOutlinedTextField(
+                    inputField = firstNameField,
+                    onValueChange = { onEvent(RegisterUiEvent.FirstNameChange(it)) },
+                    label = stringResource(SharedRes.strings.first_name),
+                    supportingText = {
+                        if (firstNameField.isError) {
+                            Text(text = firstNameField.error)
+                        } else {
+                            NamePrompt()
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    modifier = inputFieldCommonModifier.onFocusChanged {
+                        handleFocusChange(it.isFocused, firstNameField.name)
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-                TitleText(text = stringResource(SharedRes.strings.create_a_new_account))
-
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.height(20.dp))
-                    DefaultOutlinedTextField(
-                        inputField = firstNameField,
-                        onValueChange = { onEvent(RegisterUIEvent.FirstNameChange(it)) },
-                        label = stringResource(SharedRes.strings.first_name),
-                        supportingText = {
-                            if (firstNameField.isError) {
-                                Text(text = firstNameField.error)
-                            } else {
-                                NamePrompt()
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next,
-                            capitalization = KeyboardCapitalization.Words
-                        ),
-                        modifier = inputFieldCommonModifier.onFocusChanged {
-                            handleFocusChange(it.isFocused, firstNameField.name)
-                        }
-                    )
-
-                    DefaultOutlinedTextField(
-                        inputField = nickNameField,
-                        onValueChange = { onEvent(RegisterUIEvent.NickNameChange(it)) },
-                        label = stringResource(SharedRes.strings.preferred) + "/" +
-                                stringResource(SharedRes.strings.nick_name) + "(optional)",
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next,
-                            capitalization = KeyboardCapitalization.Words
-                        ),
-                    )
-
-                    DefaultOutlinedTextField(
-                        inputField = lastNameField,
-                        onValueChange = { onEvent(RegisterUIEvent.LastNameChange(it)) },
-                        label = stringResource(SharedRes.strings.last_name),
-                        supportingText = {
-                            if (lastNameField.isError) {
-                                Text(text = lastNameField.error)
-                            } else {
-                                NamePrompt()
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next,
-                            capitalization = KeyboardCapitalization.Words
-                        ),
-                        modifier = inputFieldCommonModifier.onFocusChanged {
-                            handleFocusChange(it.isFocused, lastNameField.name)
-                        }
-                    )
-
-                    DefaultOutlinedTextField(
-                        inputField = emailField,
-                        onValueChange = { onEvent(RegisterUIEvent.EmailChange(it)) },
-                        label = stringResource(SharedRes.strings.email),
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = inputFieldCommonModifier.onFocusChanged {
-                            handleFocusChange(it.isFocused, emailField.name)
-                        }
-                    )
-
-                    DefaultOutlinedTextField(
-                        inputField = phoneNumberField,
-                        onValueChange = { onEvent(RegisterUIEvent.PhoneNumberChange(it)) },
-                        label = stringResource(SharedRes.strings.phone_number),
-                        keyboardOptions = KeyboardOptions(
-                            autoCorrect = false,
-                            keyboardType = KeyboardType.Phone,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = inputFieldCommonModifier.onFocusChanged {
-                            handleFocusChange(it.isFocused, phoneNumberField.name)
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(40.dp))
-                    PasswordOutlinedTextField(
-                        inputField = passwordField,
-                        onValueChange = { onEvent(RegisterUIEvent.PasswordChange(it)) },
-                        label = stringResource(SharedRes.strings.password),
-                        onPasswordVisibilityChange = { showPassword = it },
-                        showPassword = showPassword,
-                        showCriteria = true,
-                        errors = passwordField.error.split(Regex("\n")),
+                DefaultOutlinedTextField(
+                    inputField = nickNameField,
+                    onValueChange = { onEvent(RegisterUiEvent.NickNameChange(it)) },
+                    label = stringResource(SharedRes.strings.preferred) + "/" +
+                            stringResource(SharedRes.strings.nick_name) + "(optional)",
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next,
-                    )
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                )
 
-                    PasswordOutlinedTextField(
-                        inputField = confirmPasswordField,
-                        onValueChange = { onEvent(RegisterUIEvent.ConfirmPasswordChange(it)) },
-                        label = stringResource(SharedRes.strings.confirm_password),
-                        onPasswordVisibilityChange = { showConfirmPassword = it },
-                        showPassword = showConfirmPassword,
-                        isError = confirmPasswordField.isError,
-                        supportingText = { Text(confirmPasswordField.error) },
-                        imeAction = ImeAction.Done,
-                    )
-
-                    Spacer(modifier = Modifier.height(40.dp))
-                    DefaultButton(onClick = { onEvent(RegisterUIEvent.Submit) }) {
-                        Text(text = stringResource(SharedRes.strings.create_account))
+                DefaultOutlinedTextField(
+                    inputField = lastNameField,
+                    onValueChange = { onEvent(RegisterUiEvent.LastNameChange(it)) },
+                    label = stringResource(SharedRes.strings.last_name),
+                    supportingText = {
+                        if (lastNameField.isError) {
+                            Text(text = lastNameField.error)
+                        } else {
+                            NamePrompt()
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    modifier = inputFieldCommonModifier.onFocusChanged {
+                        handleFocusChange(it.isFocused, lastNameField.name)
                     }
+                )
 
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row {
-                        BodyText(text = stringResource(SharedRes.strings.already_have_an_account))
-
-                        Spacer(modifier = Modifier.width(4.dp))
-                        BodyText(
-                            text = stringResource(SharedRes.strings.login),
-                            color = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.clickable(onClick = navigateToLogin)
-                        )
+                DefaultOutlinedTextField(
+                    inputField = emailField,
+                    onValueChange = { onEvent(RegisterUiEvent.EmailChange(it)) },
+                    label = stringResource(SharedRes.strings.email),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = inputFieldCommonModifier.onFocusChanged {
+                        handleFocusChange(it.isFocused, emailField.name)
                     }
+                )
+
+                DefaultOutlinedTextField(
+                    inputField = phoneNumberField,
+                    onValueChange = { onEvent(RegisterUiEvent.PhoneNumberChange(it)) },
+                    label = stringResource(SharedRes.strings.phone_number),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = inputFieldCommonModifier.onFocusChanged {
+                        handleFocusChange(it.isFocused, phoneNumberField.name)
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+                PasswordOutlinedTextField(
+                    inputField = passwordField,
+                    onValueChange = { onEvent(RegisterUiEvent.PasswordChange(it)) },
+                    label = stringResource(SharedRes.strings.password),
+                    onPasswordVisibilityChange = { showPassword = it },
+                    showPassword = showPassword,
+                    showCriteria = true,
+                    errors = passwordField.error.split(Regex("\n")),
+                    imeAction = ImeAction.Next,
+                )
+
+                PasswordOutlinedTextField(
+                    inputField = confirmPasswordField,
+                    onValueChange = { onEvent(RegisterUiEvent.ConfirmPasswordChange(it)) },
+                    label = stringResource(SharedRes.strings.confirm_password),
+                    onPasswordVisibilityChange = { showConfirmPassword = it },
+                    showPassword = showConfirmPassword,
+                    isError = confirmPasswordField.isError,
+                    supportingText = { Text(confirmPasswordField.error) },
+                    imeAction = ImeAction.Done,
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+                DefaultButton(onClick = { onEvent(RegisterUiEvent.Submit) }) {
+                    Text(text = stringResource(SharedRes.strings.create_account))
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Row {
+                    BodyText(text = stringResource(SharedRes.strings.already_have_an_account))
+
+                    Spacer(modifier = Modifier.width(4.dp))
+                    BodyText(
+                        text = stringResource(SharedRes.strings.login),
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.clickable(onClick = navigateToLogin)
+                    )
                 }
             }
         }

@@ -29,16 +29,16 @@ class EditProfileViewModel(
 
     private var lastFocusedField: String? = null
 
-    fun onEvent(event: EditProfileUIEvent) {
+    fun onEvent(event: EditProfileUiEvent) {
         when (event) {
-            is EditProfileUIEvent.EmailChange -> updateEmail(event.email)
-            is EditProfileUIEvent.FirstNameChange -> updateFirstName(event.firstName)
-            is EditProfileUIEvent.LastNameChange -> updateLastName(event.lastName)
-            is EditProfileUIEvent.NickNameChange -> updateNickName(event.nickName)
-            is EditProfileUIEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
-            is EditProfileUIEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
-            EditProfileUIEvent.InputFieldFocusLost -> validateLastFocusedField()
-            EditProfileUIEvent.OnSubmit -> attemptProfileEdit()
+            is EditProfileUiEvent.EmailChange -> updateEmail(event.email)
+            is EditProfileUiEvent.FirstNameChange -> updateFirstName(event.firstName)
+            is EditProfileUiEvent.LastNameChange -> updateLastName(event.lastName)
+            is EditProfileUiEvent.NickNameChange -> updateNickName(event.nickName)
+            is EditProfileUiEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
+            is EditProfileUiEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
+            EditProfileUiEvent.InputFieldFocusLost -> validateLastFocusedField()
+            EditProfileUiEvent.OnSubmit -> attemptProfileEdit()
         }
     }
 

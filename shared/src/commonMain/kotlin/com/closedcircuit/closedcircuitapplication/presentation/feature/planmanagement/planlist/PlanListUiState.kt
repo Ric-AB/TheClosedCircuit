@@ -2,6 +2,6 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.planmana
 
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plans
 
-data class PlanListUIState(
+data class PlanListUiState(
     val plans: Plans
 )

@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.domain.user
 
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 
 data class UserDashboard(
     val user: User,

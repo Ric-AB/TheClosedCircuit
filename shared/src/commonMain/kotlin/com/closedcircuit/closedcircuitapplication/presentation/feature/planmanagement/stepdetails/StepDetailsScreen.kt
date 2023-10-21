@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
@@ -81,7 +80,7 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
 
 @Composable
 private fun ScreenContent(
-    uiState: StepDetailsUIState,
+    uiState: StepDetailsUiState,
     goBack: () -> Unit,
     navigateToSaveStep: () -> Unit
 ) {

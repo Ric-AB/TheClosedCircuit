@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.dashboar
 
 import com.closedcircuit.closedcircuitapplication.domain.donation.Donations
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plans
-import com.closedcircuit.closedcircuitapplication.domain.user.Sponsor
+import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.domain.wallet.Wallet
 import kotlinx.collections.immutable.ImmutableList

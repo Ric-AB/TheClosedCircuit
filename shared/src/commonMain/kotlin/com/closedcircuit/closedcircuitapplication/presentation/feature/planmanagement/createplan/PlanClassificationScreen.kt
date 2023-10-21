@@ -44,7 +44,7 @@ internal class PlanClassificationScreen : Screen, KoinComponent {
 @Composable
 private fun ScreenContent(
     uiState: CreatePlanUIState,
-    onEvent: (CreatePlanUIEvent) -> Unit,
+    onEvent: (CreatePlanUiEvent) -> Unit,
     navigateToPlanInfoScreen: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -67,7 +67,7 @@ private fun ScreenContent(
                 items = uiState.categories,
                 selectedItemToString = { it.value },
                 selectedItem = uiState.category,
-                onItemSelected = { _, item -> onEvent(CreatePlanUIEvent.CategoryChange(item)) },
+                onItemSelected = { _, item -> onEvent(CreatePlanUiEvent.CategoryChange(item)) },
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -77,7 +77,7 @@ private fun ScreenContent(
                 items = uiState.sectors,
                 selectedItemToString = { it.value },
                 selectedItem = uiState.sector,
-                onItemSelected = { _, item -> onEvent(CreatePlanUIEvent.SectorChange(item)) },
+                onItemSelected = { _, item -> onEvent(CreatePlanUiEvent.SectorChange(item)) },
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -87,7 +87,7 @@ private fun ScreenContent(
                 items = uiState.businessTypes,
                 selectedItemToString = { it.value },
                 selectedItem = uiState.businessType,
-                onItemSelected = { _, item -> onEvent(CreatePlanUIEvent.BusinessType(item)) },
+                onItemSelected = { _, item -> onEvent(CreatePlanUiEvent.BusinessType(item)) },
             )
         }
 

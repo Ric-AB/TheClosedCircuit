@@ -37,7 +37,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.TitleTe
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home.ProfileScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ModalTransition
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
@@ -49,7 +49,7 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 internal class ProfileVerificationScreen(val email: Email) : Screen, KoinComponent,
-    CustomScreenTransition by ModalTransition {
+    CustomScreenTransition by SlideUpTransition {
     private val viewModel: ProfileVerificationViewModel by inject { parametersOf(email) }
 
     @Composable
@@ -61,9 +61,9 @@ internal class ProfileVerificationScreen(val email: Email) : Screen, KoinCompone
         var otpError by remember { mutableStateOf(false) }
         val onOtpChange: (String, Boolean) -> Unit = { text, codeComplete ->
             otpError = false
-            onEvent(ProfileVerificationUIEvent.OtpChange(text))
+            onEvent(ProfileVerificationUiEvent.OtpChange(text))
             if (codeComplete) {
-                onEvent(ProfileVerificationUIEvent.Submit)
+                onEvent(ProfileVerificationUiEvent.Submit)
             }
         }
 
@@ -90,7 +90,7 @@ internal class ProfileVerificationScreen(val email: Email) : Screen, KoinCompone
             uiState = uiState,
             otpError = otpError,
             otpChange = onOtpChange,
-            resendOtp = { onEvent(ProfileVerificationUIEvent.RequestOtp(isResend = true)) },
+            resendOtp = { onEvent(ProfileVerificationUiEvent.RequestOtp(isResend = true)) },
             goBack = navigator::pop
         )
     }

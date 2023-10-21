@@ -23,7 +23,7 @@ class PlanDetailsViewModel(
         stepRepository.getStepsForPlanAsFlow(planID),
         budgetRepository.getBudgetsForPlanAsFlow(planID)
     ) { plan, steps, budgets ->
-        PlanDetailsUIState(
+        PlanDetailsUiState(
             plan = plan,
             steps = steps,
             budgets = budgets
@@ -31,6 +31,6 @@ class PlanDetailsViewModel(
     }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.WhileSubscribed(5_000L),
-        initialValue = PlanDetailsUIState.init(plan)
+        initialValue = PlanDetailsUiState.init(plan)
     )
 }

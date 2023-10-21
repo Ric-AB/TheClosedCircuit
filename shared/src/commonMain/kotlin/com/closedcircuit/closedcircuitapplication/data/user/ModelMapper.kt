@@ -13,7 +13,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
-import com.closedcircuit.closedcircuitapplication.domain.user.Sponsor
+import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 
 fun ApiUser.asUser() = User(
     id = ID(id),

@@ -8,11 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -84,20 +83,20 @@ internal class ResetPasswordEmailScreen : Screen, KoinComponent,
 private fun ScreenContent(
     messageBarState: MessageBarState,
     state: ResetPasswordUIState,
-    onEvent: (ResetPasswordUIEvent) -> Unit,
+    onEvent: (ResetPasswordUiEvent) -> Unit,
     goBack: () -> Unit
 ) {
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
         isLoading = state.loading,
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
         ) {
             TitleText(text = stringResource(SharedRes.strings.password_recovery))
 
@@ -115,7 +114,7 @@ private fun ScreenContent(
                 Spacer(modifier = Modifier.height(40.dp))
                 DefaultOutlinedTextField(
                     inputField = state.emailField,
-                    onValueChange = { onEvent(ResetPasswordUIEvent.EmailChange(it)) },
+                    onValueChange = { onEvent(ResetPasswordUiEvent.EmailChange(it)) },
                     label = stringResource(SharedRes.strings.email),
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
@@ -125,7 +124,7 @@ private fun ScreenContent(
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-                DefaultButton(onClick = { onEvent(ResetPasswordUIEvent.RequestOtp()) }) {
+                DefaultButton(onClick = { onEvent(ResetPasswordUiEvent.RequestOtp()) }) {
                     Text(stringResource(SharedRes.strings.reset_password))
                 }
 

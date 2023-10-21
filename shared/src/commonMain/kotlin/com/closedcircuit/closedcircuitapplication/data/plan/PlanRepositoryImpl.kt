@@ -23,7 +23,7 @@ class PlanRepositoryImpl(
     database: TheClosedCircuitDatabase,
     private val planService: PlanService,
     private val ioDispatcher: CoroutineDispatcher,
-    private val defaultDispatcher: CoroutineDispatcher
+    defaultDispatcher: CoroutineDispatcher
 ) : PlanRepository {
     private val queries = database.planEntityQueries
 

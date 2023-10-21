@@ -7,10 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,8 +32,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.remembe
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -54,9 +53,9 @@ internal class ResetPasswordOtpScreen : Screen, KoinComponent,
         var otpError by remember { mutableStateOf(false) }
         val onOtpChange: (String, Boolean) -> Unit = { text, codeComplete ->
             otpError = false
-            onEvent(ResetPasswordUIEvent.OtpCodeChange(text))
+            onEvent(ResetPasswordUiEvent.OtpCodeChange(text))
             if (codeComplete) {
-                onEvent(ResetPasswordUIEvent.SubmitOtp)
+                onEvent(ResetPasswordUiEvent.SubmitOtp)
             }
         }
 
@@ -89,7 +88,7 @@ internal class ResetPasswordOtpScreen : Screen, KoinComponent,
             messageBarState = messageBarState,
             state = state,
             otpChange = onOtpChange,
-            resendOtp = { onEvent(ResetPasswordUIEvent.RequestOtp(true)) },
+            resendOtp = { onEvent(ResetPasswordUiEvent.RequestOtp(true)) },
             otpError = otpError,
             goBack = navigator::pop
         )
@@ -109,13 +108,13 @@ private fun ScreenContent(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
         isLoading = state.loading,
+        contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
         ) {
             TitleText(text = stringResource(SharedRes.strings.password_recovery))
 

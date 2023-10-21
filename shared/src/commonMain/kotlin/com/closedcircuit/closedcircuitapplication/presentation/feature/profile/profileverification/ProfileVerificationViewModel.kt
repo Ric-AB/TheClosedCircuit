@@ -27,11 +27,11 @@ class ProfileVerificationViewModel(
         requestOtp()
     }
 
-    fun onEvent(event: ProfileVerificationUIEvent) {
+    fun onEvent(event: ProfileVerificationUiEvent) {
         when (event) {
-            is ProfileVerificationUIEvent.OtpChange -> updateOtp(event.otp)
-            is ProfileVerificationUIEvent.RequestOtp -> requestOtp(event.isResend)
-            ProfileVerificationUIEvent.Submit -> submitOtp()
+            is ProfileVerificationUiEvent.OtpChange -> updateOtp(event.otp)
+            is ProfileVerificationUiEvent.RequestOtp -> requestOtp(event.isResend)
+            ProfileVerificationUiEvent.Submit -> submitOtp()
         }
     }
 

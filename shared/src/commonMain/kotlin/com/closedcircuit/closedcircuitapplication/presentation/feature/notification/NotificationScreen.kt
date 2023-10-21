@@ -81,13 +81,13 @@ internal class NotificationScreen : Screen, KoinComponent {
         ScreenContent(
             uiState = uiState,
             goBack = navigator::pop,
-            toggleSelection = { onEvent(NotificationUIEvent.ToggleSelection(it)) },
-            resetSelection = { onEvent(NotificationUIEvent.ResetSelection) },
-            markAllAsRead = { onEvent(NotificationUIEvent.MarkAllAsRead) },
+            toggleSelection = { onEvent(NotificationUiEvent.ToggleSelection(it)) },
+            resetSelection = { onEvent(NotificationUiEvent.ResetSelection) },
+            markAllAsRead = { onEvent(NotificationUiEvent.MarkAllAsRead) },
             deleteNotification = { index, id ->
-                onEvent(NotificationUIEvent.DeleteNotification(index, id))
+                onEvent(NotificationUiEvent.DeleteNotification(index, id))
             },
-            deleteMultipleNotifications = { onEvent(NotificationUIEvent.DeleteMultipleNotifications) }
+            deleteMultipleNotifications = { onEvent(NotificationUiEvent.DeleteMultipleNotifications) }
         )
 
     }

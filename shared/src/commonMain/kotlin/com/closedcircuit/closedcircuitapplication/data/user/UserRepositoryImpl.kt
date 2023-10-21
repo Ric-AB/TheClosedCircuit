@@ -3,15 +3,15 @@ package com.closedcircuit.closedcircuitapplication.data.user
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
+import com.closedcircuit.closedcircuitapplication.data.user.dto.KycRequest
 import com.closedcircuit.closedcircuitapplication.data.user.dto.UpdateUserRequest
 import com.closedcircuit.closedcircuitapplication.data.user.dto.UserDashboardResponse
+import com.closedcircuit.closedcircuitapplication.domain.user.KycVerificationType
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import io.github.xxfast.kstore.KStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
@@ -71,12 +71,15 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun requestEmailVerificationOtp(email: String): ApiResponse<Unit> {
-        TODO()
-    }
-
-    override suspend fun verifyEmailVerificationOtp(email: String, otp: String): ApiResponse<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun verifyKyc(
+        verificationType: KycVerificationType,
+        verificationNumber: String
+    ): ApiResponse<Unit> {
+        return withContext(ioDispatcher) {
+            val requestBody =
+                KycRequest(idType = verificationType.name, idNumber = verificationNumber, dateOfBirth = null)
+            userService.sendKycDetails(requestBody)
+        }
     }
 
     private fun updateUserLocally(user: User) {
