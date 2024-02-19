@@ -183,14 +183,14 @@ private fun NotificationBody(
 
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            if (uiState.notificationsState.isEmpty()) {
+            if (uiState.notificationItems.isEmpty()) {
                 EmptyNotification(modifier = Modifier.align(Alignment.BottomCenter))
             } else {
-                LaunchedEffect(uiState.notificationsState.toList()) {
+                LaunchedEffect(uiState.notificationItems.toList()) {
                     var anyUnread = false
                     var anySelected = false
                     var numberOfSelection = 0
-                    uiState.notificationsState.toList().forEach {
+                    uiState.notificationItems.toList().forEach {
                         if (it.isSelected) {
                             anySelected = true
                             numberOfSelection++
@@ -204,11 +204,11 @@ private fun NotificationBody(
 
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     itemsIndexed(
-                        items = uiState.notificationsState,
+                        items = uiState.notificationItems,
                         key = { _, item -> item.notification.id.value }) { index, item ->
                         NotificationItem(
                             modifier = Modifier.fillMaxWidth().animateItemPlacement(),
-                            notificationState = item,
+                            notificationItem = item,
                             toggleSelection = { toggleSelection(index) },
                             deleteNotification = { deleteNotification(index, item.notification.id) }
                         )
@@ -222,15 +222,15 @@ private fun NotificationBody(
 @Composable
 private fun NotificationItem(
     modifier: Modifier = Modifier,
-    notificationState: NotificationState,
+    notificationItem: NotificationItem,
     toggleSelection: () -> Unit,
     deleteNotification: () -> Unit
 ) {
-    val notification = notificationState.notification
+    val notification = notificationItem.notification
     Row(
         modifier = modifier
             .conditional(
-                condition = notificationState.isSelected,
+                condition = notificationItem.isSelected,
                 ifTrue = {
                     padding(horizontal = 10.dp)
                         .background(

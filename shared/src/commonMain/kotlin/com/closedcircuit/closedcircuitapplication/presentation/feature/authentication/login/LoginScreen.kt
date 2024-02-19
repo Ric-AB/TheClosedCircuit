@@ -142,7 +142,7 @@ private fun ScreenContent(
                     )
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 PasswordOutlinedTextField(
                     inputField = passwordField,
                     onValueChange = { onEvent(LoginUiEvent.PasswordChange(it)) },

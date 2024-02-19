@@ -65,6 +65,7 @@ class EditProfileViewModel(
                         _editProfileResult.send(EditProfileResult.Failure(message))
                     }
             }
+            state = state.copy(isLoading = false)
         }
     }
 

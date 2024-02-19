@@ -9,13 +9,13 @@ sealed interface NotificationUIState {
     object InitialLoading : NotificationUIState
     data class DataLoaded(
         val isLoading: Boolean = false,
-        val notificationsState: SnapshotStateList<NotificationState> = mutableStateListOf()
+        val notificationItems: SnapshotStateList<NotificationItem> = mutableStateListOf()
     ) : NotificationUIState
 
     data class Error(val message: String) : NotificationUIState
 }
 
-data class NotificationState(
+data class NotificationItem(
     val isSelected: Boolean,
     val notification: Notification
 )

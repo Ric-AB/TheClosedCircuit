@@ -18,8 +18,15 @@ class RegisterUseCase(
         password: String,
         confirmPassword: String
     ): ApiResponse<Unit> {
-        var registerResult =
-            authRepository.register(fullName, email, roles, phoneNumber, password, confirmPassword)
+        var registerResult = authRepository.register(
+            fullName = fullName,
+            email = email,
+            roles = roles,
+            phoneNumber = phoneNumber,
+            password = password,
+            confirmPassword = confirmPassword
+        )
+
         registerResult.onSuccess {
             loginUseCase(email, password).onError { code, message ->
                 registerResult = ApiErrorResponse(message, code)

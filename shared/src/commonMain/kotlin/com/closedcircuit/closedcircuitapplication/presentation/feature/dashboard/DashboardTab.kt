@@ -60,6 +60,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BaseSca
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
@@ -98,7 +99,8 @@ internal object DashboardTab : Tab, KoinComponent {
             messageBarState = messageBarState,
             uiState = uiState,
             navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
-            navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
+            navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
+            navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
         )
     }
 }
@@ -109,7 +111,8 @@ private fun ScreenContent(
     messageBarState: MessageBarState,
     uiState: DashboardUIState,
     navigateToPlanListScreen: () -> Unit,
-    navigateToNotificationScreen: () -> Unit
+    navigateToNotificationScreen: () -> Unit,
+    navigateToLoginScreen: () -> Unit
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
@@ -152,6 +155,10 @@ private fun ScreenContent(
             item {
                 DefaultButton(onClick = navigateToPlanListScreen) {
                     Text("Go")
+                }
+
+                DefaultButton(onClick = navigateToLoginScreen) {
+                    Text("Logout")
                 }
             }
         }

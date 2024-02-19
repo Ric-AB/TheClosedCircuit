@@ -24,7 +24,7 @@ class NotificationViewModel(
     private val initialLoadingFlow = MutableStateFlow(true)
     private val errorLoadingMessageFlow = MutableStateFlow<String?>(null)
     private val isLoadingFlow = MutableStateFlow(false)
-    private val notificationsState = mutableStateListOf<NotificationState>()
+    private val notificationItems = mutableStateListOf<NotificationItem>()
 
 
     val state: StateFlow<NotificationUIState> =
@@ -32,7 +32,7 @@ class NotificationViewModel(
             initialLoadingFlow,
             errorLoadingMessageFlow,
             isLoadingFlow,
-            snapshotFlow { notificationsState }
+            snapshotFlow { notificationItems }
         ) { initialLoading, errorLoadingMessage, isLoading, notifications ->
             when {
                 initialLoading -> NotificationUIState.InitialLoading
@@ -40,7 +40,7 @@ class NotificationViewModel(
                 else -> {
                     NotificationUIState.DataLoaded(
                         isLoading = isLoading,
-                        notificationsState = notifications
+                        notificationItems = notifications
                     )
                 }
             }
@@ -71,11 +71,11 @@ class NotificationViewModel(
         coroutineScope.launch {
             notificationRepository.getNotifications().onSuccess { notifications ->
                 val notificationsState = notifications.map {
-                    NotificationState(isSelected = false, notification = it)
+                    NotificationItem(isSelected = false, notification = it)
                 }.toMutableStateList()
 
-                this@NotificationViewModel.notificationsState.clear()
-                this@NotificationViewModel.notificationsState.addAll(notificationsState)
+                this@NotificationViewModel.notificationItems.clear()
+                this@NotificationViewModel.notificationItems.addAll(notificationsState)
                 errorLoadingMessageFlow.update { null }
                 initialLoadingFlow.update { false }
             }.onError { _, message ->
@@ -88,14 +88,17 @@ class NotificationViewModel(
     private fun deleteMultipleNotifications() {
         isLoadingFlow.update { true }
 
-        val partitionedNotifications = notificationsState.partition { it.isSelected }
+        val partitionedNotifications = notificationItems.partition { it.isSelected }
         val selectedIds = partitionedNotifications.first.map { it.notification.id }
 
         coroutineScope.launch {
             notificationRepository.deleteMultipleNotifications(selectedIds)
                 .onSuccess {
                     isLoadingFlow.update { false }
-                    notificationsState.removeAll(partitionedNotifications.first)
+                    notificationItems.removeAll(partitionedNotifications.first)
+                }.onError { _, message ->
+                    isLoadingFlow.update { false }
+                    errorLoadingMessageFlow.emit(message)
                 }
         }
     }
@@ -107,7 +110,10 @@ class NotificationViewModel(
             notificationRepository.deleteNotification(id)
                 .onSuccess {
                     isLoadingFlow.update { false }
-                    notificationsState.removeAt(index)
+                    notificationItems.removeAt(index)
+                }.onError { _, message ->
+                    isLoadingFlow.update { false }
+                    errorLoadingMessageFlow.emit(message)
                 }
         }
     }
@@ -119,16 +125,16 @@ class NotificationViewModel(
     }
 
     private fun toggleSelection(index: Int) {
-        val item = notificationsState[index]
+        val item = notificationItems[index]
         val isItemSelected = item.isSelected
 
-        notificationsState[index] = item.copy(isSelected = !isItemSelected)
+        notificationItems[index] = item.copy(isSelected = !isItemSelected)
     }
 
     private fun resetSelection() {
-        for (i in 0 until notificationsState.size) {
-            val item = notificationsState[i]
-            notificationsState[i] = item.copy(isSelected = false)
+        for (i in 0 until notificationItems.size) {
+            val item = notificationItems[i]
+            notificationItems[i] = item.copy(isSelected = false)
         }
     }
 }
