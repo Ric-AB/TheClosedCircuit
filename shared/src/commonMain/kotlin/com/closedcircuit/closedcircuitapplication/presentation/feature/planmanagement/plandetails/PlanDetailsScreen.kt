@@ -109,7 +109,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
             uiState = uiState,
             goBack = navigator::pop,
             navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
-            navigateToFundRequest = { navigator.push(FundRequestScreen) },
+            navigateToFundRequest = { navigator.push(FundRequestScreen()) },
             navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) },
             navigateToSaveStep = { navigator.push(SaveStepScreen(plan.id)) }
         )

@@ -30,10 +30,11 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHori
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.InputField
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.core.component.KoinComponent
 
-internal object FundRequestScreen : Screen, KoinComponent {
+internal class FundRequestScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -51,7 +52,7 @@ private fun ScreenContent(goBack: () -> Unit) {
                 .padding(innerPadding)
                 .padding(horizontal = defaultHorizontalScreenPadding)
         ) {
-            TitleText(text = "How do you want to be supported?")
+            TitleText(text = stringResource(SharedRes.strings.how_do_you_want_to_be_supported_label))
 
             Spacer(modifier = Modifier.height(8.dp))
             LargeDropdownMenu(
@@ -66,14 +67,14 @@ private fun ScreenContent(goBack: () -> Unit) {
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-            TitleText(text = "Loan schedule")
-            BodyText(text = "Select your preferred loan schedule")
+            TitleText(stringResource(SharedRes.strings.loan_schedule_label))
+            BodyText(stringResource(SharedRes.strings.select_your_preferred_loan_schedule_label))
 
-            Text(text = "What's your loan range?")
+            Text(text = stringResource(SharedRes.strings.what_your_loan_range_label))
             DefaultOutlinedTextField(
                 inputField = InputField(),
                 onValueChange = { },
-                placeholder = { Text(text = "Minimum amount") },
+                placeholder = { Text(stringResource(SharedRes.strings.minimum_amount_label)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Number
@@ -86,7 +87,7 @@ private fun ScreenContent(goBack: () -> Unit) {
             DefaultOutlinedTextField(
                 inputField = InputField(),
                 onValueChange = { },
-                placeholder = { Text(text = "Maximum amount") },
+                placeholder = { Text(stringResource(SharedRes.strings.maximum_amount_label)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Number
@@ -98,24 +99,24 @@ private fun ScreenContent(goBack: () -> Unit) {
             Spacer(modifier = Modifier.height(12.dp))
             LargeDropdownMenu(
                 modifier = Modifier.fillMaxWidth(),
-                label = "Select maximum number of lenders",
-                items = persistentListOf("1", "2", "3"),
+                label = stringResource(SharedRes.strings.select_maximum_number_of_lenders_label),
+                items = getNumberOfLenders(),
                 onItemSelected = { _, item -> },
             )
 
             Spacer(modifier = Modifier.height(12.dp))
             LargeDropdownMenu(
                 modifier = Modifier.fillMaxWidth(),
-                label = "Select grace duration",
-                items = persistentListOf("3", "6", "9", "12", "15", "18"),
+                label = stringResource(SharedRes.strings.select_grace_duration_label),
+                items = getDurations(),
                 onItemSelected = { _, item -> },
             )
 
             Spacer(modifier = Modifier.height(12.dp))
             LargeDropdownMenu(
                 modifier = Modifier.fillMaxWidth(),
-                label = "Select repayment duration",
-                items = persistentListOf("3", "6", "9", "12", "15", "18"),
+                label = stringResource(SharedRes.strings.select_repayment_duration_label),
+                items = getDurations(),
                 onItemSelected = { _, item -> },
             )
 
@@ -123,7 +124,7 @@ private fun ScreenContent(goBack: () -> Unit) {
             TopLabeledTextField(
                 inputField = InputField(),
                 onValueChange = { },
-                label = "Enter loan interest rate (%)",
+                label = stringResource(SharedRes.strings.enter_loan_interest_rate_label),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Number
@@ -134,8 +135,16 @@ private fun ScreenContent(goBack: () -> Unit) {
 
             Spacer(modifier = Modifier.height(40.dp))
             DefaultButton(onClick = {}) {
-                Text(text = "Proceed")
+                Text(stringResource(SharedRes.strings.proceed))
             }
         }
     }
+}
+
+private fun getDurations(): ImmutableList<String> {
+    return persistentListOf("3", "6", "9", "12", "15", "18")
+}
+
+private fun getNumberOfLenders(): ImmutableList<String> {
+    return persistentListOf("1", "2", "3")
 }

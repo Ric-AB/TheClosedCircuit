@@ -180,4 +180,15 @@
     <string name="verify_phone_number">Verify Phone Number</string>
     <string name="enter_registered_phone_number">Enter your registered Nigerian phone number
     </string>
+    <string name="how_do_you_want_to_be_supported_label">How do you want to be supported?</string>
+    <string name="loan_schedule_label">Loan schedule</string>
+    <string name="select_your_preferred_loan_schedule_label">Select your preferred loan schedule
+    </string>
+    <string name="what_your_loan_range_label">What's your loan range?</string>
+    <string name="minimum_amount_label">Minimum amount</string>
+    <string name="maximum_amount_label">Maximum amount</string>
+    <string name="select_maximum_number_of_lenders_label">Select maximum number of lenders</string>
+    <string name="select_grace_duration_label">Select grace duration</string>
+    <string name="select_repayment_duration_label">Select repayment duration</string>
+    <string name="enter_loan_interest_rate_label">Enter loan interest rate (%)</string>
 </resources>
