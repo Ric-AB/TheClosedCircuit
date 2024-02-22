@@ -62,17 +62,20 @@ internal object KycWrapperScreen : Screen, KoinComponent {
 private fun ScreenContent(uiState: KycUiState, goBack: () -> Unit) {
     var innerNavigator: Navigator? by remember { mutableStateOf(null) }
     val startScreen = remember {
-        if (uiState.hasAttemptedKyc) KycStatusScreen() else KycHomeScreen()
+        if (uiState.hasAttemptedKyc) KycStatusScreen()
+        else KycHomeScreen()
+    }
+
+    val pop: () -> Unit = {
+        if (innerNavigator?.canPop == true) innerNavigator?.pop()
+        else goBack()
     }
 
     BaseScaffold(
         topBar = {
             DefaultAppBar(
                 title = stringResource(SharedRes.strings.document_verification),
-                mainAction = {
-                    if (innerNavigator?.canPop == true) innerNavigator?.pop()
-                    else goBack()
-                }
+                mainAction = pop
             )
         },
         contentWindowInsets = WindowInsets.safeDrawing

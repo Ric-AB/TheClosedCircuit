@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.usecase.RegisterUseCase
@@ -50,7 +50,7 @@ class RegisterViewModel(
             val confirmPassword = confirmPasswordField.value
 
             state = state.copy(isLoading = true)
-            coroutineScope.launch {
+            screenModelScope.launch {
                 registerUseCase(
                     fullName,
                     email,

@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,7 +20,7 @@ class ProfileViewModel(
     val state: StateFlow<ProfileUIState?> = combine(userFlow, plansFlow) { user, plans ->
         ProfileUIState.init(user)
     }.stateIn(
-        coroutineScope,
+        screenModelScope,
         SharingStarted.WhileSubscribed(),
         ProfileUIState.init(userFlow.value)
     )

@@ -61,6 +61,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycHomeScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
@@ -98,7 +99,7 @@ internal object DashboardTab : Tab, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             uiState = uiState,
-            navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
+            navigateToPlanListScreen = { navigator.push(KycHomeScreen()) },
             navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
             navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
         )

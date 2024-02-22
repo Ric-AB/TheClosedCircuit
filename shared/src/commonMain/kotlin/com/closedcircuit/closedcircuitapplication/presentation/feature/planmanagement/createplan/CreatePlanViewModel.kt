@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
@@ -44,7 +44,7 @@ class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : Sc
     private fun attemptPlanCreation() {
         if (areFieldsValid()) {
             state = state.copy(isLoading = true)
-            coroutineScope.launch {
+            screenModelScope.launch {
                 createPlanUseCase(buildPlan())
                     .onSuccess {
                         state = state.copy(isLoading = false)

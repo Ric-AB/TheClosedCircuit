@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,7 +13,7 @@ class PlanListViewModel(planRepository: PlanRepository) : ScreenModel {
     val stateFlow = planRepository.plansFlow
         .map { PlanListUiState(it) }
         .stateIn(
-            coroutineScope,
+            screenModelScope,
             SharingStarted.WhileSubscribed(5_000L),
             PlanListUiState(persistentListOf())
         )

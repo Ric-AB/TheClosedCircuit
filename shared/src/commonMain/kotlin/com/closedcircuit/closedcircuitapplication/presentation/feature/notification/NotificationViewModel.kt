@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.toMutableStateList
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
@@ -45,7 +45,7 @@ class NotificationViewModel(
                 }
             }
         }.stateIn(
-            scope = coroutineScope,
+            scope = screenModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = NotificationUIState.InitialLoading
         )
@@ -68,7 +68,7 @@ class NotificationViewModel(
 
     private fun getNotifications() {
         initialLoadingFlow.update { true }
-        coroutineScope.launch {
+        screenModelScope.launch {
             notificationRepository.getNotifications().onSuccess { notifications ->
                 val notificationsState = notifications.map {
                     NotificationItem(isSelected = false, notification = it)
@@ -91,7 +91,7 @@ class NotificationViewModel(
         val partitionedNotifications = notificationItems.partition { it.isSelected }
         val selectedIds = partitionedNotifications.first.map { it.notification.id }
 
-        coroutineScope.launch {
+        screenModelScope.launch {
             notificationRepository.deleteMultipleNotifications(selectedIds)
                 .onSuccess {
                     isLoadingFlow.update { false }
@@ -106,7 +106,7 @@ class NotificationViewModel(
     private fun deleteNotification(index: Int, id: ID) {
         isLoadingFlow.update { true }
 
-        coroutineScope.launch {
+        screenModelScope.launch {
             notificationRepository.deleteNotification(id)
                 .onSuccess {
                     isLoadingFlow.update { false }
@@ -119,7 +119,7 @@ class NotificationViewModel(
     }
 
     private fun markAllAsRead() {
-        coroutineScope.launch {
+        screenModelScope.launch {
             notificationRepository.markAllAsRead()
         }
     }

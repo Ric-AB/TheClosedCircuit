@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.domain.step.StepRepository
@@ -22,7 +22,7 @@ class StepDetailsViewModel(
     ) { step, budgets ->
         StepDetailsUiState(step = step, budgets = budgets)
     }.stateIn(
-        scope = coroutineScope,
+        scope = screenModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = StepDetailsUiState.init(step)
     )

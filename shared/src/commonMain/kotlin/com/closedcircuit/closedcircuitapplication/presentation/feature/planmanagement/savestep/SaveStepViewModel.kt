@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.ApiErrorResponse
 import com.closedcircuit.closedcircuitapplication.core.network.ApiSuccessResponse
 import com.closedcircuit.closedcircuitapplication.core.network.onError
@@ -61,7 +61,7 @@ class SaveStepViewModel(
 
     private fun getBudgetsForStep() {
         if (step != null) {
-            coroutineScope.launch {
+            screenModelScope.launch {
                 val budgets = budgetRepository.getBudgetsForStep(step.id)
                 setBudgetItemsInState(budgets)
             }
@@ -77,7 +77,7 @@ class SaveStepViewModel(
         state = state.copy(isLoading = true)
 
         val (stepAction, step) = buildStep()
-        coroutineScope.launch {
+        screenModelScope.launch {
             val stepResult = if (stepAction == Action.CREATE) stepRepository.createStep(step)
             else stepRepository.updateStep(step)
 

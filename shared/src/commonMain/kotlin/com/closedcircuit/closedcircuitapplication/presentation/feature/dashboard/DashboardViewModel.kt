@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.usecase.GetUserDashboardUseCase
@@ -35,7 +35,7 @@ class DashboardViewModel(
                 recentPlans = allPlans,
                 recentDonation = recentDonations
             )
-        }.stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000L), DashboardUIState())
+        }.stateIn(screenModelScope, SharingStarted.WhileSubscribed(5_000L), DashboardUIState())
 
     init {
         fetchData()
@@ -48,7 +48,7 @@ class DashboardViewModel(
     }
 
     private fun fetchData() {
-        coroutineScope.launch {
+        screenModelScope.launch {
 //            launch { planRepository.fetchPlans() }
               val res = planRepository.fetchPlans()
             Napier.d("Plans:: $res")

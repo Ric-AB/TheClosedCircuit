@@ -25,7 +25,7 @@ ktorfit-compiler = '1.0.0'
 mokoResources = "0.23.0"
 napier = "2.6.1"
 sqlDelight = "2.0.0"
-voyager = "1.0.0-rc06"
+voyager = "1.0.0"
 
 [libraries]
 
@@ -64,6 +64,7 @@ sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", 
 sqldelight-primitiveAdapters = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqlDelight" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-screenModel = {module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager"}
 voyager-tab = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 
