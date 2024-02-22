@@ -184,7 +184,7 @@
     <string name="loan_schedule_label">Loan schedule</string>
     <string name="select_your_preferred_loan_schedule_label">Select your preferred loan schedule
     </string>
-    <string name="what_your_loan_range_label">What's your loan range?</string>
+    <string name="what_your_loan_range_label">What\'s your loan range?</string>
     <string name="minimum_amount_label">Minimum amount</string>
     <string name="maximum_amount_label">Maximum amount</string>
     <string name="select_maximum_number_of_lenders_label">Select maximum number of lenders</string>
