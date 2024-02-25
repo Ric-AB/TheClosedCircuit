@@ -31,8 +31,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Success
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.ScreenBasedTransition
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object CreatePlanWrapperScreen : Screen, KoinComponent {
+internal object CreatePlanNavigator : Screen, KoinComponent {
     private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
@@ -103,8 +103,8 @@ private fun ScreenContent(
                         .padding(innerPadding)
                         .verticalScroll(rememberScrollState())
                         .padding(
-                            horizontal = defaultHorizontalScreenPadding,
-                            vertical = defaultVerticalScreenPadding
+                            horizontal = horizontalScreenPadding,
+                            vertical = verticalScreenPadding
                         )
                 )
             }

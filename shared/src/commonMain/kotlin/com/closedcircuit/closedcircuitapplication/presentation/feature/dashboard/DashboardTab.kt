@@ -61,12 +61,11 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycHomeScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
@@ -99,7 +98,7 @@ internal object DashboardTab : Tab, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             uiState = uiState,
-            navigateToPlanListScreen = { navigator.push(KycHomeScreen()) },
+            navigateToPlanListScreen = { navigator.push(KycNavigator()) },
             navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
             navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
         )
@@ -128,7 +127,7 @@ private fun ScreenContent(
                 Spacer(modifier = Modifier.height(24.dp))
                 WalletCard(
                     wallet = uiState.wallet,
-                    modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
+                    modifier = Modifier.padding(horizontal = horizontalScreenPadding)
                 )
             }
 
@@ -148,7 +147,7 @@ private fun ScreenContent(
                     RecentPlans(
                         recentPlans = recentPlans,
                         modifier = Modifier.animateItemPlacement(),
-                        headerModifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
+                        headerModifier = Modifier.padding(horizontal = horizontalScreenPadding)
                     )
                 }
             }
@@ -232,7 +231,7 @@ private fun RecentPlans(
         Spacer(modifier = Modifier.height(4.dp))
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = defaultHorizontalScreenPadding)
+            contentPadding = PaddingValues(horizontal = horizontalScreenPadding)
         ) {
             items(recentPlans) {
                 Card(

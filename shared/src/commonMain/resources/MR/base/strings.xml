@@ -82,7 +82,7 @@
     <string name="your_account">Your account</string>
     <string name="personal_data">Personal data</string>
     <string name="edit_profile">Edit profile</string>
-    <string name="account_status">Account status</string>
+    <string name="account_status">Account Status</string>
     <string name="country">Country</string>
     <string name="hello_user">Hello, %s!</string>
     <string name="full_name">Full name</string>
@@ -152,8 +152,8 @@
     <string name="delete">Delete</string>
 
     <!--    Kyc-->
-    <string name="document_verification">Document verification</string>
-    <string name="input_verification_details">Input verification details</string>
+    <string name="document_verification">Document Verification</string>
+    <string name="input_verification_details">Input Verification Details</string>
     <string name="id_number">ID number</string>
     <string name="we_need_to_verify_identity">We need to verify your Means of Identification
     </string>
@@ -191,4 +191,12 @@
     <string name="select_grace_duration_label">Select grace duration</string>
     <string name="select_repayment_duration_label">Select repayment duration</string>
     <string name="enter_loan_interest_rate_label">Enter loan interest rate (%)</string>
+    <string name="verification_failed_label">Verification failed</string>
+    <string name="verification_pending_label">Verification pending</string>
+    <string name="verified_label">Verified</string>
+    <string name="identity_document_verification_label">Identity Document Verification</string>
+    <string name="phone_number_verification_label">Phone Number Verification</string>
+    <string name="verification_inprogess_prompt">Your information is still being verified and the
+        verification status will be updated shortly
+    </string>
 </resources>

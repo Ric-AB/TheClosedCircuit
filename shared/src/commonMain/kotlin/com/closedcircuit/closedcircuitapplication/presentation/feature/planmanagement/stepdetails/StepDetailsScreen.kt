@@ -51,7 +51,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetI
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberTask
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepScreen
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
@@ -101,7 +101,7 @@ private fun ScreenContent(
                 text = step.name,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
+                modifier = Modifier.padding(horizontal = horizontalScreenPadding)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -114,14 +114,14 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
             BodyText(
                 text = step.description,
-                modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
+                modifier = Modifier.padding(horizontal = horizontalScreenPadding)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(SharedRes.strings.budget_items),
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
+                modifier = Modifier.padding(horizontal = horizontalScreenPadding)
             )
 
             Spacer(modifier = Modifier.height(16.dp))

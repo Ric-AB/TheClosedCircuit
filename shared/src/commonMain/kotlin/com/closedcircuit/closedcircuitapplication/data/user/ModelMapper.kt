@@ -12,7 +12,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
-import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
+import com.closedcircuit.closedcircuitapplication.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 
 fun ApiUser.asUser() = User(
@@ -24,8 +24,8 @@ fun ApiUser.asUser() = User(
     isVerified = isVerified,
     phoneNumber = PhoneNumber(phoneNumber),
     country = Country(country),
-    kycStatus = VerificationStatus.valueOf(kycStatus),
-    phoneNumberStatus = VerificationStatus.valueOf(phoneNumberVerified),
+    kycStatus = KycStatus.valueOf(kycStatus),
+    phoneNumberStatus = KycStatus.valueOf(phoneNumberVerified),
     currency = currency?.let { Currency(it) },
     isCardTokenized = !cardToken.isNullOrBlank(),
     createdAt = Date(createdAt),

@@ -5,6 +5,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.passwordrecovery.ResetPasswordViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanViewModel
@@ -41,4 +42,7 @@ val viewModelModule = module {
     factory { parameters -> EditPlanViewModel(parameters.get(), get()) }
     factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }
     factory { NotificationViewModel(get()) }
+
+    // kyc
+    factory { KycViewModel(get()) }
 }

@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
+import com.closedcircuit.closedcircuitapplication.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 
 data class ProfileUIState(
@@ -31,8 +31,8 @@ data class PersonalData(
 
 data class AccountState(
     val emailVerified: Boolean,
-    val documentStatus: VerificationStatus,
-    val phoneNumberStatus: VerificationStatus
+    val documentStatus: KycStatus,
+    val phoneNumberStatus: KycStatus
 )
 
 data class PlanSummary(

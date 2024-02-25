@@ -31,7 +31,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.remembe
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -97,7 +97,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
         ) {
             TitleText(stringResource(SharedRes.strings.reset_your_password))
 

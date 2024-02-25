@@ -41,8 +41,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Message
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -119,9 +119,9 @@ private fun ScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = defaultHorizontalScreenPadding)
+                    .padding(horizontal = horizontalScreenPadding)
                     .verticalScroll(rememberScrollState())
-                    .padding(bottom = defaultVerticalScreenPadding)
+                    .padding(bottom = verticalScreenPadding)
             ) {
                 DefaultOutlinedTextField(
                     inputField = firstNameField,

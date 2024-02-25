@@ -1,9 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.kyc
 
-import com.closedcircuit.closedcircuitapplication.domain.user.KycVerificationType
+import com.closedcircuit.closedcircuitapplication.domain.model.KycDocumentType
 
 sealed interface KycUiEvent {
-    data class VerificationTypeChange(val kycVerificationType: KycVerificationType) : KycUiEvent
-    data class VerificationNumberChange(val number: String) : KycUiEvent
+    data class DocumentTypeChange(val documentType: KycDocumentType) : KycUiEvent
+    data class DocumentNumberChange(val number: String) : KycUiEvent
     object Submit : KycUiEvent
 }

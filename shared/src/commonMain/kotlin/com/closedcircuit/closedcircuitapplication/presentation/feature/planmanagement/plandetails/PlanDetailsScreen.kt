@@ -89,7 +89,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanag
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
@@ -164,7 +164,7 @@ private fun ScreenContent(
 @Composable
 private fun Header(plan: Plan, screenWidth: Dp) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)) {
+        Row(modifier = Modifier.padding(horizontal = horizontalScreenPadding)) {
             Avatar(
                 avatar = plan.avatar,
                 size = DpSize(80.dp, 80.dp),
@@ -198,7 +198,7 @@ private fun Header(plan: Plan, screenWidth: Dp) {
         Spacer(modifier = Modifier.height(16.dp))
         BodyText(
             text = plan.description,
-            modifier = Modifier.padding(horizontal = defaultHorizontalScreenPadding)
+            modifier = Modifier.padding(horizontal = horizontalScreenPadding)
         )
     }
 }

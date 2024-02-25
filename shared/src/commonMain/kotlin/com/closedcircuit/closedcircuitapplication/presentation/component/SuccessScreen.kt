@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 
 internal data class SuccessScreen(
     val title: String,
@@ -42,7 +42,7 @@ private fun ScreenContent(title: String, subTitle: String, primaryAction: () -> 
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
         ) {
             Box(
                 contentAlignment = Alignment.Center,

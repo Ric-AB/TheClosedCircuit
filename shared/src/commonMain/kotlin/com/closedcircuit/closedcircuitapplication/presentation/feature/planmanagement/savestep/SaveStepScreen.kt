@@ -59,8 +59,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Message
 import com.closedcircuit.closedcircuitapplication.presentation.component.TextFieldTrailingText
 import com.closedcircuit.closedcircuitapplication.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
@@ -135,9 +135,9 @@ private fun ScreenContent(
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(vertical = defaultVerticalScreenPadding)
+                .padding(vertical = verticalScreenPadding)
         ) {
             TopLabeledTextField(
                 inputField = nameField,

@@ -1,32 +1,34 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.kyc
 
-import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
-import com.closedcircuit.closedcircuitapplication.domain.user.KycVerificationType
+import androidx.compose.runtime.Stable
+import com.closedcircuit.closedcircuitapplication.domain.model.AccountType
+import com.closedcircuit.closedcircuitapplication.domain.model.KycStatus
+import com.closedcircuit.closedcircuitapplication.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.util.InputField
 
+@Stable
 data class KycUiState(
-    val user: User,
-    val selectedVerificationType: KycVerificationType? = null,
-    val verificationNumber: InputField = InputField(name = "documentNumber"),
-    val hasAttemptedKyc: Boolean,
-    val isNigerianAccount: Boolean,
+    val selectedDocumentType: KycDocumentType?,
+    val documentNumber: InputField,
+    val accountType: AccountType,
+    val kycStatus: KycStatus,
+    val phoneStatus: KycStatus,
     val isLoading: Boolean
 ) {
     val canSubmit: Boolean
-        get() = verificationNumber.value.isNotEmpty()
+        get() = documentNumber.value.isNotEmpty()
 
     companion object {
         fun init(user: User?): KycUiState? {
             if (user == null) return null
 
-            val hasAttemptedKyc = user.kycStatus != VerificationStatus.NOT_STARTED
             return KycUiState(
-                user = user,
-                selectedVerificationType = null,
-                verificationNumber = InputField(name = "documentNumber"),
-                isNigerianAccount = user.phoneNumber.value.startsWith("+234"),
-                hasAttemptedKyc = hasAttemptedKyc,
+                selectedDocumentType = null,
+                documentNumber = InputField(name = "documentNumber"),
+                accountType = user.accountType,
+                kycStatus = user.kycStatus,
+                phoneStatus = user.phoneNumberStatus,
                 isLoading = false
             )
         }

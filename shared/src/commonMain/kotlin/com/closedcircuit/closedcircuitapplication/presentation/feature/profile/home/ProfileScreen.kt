@@ -56,7 +56,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
+import com.closedcircuit.closedcircuitapplication.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
@@ -66,7 +66,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.remembe
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.edit.EditProfileScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.profileverification.ProfileVerificationScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -126,7 +126,7 @@ private fun ScreenContent(
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .padding(horizontal = defaultHorizontalScreenPadding)
+                    .padding(horizontal = horizontalScreenPadding)
             ) {
                 ProfileHeader(
                     modifier = Modifier.fillMaxWidth(),
@@ -337,18 +337,18 @@ private fun ProfileModalBottomSheet(
     bottomSheetState: SheetState,
     isVisible: Boolean,
     isEmailVerified: Boolean,
-    documentStatus: VerificationStatus,
-    phoneNumberStatus: VerificationStatus,
+    documentStatus: KycStatus,
+    phoneNumberStatus: KycStatus,
     closeModal: () -> Unit,
     navigateToProfileVerificationScreen: () -> Unit,
     navigateToKycScreen: () -> Unit
 ) {
-    val mapStatusToDisplayValues: (VerificationStatus) -> Pair<String, ImageVector> = {
+    val mapStatusToDisplayValues: (KycStatus) -> Pair<String, ImageVector> = {
         when (it) {
-            VerificationStatus.NOT_STARTED -> Pair("Not started", Icons.Outlined.Info)
-            VerificationStatus.PENDING -> Pair("Pending", Icons.Outlined.Info)
-            VerificationStatus.VERIFIED -> Pair("Verified", Icons.Outlined.Info)
-            VerificationStatus.FAILED -> Pair("Failed", Icons.Outlined.Info)
+            KycStatus.NOT_STARTED -> Pair("Not started", Icons.Outlined.Info)
+            KycStatus.PENDING -> Pair("Pending", Icons.Outlined.Info)
+            KycStatus.VERIFIED -> Pair("Verified", Icons.Outlined.Info)
+            KycStatus.FAILED -> Pair("Failed", Icons.Outlined.Info)
         }
     }
 

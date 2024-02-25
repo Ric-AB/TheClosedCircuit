@@ -26,7 +26,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.LargeDr
 import com.closedcircuit.closedcircuitapplication.presentation.component.TextFieldTrailingText
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.TopLabeledTextField
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.InputField
 import dev.icerock.moko.resources.compose.stringResource
@@ -50,7 +50,7 @@ private fun ScreenContent(goBack: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
         ) {
             TitleText(text = stringResource(SharedRes.strings.how_do_you_want_to_be_supported_label))
 

@@ -6,7 +6,7 @@ import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.data.user.dto.KycRequest
 import com.closedcircuit.closedcircuitapplication.data.user.dto.UpdateUserRequest
 import com.closedcircuit.closedcircuitapplication.data.user.dto.UserDashboardResponse
-import com.closedcircuit.closedcircuitapplication.domain.user.KycVerificationType
+import com.closedcircuit.closedcircuitapplication.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.domain.user.User
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import io.github.xxfast.kstore.KStore
@@ -72,12 +72,15 @@ class UserRepositoryImpl(
     }
 
     override suspend fun verifyKyc(
-        verificationType: KycVerificationType,
-        verificationNumber: String
+        documentType: KycDocumentType,
+        documentNumber: String
     ): ApiResponse<Unit> {
         return withContext(ioDispatcher) {
-            val requestBody =
-                KycRequest(idType = verificationType.name, idNumber = verificationNumber, dateOfBirth = null)
+            val requestBody = KycRequest(
+                idType = documentType.name,
+                idNumber = documentNumber,
+                dateOfBirth = null
+            )
             userService.sendKycDetails(requestBody)
         }
     }

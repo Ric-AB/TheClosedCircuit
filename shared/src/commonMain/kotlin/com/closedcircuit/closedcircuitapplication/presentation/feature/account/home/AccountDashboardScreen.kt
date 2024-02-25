@@ -3,14 +3,13 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.account.
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import org.koin.core.component.KoinComponent
 
 
@@ -27,7 +26,7 @@ private fun ScreenContent(goBack: () -> Unit) {
     BaseScaffold { innerPadding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
         ) {
 
         }

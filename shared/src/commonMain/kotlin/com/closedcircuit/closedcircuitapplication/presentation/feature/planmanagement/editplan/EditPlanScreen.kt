@@ -36,8 +36,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.remembe
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanResult
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
@@ -104,9 +104,9 @@ private fun ScreenContent(
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(vertical = defaultVerticalScreenPadding)
+                .padding(vertical = verticalScreenPadding)
         ) {
 
             LargeDropdownMenu(

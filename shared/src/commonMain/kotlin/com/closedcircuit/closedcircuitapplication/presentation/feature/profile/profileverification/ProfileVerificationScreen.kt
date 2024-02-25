@@ -38,7 +38,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.remembe
 import com.closedcircuit.closedcircuitapplication.presentation.feature.profile.home.ProfileScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -119,7 +119,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
                 .windowInsetsPadding(WindowInsets.ime)
         ) {
             TitleText(text = stringResource(SharedRes.strings.verify_email_address))

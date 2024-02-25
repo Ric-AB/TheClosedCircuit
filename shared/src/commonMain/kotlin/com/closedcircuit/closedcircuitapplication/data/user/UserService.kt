@@ -31,6 +31,7 @@ interface UserService {
         @Path("id") userId: String
     ): ApiResponse<ApiUser>
 
+    @Headers("Content-Type: application/json")
     @POST(KYC)
     suspend fun sendKycDetails(@Body kycRequest: KycRequest): ApiResponse<Unit>
 }

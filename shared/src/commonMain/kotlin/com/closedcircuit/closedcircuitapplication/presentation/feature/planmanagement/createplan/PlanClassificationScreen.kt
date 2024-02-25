@@ -30,7 +30,7 @@ internal class PlanClassificationScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val viewModel =
-            CreatePlanWrapperScreen.rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
+            CreatePlanNavigator.rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
 
         val navigator = LocalNavigator.currentOrThrow
         ScreenContent(

@@ -24,7 +24,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -35,12 +36,15 @@ internal class KycHomeScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(goBack = navigator::pop)
+        ScreenContent(
+            goBack = navigator::pop,
+            navigateToSelectDocumentScreen = { navigator.push(SelectDocumentTypeScreen()) }
+        )
     }
 }
 
 @Composable
-private fun ScreenContent(goBack: () -> Unit) {
+private fun ScreenContent(goBack: () -> Unit, navigateToSelectDocumentScreen: () -> Unit) {
     BaseScaffold(
         topBar = {
             DefaultAppBar(
@@ -49,12 +53,16 @@ private fun ScreenContent(goBack: () -> Unit) {
             )
         }
     ) { innerPadding ->
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
                 .verticalScroll(rememberScrollState())
+                .padding(
+                    horizontal = horizontalScreenPadding,
+                    vertical = verticalScreenPadding
+                )
         ) {
             Spacer(modifier = Modifier.height(100.dp))
             Image(
@@ -80,7 +88,7 @@ private fun ScreenContent(goBack: () -> Unit) {
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-            DefaultButton(onClick = {}) {
+            DefaultButton(onClick = navigateToSelectDocumentScreen) {
                 Text(text = stringResource(SharedRes.strings.proceed))
             }
         }

@@ -1,10 +1,11 @@
 package com.closedcircuit.closedcircuitapplication.domain.user
 
+import com.closedcircuit.closedcircuitapplication.domain.model.AccountType
 import com.closedcircuit.closedcircuitapplication.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.VerificationStatus
+import com.closedcircuit.closedcircuitapplication.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
@@ -21,8 +22,8 @@ data class User(
     val isVerified: Boolean,
     val phoneNumber: PhoneNumber,
     val country: Country,
-    val kycStatus: VerificationStatus,
-    val phoneNumberStatus: VerificationStatus,
+    val kycStatus: KycStatus,
+    val phoneNumberStatus: KycStatus,
     val currency: Currency?,
     val isCardTokenized: Boolean,
     val createdAt: Date,
@@ -30,4 +31,7 @@ data class User(
 ) {
     val firstName = Name(fullName.value.split(Regex("\\s")).first())
     val lastName = Name(fullName.value.split(Regex("\\s")).last())
+    val hasAttemptedKyc get() = kycStatus != KycStatus.NOT_STARTED
+    val accountType get() = AccountType.getByText(country.value)
+
 }

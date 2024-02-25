@@ -33,9 +33,9 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BaseSca
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.ProgressIndicator
-import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanWrapperScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.plandetails.PlanDetailsScreen
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
@@ -51,7 +51,7 @@ internal class PlanListScreen : Screen, KoinComponent {
         ScreenContent(
             state = state.value,
             goBack = navigator::pop,
-            navigateToCreatePlanScreen = { navigator.push(CreatePlanWrapperScreen) },
+            navigateToCreatePlanScreen = { navigator.push(CreatePlanNavigator) },
             navigateToPlanDetailsScreen = { plan -> navigator.push(PlanDetailsScreen(plan)) }
         )
     }
@@ -78,7 +78,7 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = defaultHorizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
         ) {
             items(state.plans) { plan ->
                 PlanCard(

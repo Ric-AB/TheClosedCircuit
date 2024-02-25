@@ -42,8 +42,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.BottomNavigation
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultHorizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.presentation.theme.defaultVerticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.painterResource
@@ -107,8 +107,8 @@ private fun ScreenContent(
             modifier = Modifier
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = defaultHorizontalScreenPadding)
-                .padding(bottom = defaultVerticalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
+                .padding(bottom = verticalScreenPadding)
 
         ) {
             TitleText(text = stringResource(SharedRes.strings.welcome_back))
