@@ -8,7 +8,5 @@ data class KycRequest(
     @SerialName("id_type")
     val idType: String,
     @SerialName("id_number")
-    val idNumber: String,
-    @SerialName("date_of_birth")
-    val dateOfBirth: String?
+    val idNumber: String
 )

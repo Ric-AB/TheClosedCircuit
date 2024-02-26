@@ -32,6 +32,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.domain.model.AccountType
 import com.closedcircuit.closedcircuitapplication.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
@@ -50,6 +51,7 @@ internal class SelectDocumentTypeScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val screenModel = navigator.getNavigatorScreenModel<KycViewModel>()
         ScreenContent(
+            state = screenModel.state!!,
             goBack = navigator::pop,
             onEvent = screenModel::onEvent,
             navigateToDocumentNumberScreen = { navigator.push(EnterDocumentNumberScreen()) }
@@ -59,6 +61,7 @@ internal class SelectDocumentTypeScreen : Screen, KoinComponent {
 
 @Composable
 private fun ScreenContent(
+    state: KycUiState,
     goBack: () -> Unit,
     onEvent: (KycUiEvent) -> Unit,
     navigateToDocumentNumberScreen: () -> Unit
@@ -102,16 +105,18 @@ private fun ScreenContent(
                 color = Color.Gray,
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
-            SelectableDocumentType(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(SharedRes.strings.bvn_display_text),
-                iconResource = SharedRes.images.id_card_icon,
-                onClick = {
-                    onEvent(KycUiEvent.DocumentTypeChange(KycDocumentType.BVN))
-                    navigateToDocumentNumberScreen()
-                }
-            )
+            if (state.accountType == AccountType.NG) {
+                Spacer(modifier = Modifier.height(40.dp))
+                SelectableDocumentType(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(SharedRes.strings.bvn_display_text),
+                    iconResource = SharedRes.images.id_card_icon,
+                    onClick = {
+                        onEvent(KycUiEvent.DocumentTypeChange(KycDocumentType.BVN))
+                        navigateToDocumentNumberScreen()
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
             SelectableDocumentType(
@@ -119,7 +124,9 @@ private fun ScreenContent(
                 text = stringResource(SharedRes.strings.nin_display_text),
                 iconResource = SharedRes.images.national_id_icon,
                 onClick = {
-                    onEvent(KycUiEvent.DocumentTypeChange(KycDocumentType.NIN))
+                    val docType = if (state.accountType == AccountType.NG) KycDocumentType.NIN_SLIP
+                    else KycDocumentType.NATIONAL_ID_NO_PHOTO
+                    onEvent(KycUiEvent.DocumentTypeChange(docType))
                     navigateToDocumentNumberScreen()
                 }
             )

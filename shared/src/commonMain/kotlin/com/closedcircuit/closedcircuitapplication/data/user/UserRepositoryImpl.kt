@@ -78,8 +78,7 @@ class UserRepositoryImpl(
         return withContext(ioDispatcher) {
             val requestBody = KycRequest(
                 idType = documentType.name,
-                idNumber = documentNumber,
-                dateOfBirth = null
+                idNumber = documentNumber
             )
             userService.sendKycDetails(requestBody)
         }

@@ -132,7 +132,7 @@ internal class EnterDocumentNumberScreen : Screen, KoinComponent {
                 SharedRes.strings.check_bvn_hint
             )
 
-            KycDocumentType.NIN -> Pair(
+            KycDocumentType.NIN_SLIP -> Pair(
                 SharedRes.strings.enter_nin,
                 SharedRes.strings.check_nin_hint
             )
