@@ -15,7 +15,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class KycViewModel(
     private val userRepository: UserRepository
-) : BaseScreenModel<KycResult>() {
+) : BaseScreenModel<KycUiState, KycResult>() {
 
     val user = userRepository.userFlow.value
     var state by mutableStateOf(KycUiState.init(user))

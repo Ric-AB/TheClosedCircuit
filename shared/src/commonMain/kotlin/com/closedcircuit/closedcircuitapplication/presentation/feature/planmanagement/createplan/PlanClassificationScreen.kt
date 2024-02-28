@@ -65,7 +65,7 @@ private fun ScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_category),
                 items = uiState.categories,
-                selectedItemToString = { it.value },
+                itemToString = { it.value },
                 selectedItem = uiState.category,
                 onItemSelected = { _, item -> onEvent(CreatePlanUiEvent.CategoryChange(item)) },
             )
@@ -75,7 +75,7 @@ private fun ScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_sector),
                 items = uiState.sectors,
-                selectedItemToString = { it.value },
+                itemToString = { it.value },
                 selectedItem = uiState.sector,
                 onItemSelected = { _, item -> onEvent(CreatePlanUiEvent.SectorChange(item)) },
             )
@@ -85,7 +85,7 @@ private fun ScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_business_type),
                 items = uiState.businessTypes,
-                selectedItemToString = { it.value },
+                itemToString = { it.value },
                 selectedItem = uiState.businessType,
                 onItemSelected = { _, item -> onEvent(CreatePlanUiEvent.BusinessType(item)) },
             )

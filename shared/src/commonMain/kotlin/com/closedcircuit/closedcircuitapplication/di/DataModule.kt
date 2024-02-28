@@ -7,6 +7,7 @@ import com.closedcircuit.closedcircuitapplication.data.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.data.auth.AuthenticationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.budget.BudgetRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.donation.DonationRepositoryImpl
+import com.closedcircuit.closedcircuitapplication.data.fundrequest.FundRequestRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.notification.NotificationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.plan.PlanRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.session.SessionRepositoryImpl
@@ -17,6 +18,7 @@ import com.closedcircuit.closedcircuitapplication.domain.app.AppSettingsReposito
 import com.closedcircuit.closedcircuitapplication.domain.auth.AuthenticationRepository
 import com.closedcircuit.closedcircuitapplication.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
+import com.closedcircuit.closedcircuitapplication.domain.fundrequest.FundRequestRepository
 import com.closedcircuit.closedcircuitapplication.domain.notification.NotificationRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.session.SessionRepository
@@ -64,4 +66,5 @@ val dataModule = module {
             ioDispatcher = get(named(namedIODispatcher))
         )
     }
+    single<FundRequestRepository> { FundRequestRepositoryImpl(service = get()) }
 }

@@ -109,10 +109,10 @@ fun <T> LargeDropdownMenu(
     items: ImmutableList<T>,
     selectedItem: T? = null,
     onItemSelected: (index: Int, item: T) -> Unit,
-    selectedItemToString: (T) -> String = { it.toString() },
+    itemToString: (T) -> String = { it.toString() },
     drawItem: @Composable (T, Boolean, Boolean, () -> Unit) -> Unit = { item, selected, itemEnabled, onClick ->
         LargeDropdownMenuItem(
-            text = item.toString(),
+            text = itemToString(item),
             selected = selected,
             enabled = itemEnabled,
             onClick = onClick,
@@ -126,7 +126,7 @@ fun <T> LargeDropdownMenu(
         Text(text = label, style = MaterialTheme.typography.labelMedium)
         Box(modifier = modifier.height(IntrinsicSize.Min)) {
             OutlinedTextField(
-                value = selectedItem?.let(selectedItemToString) ?: "",
+                value = selectedItem?.let(itemToString) ?: "",
                 enabled = enabled,
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },

@@ -4,6 +4,7 @@ import com.closedcircuit.closedcircuitapplication.core.logger.CustomLogger
 import com.closedcircuit.closedcircuitapplication.core.network.DefaultResponseConverter
 import com.closedcircuit.closedcircuitapplication.data.auth.AuthService
 import com.closedcircuit.closedcircuitapplication.data.budget.BudgetService
+import com.closedcircuit.closedcircuitapplication.data.fundrequest.FundRequestService
 import com.closedcircuit.closedcircuitapplication.data.notification.NotificationService
 import com.closedcircuit.closedcircuitapplication.data.plan.PlanService
 import com.closedcircuit.closedcircuitapplication.data.step.StepService
@@ -34,6 +35,7 @@ val networkModule = module {
     single { createStepService(get(authQualifier)) }
     single { createBudgetService(get(authQualifier)) }
     single { createNotificationService(get(authQualifier)) }
+    single { createFundRequestService(get(authQualifier)) }
 }
 
 private fun createUserService(ktorfit: Ktorfit): UserService = ktorfit.create()
@@ -42,6 +44,7 @@ private fun createPlanService(ktorfit: Ktorfit): PlanService = ktorfit.create()
 private fun createStepService(ktorfit: Ktorfit): StepService = ktorfit.create()
 private fun createBudgetService(ktorfit: Ktorfit): BudgetService = ktorfit.create()
 private fun createNotificationService(ktorfit: Ktorfit): NotificationService = ktorfit.create()
+private fun createFundRequestService(ktorfit: Ktorfit): FundRequestService = ktorfit.create()
 
 
 private fun createKtorfit(client: HttpClient): Ktorfit {

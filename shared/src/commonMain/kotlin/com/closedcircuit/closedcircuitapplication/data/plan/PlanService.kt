@@ -10,6 +10,7 @@ import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
@@ -23,11 +24,13 @@ interface PlanService {
         @Query("offset") offSet: Int = 0
     ): ApiResponse<GetPlansResponse>
 
+    @Headers("Content-Type: application/json")
     @POST(CREATE_PLAN)
     suspend fun createPlan(
         @Body request: CreateOrUpdatePlanRequest
     ): ApiResponse<ApiPlan>
 
+    @Headers("Content-Type: application/json")
     @PUT(PLAN)
     suspend fun updateUserPlan(
         @Body request: CreateOrUpdatePlanRequest,

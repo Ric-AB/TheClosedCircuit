@@ -8,13 +8,13 @@ import com.closedcircuit.closedcircuitapplication.util.validation.InputValidator
 
 
 data class InputField(
-    val name: String = "",
-    val inputValue: MutableState<String> = mutableStateOf(""),
+    val name: String = String.Empty,
+    val inputValue: MutableState<String> = mutableStateOf(String.Empty),
     val validateOnChange: Boolean = false,
     val validator: InputValidator? = null
 ) {
     val value by inputValue
-    var error by mutableStateOf("")
+    var error by mutableStateOf(String.Empty)
     val isError: Boolean
         get() = error.isNotEmpty()
 
@@ -22,7 +22,7 @@ data class InputField(
     fun onValueChange(input: String) {
         inputValue.value = input
 
-        if (!validateOnChange) error = ""
+        if (!validateOnChange) error = String.Empty
 
         if (validateOnChange && validator != null) {
             validateInput()
@@ -33,10 +33,9 @@ data class InputField(
         if (validator == null) return
 
         val validationResult = validator.validate(inputValue.value)
-        error = if (validationResult.isValid) {
-            ""
-        } else {
-            validationResult.validationError
-        }
+
+        error = if (validationResult.isValid) String.Empty
+        else validationResult.validationError
+
     }
 }

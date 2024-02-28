@@ -113,7 +113,7 @@ private fun ScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_sector),
                 items = sectors,
-                selectedItemToString = { it.value },
+                itemToString = { it.value },
                 selectedItem = sector,
                 onItemSelected = { _, item -> onEvent(EditPlanUiEvent.SectorChange(item)) },
             )
@@ -123,7 +123,7 @@ private fun ScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_business_type),
                 items = businessTypes,
-                selectedItemToString = { it.value },
+                itemToString = { it.value },
                 selectedItem = businessType,
                 onItemSelected = { _, item -> onEvent(EditPlanUiEvent.BusinessType(item)) },
             )

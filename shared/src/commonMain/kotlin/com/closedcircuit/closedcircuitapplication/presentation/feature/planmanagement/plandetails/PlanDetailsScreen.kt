@@ -82,7 +82,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BaseSca
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
-import com.closedcircuit.closedcircuitapplication.presentation.feature.fundrequest.FundRequestScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.fundrequest.FundRequestScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails.StepDetailsScreen
@@ -109,7 +109,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
             uiState = uiState,
             goBack = navigator::pop,
             navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
-            navigateToFundRequest = { navigator.push(FundRequestScreen()) },
+            navigateToFundRequest = { navigator.push(FundRequestScreen(plan.id)) },
             navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) },
             navigateToSaveStep = { navigator.push(SaveStepScreen(plan.id)) }
         )
@@ -284,7 +284,7 @@ private fun ActionItemsTabs(
             selectedTabIndex = pagerState.currentPage,
             divider = {},
             modifier = Modifier.fillMaxWidth(),
-            indicator = { tabPositions -> }
+            indicator = { _ -> }
         ) {
             list.forEachIndexed { index, text ->
                 Tab(

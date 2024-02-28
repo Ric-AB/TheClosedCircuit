@@ -9,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycVi
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.fundrequest.FundRequestViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.plandetails.PlanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepViewModel
@@ -41,6 +42,9 @@ val viewModelModule = module {
     factory { parameters -> PlanDetailsViewModel(parameters.get(), get(), get(), get()) }
     factory { parameters -> EditPlanViewModel(parameters.get(), get()) }
     factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }
+    factory { parameters -> FundRequestViewModel(parameters.get(), get()) }
+
+
     factory { NotificationViewModel(get()) }
 
     // kyc

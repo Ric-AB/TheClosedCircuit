@@ -15,7 +15,6 @@ value class ID(val value: String) {
 
     companion object {
         fun generateRandomUUID(): ID {
-
             return ID(randomUUID())
         }
     }
