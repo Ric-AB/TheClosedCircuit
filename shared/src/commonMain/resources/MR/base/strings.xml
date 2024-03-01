@@ -140,6 +140,13 @@
     <string name="you_currently_have_no_step">You currently have no steps associated with this
         plan
     </string>
+    <string name="plan_description_label">Plan description</string>
+    <string name="mode_of_support_label">Mode of support</string>
+    <string name="plan_summary_label">Plan Summary</string>
+    <string name="estimated_cost_price_per_unit_label">Estimated cost price per unit</string>
+    <string name="estimated_selling_price_per_unit_label">Estimated selling price per unit</string>
+    <string name="share_plan_link_label">Share Plan Link</string>
+    <string name="back_home_label">Back Home</string>
 
     <!--    Notifications-->
     <string name="notifications">Notifications</string>

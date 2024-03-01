@@ -110,7 +110,7 @@ private fun ScreenContent(
                 SelectableDocumentType(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(SharedRes.strings.bvn_display_text),
-                    iconResource = SharedRes.images.id_card_icon,
+                    iconResource = SharedRes.images.ic_id_card,
                     onClick = {
                         onEvent(KycUiEvent.DocumentTypeChange(KycDocumentType.BVN))
                         navigateToDocumentNumberScreen()
@@ -122,7 +122,7 @@ private fun ScreenContent(
             SelectableDocumentType(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(SharedRes.strings.nin_display_text),
-                iconResource = SharedRes.images.national_id_icon,
+                iconResource = SharedRes.images.ic_national_id,
                 onClick = {
                     val docType = if (state.accountType == AccountType.NG) KycDocumentType.NIN_SLIP
                     else KycDocumentType.NATIONAL_ID_NO_PHOTO

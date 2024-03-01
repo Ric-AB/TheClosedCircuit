@@ -102,7 +102,7 @@ internal class KycStatusScreen : Screen, KoinComponent {
                 if (idVerificationRes != null) {
                     Spacer(modifier = Modifier.height(20.dp))
                     VerificationTypeComponent(
-                        iconResource = SharedRes.images.national_id_icon,
+                        iconResource = SharedRes.images.ic_national_id,
                         textResource = SharedRes.strings.identity_document_verification_label,
                         subTextResource = idVerificationRes.first,
                         trailingIconResource = idVerificationRes.second,
@@ -116,7 +116,7 @@ internal class KycStatusScreen : Screen, KoinComponent {
                 if (phoneVerificationResources != null) {
                     Spacer(modifier = Modifier.height(20.dp))
                     VerificationTypeComponent(
-                        iconResource = SharedRes.images.phone_icon,
+                        iconResource = SharedRes.images.ic_phone,
                         textResource = SharedRes.strings.phone_number_verification,
                         subTextResource = phoneVerificationResources.first,
                         trailingIconResource = phoneVerificationResources.second,
@@ -211,7 +211,7 @@ internal class KycStatusScreen : Screen, KoinComponent {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(SharedRes.images.pending_icon),
+                    painter = painterResource(SharedRes.images.ic_pending),
                     contentDescription = "",
                     modifier = Modifier.size(32.dp)
                 )
@@ -247,17 +247,17 @@ internal class KycStatusScreen : Screen, KoinComponent {
         return when (status) {
             KycStatus.PENDING -> Pair(
                 SharedRes.strings.verification_pending_label,
-                SharedRes.images.pending_icon
+                SharedRes.images.ic_pending
             )
 
             KycStatus.VERIFIED -> Pair(
                 SharedRes.strings.verified_label,
-                SharedRes.images.green_check_icon,
+                SharedRes.images.ic_green_check,
             )
 
             KycStatus.FAILED -> Pair(
                 SharedRes.strings.verification_failed_label,
-                SharedRes.images.failed_icon
+                SharedRes.images.ic_failed
             )
 
             KycStatus.NOT_STARTED -> null

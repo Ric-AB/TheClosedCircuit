@@ -20,7 +20,7 @@ data class ApiPlan(
     @SerialName("plan_description")
     val description: String,
     @SerialName("plan_duration")
-    val duration: String,
+    val duration: Int,
     @SerialName("estimated_selling_price")
     val estimatedSellingPrice: String,
     @SerialName("estimated_cost_price")
