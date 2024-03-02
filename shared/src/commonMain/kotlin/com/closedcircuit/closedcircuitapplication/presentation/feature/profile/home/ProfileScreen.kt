@@ -323,8 +323,7 @@ private fun ScreenCard(modifier: Modifier = Modifier, content: @Composable () ->
         modifier = modifier,
         shape = Shapes().small,
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme
-                .colorScheme.surfaceColorAtElevation(Elevation.Level1)
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level1)
         )
     ) {
         content()

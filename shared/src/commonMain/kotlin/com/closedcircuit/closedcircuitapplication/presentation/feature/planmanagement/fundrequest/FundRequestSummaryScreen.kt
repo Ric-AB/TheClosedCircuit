@@ -207,7 +207,6 @@ internal class FundRequestSummaryScreen(
             SectionHeader(stringResource(SharedRes.strings.steps))
             repeat(10) {
                 StepItem()
-                Spacer(Modifier.height(8.dp))
                 Divider()
             }
         }

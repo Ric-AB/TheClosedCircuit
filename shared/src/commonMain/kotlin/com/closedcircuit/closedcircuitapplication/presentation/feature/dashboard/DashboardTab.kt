@@ -6,7 +6,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -43,7 +42,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
@@ -55,10 +53,10 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
-import com.closedcircuit.closedcircuitapplication.domain.wallet.Wallet
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationScreen
@@ -298,48 +296,6 @@ private fun TopSponsors(topSponsors: ImmutableList<Sponsor>, modifier: Modifier)
         }
     } else {
         NoSponsors(modifier = modifier)
-    }
-}
-
-@Composable
-private fun WalletCard(wallet: Wallet?, modifier: Modifier) {
-    @Composable
-    fun Card(modifier: Modifier, containerColor: Color) {
-        Card(
-            modifier = modifier,
-            colors = CardDefaults.cardColors(containerColor = containerColor)
-        ) {}
-    }
-
-    Box(
-        modifier = modifier.fillMaxWidth()
-            .height(180.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        val commonModifier = Modifier.padding(horizontal = 8.dp)
-            .matchParentSize()
-
-        Card(
-            modifier = commonModifier.rotate(5F),
-            containerColor = Color.LightGray
-        )
-
-        Card(
-            modifier = commonModifier.rotate(355F),
-            containerColor = Color.LightGray
-        )
-
-        Card(
-            modifier = Modifier.matchParentSize(),
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
-        )
-
-        Text(
-            text = wallet?.totalFunds?.value?.toString() ?: "--",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
     }
 }
 

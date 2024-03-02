@@ -159,6 +159,7 @@
     <string name="delete">Delete</string>
 
     <!--    Kyc-->
+    <string name="kyc_label">KYC</string>
     <string name="document_verification">Document Verification</string>
     <string name="input_verification_details">Input Verification Details</string>
     <string name="id_number">ID number</string>
@@ -206,4 +207,9 @@
     <string name="verification_inprogess_prompt">Your information is still being verified and the
         verification status will be updated shortly
     </string>
+
+    <!-- Account -->
+    <string name="loans_label">Loans</string>
+    <string name="card_details_label">Card Details</string>
+    <string name="bank_details_label">Bank Details</string>
 </resources>
