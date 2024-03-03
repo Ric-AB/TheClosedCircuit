@@ -80,6 +80,9 @@ kotlin {
                 // sqlDelight
                 implementation(libs.sqldelight.coroutines)
                 implementation(libs.sqldelight.primitiveAdapters)
+
+                // webview
+                api(libs.webview.compose)
             }
         }
 

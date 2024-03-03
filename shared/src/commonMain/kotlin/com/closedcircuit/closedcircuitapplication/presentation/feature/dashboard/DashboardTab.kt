@@ -60,6 +60,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.WalletC
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.payment.PaymentScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
@@ -96,7 +97,7 @@ internal object DashboardTab : Tab, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             uiState = uiState,
-            navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
+            navigateToPlanListScreen = { navigator.push(PaymentScreen("https://www.google.com")) },
             navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
             navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
         )
