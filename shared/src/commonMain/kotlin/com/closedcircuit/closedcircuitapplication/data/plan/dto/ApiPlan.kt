@@ -28,9 +28,9 @@ data class ApiPlan(
     @SerialName("target_amount")
     val targetAmount: String,
     @SerialName("funds_raised")
-    val fundsRaised: String,
+    val fundsRaised: Double?,
     @SerialName("tasks_completed")
-    val tasksCompleted: Double,
+    val tasksCompleted: Double?,
     @SerialName("total_funds_raised")
     val totalFundsRaised: String?,
     @SerialName("plan_analytics")

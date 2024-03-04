@@ -44,8 +44,8 @@ fun ApiPlan.asPlanEntity() = PlanEntity(
     duration = duration.toLong(),
     estimatedSellingPrice = estimatedSellingPrice.toDouble(),
     estimatedCostPrice = estimatedCostPrice.toDouble(),
-    fundsRaised = fundsRaised.toDouble(),
-    tasksCompleted = tasksCompleted,
+    fundsRaised = fundsRaised ?: 0.0,
+    tasksCompleted = tasksCompleted ?: 0.0,
     targetAmount = targetAmount.toDouble(),
     totalFundsRaised = totalFundsRaised?.toDouble() ?: 0.0,
     analytics = analytics,
@@ -90,6 +90,8 @@ fun Plan.asEntity() = PlanEntity(
     createdAt = Date.now().value,
     updatedAt = Date.now().value
 )
+
+fun List<ApiPlan>.toPlans() = this.map { it.asPlanEntity().asPlan() }.toImmutableList()
 
 fun List<ApiPlan>.asPlanEntities() = this.map { it.asPlanEntity() }
 

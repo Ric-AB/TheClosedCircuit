@@ -9,9 +9,11 @@ typealias Steps = ImmutableList<Step>
 
 interface StepRepository {
 
-    val stepsFlow: Flow<Steps>
-
     suspend fun fetchSteps(): ApiResponse<Steps>
+
+    fun saveLocally(step: Step)
+
+    fun saveLocally(steps: List<Step>)
 
     suspend fun createStep(step: Step): ApiResponse<Step>
 

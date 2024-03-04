@@ -43,8 +43,8 @@ suspend fun <T : Any> ApiResponse<T>.onSuccess(
     }
 }
 
-fun <T, R> ApiResponse<T>.mapOnSuccess(
-    transform: (T) -> R
+suspend fun <T, R> ApiResponse<T>.mapOnSuccess(
+    transform: suspend (T) -> R
 ): ApiResponse<R> {
     return when (this) {
         is ApiSuccessResponse<T> -> ApiSuccessResponse(transform(body))

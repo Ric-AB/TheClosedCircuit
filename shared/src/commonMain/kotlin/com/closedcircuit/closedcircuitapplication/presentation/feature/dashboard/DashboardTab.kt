@@ -97,7 +97,7 @@ internal object DashboardTab : Tab, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             uiState = uiState,
-            navigateToPlanListScreen = { navigator.push(PaymentScreen("https://www.google.com")) },
+            navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
             navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
             navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
         )

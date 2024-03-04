@@ -9,9 +9,11 @@ typealias Budgets = ImmutableList<Budget>
 
 interface BudgetRepository {
 
-    val budgetsFlow: Flow<Budgets>
-
     suspend fun fetchBudgets(): ApiResponse<Budgets>
+
+    fun saveLocally(budget: Budget)
+
+    fun saveLocally(budgets: List<Budget>)
 
     suspend fun createBudget(budget: Budget): ApiResponse<Budget>
 

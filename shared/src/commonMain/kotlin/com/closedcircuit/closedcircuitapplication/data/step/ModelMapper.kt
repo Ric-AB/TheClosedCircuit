@@ -64,6 +64,8 @@ fun Step.asEntity() = StepEntity(
     updatedAt = updatedAt.value
 )
 
+fun List<ApiStep>.toSteps() = this.map { it.asStepEntity().asStep() }.toImmutableList()
+
 fun List<ApiStep>.asStepEntities() = this.map { it.asStepEntity() }
 
 fun List<StepEntity>.asSteps() = this.map { it.asStep() }.toImmutableList()

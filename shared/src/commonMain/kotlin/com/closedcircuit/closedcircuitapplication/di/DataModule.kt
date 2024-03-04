@@ -39,6 +39,8 @@ val dataModule = module {
         PlanRepositoryImpl(
             database = get(),
             planService = get(),
+            stepRepository = get(),
+            budgetRepository = get(),
             ioDispatcher = get(named(namedDefaultDispatcher)),
             defaultDispatcher = get(named(namedDefaultDispatcher))
         )

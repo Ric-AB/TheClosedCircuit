@@ -63,6 +63,8 @@ fun Budget.asEntity() = BudgetEntity(
     updatedAt = updatedAt.value
 )
 
+fun List<ApiBudget>.toBudgets() = this.map { it.asBudgetEntity().asBudget() }
+
 fun List<ApiBudget>.asBudgetEntities() = this.map { it.asBudgetEntity() }
 
 fun List<BudgetEntity>.asBudgets() = this.map { it.asBudget() }.toImmutableList()
