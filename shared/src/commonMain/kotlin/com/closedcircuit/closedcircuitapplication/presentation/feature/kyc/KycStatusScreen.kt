@@ -35,6 +35,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
@@ -44,12 +45,10 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalS
 import com.closedcircuit.closedcircuitapplication.presentation.theme.secondary3
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 
 
@@ -64,7 +63,9 @@ internal class KycStatusScreen : Screen, KoinComponent {
             ScreenContent(
                 state = it,
                 goBack = { if (navigator.canPop) navigator.pop() else findRootNavigator(navigator).pop() },
-                navigateToSelectDocumentTypeScreen = { navigator.push(SelectDocumentTypeScreen()) }
+                onEvent = viewModel::onEvent,
+                navigateToSelectDocumentTypeScreen = { navigator.push(SelectDocumentTypeScreen()) },
+                navigateToDocumentNumberScreen = { navigator.push(EnterDocumentNumberScreen()) }
             )
         }
     }
@@ -73,7 +74,9 @@ internal class KycStatusScreen : Screen, KoinComponent {
     private fun ScreenContent(
         state: KycUiState,
         goBack: () -> Unit,
-        navigateToSelectDocumentTypeScreen: () -> Unit
+        onEvent: (KycUiEvent) -> Unit,
+        navigateToSelectDocumentTypeScreen: () -> Unit,
+        navigateToDocumentNumberScreen: () -> Unit
     ) {
         BaseScaffold(
             topBar = {
@@ -101,7 +104,7 @@ internal class KycStatusScreen : Screen, KoinComponent {
                 val idVerificationRes = remember { getResources(state.kycStatus) }
                 if (idVerificationRes != null) {
                     Spacer(modifier = Modifier.height(20.dp))
-                    VerificationTypeComponent(
+                    VerificationStatus(
                         iconResource = SharedRes.images.ic_national_id,
                         textResource = SharedRes.strings.identity_document_verification_label,
                         subTextResource = idVerificationRes.first,
@@ -115,13 +118,16 @@ internal class KycStatusScreen : Screen, KoinComponent {
                 val phoneVerificationResources = remember { getResources(phoneStatus) }
                 if (phoneVerificationResources != null) {
                     Spacer(modifier = Modifier.height(20.dp))
-                    VerificationTypeComponent(
+                    VerificationStatus(
                         iconResource = SharedRes.images.ic_phone,
                         textResource = SharedRes.strings.phone_number_verification,
                         subTextResource = phoneVerificationResources.first,
                         trailingIconResource = phoneVerificationResources.second,
                         onClick = if (phoneStatus == KycStatus.FAILED || phoneStatus == KycStatus.NOT_STARTED) {
-                            { navigateToSelectDocumentTypeScreen() }
+                            {
+                                onEvent(KycUiEvent.DocumentTypeChange(KycDocumentType.PHONE_NUMBER))
+                                navigateToDocumentNumberScreen()
+                            }
                         } else null
                     )
                 }
@@ -134,7 +140,7 @@ internal class KycStatusScreen : Screen, KoinComponent {
     }
 
     @Composable
-    private fun VerificationTypeComponent(
+    private fun VerificationStatus(
         iconResource: ImageResource,
         textResource: StringResource,
         subTextResource: StringResource,

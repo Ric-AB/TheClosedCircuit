@@ -1,6 +1,7 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
@@ -36,17 +39,17 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Progres
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.plandetails.PlanDetailsScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 internal class PlanListScreen : Screen, KoinComponent {
-    private val viewModel: PlanListViewModel by inject()
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = getScreenModel<PlanListViewModel>()
         val state = viewModel.stateFlow.collectAsState()
         ScreenContent(
             state = state.value,
@@ -78,13 +81,13 @@ private fun ScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = horizontalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
         ) {
             items(state.plans) { plan ->
                 PlanCard(
+                    modifier = Modifier.fillMaxWidth(),
                     plan = plan,
-                    modifier = Modifier.fillMaxWidth()
-                        .clickable(enabled = true, onClick = { navigateToPlanDetailsScreen(plan) })
+                    onClick = { navigateToPlanDetailsScreen(plan) }
                 )
             }
         }
@@ -92,13 +95,13 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun PlanCard(plan: Plan, modifier: Modifier) {
+private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> Unit) {
     val fundsRaised = remember {
         val value = (plan.fundsRaised / plan.targetAmount).value.toFloat()
         val percentage = value * 100
         Pair(value, "$percentage%")
     }
-    OutlinedCard(modifier = modifier) {
+    OutlinedCard(modifier = modifier, onClick = onClick) {
         Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
             Avatar(
                 avatar = plan.avatar,

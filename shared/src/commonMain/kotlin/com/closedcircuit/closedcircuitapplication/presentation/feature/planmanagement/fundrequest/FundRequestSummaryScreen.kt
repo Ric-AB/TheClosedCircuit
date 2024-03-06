@@ -3,7 +3,6 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.planmana
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,6 +27,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
@@ -44,7 +45,8 @@ import org.koin.core.component.KoinComponent
 
 internal class FundRequestSummaryScreen(
     private val modeOfSupport: FundType,
-    private val plan: Plan
+    private val plan: Plan,
+    private val steps: Steps
 ) : Screen, KoinComponent {
     @Composable
     override fun Content() {
@@ -65,6 +67,7 @@ internal class FundRequestSummaryScreen(
             Column(
                 modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
                 PlanDetailsGrid(modifier = Modifier.fillMaxWidth(), plan = plan)
@@ -84,14 +87,14 @@ internal class FundRequestSummaryScreen(
                 )
 
                 Spacer(Modifier.height(24.dp))
-                StepList(modifier = Modifier.fillMaxWidth())
+                StepList(modifier = Modifier.fillMaxWidth(), steps = steps)
 
                 Spacer(Modifier.height(24.dp))
                 DefaultButton(onClick = {}) {
                     Text(stringResource(SharedRes.strings.share_plan_link_label))
                 }
 
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(8.dp))
                 DefaultOutlinedButton(onClick = {}) {
                     Text(stringResource(SharedRes.strings.back_home_label))
                 }
@@ -101,58 +104,74 @@ internal class FundRequestSummaryScreen(
 
     @Composable
     private fun PlanDetailsGrid(modifier: Modifier, plan: Plan) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = modifier,
-            contentPadding = PaddingValues(12.dp)
-        ) {
-            item {
-                GridItem(
-                    imageResource = SharedRes.images.ic_briefcase,
-                    header = plan.sector,
-                    message = stringResource(SharedRes.strings.business_sector)
-                )
-            }
 
-            item {
-                GridItem(
-                    imageResource = SharedRes.images.ic_calendar,
-                    header = plan.duration.value.toString(),
-                    message = stringResource(SharedRes.strings.plan_duration)
-                )
-            }
+        @Composable
+        fun GridRow(item1: @Composable () -> Unit, item2: @Composable () -> Unit) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    item1()
+                }
 
-            item {
-                GridItem(
-                    imageResource = SharedRes.images.ic_target_amount,
-                    header = plan.targetAmount.value.toString(),
-                    message = stringResource(SharedRes.strings.target_amount)
-                )
+                Spacer(Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    item2()
+                }
             }
+        }
 
-            item {
-                GridItem(
-                    imageResource = SharedRes.images.ic_funds,
-                    header = plan.totalFundsRaised.value.toString(),
-                    message = stringResource(SharedRes.strings.total_funds_raised)
-                )
-            }
 
-            item {
-                GridItem(
-                    imageResource = SharedRes.images.ic_orange_bag,
-                    header = plan.estimatedCostPrice.value.toString(),
-                    message = stringResource(SharedRes.strings.estimated_cost_price_per_unit_label)
-                )
-            }
+        Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            GridRow(
+                item1 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_briefcase,
+                        header = plan.sector,
+                        message = stringResource(SharedRes.strings.business_sector)
+                    )
+                },
+                item2 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_calendar,
+                        header = plan.duration.value.toString(),
+                        message = stringResource(SharedRes.strings.plan_duration)
+                    )
+                }
+            )
 
-            item {
-                GridItem(
-                    imageResource = SharedRes.images.ic_purple_file,
-                    header = plan.estimatedSellingPrice.value.toString(),
-                    message = stringResource(SharedRes.strings.estimated_selling_price_per_unit_label)
-                )
-            }
+
+            GridRow(
+                item1 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_target_amount,
+                        header = plan.targetAmount.value.toString(),
+                        message = stringResource(SharedRes.strings.target_amount)
+                    )
+                },
+                item2 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_funds,
+                        header = plan.totalFundsRaised.value.toString(),
+                        message = stringResource(SharedRes.strings.total_funds_raised)
+                    )
+                }
+            )
+
+            GridRow(
+                item1 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_orange_bag,
+                        header = plan.estimatedCostPrice.value.toString(),
+                        message = stringResource(SharedRes.strings.estimated_cost_price_per_unit_label)
+                    )
+                },
+                item2 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_purple_file,
+                        header = plan.estimatedSellingPrice.value.toString(),
+                        message = stringResource(SharedRes.strings.estimated_selling_price_per_unit_label)
+                    )
+                }
+            )
         }
     }
 
@@ -202,27 +221,27 @@ internal class FundRequestSummaryScreen(
     }
 
     @Composable
-    private fun StepList(modifier: Modifier = Modifier) {
+    private fun StepList(modifier: Modifier = Modifier, steps: Steps) {
         Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             SectionHeader(stringResource(SharedRes.strings.steps))
-            repeat(10) {
-                StepItem()
+            steps.forEach {
+                StepItem(it)
                 Divider()
             }
         }
     }
 
     @Composable
-    private fun StepItem() {
+    private fun StepItem(step: Step) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                BodyText("Conduct Market Research", color = Color.Black)
+                BodyText(step.name, color = Color.Black)
 
                 Spacer(Modifier.height(4.dp))
-                BodyText("$10,343")
+                BodyText(step.targetFunds.value.toString())
             }
         }
     }

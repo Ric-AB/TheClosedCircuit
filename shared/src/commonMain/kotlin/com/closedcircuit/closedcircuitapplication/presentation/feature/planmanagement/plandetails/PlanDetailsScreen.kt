@@ -72,7 +72,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budgets
-import com.closedcircuit.closedcircuitapplication.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.domain.model.Price
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
@@ -83,9 +82,8 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BaseSca
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
-import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.fundrequest.FundRequestScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanScreen
-import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.fundrequest.FundRequestSummaryScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.fundrequest.FundRequestScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails.StepDetailsScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
@@ -111,14 +109,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
             uiState = uiState,
             goBack = navigator::pop,
             navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
-            navigateToFundRequest = {
-                navigator.push(
-                    FundRequestSummaryScreen(
-                        FundType.LOAN,
-                        plan
-                    )
-                )
-            },
+            navigateToFundRequest = { navigator.push(FundRequestScreen(plan, uiState.steps)) },
             navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) },
             navigateToSaveStep = { navigator.push(SaveStepScreen(plan.id)) }
         )

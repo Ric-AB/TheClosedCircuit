@@ -30,11 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.WalletCard
+import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycNavigator
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -62,11 +65,12 @@ internal object AccountTab : Tab {
 
     @Composable
     override fun Content() {
-        ScreenContent()
+        val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
+        ScreenContent(navigateToKycScreen = { navigator.push(KycNavigator()) })
     }
 
     @Composable
-    private fun ScreenContent() {
+    private fun ScreenContent(navigateToKycScreen: () -> Unit) {
         BaseScaffold { innerPadding ->
             Column(
                 modifier = Modifier.padding(innerPadding)
@@ -76,15 +80,18 @@ internal object AccountTab : Tab {
                 WalletCard(wallet = null, modifier = Modifier.fillMaxWidth())
 
                 Spacer(Modifier.height(40.dp))
-                AccountSections(Modifier.fillMaxWidth())
+                AccountSections(
+                    modifier = Modifier.fillMaxWidth(),
+                    navigateToKycScreen = navigateToKycScreen
+                )
             }
         }
     }
 
     @Composable
-    private fun AccountSections(modifier: Modifier) {
+    private fun AccountSections(modifier: Modifier, navigateToKycScreen: () -> Unit) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
             modifier = modifier.background(color = Color.White, shape = Shapes().medium)
                 .padding(vertical = 20.dp)
         ) {
@@ -114,7 +121,7 @@ internal object AccountTab : Tab {
                 modifier = commonModifier,
                 iconRes = SharedRes.images.ic_national_id,
                 textRes = SharedRes.strings.kyc_label,
-                onClick = {}
+                onClick = navigateToKycScreen
             )
         }
     }
@@ -128,7 +135,8 @@ internal object AccountTab : Tab {
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.clickable(onClick = onClick).padding(horizontal = 16.dp)
+            modifier = modifier.clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 20.dp)
         ) {
             Icon(
                 painter = painterResource(iconRes),

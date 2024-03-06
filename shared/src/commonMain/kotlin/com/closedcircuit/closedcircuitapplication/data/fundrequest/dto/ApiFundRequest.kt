@@ -17,13 +17,13 @@ data class ApiFundRequest(
     @SerialName("maximum_loan_range")
     val maximumLoanRange: String?,
     @SerialName("maximum_number_of_lenders")
-    val maxLenders: String?,
+    val maxLenders: Int?,
     @SerialName("grace_duration")
-    val graceDuration: String?,
+    val graceDuration: Int?,
     @SerialName("repayment_duration")
-    val repaymentDuration: String?,
+    val repaymentDuration: Int?,
     @SerialName("interest_rate")
-    val interestRate: String?,
+    val interestRate: Int?,
     @SerialName("created_at")
     val createdAt: String?,
     @SerialName("updated_at")

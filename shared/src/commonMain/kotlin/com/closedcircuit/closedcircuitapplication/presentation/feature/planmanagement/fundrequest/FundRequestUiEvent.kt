@@ -3,7 +3,8 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.planmana
 import com.closedcircuit.closedcircuitapplication.domain.model.FundType
 
 sealed interface FundRequestUiEvent {
-    object Submit : FundRequestUiEvent
+    object TokenizeCard: FundRequestUiEvent
+    object SubmitFundRequest : FundRequestUiEvent
     data class FundTypeChange(val fundType: FundType) : FundRequestUiEvent
     data class MinRangeChange(val minRange: String) : FundRequestUiEvent
     data class MaxRangeChange(val maxRange: String) : FundRequestUiEvent

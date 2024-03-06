@@ -13,7 +13,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.ImeAction
@@ -24,7 +28,8 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.model.FundType
-import com.closedcircuit.closedcircuitapplication.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
@@ -32,13 +37,18 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Default
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.LargeDropdownMenu
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.component.PromptDialog
 import com.closedcircuit.closedcircuitapplication.presentation.component.TextFieldTrailingText
 import com.closedcircuit.closedcircuitapplication.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.presentation.feature.payment.PaymentScreen
+import com.closedcircuit.closedcircuitapplication.presentation.navigation.navigationResult
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.util.Empty
+import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.util.conditional
 import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
 import dev.icerock.moko.resources.compose.stringResource
@@ -49,18 +59,28 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
-internal class FundRequestScreen(private val planId: ID) : Screen, KoinComponent {
+internal class FundRequestScreen(private val plan: Plan, private val steps: Steps) : Screen,
+    KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getScreenModel<FundRequestViewModel> { parametersOf(planId) }
+        val viewModel = getScreenModel<FundRequestViewModel> { parametersOf(plan) }
         val messageBarState = rememberMessageBarState()
+        val paymentResult = navigator.navigationResult
+            .getResult<Boolean>(PaymentScreen.PAYMENT_RESULT)
 
         viewModel.resultChannel.receiveAsFlow().observerWithScreen {
             when (it) {
                 is FundRequestResult.Error -> messageBarState.addError(it.message)
-                FundRequestResult.Success -> navigator.pop()
+                is FundRequestResult.FundRequestSuccess ->
+                    navigator.push(FundRequestSummaryScreen(it.fundType, plan, steps))
+
+                is FundRequestResult.TokenizeRequestSuccess -> navigator.push(PaymentScreen(it.link))
             }
+        }
+
+        LaunchedEffect(paymentResult) {
+            if (paymentResult.value == true) viewModel.onEvent(FundRequestUiEvent.SubmitFundRequest)
         }
 
         ScreenContent(
@@ -84,6 +104,7 @@ private fun ScreenContent(
         isLoading = state.loading,
         messageBarState = messageBarState
     ) { innerPadding ->
+        var showDialog by remember { mutableStateOf(false) }
         val commonModifier = Modifier.fillMaxWidth()
         val showLoanSchedule = remember(state.selectedFundType) {
             state.selectedFundType != FundType.DONATION
@@ -125,6 +146,7 @@ private fun ScreenContent(
                             keyboardType = KeyboardType.Number
                         ),
                         trailingIcon = { TextFieldTrailingText("NGN") },
+                        visualTransformation = NumberCommaTransformation(),
                         modifier = commonModifier.onFocusChanged {}
                     )
 
@@ -138,6 +160,7 @@ private fun ScreenContent(
                             keyboardType = KeyboardType.Number
                         ),
                         trailingIcon = { TextFieldTrailingText("NGN") },
+                        visualTransformation = NumberCommaTransformation(),
                         modifier = commonModifier.onFocusChanged {}
                     )
 
@@ -197,9 +220,23 @@ private fun ScreenContent(
                 )
             )
 
-            DefaultButton(onClick = { onEvent(FundRequestUiEvent.Submit) }) {
+            DefaultButton(
+                onClick = {
+                    if (state.canRequestFunds) onEvent(FundRequestUiEvent.SubmitFundRequest)
+                    else showDialog = true
+                }
+            ) {
                 Text(stringResource(SharedRes.strings.proceed))
             }
+
+            PromptDialog(
+                visible = showDialog,
+                title = String.Empty,
+                message = stringResource(SharedRes.strings.tokenize_card_prompt),
+                buttonText = stringResource(SharedRes.strings.okay_label),
+                onDismiss = { showDialog = false },
+                onButtonClick = { onEvent(FundRequestUiEvent.TokenizeCard) }
+            )
         }
     }
 }

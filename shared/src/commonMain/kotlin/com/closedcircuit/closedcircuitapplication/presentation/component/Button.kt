@@ -1,11 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.presentation.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
@@ -34,14 +32,16 @@ fun DefaultButton(
 @Composable
 fun DefaultOutlinedButton(
     modifier: Modifier = Modifier.fillMaxWidth(),
-    shape: Shape = Shapes().large,
+    shape: Shape = ButtonDefaults.shape,
+    enabled: Boolean = true,
     onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier,
-        shape = shape
+        shape = shape,
+        enabled = enabled
     ) {
         content()
     }

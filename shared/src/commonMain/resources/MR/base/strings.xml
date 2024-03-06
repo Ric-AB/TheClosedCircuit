@@ -147,6 +147,9 @@
     <string name="estimated_selling_price_per_unit_label">Estimated selling price per unit</string>
     <string name="share_plan_link_label">Share Plan Link</string>
     <string name="back_home_label">Back Home</string>
+    <string name="tokenize_card_prompt">We are about to charge a small fee to tokenize your card
+    </string>
+    <string name="okay_label">Okay</string>
 
     <!--    Notifications-->
     <string name="notifications">Notifications</string>
@@ -162,6 +165,7 @@
     <string name="kyc_label">KYC</string>
     <string name="document_verification">Document Verification</string>
     <string name="input_verification_details">Input Verification Details</string>
+    <string name="document_details_label">Document Details</string>
     <string name="id_number">ID number</string>
     <string name="we_need_to_verify_identity">We need to verify your Means of Identification
     </string>

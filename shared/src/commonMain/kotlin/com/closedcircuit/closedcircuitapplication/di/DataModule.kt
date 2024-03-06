@@ -9,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.data.budget.BudgetRepositoryIm
 import com.closedcircuit.closedcircuitapplication.data.donation.DonationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.fundrequest.FundRequestRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.notification.NotificationRepositoryImpl
+import com.closedcircuit.closedcircuitapplication.data.payment.PaymentRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.plan.PlanRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.session.SessionRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.step.StepRepositoryImpl
@@ -20,6 +21,7 @@ import com.closedcircuit.closedcircuitapplication.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.domain.fundrequest.FundRequestRepository
 import com.closedcircuit.closedcircuitapplication.domain.notification.NotificationRepository
+import com.closedcircuit.closedcircuitapplication.domain.payment.PaymentRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.domain.step.StepRepository
@@ -45,6 +47,7 @@ val dataModule = module {
             defaultDispatcher = get(named(namedDefaultDispatcher))
         )
     }
+
     single<StepRepository> {
         StepRepositoryImpl(
             database = get(),
@@ -53,6 +56,7 @@ val dataModule = module {
             defaultDispatcher = get(named(namedDefaultDispatcher))
         )
     }
+
     single<BudgetRepository> {
         BudgetRepositoryImpl(
             database = get(),
@@ -61,6 +65,7 @@ val dataModule = module {
             defaultDispatcher = get(named(namedDefaultDispatcher))
         )
     }
+
     single<DonationRepository> { DonationRepositoryImpl() }
     single<NotificationRepository> {
         NotificationRepositoryImpl(
@@ -68,5 +73,12 @@ val dataModule = module {
             ioDispatcher = get(named(namedIODispatcher))
         )
     }
+
     single<FundRequestRepository> { FundRequestRepositoryImpl(service = get()) }
+    single<PaymentRepository> {
+        PaymentRepositoryImpl(
+            paymentService = get(),
+            ioDispatcher = get(named(namedIODispatcher))
+        )
+    }
 }
