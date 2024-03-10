@@ -216,4 +216,13 @@
     <string name="loans_label">Loans</string>
     <string name="card_details_label">Card Details</string>
     <string name="bank_details_label">Bank Details</string>
+
+    <string name="repayment_schedule_label">Repayment Schedule</string>
+    <string name="pending_loan_offers_label">Pending Loan Offers</string>
+    <string name="accepted_loan_offers_label">Accepted Loan Offers</string>
+    <string name="active_loans_label">Active Loans</string>
+    <string name="loans_declined_label">Loans Declined</string>
+    <string name="total_sponsors">Total Sponsors:</string>
+    <string name="total_amount">Total Amount:</string>
+    <string name="x_sponsor">%1$s sponsor</string>
 </resources>

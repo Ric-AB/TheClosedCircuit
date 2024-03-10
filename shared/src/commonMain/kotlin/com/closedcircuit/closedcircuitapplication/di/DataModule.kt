@@ -8,6 +8,7 @@ import com.closedcircuit.closedcircuitapplication.data.auth.AuthenticationReposi
 import com.closedcircuit.closedcircuitapplication.data.budget.BudgetRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.donation.DonationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.fundrequest.FundRequestRepositoryImpl
+import com.closedcircuit.closedcircuitapplication.data.loan.LoanRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.notification.NotificationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.payment.PaymentRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.data.plan.PlanRepositoryImpl
@@ -20,6 +21,7 @@ import com.closedcircuit.closedcircuitapplication.domain.auth.AuthenticationRepo
 import com.closedcircuit.closedcircuitapplication.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.domain.fundrequest.FundRequestRepository
+import com.closedcircuit.closedcircuitapplication.domain.loan.LoanRepository
 import com.closedcircuit.closedcircuitapplication.domain.notification.NotificationRepository
 import com.closedcircuit.closedcircuitapplication.domain.payment.PaymentRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanRepository
@@ -78,6 +80,13 @@ val dataModule = module {
     single<PaymentRepository> {
         PaymentRepositoryImpl(
             paymentService = get(),
+            ioDispatcher = get(named(namedIODispatcher))
+        )
+    }
+
+    single<LoanRepository> {
+        LoanRepositoryImpl(
+            loanService = get(),
             ioDispatcher = get(named(namedIODispatcher))
         )
     }
