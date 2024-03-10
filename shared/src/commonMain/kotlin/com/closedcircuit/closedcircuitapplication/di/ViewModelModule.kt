@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.loans.preview.LoansPreviewViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.onboarding.OnboardingViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.payment.PaymentViewModel
@@ -25,7 +26,7 @@ val viewModelModule = module {
     factory { OnboardingViewModel(get()) }
     factory { LoginViewModel(get()) }
     factory { RegisterViewModel(get()) }
-    single { ResetPasswordKoinContainer() }
+    single { ResetPasswordKoinContainer() } // todo replace with scoped navigator
     scope<ResetPasswordKoinContainer> {
         scoped { ResetPasswordViewModel(get()) }
     }
@@ -53,4 +54,7 @@ val viewModelModule = module {
 
     // payment
     factory { PaymentViewModel() }
+
+    // loan
+    factory { LoansPreviewViewModel(get()) }
 }

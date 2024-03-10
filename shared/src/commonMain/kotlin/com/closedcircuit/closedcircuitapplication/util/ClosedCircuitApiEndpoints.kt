@@ -22,7 +22,7 @@ object ClosedCircuitApiEndpoints {
     const val FUND_REQUEST = "v1/fund_request/"
 
     // loans
-    const val GET_LOAN_OFFERS_PLANS = "v1/loan_offer/plans/"
+    const val GET_LOAN_PREVIEWS = "v1/loan_offer/plans/"
     const val GET_LOAN_OFFERS_PLAN = "v1/loan_offer/plans/{id}"
     const val GET_LOAN_OFFER = "v1/loan_offer/{id}"
     const val ACCEPT_DELCINE_OFFER = "v1/loan_offer/{id}/"

@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.account
 
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +17,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.AccountBox
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -37,6 +41,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycNavigator
+import com.closedcircuit.closedcircuitapplication.presentation.feature.loans.LoansDashboard
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
@@ -66,11 +71,17 @@ internal object AccountTab : Tab {
     @Composable
     override fun Content() {
         val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
-        ScreenContent(navigateToKycScreen = { navigator.push(KycNavigator()) })
+        ScreenContent(
+            navigateToKycScreen = { navigator.push(KycNavigator()) },
+            navigateToLoansDashboard = { navigator.push(LoansDashboard()) }
+        )
     }
 
     @Composable
-    private fun ScreenContent(navigateToKycScreen: () -> Unit) {
+    private fun ScreenContent(
+        navigateToKycScreen: () -> Unit,
+        navigateToLoansDashboard: () -> Unit
+    ) {
         BaseScaffold { innerPadding ->
             Column(
                 modifier = Modifier.padding(innerPadding)
@@ -79,50 +90,59 @@ internal object AccountTab : Tab {
             ) {
                 WalletCard(wallet = null, modifier = Modifier.fillMaxWidth())
 
-                Spacer(Modifier.height(40.dp))
+                Spacer(Modifier.height(100.dp))
                 AccountSections(
                     modifier = Modifier.fillMaxWidth(),
-                    navigateToKycScreen = navigateToKycScreen
+                    navigateToKycScreen = navigateToKycScreen,
+                    navigateToLoansDashboard = navigateToLoansDashboard
                 )
             }
         }
     }
 
     @Composable
-    private fun AccountSections(modifier: Modifier, navigateToKycScreen: () -> Unit) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = modifier.background(color = Color.White, shape = Shapes().medium)
-                .padding(vertical = 20.dp)
+    private fun AccountSections(
+        modifier: Modifier,
+        navigateToKycScreen: () -> Unit,
+        navigateToLoansDashboard: () -> Unit
+    ) {
+        ElevatedCard(
+            colors = CardDefaults.elevatedCardColors(containerColor = Color.White),
         ) {
-            val commonModifier = remember { Modifier.fillMaxWidth() }
-            Section(
-                modifier = commonModifier,
-                iconRes = SharedRes.images.ic_loans,
-                textRes = SharedRes.strings.loans_label,
-                onClick = {}
-            )
+            Column(modifier = modifier.background(color = Color.White, shape = Shapes().medium)) {
+                val commonModifier = remember { Modifier.fillMaxWidth() }
+                Section(
+                    modifier = commonModifier,
+                    iconRes = SharedRes.images.ic_loans,
+                    textRes = SharedRes.strings.loans_label,
+                    showDivider = true,
+                    onClick = navigateToLoansDashboard
+                )
 
-            Section(
-                modifier = commonModifier,
-                iconRes = SharedRes.images.ic_credit_card,
-                textRes = SharedRes.strings.card_details_label,
-                onClick = {}
-            )
+                Section(
+                    modifier = commonModifier,
+                    iconRes = SharedRes.images.ic_credit_card,
+                    textRes = SharedRes.strings.card_details_label,
+                    showDivider = true,
+                    onClick = {}
+                )
 
-            Section(
-                modifier = commonModifier,
-                iconRes = SharedRes.images.ic_bank,
-                textRes = SharedRes.strings.bank_details_label,
-                onClick = {}
-            )
+                Section(
+                    modifier = commonModifier,
+                    iconRes = SharedRes.images.ic_bank,
+                    textRes = SharedRes.strings.bank_details_label,
+                    showDivider = true,
+                    onClick = {}
+                )
 
-            Section(
-                modifier = commonModifier,
-                iconRes = SharedRes.images.ic_national_id,
-                textRes = SharedRes.strings.kyc_label,
-                onClick = navigateToKycScreen
-            )
+                Section(
+                    modifier = commonModifier,
+                    iconRes = SharedRes.images.ic_national_id,
+                    textRes = SharedRes.strings.kyc_label,
+                    showDivider = false,
+                    onClick = navigateToKycScreen
+                )
+            }
         }
     }
 
@@ -131,36 +151,41 @@ internal object AccountTab : Tab {
         modifier: Modifier,
         iconRes: ImageResource,
         textRes: StringResource,
+        showDivider: Boolean,
         onClick: () -> Unit
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.clickable(onClick = onClick)
-                .padding(horizontal = 16.dp, vertical = 20.dp)
-        ) {
-            Icon(
-                painter = painterResource(iconRes),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level1),
-                        shape = CircleShape
-                    )
-                    .padding(8.dp)
-            )
+        Column(modifier = modifier.clickable(onClick = onClick).padding(horizontal = 16.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 20.dp)
+            ) {
+                Icon(
+                    painter = painterResource(iconRes),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level1),
+                            shape = CircleShape
+                        )
+                        .padding(10.dp)
+                )
 
-            Spacer(Modifier.width(16.dp))
-            Text(
-                text = stringResource(textRes),
-                color = Color.Black,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.weight(1f)
-            )
+                Spacer(Modifier.width(16.dp))
+                Text(
+                    text = stringResource(textRes),
+                    color = Color.Black,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.weight(1f)
+                )
 
-            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = null)
+                Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = null)
+            }
+
+            if (showDivider) {
+                Divider(color = Color.LightGray.copy(alpha = 0.5f))
+            }
         }
     }
 }
