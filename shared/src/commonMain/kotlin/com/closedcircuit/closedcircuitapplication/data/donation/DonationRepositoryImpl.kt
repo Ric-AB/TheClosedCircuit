@@ -6,7 +6,7 @@ import com.closedcircuit.closedcircuitapplication.domain.donation.Donations
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +30,6 @@ private val donations = List(10) {
         sponsorAvatar = Avatar(""),
         sponsorFullName = Name("Walter White"),
         planName = "Drugs",
-        amount = Price(5000.0)
+        amount = Amount(5000.0)
     )
 }.toImmutableList()

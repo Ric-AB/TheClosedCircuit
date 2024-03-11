@@ -11,7 +11,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 
@@ -52,5 +52,5 @@ fun User.asApiUser() = ApiUser(
 fun SponsorResponse.toSponsor() = Sponsor(
     avatar = Avatar(sponsorAvatar),
     fullName = Name(sponsorFullName),
-    loanAmount = Price(loanAmount.toDouble())
+    loanAmount = Amount(loanAmount.toDouble())
 )

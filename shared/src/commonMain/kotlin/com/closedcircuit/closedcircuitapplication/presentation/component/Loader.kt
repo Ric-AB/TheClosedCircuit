@@ -76,6 +76,13 @@ fun LoadingDialog(visible: Boolean = false) {
 }
 
 @Composable
+fun BackgroundLoader(modifier: Modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        CircularIndicator(size = 50.dp)
+    }
+}
+
+@Composable
 fun CircularIndicator(
     modifier: Modifier = Modifier,
     size: Dp = 32.dp,

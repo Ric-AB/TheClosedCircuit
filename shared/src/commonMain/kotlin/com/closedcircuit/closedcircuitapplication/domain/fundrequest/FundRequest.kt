@@ -3,15 +3,15 @@ package com.closedcircuit.closedcircuitapplication.domain.fundrequest
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 
 data class FundRequest(
     val id: ID,
     val beneficiaryId: ID,
     val planId: ID,
     val fundType: FundType,
-    val minimumLoanRange: Price?,
-    val maximumLoanRange: Price?,
+    val minimumLoanRange: Amount?,
+    val maximumLoanRange: Amount?,
     val maxLenders: Int?,
     val graceDuration: Int?,
     val repaymentDuration: Int?,
@@ -25,8 +25,8 @@ data class FundRequest(
             beneficiaryId: ID = ID.generateRandomUUID(),
             planId: ID = ID.generateRandomUUID(),
             fundType: FundType,
-            minimumLoanRange: Price? = null,
-            maximumLoanRange: Price? = null,
+            minimumLoanRange: Amount? = null,
+            maximumLoanRange: Amount? = null,
             maxLenders: Int? = null,
             graceDuration: Int? = null,
             repaymentDuration: Int? = null,

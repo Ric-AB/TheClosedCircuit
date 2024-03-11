@@ -20,15 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 
 @Composable
 fun BudgetItem(
     modifier: Modifier,
     name: String,
-    targetAmount: Price,
-    amountRaised: Price
+    targetAmount: Amount,
+    amountRaised: Amount
 ) {
     Card(
         shape = Shapes().large,

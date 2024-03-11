@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.domain.budget
 
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,9 +13,9 @@ data class Budget(
     val userID: ID,
     val name: String,
     val description: String,
-    val cost: Price,
+    val cost: Amount,
     val isSponsored: Boolean,
-    val fundsRaised: Price,
+    val fundsRaised: Amount,
     val isCompleted: Boolean,
     val approvers: List<String>,
     val createdAt: Date,
@@ -29,9 +29,9 @@ data class Budget(
             userID: ID = ID.generateRandomUUID(),
             name: String = "",
             description: String = "",
-            cost: Price = Price(0.0),
+            cost: Amount = Amount(0.0),
             isSponsored: Boolean = false,
-            fundsRaised: Price = Price(0.0),
+            fundsRaised: Amount = Amount(0.0),
             isCompleted: Boolean = false,
             approvers: List<String> = emptyList(),
             createdAt: Date = Date.now(),

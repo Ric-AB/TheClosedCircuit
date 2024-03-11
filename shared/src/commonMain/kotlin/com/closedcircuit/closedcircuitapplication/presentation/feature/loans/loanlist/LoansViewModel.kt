@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.presentation.feature.loans.preview
+package com.closedcircuit.closedcircuitapplication.presentation.feature.loans.loanlist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -6,42 +6,43 @@ import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.domain.loan.LoanPreview
+import com.closedcircuit.closedcircuitapplication.domain.loan.Loan
 import com.closedcircuit.closedcircuitapplication.domain.loan.LoanRepository
+import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.LoanStatus
 import com.closedcircuit.closedcircuitapplication.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.util.replaceAll
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
-class LoansPreviewViewModel(private val loanRepository: LoanRepository) :
-    BaseScreenModel<LoansPreviewUiState, Unit>() {
+class LoansViewModel(private val loanRepository: LoanRepository) :
+    BaseScreenModel<LoansUiState, Unit>() {
 
     private val loading = mutableStateOf(false)
     private val errorMessage = mutableStateOf<String?>(null)
-    private val loansPreviews = mutableStateListOf<LoanPreview>()
+    private val loans = mutableStateListOf<Loan>()
 
     @Composable
-    override fun uiState(): LoansPreviewUiState {
+    override fun uiState(): LoansUiState {
         return when {
-            loading.value -> LoansPreviewUiState.Loading
-            !errorMessage.value.isNullOrEmpty() -> LoansPreviewUiState.Error(errorMessage.value!!)
-            else -> LoansPreviewUiState.DataLoaded(loansPreviews.toImmutableList())
+            loading.value -> LoansUiState.Loading
+            !errorMessage.value.isNullOrEmpty() -> LoansUiState.Error(errorMessage.value!!)
+            else -> LoansUiState.DataLoaded(loans.toImmutableList())
         }
     }
 
-    fun onEvent(event: LoansPreviewUiEvent) {
+    fun onEvent(event: LoansUiEvent) {
         when (event) {
-            is LoansPreviewUiEvent.Fetch -> fetchLoansPreview(event.loanStatus)
+            is LoansUiEvent.Fetch -> fetchLoansBy(event.planId, event.loanStatus)
         }
     }
 
-    private fun fetchLoansPreview(loanStatus: LoanStatus) {
+    private fun fetchLoansBy(planId: ID, loanStatus: LoanStatus) {
         screenModelScope.launch {
             loading.value = true
             errorMessage.value = null
-            loanRepository.fetchLoanPreviews(loanStatus).onSuccess {
-                loansPreviews.replaceAll(it)
+            loanRepository.fetchLoansBy(planId, loanStatus).onSuccess {
+                loans.replaceAll(it)
             }.onError { _, message ->
                 errorMessage.value = message
             }

@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.data.wallet
 
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.wallet.Wallet
 import com.closedcircuit.closedcircuitapplication.domain.wallet.WalletRepository
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +10,7 @@ class WalletRepositoryImpl : WalletRepository {
 
     private val _walletFlow = MutableStateFlow(
         Wallet(
-            totalFunds = Price(4000.0),
+            totalFunds = Amount(4000.0),
             percentageIncrease = 10
         )
     )
@@ -19,7 +19,7 @@ class WalletRepositoryImpl : WalletRepository {
 
     override suspend fun getUserWallet(): Wallet {
         return Wallet(
-            totalFunds = Price(4000.0),
+            totalFunds = Amount(4000.0),
             percentageIncrease = 10
         )
     }

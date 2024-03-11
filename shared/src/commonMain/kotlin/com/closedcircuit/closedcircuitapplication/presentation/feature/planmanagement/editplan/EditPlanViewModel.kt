@@ -7,7 +7,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanOption
@@ -53,8 +53,8 @@ class EditPlanViewModel(
                 name = state.nameField.value,
                 description = state.descriptionField.value,
                 duration = TaskDuration(state.durationField.value.toInt()),
-                estimatedSellingPrice = Price(state.estimatedSellingPriceField.value.toDouble()),
-                estimatedCostPrice = Price(state.estimatedCostPriceField.value.toDouble())
+                estimatedSellingPrice = Amount(state.estimatedSellingPriceField.value.toDouble()),
+                estimatedCostPrice = Amount(state.estimatedCostPriceField.value.toDouble())
             )
 
             state = state.copy(isLoading = true)

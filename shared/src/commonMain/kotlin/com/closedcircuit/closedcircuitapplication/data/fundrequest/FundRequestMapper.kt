@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 
 fun FundRequest.toApiFundRequest(): ApiFundRequest {
     return if (fundType == FundType.DONATION) {
@@ -47,8 +47,8 @@ fun ApiFundRequest.toFundRequest(): FundRequest {
         planId = ID(planId.orEmpty()),
         beneficiaryId = ID(beneficiaryId.orEmpty()),
         fundType = FundType.fromText(meansOfSupport),
-        minimumLoanRange = minimumLoanRange?.toDouble()?.let { Price(it) },
-        maximumLoanRange = maximumLoanRange?.toDouble()?.let { Price(it) },
+        minimumLoanRange = minimumLoanRange?.toDouble()?.let { Amount(it) },
+        maximumLoanRange = maximumLoanRange?.toDouble()?.let { Amount(it) },
         maxLenders = maxLenders,
         graceDuration = graceDuration,
         repaymentDuration = repaymentDuration,

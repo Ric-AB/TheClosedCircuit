@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.data.plan.dto.CreateOrUpdatePl
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import database.PlanEntity
@@ -20,12 +20,12 @@ fun PlanEntity.asPlan() = Plan(
     name = name,
     description = description,
     duration = TaskDuration(duration),
-    estimatedSellingPrice = Price(estimatedSellingPrice),
-    estimatedCostPrice = Price(estimatedCostPrice),
-    fundsRaised = Price(fundsRaised),
+    estimatedSellingPrice = Amount(estimatedSellingPrice),
+    estimatedCostPrice = Amount(estimatedCostPrice),
+    fundsRaised = Amount(fundsRaised),
     tasksCompleted = tasksCompleted,
-    targetAmount = Price(targetAmount),
-    totalFundsRaised = Price(totalFundsRaised),
+    targetAmount = Amount(targetAmount),
+    totalFundsRaised = Amount(totalFundsRaised),
     analytics = analytics.orEmpty(),
     userID = ID(userID),
     hasRequestedFund = hasRequestedFund,

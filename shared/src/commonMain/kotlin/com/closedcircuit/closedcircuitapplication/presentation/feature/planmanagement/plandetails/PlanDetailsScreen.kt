@@ -72,7 +72,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budgets
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
@@ -206,8 +206,8 @@ private fun Header(plan: Plan, screenWidth: Dp) {
 @Composable
 private fun PlanSummary(
     planDuration: TaskDuration,
-    targetAmount: Price,
-    amountRaised: Price,
+    targetAmount: Amount,
+    amountRaised: Amount,
     screenWidth: Dp,
 ) {
     @Composable

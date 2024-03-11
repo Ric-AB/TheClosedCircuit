@@ -1,8 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.domain.wallet
 
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 
 data class Wallet(
-    val totalFunds: Price,
+    val totalFunds: Amount,
     val percentageIncrease: Int
 )

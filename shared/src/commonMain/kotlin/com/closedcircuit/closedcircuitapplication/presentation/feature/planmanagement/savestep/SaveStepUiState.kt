@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.util.InputField
-import com.closedcircuit.closedcircuitapplication.util.validation.PriceValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.AmountValidator
 import com.closedcircuit.closedcircuitapplication.util.validation.TextValidator
 
 data class SaveStepUIState(
@@ -47,7 +47,7 @@ data class BudgetItemState(
     val indexOfItem: Int = -1,
     val budget: Budget? = null,
     val budgetNameField: InputField = InputField(name = "budgetName", validator = TextValidator()),
-    val budgetCostField: InputField = InputField(name = "budgetCost", validator = PriceValidator())
+    val budgetCostField: InputField = InputField(name = "budgetCost", validator = AmountValidator())
 ) {
     val fieldsToValidate = listOf(budgetNameField, budgetCostField)
 

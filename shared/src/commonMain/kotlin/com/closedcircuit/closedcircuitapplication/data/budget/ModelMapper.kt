@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.data.budget.dto.CreateOrUpdate
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import database.BudgetEntity
 import kotlinx.collections.immutable.toImmutableList
 
@@ -31,9 +31,9 @@ fun BudgetEntity.asBudget() = Budget(
     userID = ID(userID),
     name = name,
     description = description,
-    cost = Price(cost),
+    cost = Amount(cost),
     isSponsored = isSponsored,
-    fundsRaised = Price(fundsRaised),
+    fundsRaised = Amount(fundsRaised),
     isCompleted = isCompleted,
     approvers = emptyList(),
     createdAt = Date(createdAt),

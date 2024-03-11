@@ -225,4 +225,18 @@
     <string name="total_sponsors">Total Sponsors:</string>
     <string name="total_amount">Total Amount:</string>
     <string name="x_sponsor">%1$s sponsor</string>
+    <string name="amount_label">Amount:</string>
+    <string name="grace_period_label">Grace Period:</string>
+    <string name="loan_percentage_label">Loan Percentage</string>
+    <string name="date_label">Date:</string>
+    <string name="view_offer_label">View Offer</string>
+    <string name="accept_offer_label">Accept Offer</string>
+    <string name="decline_offer_label">Decline Offer</string>
+    <string name="months_label">Months</string>
+    <string name="repayment_amount_label">Repayment Amount</string>
+    <string name="total_repayment_label">Total Repayment</string>
+    <string name="interest_label">Interest</string>
+    <string name="loan_label">Loan</string>
+    <string name="loan_details_label">Loan Details</string>
+    <string name="month_x_label">Month %1$s</string>
 </resources>

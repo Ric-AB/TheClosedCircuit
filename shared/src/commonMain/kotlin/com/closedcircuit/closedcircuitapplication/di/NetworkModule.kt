@@ -30,7 +30,7 @@ val networkModule = module {
     single(authQualifier) { createHttpClient(get()) }
     single(noAuthQualifier) { createHttpClient() }
     single(authQualifier) { createKtorfit(get(authQualifier)) }
-    single(noAuthQualifier) { createNoKtorfit(get(noAuthQualifier)) }
+    single(noAuthQualifier) { createNoAuthKtorfit(get(noAuthQualifier)) }
     single { createUserService(get(authQualifier)) }
     single { createAuthService(get(noAuthQualifier)) }
     single { createPlanService(get(authQualifier)) }
@@ -60,7 +60,7 @@ private fun createKtorfit(client: HttpClient): Ktorfit {
         .build()
 }
 
-private fun createNoKtorfit(client: HttpClient): Ktorfit {
+private fun createNoAuthKtorfit(client: HttpClient): Ktorfit {
     return Ktorfit.Builder()
         .httpClient(client)
         .baseUrl("https://theclosedcircuit-staging.herokuapp.com/api/")

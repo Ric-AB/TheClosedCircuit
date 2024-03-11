@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.planmana
 
 import com.closedcircuit.closedcircuitapplication.domain.plan.PlanOption
 import com.closedcircuit.closedcircuitapplication.util.InputField
-import com.closedcircuit.closedcircuitapplication.util.validation.PriceValidator
+import com.closedcircuit.closedcircuitapplication.util.validation.AmountValidator
 import com.closedcircuit.closedcircuitapplication.util.validation.TextValidator
 import kotlinx.collections.immutable.ImmutableList
 
@@ -19,11 +19,11 @@ data class CreatePlanUIState(
     val durationField: InputField = InputField(name = "planDuration", validator = TextValidator()),
     val estimatedSellingPriceField: InputField = InputField(
         name = "sellingPrice",
-        validator = PriceValidator()
+        validator = AmountValidator()
     ),
     val estimatedCostPriceField: InputField = InputField(
         name = "costPrice",
-        validator = PriceValidator()
+        validator = AmountValidator()
     ),
     val categories: ImmutableList<PlanOption> = PlanOption.getCategories(),
     val sectors: ImmutableList<PlanOption> = PlanOption.getSectors(),

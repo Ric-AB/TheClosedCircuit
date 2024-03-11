@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.util.validation
 
-class PriceValidator : InputValidator {
+class AmountValidator : InputValidator {
 
     override fun validate(input: String): ValidationResult {
         if (input.isEmpty()) {

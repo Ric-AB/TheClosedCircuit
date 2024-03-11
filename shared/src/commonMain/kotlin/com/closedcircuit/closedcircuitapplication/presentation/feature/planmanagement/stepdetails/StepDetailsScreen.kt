@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
@@ -143,7 +143,7 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun StepSummary(stepDuration: TaskDuration, targetAmount: Price, amountRaised: Price) {
+private fun StepSummary(stepDuration: TaskDuration, targetAmount: Amount, amountRaised: Amount) {
     @Composable
     fun Item(imageVector: ImageVector, text: String, contentDescription: String? = null) {
         Column(

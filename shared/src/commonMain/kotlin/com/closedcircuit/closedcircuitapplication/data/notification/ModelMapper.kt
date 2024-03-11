@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.notification.Notification
 import kotlinx.collections.immutable.toImmutableList
 
@@ -16,7 +16,7 @@ fun ApiNotification.asNotification() = Notification(
     message = message,
     avatar = Avatar(avatar),
     businessName = businessName,
-    amountOffered = Price(amountOffered),
+    amountOffered = Amount(amountOffered),
     isRead = isRead,
     createdAt = Date(createdAt)
 )

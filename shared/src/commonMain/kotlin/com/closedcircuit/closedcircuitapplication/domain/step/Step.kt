@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.domain.step
 
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.util.Empty
 import kotlinx.serialization.Serializable
@@ -13,8 +13,8 @@ data class Step(
     val name: String,
     val description: String,
     val duration: TaskDuration,
-    val targetFunds: Price,
-    val totalFundsRaised: Price,
+    val targetFunds: Amount,
+    val totalFundsRaised: Amount,
     val planID: ID,
     val userID: ID,
     val isSponsored: Boolean,
@@ -28,8 +28,8 @@ data class Step(
             name: String = String.Empty,
             description: String = String.Empty,
             duration: TaskDuration = TaskDuration(0),
-            targetFunds: Price = Price(0.0),
-            totalFundsRaised: Price = Price(0.0),
+            targetFunds: Amount = Amount(0.0),
+            totalFundsRaised: Amount = Amount(0.0),
             planID: ID = ID.generateRandomUUID(),
             userID: ID = ID.generateRandomUUID(),
             isSponsored: Boolean = false,

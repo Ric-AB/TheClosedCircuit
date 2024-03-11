@@ -4,7 +4,7 @@ import com.closedcircuit.closedcircuitapplication.data.step.dto.ApiStep
 import com.closedcircuit.closedcircuitapplication.data.step.dto.CreateOrUpdateStepRequest
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import database.StepEntity
@@ -15,8 +15,8 @@ fun StepEntity.asStep() = Step(
     name = name,
     description = description,
     duration = TaskDuration(duration),
-    targetFunds = Price(targetFunds),
-    totalFundsRaised = Price(totalFundsRaised),
+    targetFunds = Amount(targetFunds),
+    totalFundsRaised = Amount(totalFundsRaised),
     planID = ID(planID),
     userID = ID(userID),
     isSponsored = isSponsored,

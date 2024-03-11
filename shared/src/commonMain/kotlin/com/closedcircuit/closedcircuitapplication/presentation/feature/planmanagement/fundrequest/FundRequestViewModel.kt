@@ -8,7 +8,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.domain.fundrequest.FundRequestRepository
 import com.closedcircuit.closedcircuitapplication.domain.model.FundType
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.payment.PaymentRepository
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
@@ -98,8 +98,8 @@ class FundRequestViewModel(
 
         if (fundType != FundType.DONATION) {
             fundRequest = fundRequest.copy(
-                minimumLoanRange = Price(minimumLoanRange.value.toDouble()),
-                maximumLoanRange = Price(maximumLoanRange.value.toDouble()),
+                minimumLoanRange = Amount(minimumLoanRange.value.toDouble()),
+                maximumLoanRange = Amount(maximumLoanRange.value.toDouble()),
                 maxLenders = numberOfLenders.value,
                 graceDuration = graceDuration.value,
                 repaymentDuration = repaymentDuration.value,

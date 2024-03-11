@@ -13,7 +13,7 @@ import com.closedcircuit.closedcircuitapplication.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budgets
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.domain.step.StepRepository
@@ -118,7 +118,6 @@ class SaveStepViewModel(
         val stepDescription = state.stepDescriptionField.value
         val stepDuration = state.stepDurationField.value.toInt()
 
-        @Suppress("IfThenToElvis")
         return if (step == null) {
             val step = Step.buildStep(
                 name = stepName,
@@ -147,13 +146,13 @@ class SaveStepViewModel(
                     planID = planID,
                     stepID = stepID,
                     name = budgetName,
-                    cost = Price(budgetCost)
+                    cost = Amount(budgetCost)
                 )
                 Pair(Action.CREATE, budget)
             } else {
                 val budget = it.budget.copy(
                     name = budgetName,
-                    cost = Price(budgetCost)
+                    cost = Amount(budgetCost)
                 )
                 Pair(Action.UPDATE, budget)
             }

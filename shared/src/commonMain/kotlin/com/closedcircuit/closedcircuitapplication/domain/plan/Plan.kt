@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.domain.plan
 
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Price
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.util.Empty
 import kotlinx.serialization.Serializable
@@ -17,12 +17,12 @@ data class Plan(
     val name: String,
     val description: String,
     val duration: TaskDuration,
-    val estimatedSellingPrice: Price,
-    val estimatedCostPrice: Price,
-    val fundsRaised: Price,
+    val estimatedSellingPrice: Amount,
+    val estimatedCostPrice: Amount,
+    val fundsRaised: Amount,
     val tasksCompleted: Double,
-    val targetAmount: Price,
-    val totalFundsRaised: Price,
+    val targetAmount: Amount,
+    val totalFundsRaised: Amount,
     val analytics: String,
     val userID: ID,
     val hasRequestedFund: Boolean,
@@ -40,12 +40,12 @@ data class Plan(
             name: String = String.Empty,
             description: String = String.Empty,
             duration: TaskDuration = TaskDuration(0),
-            estimatedSellingPrice: Price = Price(0.0),
-            estimatedCostPrice: Price = Price(0.0),
-            fundsRaised: Price = Price(0.0),
+            estimatedSellingPrice: Amount = Amount(0.0),
+            estimatedCostPrice: Amount = Amount(0.0),
+            fundsRaised: Amount = Amount(0.0),
             tasksCompleted: Double = 0.0,
-            targetAmount: Price = Price(0.0),
-            totalFundsRaised: Price = Price(0.0),
+            targetAmount: Amount = Amount(0.0),
+            totalFundsRaised: Amount = Amount(0.0),
             planAnalytics: String = String.Empty,
             userID: ID = ID.generateRandomUUID(),
             hasRequestedFund: Boolean = false,
