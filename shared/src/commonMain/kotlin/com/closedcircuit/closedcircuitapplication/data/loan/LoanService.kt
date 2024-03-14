@@ -1,11 +1,17 @@
 package com.closedcircuit.closedcircuitapplication.data.loan
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import com.closedcircuit.closedcircuitapplication.data.loan.dto.AcknowledgeLoanPayload
+import com.closedcircuit.closedcircuitapplication.data.loan.dto.ApiLoanDetails
 import com.closedcircuit.closedcircuitapplication.data.loan.dto.LoanPreviewResponse
 import com.closedcircuit.closedcircuitapplication.data.loan.dto.LoansResponse
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.ACCEPT_DELCINE_OFFER
+import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.GET_LOAN_OFFER
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.GET_LOAN_PREVIEWS
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.GET_PLAN_LOAN_OFFERS
+import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
@@ -18,4 +24,13 @@ interface LoanService {
         @Path("id") planId: String,
         @Query("status") status: String
     ): ApiResponse<LoansResponse>
+
+    @GET(GET_LOAN_OFFER)
+    suspend fun fetchLoan(@Path("id") loanId: String): ApiResponse<ApiLoanDetails>
+
+    @PATCH(ACCEPT_DELCINE_OFFER)
+    suspend fun acknowledgeLoan(
+        @Path("id") loanId: String,
+        @Body body: AcknowledgeLoanPayload
+    ): ApiResponse<Unit>
 }

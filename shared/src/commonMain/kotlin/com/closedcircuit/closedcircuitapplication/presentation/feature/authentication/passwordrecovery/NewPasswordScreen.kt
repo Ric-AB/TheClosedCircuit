@@ -33,7 +33,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -53,7 +53,7 @@ internal class NewPasswordScreen : Screen, KoinComponent,
         val onEvent = viewModel::onEvent
         val messageBarState = rememberMessageBarState()
 
-        viewModel.resetPasswordResult.receiveAsFlow().observerWithScreen {
+        viewModel.resetPasswordResult.receiveAsFlow().observeWithScreen {
             when (it) {
                 is ResetPasswordResult.Failure -> {
                     messageBarState.addError(it.message)

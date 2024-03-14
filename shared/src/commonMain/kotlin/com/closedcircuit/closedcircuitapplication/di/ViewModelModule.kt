@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.authentic
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.register.RegisterViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.kyc.KycViewModel
+import com.closedcircuit.closedcircuitapplication.presentation.feature.loans.details.LoanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.loans.loanlist.LoansViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.loans.preview.LoansPreviewViewModel
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationViewModel
@@ -59,4 +60,5 @@ val viewModelModule = module {
     // loan
     factory { LoansPreviewViewModel(get()) }
     factory { LoansViewModel(get()) }
+    factory { parameters -> LoanDetailsViewModel(parameters.get(), get()) }
 }

@@ -52,7 +52,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -70,7 +70,7 @@ internal class RegisterScreen : Screen, KoinComponent,
         val messageBarState = rememberMessageBarState()
 
 
-        viewModel.registerResultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.registerResultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is RegisterResult.Failure -> {
                     messageBarState.addError(it.message)

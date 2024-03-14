@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
 
 @Composable
-inline fun <reified T> Flow<T>.observerWithScreen(
+inline fun <reified T> Flow<T>.observeWithScreen(
     noinline action: suspend (T) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
-            this@observerWithScreen.cancellable().collectIndexed { _, value -> action(value) }
+            this@observeWithScreen.cancellable().collectIndexed { _, value -> action(value) }
         }
     }
 }

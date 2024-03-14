@@ -33,7 +33,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -59,7 +59,7 @@ internal class ResetPasswordOtpScreen : Screen, KoinComponent,
             }
         }
 
-        viewModel.requestOtpResult.receiveAsFlow().observerWithScreen {
+        viewModel.requestOtpResult.receiveAsFlow().observeWithScreen {
             when (it) {
                 is RequestOtpResult.Failure -> {
                     messageBarState.addError(it.message)
@@ -72,7 +72,7 @@ internal class ResetPasswordOtpScreen : Screen, KoinComponent,
             }
         }
 
-        viewModel.verifyOtpResult.receiveAsFlow().observerWithScreen {
+        viewModel.verifyOtpResult.receiveAsFlow().observeWithScreen {
             when (it) {
                 is VerifyOtpResult.Failure -> {
                     otpError = true

@@ -40,7 +40,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -67,7 +67,7 @@ internal class ProfileVerificationScreen(val email: Email) : Screen, KoinCompone
             }
         }
 
-        viewModel.resultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is ProfileVerificationResult.RequestOtpFailure -> messageBarState.addError(it.message)
                 ProfileVerificationResult.RequestOtpSuccess -> messageBarState.addSuccess("Otp code has been sent to ${email.value}")

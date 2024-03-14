@@ -34,7 +34,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -49,7 +49,7 @@ internal object CreatePlanNavigator : Screen, KoinComponent {
         val viewModel = rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
         val messageBarState = rememberMessageBarState()
 
-        viewModel.createPlanResultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.createPlanResultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is CreatePlanResult.Failure -> messageBarState.addError(it.message)
                 CreatePlanResult.Success -> {

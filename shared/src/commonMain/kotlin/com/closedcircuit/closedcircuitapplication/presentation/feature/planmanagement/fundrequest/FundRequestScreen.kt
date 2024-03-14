@@ -50,7 +50,7 @@ import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.Empty
 import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.util.conditional
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -69,7 +69,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
         val paymentResult = navigator.navigationResult
             .getResult<Boolean>(PaymentScreen.PAYMENT_RESULT)
 
-        viewModel.resultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is FundRequestResult.Error -> messageBarState.addError(it.message)
                 is FundRequestResult.FundRequestSuccess ->

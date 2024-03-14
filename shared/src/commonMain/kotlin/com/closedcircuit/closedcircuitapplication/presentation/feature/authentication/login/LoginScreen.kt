@@ -45,7 +45,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.Bottom
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
@@ -62,7 +62,7 @@ internal class LoginScreen : Screen, KoinComponent {
         val state = viewModel.state
         val messageBarState = rememberMessageBarState()
 
-        viewModel.loginResultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.loginResultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is LoginResult.Failure -> {
                     messageBarState.addError(it.message)

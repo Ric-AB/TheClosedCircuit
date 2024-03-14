@@ -6,14 +6,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.domain.util.TypeWithProperties
+import com.closedcircuit.closedcircuitapplication.domain.util.TypeWithStringProperties
 
 /**
  * @param data The list of data items to display in the table.
@@ -33,18 +36,18 @@ import com.closedcircuit.closedcircuitapplication.domain.util.TypeWithProperties
  * @param textAlign The alignment of the text in the table cells, by default it will be [TextAlign.Center].
  */
 @Composable
-inline fun <reified T : TypeWithProperties> Table(
+inline fun <reified T : TypeWithStringProperties> Table(
     data: List<T>,
     enableTableHeaderTitles: Boolean = true,
     headerTableTitles: List<String>,
     headerTitlesBorderColor: Color = Color.LightGray,
-    headerTitlesTextStyle: TextStyle = MaterialTheme.typography.bodySmall,
+    headerTitlesTextStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
     headerTitlesBackGroundColor: Color = Color.White,
     tableRowColors: List<Color> = listOf(Color.White, Color.White),
     rowBorderColor: Color = Color.LightGray,
     rowTextStyle: TextStyle = MaterialTheme.typography.bodySmall,
     tableElevation: Dp = 0.dp,
-    shape: RoundedCornerShape = RoundedCornerShape(4.dp),
+    shape: Shape = Shapes().medium,
     borderStroke: BorderStroke = BorderStroke(
         width = 1.dp,
         color = Color.LightGray,
@@ -91,7 +94,7 @@ inline fun <reified T : TypeWithProperties> Table(
             }
 
             data.forEachIndexed { index, data ->
-                val rowData = data.properties.map { it.toString() }
+                val rowData = data.properties
 
                 // alternate background colors between rows
                 val tableRowBackgroundColor = if (index % 2 == 0) {

@@ -40,7 +40,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalS
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -57,7 +57,7 @@ internal data class EditPlanScreen(val plan: Plan) : Screen, KoinComponent,
         val uiState = viewModel.state
         val messageBarState = rememberMessageBarState()
 
-        viewModel.editPlanResultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.editPlanResultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is CreatePlanResult.Failure -> messageBarState.addError(it.message)
                 CreatePlanResult.Success -> messageBarState.addSuccess("Plan edited successfully") {

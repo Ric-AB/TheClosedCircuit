@@ -63,7 +63,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalS
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -80,7 +80,7 @@ internal data class SaveStepScreen(val planID: ID, val step: Step? = null) : Scr
         val messageBarState = rememberMessageBarState()
         val isNewStep = remember { step == null }
 
-        viewModel.saveStepResult.receiveAsFlow().observerWithScreen {
+        viewModel.saveStepResult.receiveAsFlow().observeWithScreen {
             when (it) {
                 is SaveStepResult.Failure -> messageBarState.addError(it.message)
                 SaveStepResult.Success -> {

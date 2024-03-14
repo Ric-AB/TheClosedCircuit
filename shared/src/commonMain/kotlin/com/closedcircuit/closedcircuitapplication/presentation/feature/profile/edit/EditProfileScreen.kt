@@ -44,7 +44,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -63,7 +63,7 @@ internal data class EditProfileScreen(private val user: User) :
         val uiState = viewModel.state
         val messageBarState = rememberMessageBarState()
 
-        viewModel.editProfileResult.receiveAsFlow().observerWithScreen {
+        viewModel.editProfileResult.receiveAsFlow().observeWithScreen {
             when (it) {
                 is EditProfileResult.Failure -> {
                     messageBarState.addError(it.message)

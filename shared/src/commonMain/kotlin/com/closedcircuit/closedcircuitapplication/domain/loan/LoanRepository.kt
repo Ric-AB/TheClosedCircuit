@@ -9,4 +9,8 @@ interface LoanRepository {
     suspend fun fetchLoanPreviews(loanStatus: LoanStatus): ApiResponse<List<LoanPreview>>
 
     suspend fun fetchLoansBy(planID: ID, loanStatus: LoanStatus): ApiResponse<List<Loan>>
+
+    suspend fun fetchLoan(loanID: ID): ApiResponse<LoanDetails>
+
+    suspend fun acknowledgeLoan(loanID: ID, status: LoanStatus): ApiResponse<Unit>
 }

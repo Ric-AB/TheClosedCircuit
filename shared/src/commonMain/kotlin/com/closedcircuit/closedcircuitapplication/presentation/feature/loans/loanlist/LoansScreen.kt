@@ -1,6 +1,5 @@
 package com.closedcircuit.closedcircuitapplication.presentation.feature.loans.loanlist
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +32,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Backgro
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultOutlinedButton
+import com.closedcircuit.closedcircuitapplication.presentation.feature.loans.details.LoanDetailsScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -55,9 +55,7 @@ internal class LoansScreen(private val planID: ID, private val loanStatus: LoanS
         ScreenContent(
             state = viewModel.uiState(),
             goBack = navigator::pop,
-            navigateToLoanDetails = {
-
-            }
+            navigateToLoanDetails = { navigator.push(LoanDetailsScreen(it)) }
         )
     }
 
@@ -131,7 +129,7 @@ internal class LoansScreen(private val planID: ID, private val loanStatus: LoanS
             }
         }
 
-        OutlinedCard(modifier = modifier.clickable(onClick = onClick)) {
+        OutlinedCard(modifier = modifier) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -164,7 +162,7 @@ internal class LoansScreen(private val planID: ID, private val loanStatus: LoanS
                 )
 
                 Spacer(Modifier.height(8.dp))
-                DefaultOutlinedButton(onClick = {}) {
+                DefaultOutlinedButton(onClick = onClick) {
                     Text(stringResource(SharedRes.strings.view_offer_label))
                 }
             }

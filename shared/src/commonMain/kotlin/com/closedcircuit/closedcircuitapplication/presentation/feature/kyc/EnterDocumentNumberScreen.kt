@@ -28,7 +28,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.remembe
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -42,7 +42,7 @@ internal class EnterDocumentNumberScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = navigator.getNavigatorScreenModel<KycViewModel>()
 
-        viewModel.resultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is KycResult.Failure -> messageBarState.addError(it.message)
                 KycResult.Success -> navigator.replaceAll(KycStatusScreen())

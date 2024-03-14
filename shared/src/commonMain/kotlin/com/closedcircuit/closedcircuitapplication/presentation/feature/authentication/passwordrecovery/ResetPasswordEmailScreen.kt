@@ -36,7 +36,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.navigation.transi
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
@@ -57,7 +57,7 @@ internal class ResetPasswordEmailScreen : Screen, KoinComponent,
         val onEvent = viewModel::onEvent
         val messageBarState = rememberMessageBarState()
 
-        viewModel.requestOtpResult.receiveAsFlow().observerWithScreen {
+        viewModel.requestOtpResult.receiveAsFlow().observeWithScreen {
             when (it) {
                 is RequestOtpResult.Failure -> {
                     messageBarState.addError(it.message)

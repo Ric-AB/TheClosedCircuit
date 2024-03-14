@@ -14,7 +14,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.BaseSca
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.navigationResult
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
-import com.closedcircuit.closedcircuitapplication.util.observerWithScreen
+import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.WebViewState
 import com.multiplatform.webview.web.rememberWebViewState
@@ -34,7 +34,7 @@ internal class PaymentScreen(private val url: String) : Screen, KoinComponent {
         val webViewState = rememberWebViewState(url)
         val viewModel = navigator.getNavigatorScreenModel<PaymentViewModel>()
 
-        viewModel.resultChannel.receiveAsFlow().observerWithScreen {
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 is PaymentResult.Error -> {}
                 PaymentResult.Success -> navigationResult.popWithResult(true)
