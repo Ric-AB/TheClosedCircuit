@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.data.plan
 
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.ApiPlan
-import com.closedcircuit.closedcircuitapplication.data.plan.dto.CreateOrUpdatePlanRequest
+import com.closedcircuit.closedcircuitapplication.data.plan.dto.SavePlanPayload
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
@@ -56,7 +56,7 @@ fun ApiPlan.asPlanEntity() = PlanEntity(
     updatedAt = updatedAt
 )
 
-fun Plan.asRequest() = CreateOrUpdatePlanRequest(
+fun Plan.asRequest() = SavePlanPayload(
     avatar = avatar.value,
     category = category,
     sector = sector,

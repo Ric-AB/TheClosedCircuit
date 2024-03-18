@@ -42,7 +42,7 @@ val viewModelModule = module {
 
     // plan management
     factory { PlanListViewModel(get()) }
-    factory { parameters -> SaveStepViewModel(parameters.get(), parameters.get(), get(), get()) }
+    factory { parameters -> SaveStepViewModel(parameters[0], parameters[1], get(), get()) }
     factory { parameters -> PlanDetailsViewModel(parameters.get(), get(), get(), get()) }
     factory { parameters -> EditPlanViewModel(parameters.get(), get()) }
     factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }

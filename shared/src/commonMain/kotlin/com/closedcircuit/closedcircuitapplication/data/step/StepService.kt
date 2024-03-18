@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.data.step
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.step.dto.ApiStep
-import com.closedcircuit.closedcircuitapplication.data.step.dto.CreateOrUpdateStepRequest
+import com.closedcircuit.closedcircuitapplication.data.step.dto.SaveStepPayload
 import com.closedcircuit.closedcircuitapplication.data.step.dto.GetStepsResponse
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.STEP
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.STEPS
@@ -20,13 +20,13 @@ interface StepService {
 
     @Headers("Content-Type: application/json")
     @POST(STEPS)
-    suspend fun createStep(@Body request: CreateOrUpdateStepRequest): ApiResponse<ApiStep>
+    suspend fun createStep(@Body request: SaveStepPayload): ApiResponse<ApiStep>
 
     @Headers("Content-Type: application/json")
     @PUT(STEP)
     suspend fun updateStep(
         @Path("id") id: String,
-        @Body request: CreateOrUpdateStepRequest
+        @Body request: SaveStepPayload
     ): ApiResponse<ApiStep>
 
     @DELETE(STEP)

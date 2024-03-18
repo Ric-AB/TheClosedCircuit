@@ -89,7 +89,7 @@ class LoanRepositoryImpl(
 
     override suspend fun acknowledgeLoan(loanID: ID, status: LoanStatus): ApiResponse<Unit> {
         return withContext(ioDispatcher) {
-            val payload = AcknowledgeLoanPayload(status = status)
+            val payload = AcknowledgeLoanPayload(status = status.name.lowercase())
             loanService.acknowledgeLoan(loanID.value, payload)
         }
     }

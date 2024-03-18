@@ -109,7 +109,7 @@ private fun ScreenContent(
     var isLoading by remember { mutableStateOf(false) }
 
     BaseScaffold(
-        isLoading = isLoading,
+        showLoadingDialog = isLoading,
         topBar = {
             if (isInSelectionMode) {
                 SelectionModeTopAppBar(

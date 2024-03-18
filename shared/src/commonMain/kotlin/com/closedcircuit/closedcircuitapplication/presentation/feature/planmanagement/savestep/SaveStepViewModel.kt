@@ -74,7 +74,7 @@ class SaveStepViewModel(
     }
 
     private fun upsertStepAndBudgets() {
-        state = state.copy(isLoading = true)
+        state = state.copy(loading = true)
 
         val (stepAction, step) = buildStep()
         screenModelScope.launch {
@@ -98,16 +98,16 @@ class SaveStepViewModel(
 
                 val completedSuccessfully = allResults.all { it is ApiSuccessResponse }
                 if (completedSuccessfully) {
-                    state = state.copy(isLoading = false)
+                    state = state.copy(loading = false)
                     _saveStepResult.send(SaveStepResult.Success)
                 } else {
-                    state = state.copy(isLoading = false)
+                    state = state.copy(loading = false)
                     val errorResult = allResults.find { it is ApiErrorResponse }
                     _saveStepResult.send(SaveStepResult.Failure((errorResult as ApiErrorResponse).errorMessage))
                 }
 
             }.onError { _, message ->
-                state = state.copy(isLoading = false)
+                state = state.copy(loading = false)
                 _saveStepResult.send(SaveStepResult.Failure(message))
             }
         }

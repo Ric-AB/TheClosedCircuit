@@ -84,7 +84,7 @@ private fun ScreenContent(
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
-        isLoading = uiState.isLoading,
+        showLoadingDialog = uiState.isLoading,
         topBar = {
             DefaultAppBar(
                 title = stringResource(SharedRes.strings.edit_plan),

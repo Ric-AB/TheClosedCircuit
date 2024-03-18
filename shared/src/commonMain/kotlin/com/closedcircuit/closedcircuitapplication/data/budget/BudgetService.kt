@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.data.budget
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.budget.dto.ApiBudget
-import com.closedcircuit.closedcircuitapplication.data.budget.dto.CreateOrUpdateBudgetRequest
+import com.closedcircuit.closedcircuitapplication.data.budget.dto.SaveBudgetPayload
 import com.closedcircuit.closedcircuitapplication.data.budget.dto.GetBudgetsResponse
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.BUDGET
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.BUDGETS
@@ -21,13 +21,13 @@ interface BudgetService {
 
     @Headers("Content-Type: application/json")
     @POST(BUDGETS)
-    suspend fun createBudget(@Body request: CreateOrUpdateBudgetRequest): ApiResponse<ApiBudget>
+    suspend fun createBudget(@Body request: SaveBudgetPayload): ApiResponse<ApiBudget>
 
     @Headers("Content-Type: application/json")
     @PUT(BUDGET)
     suspend fun updateBudget(
         @Path("id") id: String,
-        @Body request: CreateOrUpdateBudgetRequest
+        @Body request: SaveBudgetPayload
     ): ApiResponse<ApiBudget>
 
     @DELETE(BUDGET)

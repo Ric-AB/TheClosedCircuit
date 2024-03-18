@@ -59,7 +59,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -69,6 +69,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budgets
@@ -81,29 +82,25 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetItem
-import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.editplan.EditPlanScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.fundrequest.FundRequestScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.stepdetails.StepDetailsScreen
-import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
-internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
-    CustomScreenTransition by SlideOverTransition {
-    private val viewModel: PlanDetailsViewModel by inject { parametersOf(plan) }
+internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = getScreenModel<PlanDetailsViewModel> { parametersOf(plan) }
         val uiState by viewModel.state.collectAsState()
         ScreenContent(
             uiState = uiState,
@@ -212,7 +209,7 @@ private fun PlanSummary(
 ) {
     @Composable
     fun Item(
-        imageVector: ImageVector,
+        imagePainter: Painter,
         text: String,
         contentDescription: String? = null,
         modifier: Modifier
@@ -222,10 +219,11 @@ private fun PlanSummary(
             modifier = modifier
         ) {
             Icon(
-                imageVector = imageVector,
+                painter = imagePainter,
                 contentDescription = contentDescription
             )
 
+            Spacer(Modifier.height(4.dp))
             Text(text = text, style = MaterialTheme.typography.labelLarge)
         }
     }
@@ -243,23 +241,21 @@ private fun PlanSummary(
     ) {
 
         Item(
-            imageVector = rememberCalendarMonth(),
+            imagePainter = painterResource(SharedRes.images.ic_calendar),
             text = stringResource(SharedRes.strings.x_months, planDuration.value),
             modifier = Modifier.width(itemWidth)
         )
 
         Divider(modifier = dividerModifier)
-
         Item(
-            imageVector = rememberCalendarMonth(),
+            imagePainter = painterResource(SharedRes.images.ic_target_arrow),
             text = "NGN ${targetAmount.value}",
             modifier = Modifier.width(itemWidth)
         )
 
         Divider(modifier = dividerModifier)
-
         Item(
-            imageVector = rememberCalendarMonth(),
+            imagePainter = painterResource(SharedRes.images.ic_rising_arrow),
             text = "NGN ${amountRaised.value}",
             modifier = Modifier.width(itemWidth)
         )
@@ -461,7 +457,7 @@ private fun DropDownMenu(
         }
 
         DropdownMenu(
-            modifier = Modifier.width(100.dp),
+            modifier = Modifier.width(IntrinsicSize.Max),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {

@@ -102,7 +102,7 @@ private fun ScreenContent(
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = navigateToLogin) },
         messageBarState = messageBarState,
-        isLoading = state.isLoading,
+        showLoadingDialog = state.isLoading,
     ) { innerPadding ->
 
         var showPassword by rememberSaveable { mutableStateOf(false) }

@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
@@ -67,15 +68,14 @@ import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
-internal data class SaveStepScreen(val planID: ID, val step: Step? = null) : Screen, KoinComponent {
-    private val viewModel: SaveStepViewModel by inject { parametersOf(planID, step) }
+internal data class SaveStepScreen(val planId: ID, val step: Step? = null) : Screen, KoinComponent {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = getScreenModel<SaveStepViewModel> { parametersOf(planId, step) }
         val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         val messageBarState = rememberMessageBarState()
         val isNewStep = remember { step == null }
@@ -121,7 +121,7 @@ private fun ScreenContent(
 
     BaseScaffold(
         messageBarState = messageBarState,
-        isLoading = uiState.isLoading,
+        showLoadingDialog = uiState.loading,
         topBar = { DefaultAppBar(title = stringResource(titleRes), mainAction = goBack) },
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->

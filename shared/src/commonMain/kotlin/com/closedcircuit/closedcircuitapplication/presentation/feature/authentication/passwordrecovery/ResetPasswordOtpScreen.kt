@@ -107,7 +107,7 @@ private fun ScreenContent(
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
-        isLoading = state.loading,
+        showLoadingDialog = state.loading,
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         Column(

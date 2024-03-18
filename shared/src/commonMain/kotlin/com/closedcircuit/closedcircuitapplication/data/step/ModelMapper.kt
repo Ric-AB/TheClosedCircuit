@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.data.step
 
 import com.closedcircuit.closedcircuitapplication.data.step.dto.ApiStep
-import com.closedcircuit.closedcircuitapplication.data.step.dto.CreateOrUpdateStepRequest
+import com.closedcircuit.closedcircuitapplication.data.step.dto.SaveStepPayload
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.Amount
@@ -40,7 +40,7 @@ fun ApiStep.asStepEntity() = StepEntity(
     updatedAt = updatedAt
 )
 
-fun Step.asRequest() = CreateOrUpdateStepRequest(
+fun Step.asRequest() = SaveStepPayload(
     name = name,
     description = description,
     duration = duration.value,

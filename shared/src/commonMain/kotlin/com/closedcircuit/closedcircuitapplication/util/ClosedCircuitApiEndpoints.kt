@@ -40,7 +40,7 @@ object ClosedCircuitApiEndpoints {
     // plans
     const val CREATE_PLAN = "user/plans/"
     const val PLANS = "user/plans/get-plans/"
-    const val PLAN = "user/plans/{id}"
+    const val PLAN = "user/plans/{id}/"
 
     // steps
     const val STEPS = "user/steps/"

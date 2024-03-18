@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.data.plan
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.ApiPlan
-import com.closedcircuit.closedcircuitapplication.data.plan.dto.CreateOrUpdatePlanRequest
+import com.closedcircuit.closedcircuitapplication.data.plan.dto.SavePlanPayload
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.GetPlansResponse
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.CREATE_PLAN
 import com.closedcircuit.closedcircuitapplication.util.ClosedCircuitApiEndpoints.PLAN
@@ -27,13 +27,13 @@ interface PlanService {
     @Headers("Content-Type: application/json")
     @POST(CREATE_PLAN)
     suspend fun createPlan(
-        @Body request: CreateOrUpdatePlanRequest
+        @Body request: SavePlanPayload
     ): ApiResponse<ApiPlan>
 
     @Headers("Content-Type: application/json")
     @PUT(PLAN)
     suspend fun updateUserPlan(
-        @Body request: CreateOrUpdatePlanRequest,
+        @Body request: SavePlanPayload,
         @Path("id") planId: String
     ): ApiResponse<ApiPlan>
 

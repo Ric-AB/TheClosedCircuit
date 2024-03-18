@@ -86,7 +86,7 @@ private fun ScreenContent(
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = goBack) },
         messageBarState = messageBarState,
-        isLoading = state.loading,
+        showLoadingDialog = state.loading,
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         val (_, _, passwordField, confirmPasswordField, _) = state

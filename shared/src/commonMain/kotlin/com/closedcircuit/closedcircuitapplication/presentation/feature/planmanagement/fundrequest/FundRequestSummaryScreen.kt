@@ -142,7 +142,7 @@ internal class FundRequestSummaryScreen(
             GridRow(
                 item1 = {
                     GridItem(
-                        imageResource = SharedRes.images.ic_target_amount,
+                        imageResource = SharedRes.images.ic_target_arrow,
                         header = plan.targetAmount.value.toString(),
                         message = stringResource(SharedRes.strings.target_amount)
                     )

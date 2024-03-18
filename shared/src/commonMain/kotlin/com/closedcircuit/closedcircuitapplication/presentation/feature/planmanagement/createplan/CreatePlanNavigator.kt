@@ -82,7 +82,7 @@ private fun ScreenContent(
 
     BaseScaffold(
         messageBarState = messageBarState,
-        isLoading = uiState.isLoading,
+        showLoadingDialog = uiState.isLoading,
         topBar = {
             CreatePlanAppBar(
                 progress = innerNavigator?.size?.div(2F) ?: 0.5F,

@@ -101,7 +101,7 @@ private fun ScreenContent(
 ) {
     BaseScaffold(
         topBar = { DefaultAppBar(mainAction = goBack) },
-        isLoading = state.loading,
+        showLoadingDialog = state.loading,
         messageBarState = messageBarState
     ) { innerPadding ->
         var showDialog by remember { mutableStateOf(false) }

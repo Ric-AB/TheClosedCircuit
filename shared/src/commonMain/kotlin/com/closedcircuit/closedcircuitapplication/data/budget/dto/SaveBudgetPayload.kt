@@ -1,8 +1,10 @@
 package com.closedcircuit.closedcircuitapplication.data.budget.dto
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-data class CreateOrUpdateBudgetRequest(
+@Serializable
+data class SaveBudgetPayload(
     @SerialName("budget_name")
     val name: String,
     @SerialName("budget_description")

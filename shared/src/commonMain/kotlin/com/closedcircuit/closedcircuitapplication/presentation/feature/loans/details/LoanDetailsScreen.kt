@@ -84,7 +84,7 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
         onEvent: (LoanDetailsUiEvent) -> Unit
     ) {
         BaseScaffold(
-            isLoading = state.postLoading,
+            showLoadingDialog = state.postLoading,
             messageBarState = messageBarState,
             topBar = {
                 DefaultAppBar(

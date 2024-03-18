@@ -10,7 +10,7 @@ import com.closedcircuit.closedcircuitapplication.util.validation.AmountValidato
 import com.closedcircuit.closedcircuitapplication.util.validation.TextValidator
 
 data class SaveStepUIState(
-    val isLoading: Boolean = false,
+    val loading: Boolean = false,
     val stepNameField: InputField = InputField(name = "stepName", validator = TextValidator()),
     val stepDescriptionField: InputField = InputField(
         name = "stepDescription",

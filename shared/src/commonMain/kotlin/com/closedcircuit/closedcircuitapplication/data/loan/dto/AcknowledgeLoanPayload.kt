@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AcknowledgeLoanPayload(
-    val status: LoanStatus
+    val status: String
 )

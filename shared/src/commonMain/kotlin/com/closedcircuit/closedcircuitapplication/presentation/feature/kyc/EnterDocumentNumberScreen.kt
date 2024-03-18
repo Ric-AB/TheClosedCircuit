@@ -74,7 +74,7 @@ internal class EnterDocumentNumberScreen : Screen, KoinComponent {
                     mainAction = goBack
                 )
             },
-            isLoading = state.isLoading,
+            showLoadingDialog = state.isLoading,
             messageBarState = messageBarState
         ) { innerPadding ->
             val placeHolderAndHintResource =

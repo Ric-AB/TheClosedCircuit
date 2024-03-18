@@ -107,7 +107,7 @@ private fun ScreenContent(
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
-        isLoading = uiState.isLoading,
+        showLoadingDialog = uiState.isLoading,
         topBar = {
             DefaultAppBar(
                 mainIcon = Icons.Rounded.Close,

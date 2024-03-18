@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun BaseScaffold(
     messageBarState: MessageBarState? = null,
-    isLoading: Boolean = false,
+    showLoadingDialog: Boolean = false,
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
@@ -41,7 +41,7 @@ fun BaseScaffold(
                 contentWindowInsets = contentWindowInsets,
             ) { innerPadding ->
                 content(innerPadding)
-                LoadingDialog(isLoading)
+                LoadingDialog(showLoadingDialog)
             }
         }
     } else {
@@ -58,7 +58,7 @@ fun BaseScaffold(
         ) { innerPadding ->
             Box(modifier = modifier) {
                 content(innerPadding)
-                LoadingDialog(isLoading)
+                LoadingDialog(showLoadingDialog)
             }
         }
     }

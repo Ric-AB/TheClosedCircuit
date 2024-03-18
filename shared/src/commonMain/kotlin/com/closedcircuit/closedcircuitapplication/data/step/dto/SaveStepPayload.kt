@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateOrUpdateStepRequest(
+data class SaveStepPayload(
     @SerialName("step_name")
     val name: String,
     @SerialName("step_description")

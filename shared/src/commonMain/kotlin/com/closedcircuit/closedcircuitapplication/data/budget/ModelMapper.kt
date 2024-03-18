@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.data.budget
 
 import com.closedcircuit.closedcircuitapplication.data.budget.dto.ApiBudget
-import com.closedcircuit.closedcircuitapplication.data.budget.dto.CreateOrUpdateBudgetRequest
+import com.closedcircuit.closedcircuitapplication.data.budget.dto.SaveBudgetPayload
 import com.closedcircuit.closedcircuitapplication.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
@@ -40,7 +40,7 @@ fun BudgetEntity.asBudget() = Budget(
     updatedAt = Date(updatedAt)
 )
 
-fun Budget.asRequest() = CreateOrUpdateBudgetRequest(
+fun Budget.asRequest() = SaveBudgetPayload(
     name = name,
     description = description,
     cost = cost.value,

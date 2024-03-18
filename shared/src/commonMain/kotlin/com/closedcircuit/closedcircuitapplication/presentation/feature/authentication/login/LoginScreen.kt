@@ -97,7 +97,7 @@ private fun ScreenContent(
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
-        isLoading = state.isLoading,
+        showLoadingDialog = state.isLoading,
         topBar = { DefaultAppBar(mainAction = navigateToWelcomeScreen) },
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->

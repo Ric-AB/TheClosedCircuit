@@ -36,10 +36,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.model.Amount
@@ -48,22 +49,21 @@ import com.closedcircuit.closedcircuitapplication.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.presentation.component.BudgetItem
-import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberCalendarMonth
 import com.closedcircuit.closedcircuitapplication.presentation.component.icon.rememberTask
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
-    private val viewModel: StepDetailsViewModel by inject { parametersOf(step) }
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = getScreenModel<StepDetailsViewModel> { parametersOf(step) }
         val uiState by viewModel.state.collectAsState()
         ScreenContent(
             uiState = uiState,
@@ -71,7 +71,7 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
             navigateToSaveStep = {
                 val step = uiState.step
                 navigator.push(
-                    SaveStepScreen(planID = step.planID, step = step)
+                    SaveStepScreen(planId = step.planID, step = step)
                 )
             }
         )
@@ -145,13 +145,13 @@ private fun ScreenContent(
 @Composable
 private fun StepSummary(stepDuration: TaskDuration, targetAmount: Amount, amountRaised: Amount) {
     @Composable
-    fun Item(imageVector: ImageVector, text: String, contentDescription: String? = null) {
+    fun Item(imagePainter: Painter, text: String, contentDescription: String? = null) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.width(100.dp)
         ) {
             Icon(
-                imageVector = imageVector,
+                painter = imagePainter,
                 contentDescription = contentDescription
             )
 
@@ -168,21 +168,21 @@ private fun StepSummary(stepDuration: TaskDuration, targetAmount: Amount, amount
     ) {
         val dividerModifier = Modifier.fillMaxHeight(.5f).width(1.dp)
         Item(
-            imageVector = rememberCalendarMonth(),
+            imagePainter = painterResource(SharedRes.images.ic_calendar),
             text = stringResource(SharedRes.strings.x_months, stepDuration.value)
         )
 
         Divider(modifier = dividerModifier)
 
         Item(
-            imageVector = rememberCalendarMonth(),
+            imagePainter = painterResource(SharedRes.images.ic_target_arrow),
             text = "NGN ${targetAmount.value}"
         )
 
         Divider(modifier = dividerModifier)
 
         Item(
-            imageVector = rememberCalendarMonth(),
+            imagePainter = painterResource(SharedRes.images.ic_rising_arrow),
             text = "NGN ${amountRaised.value}"
         )
     }

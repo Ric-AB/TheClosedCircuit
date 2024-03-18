@@ -1,9 +1,10 @@
 package com.closedcircuit.closedcircuitapplication.data.plan.dto
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
-data class CreateOrUpdatePlanRequest(
+@Serializable
+data class SavePlanPayload(
     val avatar: String,
     @SerialName("plan_category")
     val category: String,
