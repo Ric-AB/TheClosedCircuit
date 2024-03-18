@@ -26,18 +26,18 @@ value class Date(val value: String) {
         fun now(): Date {
             return Date(Clock.System.now().toString())
         }
+    }
 
-        enum class Format(val format: String) {
-            hh_mm_a("hh:mm a"),
-            dd_mm_yyyy("dd/MM/yyyy"),
-            mmm_dd("MMM dd"),
-            yy_mm_dd("yyyy-MM-dd"),
-            dd_mmmm_yyyy("dd MMMM, yyyy"),
-            dd_mmm_yyyy("dd MMM, yyyy"),
-            MMMM_dd_yyyy("MMMM dd, yyyy"),
-            dd_mm_yyyy_hh_mm_ss("yyyy-MM-dd'T'HH:mm:ss'Z'"),
-            dd_mm_yyyy_hh_mm_ss_SSS("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        }
+    enum class Format(val format: String) {
+        hh_mm_a("hh:mm a"),
+        dd_mm_yyyy("dd/MM/yyyy"),
+        mmm_dd("MMM dd"),
+        yy_mm_dd("yyyy-MM-dd"),
+        dd_mmmm_yyyy("dd MMMM, yyyy"),
+        dd_mmm_yyyy("dd MMM, yyyy"),
+        MMMM_dd_yyyy("MMMM dd, yyyy"),
+        dd_mm_yyyy_hh_mm_ss("yyyy-MM-dd'T'HH:mm:ss'Z'"),
+        dd_mm_yyyy_hh_mm_ss_SSS("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     }
 
 }

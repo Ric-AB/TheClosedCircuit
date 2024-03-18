@@ -25,6 +25,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.domain.loan.Loan
+import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.LoanStatus
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
@@ -38,6 +39,7 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScr
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
+import org.jetbrains.skia.Data
 import org.koin.core.component.KoinComponent
 
 
@@ -158,7 +160,7 @@ internal class LoansScreen(private val planID: ID, private val loanStatus: LoanS
 
                 RowItem(
                     label = stringResource(SharedRes.strings.date_label),
-                    value = loan.createdAt.value
+                    value = loan.createdAt.format(Date.Format.dd_mmm_yyyy)
                 )
 
                 Spacer(Modifier.height(8.dp))

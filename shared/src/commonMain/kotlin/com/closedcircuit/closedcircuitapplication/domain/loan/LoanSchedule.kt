@@ -12,5 +12,5 @@ data class LoanSchedule(
     val status: String
 ) : TypeWithStringProperties {
     override val properties: List<String>
-        get() = listOf(date.value, repaymentAmount.value.toString())
+        get() = listOf(date.format(Date.Format.dd_mmm_yyyy), repaymentAmount.value.toString())
 }
