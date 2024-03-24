@@ -2,10 +2,10 @@ package com.closedcircuit.closedcircuitapplication.data.plan
 
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.data.plan.dto.SavePlanPayload
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import database.PlanEntity
@@ -22,7 +22,7 @@ fun PlanEntity.asPlan() = Plan(
     duration = TaskDuration(duration),
     estimatedSellingPrice = Amount(estimatedSellingPrice),
     estimatedCostPrice = Amount(estimatedCostPrice),
-    fundsRaised = Amount(fundsRaised),
+    fundsRaised = fundsRaised,
     tasksCompleted = tasksCompleted,
     targetAmount = Amount(targetAmount),
     totalFundsRaised = Amount(totalFundsRaised),
@@ -79,7 +79,7 @@ fun Plan.asEntity() = PlanEntity(
     duration = duration.value.toLong(),
     estimatedSellingPrice = estimatedSellingPrice.value,
     estimatedCostPrice = estimatedCostPrice.value,
-    fundsRaised = fundsRaised.value,
+    fundsRaised = fundsRaised,
     tasksCompleted = tasksCompleted,
     targetAmount = targetAmount.value,
     totalFundsRaised = totalFundsRaised.value,

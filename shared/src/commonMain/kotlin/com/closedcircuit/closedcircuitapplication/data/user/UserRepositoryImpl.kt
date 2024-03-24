@@ -5,9 +5,13 @@ import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.data.user.dto.KycRequest
 import com.closedcircuit.closedcircuitapplication.data.user.dto.UpdateUserRequest
-import com.closedcircuit.closedcircuitapplication.data.user.dto.UserDashboardResponse
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.KycDocumentType
+import com.closedcircuit.closedcircuitapplication.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.domain.user.User
+import com.closedcircuit.closedcircuitapplication.domain.user.UserDashboard
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import io.github.xxfast.kstore.KStore
 import kotlinx.coroutines.CoroutineDispatcher
@@ -37,7 +41,7 @@ class UserRepositoryImpl(
         return withContext(ioDispatcher + NonCancellable) {
             userService.getUserDetails(userId).mapOnSuccess { apiUser ->
                 val user = apiUser.asUser()
-                updateUserLocally(user)
+                saveLocally(user)
                 user
             }
         }
@@ -59,15 +63,29 @@ class UserRepositoryImpl(
 
             userService.updateUser(request, apiUser.id).mapOnSuccess { apiUserFromServer ->
                 val updatedUser = apiUserFromServer.asUser()
-                updateUserLocally(updatedUser)
+                saveLocally(updatedUser)
                 updatedUser
             }
         }
     }
 
-    override suspend fun getUserDashboard(): ApiResponse<UserDashboardResponse> {
+    override suspend fun getUserDashboard(): ApiResponse<UserDashboard> {
         return withContext(ioDispatcher) {
-            userService.getUserDashboard()
+            userService.getUserDashboard().mapOnSuccess { response ->
+                UserDashboard(
+                    completedPlansCount = response.planStatus.planAnalytics.completed,
+                    ongoingPlansCount = response.planStatus.planAnalytics.onGoing,
+                    notStartedPlansCount = response.planStatus.planAnalytics.notStarted,
+                    totalFundsRaised = Amount(response.totalFundsRaised.toDouble()),
+                    topSponsors = response.topSponsors.map {
+                        Sponsor(
+                            avatar = Avatar(it.sponsorAvatar),
+                            fullName = Name(it.sponsorFullName),
+                            loanAmount = Amount(it.loanAmount.toDouble())
+                        )
+                    }
+                )
+            }
         }
     }
 
@@ -80,11 +98,11 @@ class UserRepositoryImpl(
                 idType = documentType.name,
                 idNumber = documentNumber
             )
-            userService.sendKycDetails(requestBody)
+            userService.verifyKyc(requestBody)
         }
     }
 
-    private fun updateUserLocally(user: User) {
+    private fun saveLocally(user: User) {
         CoroutineScope(ioDispatcher).launch {
             userStore.set(user)
         }

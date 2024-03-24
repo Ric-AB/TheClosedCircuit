@@ -4,7 +4,6 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 
 data class UserDashboard(
-    val user: User,
     val completedPlansCount: Int,
     val ongoingPlansCount: Int,
     val notStartedPlansCount: Int,

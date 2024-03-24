@@ -239,4 +239,19 @@
     <string name="loan_label">Loan</string>
     <string name="loan_details_label">Loan Details</string>
     <string name="month_x_label">Month %1$s</string>
+
+    <string name="no_sponsors_label">No sponsors</string>
+    <string name="top_sponsors_label">Top sponsors</string>
+    <string name="no_sponsors_message">%1$s, you currently do not have any Sponsors. Share your link
+        to family and friends.
+    </string>
+    <string name="see_all_label">See all</string>
+    <string name="completed_label">Completed</string>
+    <string name="ongoing_label">On-going</string>
+    <string name="not_started_label">Not started</string>
+    <string name="total_no_of_plans_label">Total No. of plans</string>
+    <string name="x_percent_funds_raised_label">%1$s funds raised</string>
+    <string name="x_percent_tasks_completed_label">%1$s tasks completed</string>
+    <string name="plan_analytic_label">Plan analytics</string>
+    <string name="donations_label">Donations</string>
 </resources>

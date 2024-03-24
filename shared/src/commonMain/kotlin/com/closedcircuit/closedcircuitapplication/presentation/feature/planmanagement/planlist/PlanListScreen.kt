@@ -97,7 +97,7 @@ private fun ScreenContent(
 @Composable
 private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> Unit) {
     val fundsRaised = remember {
-        val value = (plan.fundsRaised / plan.targetAmount).value.toFloat()
+        val value = (plan.totalFundsRaised / plan.targetAmount).value.toFloat()
         val percentage = value * 100
         Pair(value, "$percentage%")
     }

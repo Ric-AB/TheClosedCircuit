@@ -33,7 +33,7 @@ val viewModelModule = module {
         scoped { ResetPasswordViewModel(get()) }
     }
 
-    factory { DashboardViewModel(get(), get(), get(), get(), get()) }
+    factory { DashboardViewModel(get(), get(), get()) }
 
     // profile
     factory { ProfileViewModel(get(), get()) }

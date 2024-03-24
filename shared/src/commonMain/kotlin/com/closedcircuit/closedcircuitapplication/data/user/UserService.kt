@@ -17,9 +17,7 @@ import de.jensklingenberg.ktorfit.http.Path
 
 interface UserService {
     @GET(USER)
-    suspend fun getUserDetails(
-        @Path("id") userId: String
-    ): ApiResponse<ApiUser>
+    suspend fun getUserDetails(@Path("id") userId: String): ApiResponse<ApiUser>
 
     @GET(DASHBOARD)
     suspend fun getUserDashboard(): ApiResponse<UserDashboardResponse>
@@ -33,5 +31,5 @@ interface UserService {
 
     @Headers("Content-Type: application/json")
     @POST(KYC)
-    suspend fun sendKycDetails(@Body kycRequest: KycRequest): ApiResponse<Unit>
+    suspend fun verifyKyc(@Body kycRequest: KycRequest): ApiResponse<Unit>
 }

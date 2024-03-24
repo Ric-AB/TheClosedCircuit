@@ -39,7 +39,6 @@ import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScr
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
-import org.jetbrains.skia.Data
 import org.koin.core.component.KoinComponent
 
 

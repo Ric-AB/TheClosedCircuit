@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         storageDir = filesDir.path
         setContent {
             CompositionLocalProvider(LocalImagePicker provides ImagePickerFactory().createPicker()) {
-                EntryPoint(useDarkTheme = isSystemInDarkTheme(), dynamicColors = true)
+                EntryPoint(useDarkTheme = isSystemInDarkTheme(), dynamicColors = false)
             }
         }
     }

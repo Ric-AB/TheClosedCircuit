@@ -4,13 +4,11 @@ import com.closedcircuit.closedcircuitapplication.domain.donation.Donations
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plans
 import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.domain.user.User
-import com.closedcircuit.closedcircuitapplication.domain.wallet.Wallet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-data class DashboardUIState(
-    val currentUser: User? = null,
-    val wallet: Wallet? = null,
+data class DashboardUiState(
+    val firstName: String? = null,
     val planAnalytics: PlanAnalyticsUIState? = null,
     val topSponsors: ImmutableList<Sponsor>? = null,
     val recentDonation: Donations = persistentListOf(),

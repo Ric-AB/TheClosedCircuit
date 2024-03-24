@@ -3,12 +3,15 @@ package com.closedcircuit.closedcircuitapplication.domain.loan
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.LoanStatus
+import kotlinx.collections.immutable.ImmutableList
+
+typealias Loans = ImmutableList<Loan>
 
 interface LoanRepository {
 
-    suspend fun fetchLoanPreviews(loanStatus: LoanStatus): ApiResponse<List<LoanPreview>>
+    suspend fun fetchLoanPreviews(loanStatus: LoanStatus): ApiResponse<ImmutableList<LoanPreview>>
 
-    suspend fun fetchLoansBy(planID: ID, loanStatus: LoanStatus): ApiResponse<List<Loan>>
+    suspend fun fetchLoansBy(planID: ID, loanStatus: LoanStatus): ApiResponse<Loans>
 
     suspend fun fetchLoan(loanID: ID): ApiResponse<LoanDetails>
 

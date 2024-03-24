@@ -10,7 +10,7 @@ interface UserRepository {
     suspend fun fetchUser(userId: String): ApiResponse<User>
     suspend fun nonNullUser(): User
     suspend fun updateUser(user: User): ApiResponse<User>
-    suspend fun getUserDashboard(): ApiResponse<UserDashboardResponse>
+    suspend fun getUserDashboard(): ApiResponse<UserDashboard>
     suspend fun verifyKyc(
         documentType: KycDocumentType,
         documentNumber: String

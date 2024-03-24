@@ -8,12 +8,15 @@ import com.closedcircuit.closedcircuitapplication.domain.loan.LoanDetails
 import com.closedcircuit.closedcircuitapplication.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.domain.loan.LoanRepository
 import com.closedcircuit.closedcircuitapplication.domain.loan.LoanSchedule
+import com.closedcircuit.closedcircuitapplication.domain.loan.Loans
+import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.domain.model.LoanStatus
 import com.closedcircuit.closedcircuitapplication.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.domain.model.Amount
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -22,7 +25,7 @@ class LoanRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher
 ) : LoanRepository {
 
-    override suspend fun fetchLoanPreviews(loanStatus: LoanStatus): ApiResponse<List<LoanPreview>> {
+    override suspend fun fetchLoanPreviews(loanStatus: LoanStatus): ApiResponse<ImmutableList<LoanPreview>> {
         return withContext(ioDispatcher) {
             loanService.fetchLoanPreviews(loanStatus.name.lowercase()).mapOnSuccess { response ->
                 response.previews.map {
@@ -33,12 +36,12 @@ class LoanRepositoryImpl(
                         totalAmountOffered = Amount(it.totalAmountOffered.toDouble()),
                         sponsorAvatars = it.sponsorAvatars.map { s: String -> Avatar(s) }
                     )
-                }
+                }.toImmutableList()
             }
         }
     }
 
-    override suspend fun fetchLoansBy(planID: ID, loanStatus: LoanStatus): ApiResponse<List<Loan>> {
+    override suspend fun fetchLoansBy(planID: ID, loanStatus: LoanStatus): ApiResponse<Loans> {
         return withContext(ioDispatcher) {
             loanService.fetchLoansBy(planID.value, loanStatus.name.lowercase())
                 .mapOnSuccess { response ->
@@ -52,7 +55,7 @@ class LoanRepositoryImpl(
                             interestRate = it.interestRate,
                             createdAt = Date(it.createdAt)
                         )
-                    }
+                    }.toImmutableList()
                 }
         }
     }

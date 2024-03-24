@@ -68,7 +68,13 @@ val dataModule = module {
         )
     }
 
-    single<DonationRepository> { DonationRepositoryImpl() }
+    single<DonationRepository> {
+        DonationRepositoryImpl(
+            donationService = get(),
+            ioDispatcher = get(named(namedIODispatcher))
+        )
+    }
+
     single<NotificationRepository> {
         NotificationRepositoryImpl(
             notificationService = get(),

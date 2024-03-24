@@ -188,7 +188,7 @@ private fun Header(plan: Plan, screenWidth: Dp) {
         PlanSummary(
             planDuration = plan.duration,
             targetAmount = plan.targetAmount,
-            amountRaised = plan.fundsRaised,
+            amountRaised = plan.totalFundsRaised,
             screenWidth = screenWidth
         )
 

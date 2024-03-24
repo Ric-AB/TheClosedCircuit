@@ -35,6 +35,11 @@ data class ApiErrorResponse<T>(
 val <T> ApiResponse<T>.isSuccessful: Boolean
     get() = this is ApiSuccessResponse<T>
 
+fun <T> ApiResponse<T>.getOrNull(): T? {
+    return if (this is ApiSuccessResponse<T>) this.body
+    else null
+}
+
 suspend fun <T : Any> ApiResponse<T>.onSuccess(
     executable: suspend (T) -> Unit
 ): ApiResponse<T> = apply {

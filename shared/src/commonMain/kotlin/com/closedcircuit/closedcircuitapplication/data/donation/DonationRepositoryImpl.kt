@@ -1,5 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.data.donation
 
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.domain.donation.Donation
 import com.closedcircuit.closedcircuitapplication.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.domain.donation.Donations
@@ -9,27 +11,30 @@ import com.closedcircuit.closedcircuitapplication.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.domain.model.Amount
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.withContext
 
-class DonationRepositoryImpl : DonationRepository {
+class DonationRepositoryImpl(
+    private val donationService: DonationService,
+    private val ioDispatcher: CoroutineDispatcher
+) : DonationRepository {
 
-    private val _donationsFlow = MutableStateFlow(donations)
-    override val recentDonationsFlow: Flow<Donations>
-        get() = _donationsFlow.asStateFlow()
-
-    override suspend fun getRecentDonations(): ImmutableList<Donation> {
-        return donations.take(5).toImmutableList()
+    override suspend fun fetchRecentDonations(): ApiResponse<Donations> {
+        return withContext(ioDispatcher) {
+            donationService.fetchRecentDonations().mapOnSuccess { response ->
+                response.donations.map {
+                    Donation(
+                        id = ID(it.donationId),
+                        sponsorAvatar = Avatar(it.sponsorAvatar),
+                        sponsorFullName = Name(it.sponsorFullName),
+                        planName = it.planName,
+                        amount = Amount(it.amount.toDouble())
+                    )
+                }.toImmutableList()
+            }
+        }
     }
 }
-
-private val donations = List(10) {
-    Donation(
-        id = ID("0d410f4e-4cd6-11ee-be56-0242ac120002"),
-        sponsorAvatar = Avatar(""),
-        sponsorFullName = Name("Walter White"),
-        planName = "Drugs",
-        amount = Amount(5000.0)
-    )
-}.toImmutableList()
