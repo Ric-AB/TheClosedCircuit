@@ -131,7 +131,7 @@ private fun ScreenContent(
                 .padding(innerPadding)
         ) {
             when (uiState) {
-                is NotificationUIState.DataLoaded -> {
+                is NotificationUIState.Content -> {
                     LaunchedEffect(uiState.isLoading) {
                         isLoading = uiState.isLoading
                     }
@@ -165,7 +165,7 @@ private fun ScreenContent(
 
 @Composable
 private fun NotificationBody(
-    uiState: NotificationUIState.DataLoaded,
+    uiState: NotificationUIState.Content,
     toggleSelection: (Int) -> Unit,
     deleteNotification: (Int, ID) -> Unit,
     updateSelectionState: (Boolean, Boolean, Int) -> Unit

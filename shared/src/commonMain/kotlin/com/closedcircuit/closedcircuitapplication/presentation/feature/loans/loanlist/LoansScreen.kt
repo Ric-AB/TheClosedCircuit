@@ -79,7 +79,7 @@ internal class LoansScreen(private val planID: ID, private val loanStatus: LoanS
                     .padding(innerPadding)
             ) {
                 when (state) {
-                    is LoansUiState.DataLoaded -> LoanItems(
+                    is LoansUiState.Content -> LoanItems(
                         modifier = Modifier.fillMaxWidth(),
                         items = state.items,
                         navigateToLoanDetails = navigateToLoanDetails

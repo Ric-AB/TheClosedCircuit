@@ -9,6 +9,16 @@ expect fun randomUUID(): String
 val String.Companion.Empty
     inline get() = ""
 
+val Double.Companion.Zero
+    inline get() = 0.0
+
+val Int.Companion.Zero
+    inline get() = 0
+
+fun Double?.orZero() = this ?: Double.Zero
+
+fun Int?.orZero() = this ?: Int.Zero
+
 fun <T> SnapshotStateList<T>.replaceAll(items: Collection<T>) {
     clear()
     addAll(items)

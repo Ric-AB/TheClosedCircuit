@@ -35,7 +35,7 @@ class LoanDetailsViewModel(
         return when {
             fetchLoading.value -> LoanDetailsUiState.Loading
             errorMessage.value != null -> LoanDetailsUiState.Error(errorMessage.value!!)
-            else -> LoanDetailsUiState.DataLoaded(
+            else -> LoanDetailsUiState.Content(
                 loading = postLoading.value,
                 canTransact = loanStatus.value == LoanStatus.PENDING,
                 loanAmount = loanAmount.value,

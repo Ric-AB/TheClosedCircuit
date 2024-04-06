@@ -27,7 +27,7 @@ class LoansViewModel(private val loanRepository: LoanRepository) :
         return when {
             loading.value -> LoansUiState.Loading
             !errorMessage.value.isNullOrEmpty() -> LoansUiState.Error(errorMessage.value!!)
-            else -> LoansUiState.DataLoaded(loans.toImmutableList())
+            else -> LoansUiState.Content(loans.toImmutableList())
         }
     }
 

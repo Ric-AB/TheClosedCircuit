@@ -95,7 +95,7 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
         ) { innerPadding ->
             Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                 when (state) {
-                    is LoanDetailsUiState.DataLoaded ->
+                    is LoanDetailsUiState.Content ->
                         Body(
                             state = state,
                             onEvent = onEvent,
@@ -118,7 +118,7 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
     @Composable
     private fun Body(
         modifier: Modifier,
-        state: LoanDetailsUiState.DataLoaded,
+        state: LoanDetailsUiState.Content,
         onEvent: (LoanDetailsUiEvent) -> Unit
     ) {
         Column(modifier = modifier) {

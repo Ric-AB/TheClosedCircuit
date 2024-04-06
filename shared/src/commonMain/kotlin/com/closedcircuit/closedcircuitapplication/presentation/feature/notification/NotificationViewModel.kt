@@ -38,7 +38,7 @@ class NotificationViewModel(
                 initialLoading -> NotificationUIState.InitialLoading
                 errorLoadingMessage != null -> NotificationUIState.Error(errorLoadingMessage)
                 else -> {
-                    NotificationUIState.DataLoaded(
+                    NotificationUIState.Content(
                         isLoading = isLoading,
                         notificationItems = notifications
                     )

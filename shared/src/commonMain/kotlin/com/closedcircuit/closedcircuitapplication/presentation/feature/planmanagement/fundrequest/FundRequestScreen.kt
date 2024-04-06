@@ -46,10 +46,10 @@ import com.closedcircuit.closedcircuitapplication.presentation.feature.payment.P
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.navigationResult
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.presentation.util.conditional
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.util.Empty
 import com.closedcircuit.closedcircuitapplication.util.NumberCommaTransformation
-import com.closedcircuit.closedcircuitapplication.util.conditional
 import com.closedcircuit.closedcircuitapplication.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList

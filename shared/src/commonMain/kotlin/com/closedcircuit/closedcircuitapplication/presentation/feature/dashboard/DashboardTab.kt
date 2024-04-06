@@ -1,16 +1,18 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard
 
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -24,11 +26,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
@@ -36,7 +38,6 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,6 +56,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -74,6 +76,7 @@ import com.closedcircuit.closedcircuitapplication.domain.donation.Donations
 import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.presentation.component.Avatar
+import com.closedcircuit.closedcircuitapplication.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.presentation.component.MessageBarState
@@ -81,12 +84,20 @@ import com.closedcircuit.closedcircuitapplication.presentation.component.WalletC
 import com.closedcircuit.closedcircuitapplication.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.presentation.feature.notification.NotificationScreen
+import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.createplan.CreatePlanNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.presentation.theme.accent1
+import com.closedcircuit.closedcircuitapplication.presentation.theme.accent2
+import com.closedcircuit.closedcircuitapplication.presentation.theme.accent3
+import com.closedcircuit.closedcircuitapplication.presentation.theme.accent4
 import com.closedcircuit.closedcircuitapplication.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.presentation.theme.primary2
+import com.closedcircuit.closedcircuitapplication.presentation.theme.primary3
+import com.closedcircuit.closedcircuitapplication.presentation.theme.primary4
 import com.closedcircuit.closedcircuitapplication.presentation.theme.secondary2
+import com.closedcircuit.closedcircuitapplication.presentation.theme.secondary4
+import com.closedcircuit.closedcircuitapplication.presentation.theme.secondary5
 import com.closedcircuit.closedcircuitapplication.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
@@ -95,7 +106,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.component.KoinComponent
 
-@OptIn(ExperimentalLayoutApi::class)
 internal object DashboardTab : Tab, KoinComponent {
     override val options: TabOptions
         @Composable
@@ -121,17 +131,18 @@ internal object DashboardTab : Tab, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             state = viewModel.uiState(),
+            navigateToCreatePlan = { navigator.push(CreatePlanNavigator) },
             navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
             navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
             navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
         )
     }
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun ScreenContent(
         messageBarState: MessageBarState,
         state: DashboardUiState,
+        navigateToCreatePlan: () -> Unit,
         navigateToPlanListScreen: () -> Unit,
         navigateToNotificationScreen: () -> Unit,
         navigateToLoginScreen: () -> Unit
@@ -140,78 +151,105 @@ internal object DashboardTab : Tab, KoinComponent {
             messageBarState = messageBarState,
             topBar = { DashboardTopAppBar(navigateToNotificationScreen = navigateToNotificationScreen) }
         ) { innerPadding ->
-            LazyColumn(
-                contentPadding = PaddingValues(top = verticalScreenPadding),
-                modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                item {
+            BoxWithConstraints {
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                        .padding(innerPadding)
+                        .verticalScroll(rememberScrollState())
+                        .padding(vertical = verticalScreenPadding)
+                ) {
                     WalletCard(
                         wallet = null,
                         modifier = Modifier.padding(horizontal = horizontalScreenPadding)
                     )
-                }
 
-                item {
-                    val topSponsors = state.topSponsors
-                    if (topSponsors != null) {
-                        Spacer(Modifier.height(80.dp))
-                        TopSponsors(
-                            topSponsors = topSponsors,
-                            userFirstName = state.firstName.orEmpty(),
-                            modifier = Modifier.fillMaxWidth().animateItemPlacement()
-                        )
+                    when (state) {
+                        is DashboardUiState.Content -> {
+                            LoadedDashboard(
+                                modifier = Modifier.fillMaxWidth(),
+                                state = state,
+                                navigateToPlanListScreen = navigateToPlanListScreen,
+                                navigateToLoginScreen = navigateToLoginScreen
+                            )
+                        }
+
+                        DashboardUiState.Empty -> {
+                            EmptyDashboard(
+                                onClick = navigateToCreatePlan,
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(horizontal = horizontalScreenPadding),
+                            )
+                        }
+
+                        DashboardUiState.Loading -> {
+                            BackgroundLoader(Modifier.fillMaxWidth().height(this@BoxWithConstraints.maxHeight))
+                        }
                     }
                 }
+            }
+        }
+    }
 
-                item {
-                    val planAnalyticsUiState = state.planAnalytics
-                    if (planAnalyticsUiState != null) {
-                        Spacer(Modifier.height(32.dp))
-                        PlanAnalytics(
-                            modifier = Modifier.fillMaxWidth(),
-                            planAnalyticsUiState = planAnalyticsUiState
-                        )
-                    }
-                }
+    @Composable
+    private fun LoadedDashboard(
+        modifier: Modifier,
+        state: DashboardUiState.Content,
+        navigateToPlanListScreen: () -> Unit,
+        navigateToLoginScreen: () -> Unit
+    ) {
+        Column(modifier = modifier) {
+            val topSponsors = state.topSponsors
+            if (topSponsors != null) {
+                Spacer(Modifier.height(80.dp))
+                TopSponsors(
+                    topSponsors = topSponsors,
+                    userFirstName = state.firstName,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
-                item {
-                    val recentPlans = state.recentPlans
-                    if (recentPlans.isNotEmpty()) {
-                        Spacer(Modifier.height(32.dp))
-                        RecentPlans(
-                            recentPlans = recentPlans,
-                            modifier = Modifier.fillMaxWidth().animateItemPlacement()
-                        )
-                    }
-                }
+            val completedPlans = state.completedPlansCount
+            val onGoingPlans = state.ongoingPlansCount
+            val notStartedPlans = state.notStartedPlansCount
+            val showAnalytics = remember(completedPlans, onGoingPlans, notStartedPlans) {
+                listOf(completedPlans, onGoingPlans, notStartedPlans).any { it > 0 }
+            }
 
-                val recentDonations = state.recentDonation
-                if (state.recentDonation.isNotEmpty()) {
-                    val modifier = Modifier.padding(horizontal = horizontalScreenPadding)
-                    item {
-                        Spacer(Modifier.height(32.dp))
-                        SectionHeader(
-                            modifier = modifier,
-                            text = stringResource(SharedRes.strings.donations_label)
-                        )
-                    }
+            if (showAnalytics) {
+                Spacer(Modifier.height(32.dp))
+                PlanAnalytics(
+                    modifier = Modifier.fillMaxWidth(),
+                    completedPlans = state.completedPlansCount,
+                    onGoingPlans = state.ongoingPlansCount,
+                    notStartedPlans = state.notStartedPlansCount
+                )
+            }
 
-                    recentDonations(
-                        modifier = modifier.fillMaxWidth(),
-                        donations = recentDonations
-                    )
-                }
+            val recentPlans = state.recentPlans
+            if (recentPlans.isNotEmpty()) {
+                Spacer(Modifier.height(32.dp))
+                RecentPlans(
+                    recentPlans = recentPlans,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
-                item {
-                    DefaultButton(onClick = navigateToPlanListScreen) {
-                        Text("Go")
-                    }
+            val recentDonations = state.recentDonation
+            if (state.recentDonation.isNotEmpty()) {
+                Spacer(Modifier.height(32.dp))
+                RecentDonations(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(horizontal = horizontalScreenPadding),
+                    donations = recentDonations
+                )
+            }
 
-                    DefaultButton(onClick = navigateToLoginScreen) {
-                        Text("Logout")
-                    }
-                }
+            DefaultButton(onClick = navigateToPlanListScreen) {
+                Text("Go")
+            }
+
+            DefaultButton(onClick = navigateToLoginScreen) {
+                Text("Logout")
             }
         }
     }
@@ -251,36 +289,38 @@ internal object DashboardTab : Tab, KoinComponent {
             ) {
                 items(items = recentPlans, key = { it.id.value }) {
                     ScreenCard(modifier = Modifier.width(250.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Avatar(avatar = it.avatar, size = DpSize(40.dp, 40.dp))
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Avatar(avatar = it.avatar, size = DpSize(40.dp, 40.dp))
 
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = it.name)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = it.name)
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+                            LinearProgressIndicator(progress = it.fundsRaised.toFloat())
+                            Text(
+                                text = stringResource(
+                                    SharedRes.strings.x_percent_funds_raised_label,
+                                    it.fundsRaised.times(100)
+                                ),
+                                style = MaterialTheme.typography.labelMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+                            LinearProgressIndicator(progress = it.tasksCompleted.toFloat())
+                            Text(
+                                text = stringResource(
+                                    SharedRes.strings.x_percent_tasks_completed_label,
+                                    it.tasksCompleted.times(100)
+                                ),
+                                style = MaterialTheme.typography.labelMedium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
                         }
-
-                        Spacer(modifier = Modifier.height(12.dp))
-                        LinearProgressIndicator(progress = it.fundsRaised.toFloat())
-                        Text(
-                            text = stringResource(
-                                SharedRes.strings.x_percent_funds_raised_label,
-                                it.fundsRaised.times(100)
-                            ),
-                            style = MaterialTheme.typography.labelMedium,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-                        LinearProgressIndicator(progress = it.tasksCompleted.toFloat())
-                        Text(
-                            text = stringResource(
-                                SharedRes.strings.x_percent_tasks_completed_label,
-                                it.tasksCompleted.times(100)
-                            ),
-                            style = MaterialTheme.typography.labelMedium,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
                     }
                 }
             }
@@ -363,71 +403,90 @@ internal object DashboardTab : Tab, KoinComponent {
         }
     }
 
-    private fun LazyListScope.recentDonations(modifier: Modifier, donations: Donations) {
-        items(items = donations, key = { it.id.value }) {
-            Row(
-                modifier = modifier.padding(vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Avatar(avatar = it.sponsorAvatar, size = DpSize(40.dp, 40.dp))
+    @Composable
+    private fun RecentDonations(modifier: Modifier, donations: Donations) {
+        Column(modifier = modifier) {
+            SectionHeader(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(SharedRes.strings.donations_label)
+            )
 
-                Spacer(Modifier.width(8.dp))
-                Column(modifier = Modifier.weight(1f)) {
+            donations.forEach {
+                Row(
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Avatar(avatar = it.sponsorAvatar, size = DpSize(40.dp, 40.dp))
+
+                    Spacer(Modifier.width(8.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = it.sponsorFullName.value,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = it.amount.value.toString(),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
+                    Spacer(Modifier.width(12.dp))
                     Text(
-                        text = it.sponsorFullName.value,
-                        style = MaterialTheme.typography.bodySmall
+                        text = it.planName,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.End
                     )
+                }
+            }
+        }
 
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        text = it.amount.value.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.SemiBold
+    }
+
+    @Composable
+    private fun EmptyDashboard(modifier: Modifier, onClick: () -> Unit) {
+        Column(modifier = modifier) {
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                val backgroundToTextColorPair = remember {
+                    listOf(
+                        primary3 to primary4,
+                        secondary4 to secondary5,
+                        accent2 to primary4,
+                        secondary4 to secondary5,
+                        accent3 to accent4,
                     )
                 }
 
-                Spacer(Modifier.width(12.dp))
-                Text(
-                    text = it.planName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.End
-                )
+                val suggestions = remember {
+                    listOf(
+                        "A new personal business",
+                        "A community project",
+                        "A new social project with friends and family",
+                        "Business Incubation",
+                        "Business with friends and family",
+                    )
+                }
+
+                suggestions.forEachIndexed { index, text ->
+                    val usableIndex = index.coerceAtMost(backgroundToTextColorPair.lastIndex)
+                    Text(
+                        text = text,
+                        color = backgroundToTextColorPair[usableIndex].second,
+                        modifier = Modifier.clip(Shapes().small)
+                            .background(backgroundToTextColorPair[usableIndex].first)
+                            .clickable(onClick = onClick)
+                            .padding(horizontal = 8.dp)
+                    )
+                }
             }
-
-            Divider(modifier = modifier)
-        }
-    }
-
-    @Composable
-    private fun ScreenCard(modifier: Modifier, content: @Composable ColumnScope.() -> Unit) {
-        OutlinedCard(
-            modifier = modifier,
-            border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
-            content = content
-        )
-    }
-
-    @Composable
-    private fun SectionHeader(
-        modifier: Modifier = Modifier,
-        text: String,
-        bottomPadding: Dp = 4.dp,
-        action: @Composable () -> Unit = {}
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = modifier.fillMaxWidth().padding(bottom = bottomPadding)
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            action()
         }
     }
 
@@ -448,13 +507,17 @@ internal object DashboardTab : Tab, KoinComponent {
 
 
     @Composable
-    private fun PlanAnalytics(modifier: Modifier, planAnalyticsUiState: PlanAnalyticsUIState) {
+    private fun PlanAnalytics(
+        modifier: Modifier,
+        completedPlans: Int,
+        onGoingPlans: Int,
+        notStartedPlans: Int
+    ) {
         Column(modifier = modifier.padding(horizontal = horizontalScreenPadding)) {
             SectionHeader(text = stringResource(SharedRes.strings.plan_analytic_label))
             ScreenCard(Modifier.fillMaxWidth()) {
                 Box(modifier = Modifier.padding(16.dp)) {
                     Row {
-                        val (completedPlans, onGoingPlans, notStartedPlans) = planAnalyticsUiState
                         val values = persistentListOf(
                             onGoingPlans.toFloat(),
                             notStartedPlans.toFloat(),
@@ -502,7 +565,38 @@ internal object DashboardTab : Tab, KoinComponent {
     }
 
     @Composable
-    fun PlanCategory(modifier: Modifier = Modifier, color: Color, text: String) {
+    private fun ScreenCard(modifier: Modifier, content: @Composable ColumnScope.() -> Unit) {
+        OutlinedCard(
+            modifier = modifier,
+            border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
+            content = content
+        )
+    }
+
+    @Composable
+    private fun SectionHeader(
+        modifier: Modifier = Modifier,
+        text: String,
+        bottomPadding: Dp = 4.dp,
+        action: @Composable () -> Unit = {}
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = modifier.fillMaxWidth().padding(bottom = bottomPadding)
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            action()
+        }
+    }
+
+    @Composable
+    private fun PlanCategory(modifier: Modifier = Modifier, color: Color, text: String) {
         Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
@@ -579,4 +673,5 @@ internal object DashboardTab : Tab, KoinComponent {
         }
     }
 }
+
 

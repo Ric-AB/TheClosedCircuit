@@ -26,7 +26,7 @@ class LoansPreviewViewModel(private val loanRepository: LoanRepository) :
         return when {
             loading.value -> LoansPreviewUiState.Loading
             !errorMessage.value.isNullOrEmpty() -> LoansPreviewUiState.Error(errorMessage.value!!)
-            else -> LoansPreviewUiState.DataLoaded(loansPreviews.toImmutableList())
+            else -> LoansPreviewUiState.Content(loansPreviews.toImmutableList())
         }
     }
 

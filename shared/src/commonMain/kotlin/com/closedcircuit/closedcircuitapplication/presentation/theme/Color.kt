@@ -69,9 +69,16 @@ val seed = Color(0xFF24500F)
 
 val primary1 = Color(0xFF376A20)
 val primary2 = Color(0xFF76961F)
+val primary3 = Color(0xFFBFEEFBCD)
+val primary4 = Color(0xFF2E7C36)
 
 val secondary1 = Color(0xFFD91D1D)
 val secondary2 = Color(0xFFFF9234)
 val secondary3 = Color(0xFFFEF6E9)
+val secondary4 = Color(0xFFBFFCF3E8)
+val secondary5 = Color(0xFFD7A949)
 
 val accent1 = Color(0xFF5153F1)
+val accent2 = Color(0xFFBFD1F7FF)
+val accent3 = Color(0xFFBFEAEEFE)
+val accent4 = Color(0xFF060A62)

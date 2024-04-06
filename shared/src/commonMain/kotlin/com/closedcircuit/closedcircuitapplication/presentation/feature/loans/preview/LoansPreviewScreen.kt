@@ -84,7 +84,7 @@ internal class LoansPreviewScreen(private val loanStatus: LoanStatus) : Screen, 
                     .padding(innerPadding)
             ) {
                 when (state) {
-                    is LoansPreviewUiState.DataLoaded -> LoanPreviews(
+                    is LoansPreviewUiState.Content -> LoanPreviews(
                         modifier = Modifier.fillMaxWidth(),
                         items = state.items,
                         navigateToLoansList = navigateToLoansList

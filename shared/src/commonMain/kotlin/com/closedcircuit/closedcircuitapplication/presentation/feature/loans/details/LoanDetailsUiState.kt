@@ -5,7 +5,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 sealed interface LoanDetailsUiState {
     object Loading : LoanDetailsUiState
-    data class DataLoaded(
+    data class Content(
         val loading: Boolean,
         val canTransact: Boolean,
         val loanAmount: String,
@@ -18,7 +18,7 @@ sealed interface LoanDetailsUiState {
 
     val postLoading: Boolean
         get() {
-            return this is DataLoaded && this.loading
+            return this is Content && this.loading
         }
 }
 
