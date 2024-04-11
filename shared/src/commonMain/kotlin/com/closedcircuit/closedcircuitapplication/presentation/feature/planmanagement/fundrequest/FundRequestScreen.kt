@@ -90,161 +90,159 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
             onEvent = viewModel::onEvent
         )
     }
-}
 
-@Composable
-private fun ScreenContent(
-    state: FundRequestUiState,
-    messageBarState: MessageBarState,
-    goBack: () -> Unit,
-    onEvent: (FundRequestUiEvent) -> Unit
-) {
-    BaseScaffold(
-        topBar = { DefaultAppBar(mainAction = goBack) },
-        showLoadingDialog = state.loading,
-        messageBarState = messageBarState
-    ) { innerPadding ->
-        var showDialog by remember { mutableStateOf(false) }
-        val commonModifier = Modifier.fillMaxWidth()
-        val showLoanSchedule = remember(state.selectedFundType) {
-            state.selectedFundType != FundType.DONATION
-        }
+    @Composable
+    private fun ScreenContent(
+        state: FundRequestUiState,
+        messageBarState: MessageBarState,
+        goBack: () -> Unit,
+        onEvent: (FundRequestUiEvent) -> Unit
+    ) {
+        BaseScaffold(
+            topBar = { DefaultAppBar(mainAction = goBack) },
+            showLoadingDialog = state.loading,
+            messageBarState = messageBarState
+        ) { innerPadding ->
+            var showDialog by remember { mutableStateOf(false) }
+            val commonModifier = Modifier.fillMaxWidth()
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
-                .imePadding()
-        ) {
-            TitleText(text = stringResource(SharedRes.strings.how_do_you_want_to_be_supported_label))
-
-            Spacer(modifier = Modifier.height(8.dp))
-            LargeDropdownMenu(
-                modifier = Modifier.fillMaxWidth(),
-                label = stringResource(SharedRes.strings.select_category),
-                selectedItem = state.selectedFundType,
-                items = FundType.values().toList().toImmutableList(),
-                itemToString = { it.displayText },
-                onItemSelected = { _, item -> onEvent(FundRequestUiEvent.FundTypeChange(item)) },
-            )
-
-            AnimatedVisibility(showLoanSchedule) {
-                Column {
-                    Spacer(modifier = Modifier.height(40.dp))
-                    TitleText(stringResource(SharedRes.strings.loan_schedule_label))
-                    BodyText(stringResource(SharedRes.strings.select_your_preferred_loan_schedule_label))
-
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Text(text = stringResource(SharedRes.strings.what_your_loan_range_label))
-                    DefaultOutlinedTextField(
-                        inputField = state.minimumLoanRange,
-                        onValueChange = { onEvent(FundRequestUiEvent.MinRangeChange(it)) },
-                        placeholder = { Text(stringResource(SharedRes.strings.minimum_amount_label)) },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Number
-                        ),
-                        trailingIcon = { TextFieldTrailingText("NGN") },
-                        visualTransformation = NumberCommaTransformation(),
-                        modifier = commonModifier.onFocusChanged {}
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    DefaultOutlinedTextField(
-                        inputField = state.maximumLoanRange,
-                        onValueChange = { onEvent(FundRequestUiEvent.MaxRangeChange(it)) },
-                        placeholder = { Text(stringResource(SharedRes.strings.maximum_amount_label)) },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Number
-                        ),
-                        trailingIcon = { TextFieldTrailingText("NGN") },
-                        visualTransformation = NumberCommaTransformation(),
-                        modifier = commonModifier.onFocusChanged {}
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    LargeDropdownMenu(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(SharedRes.strings.select_maximum_number_of_lenders_label),
-                        selectedItem = state.numberOfLenders,
-                        items = getNumberOfLenders(),
-                        onItemSelected = { _, item ->
-                            onEvent(FundRequestUiEvent.MaxLendersChange(item))
-                        },
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    LargeDropdownMenu(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(SharedRes.strings.select_grace_duration_label),
-                        selectedItem = state.graceDuration,
-                        items = getDurations(),
-                        onItemSelected = { _, item ->
-                            onEvent(FundRequestUiEvent.GraceDurationChange(item))
-                        },
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    LargeDropdownMenu(
-                        modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(SharedRes.strings.select_repayment_duration_label),
-                        selectedItem = state.repaymentDuration,
-                        items = getDurations(),
-                        onItemSelected = { _, item ->
-                            onEvent(FundRequestUiEvent.RepaymentDurationChange(item))
-                        },
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    TopLabeledTextField(
-                        inputField = state.interestRate,
-                        onValueChange = { onEvent(FundRequestUiEvent.InterestRateChange(it)) },
-                        label = stringResource(SharedRes.strings.enter_loan_interest_rate_label),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Number
-                        ),
-                        trailingIcon = { TextFieldTrailingText("%") },
-                        modifier = commonModifier.onFocusChanged {}
-                    )
-                }
-            }
-
-            Spacer(
-                modifier = Modifier.conditional(
-                    condition = showLoanSchedule,
-                    ifTrue = { Modifier.height(40.dp) },
-                    ifFalse = { Modifier.weight(1f) }
-                )
-            )
-
-            DefaultButton(
-                onClick = {
-                    if (state.canRequestFunds) onEvent(FundRequestUiEvent.SubmitFundRequest)
-                    else showDialog = true
-                }
+            Column(
+                modifier = Modifier.fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
+                    .imePadding()
             ) {
-                Text(stringResource(SharedRes.strings.proceed))
-            }
+                TitleText(text = stringResource(SharedRes.strings.how_do_you_want_to_be_supported_label))
 
-            PromptDialog(
-                visible = showDialog,
-                title = String.Empty,
-                message = stringResource(SharedRes.strings.tokenize_card_prompt),
-                buttonText = stringResource(SharedRes.strings.okay_label),
-                onDismiss = { showDialog = false },
-                onButtonClick = { onEvent(FundRequestUiEvent.TokenizeCard) }
-            )
+                Spacer(modifier = Modifier.height(8.dp))
+                LargeDropdownMenu(
+                    modifier = Modifier.fillMaxWidth(),
+                    label = stringResource(SharedRes.strings.select_category),
+                    selectedItem = state.selectedFundType,
+                    items = FundType.values().toList().toImmutableList(),
+                    itemToString = { it.displayText },
+                    onItemSelected = { _, item -> onEvent(FundRequestUiEvent.FundTypeChange(item)) },
+                )
+
+                AnimatedVisibility(state.showLoanSchedule) {
+                    Column {
+                        Spacer(modifier = Modifier.height(40.dp))
+                        TitleText(stringResource(SharedRes.strings.loan_schedule_label))
+                        BodyText(stringResource(SharedRes.strings.select_your_preferred_loan_schedule_label))
+
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(text = stringResource(SharedRes.strings.what_your_loan_range_label))
+                        DefaultOutlinedTextField(
+                            inputField = state.minimumLoanRange,
+                            onValueChange = { onEvent(FundRequestUiEvent.MinRangeChange(it)) },
+                            placeholder = { Text(stringResource(SharedRes.strings.minimum_amount_label)) },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next,
+                                keyboardType = KeyboardType.Number
+                            ),
+                            trailingIcon = { TextFieldTrailingText("NGN") },
+                            visualTransformation = NumberCommaTransformation(),
+                            modifier = commonModifier.onFocusChanged {}
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        DefaultOutlinedTextField(
+                            inputField = state.maximumLoanRange,
+                            onValueChange = { onEvent(FundRequestUiEvent.MaxRangeChange(it)) },
+                            placeholder = { Text(stringResource(SharedRes.strings.maximum_amount_label)) },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next,
+                                keyboardType = KeyboardType.Number
+                            ),
+                            trailingIcon = { TextFieldTrailingText("NGN") },
+                            visualTransformation = NumberCommaTransformation(),
+                            modifier = commonModifier.onFocusChanged {}
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        LargeDropdownMenu(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = stringResource(SharedRes.strings.select_maximum_number_of_lenders_label),
+                            selectedItem = state.numberOfLenders,
+                            items = getNumberOfLenders(),
+                            onItemSelected = { _, item ->
+                                onEvent(FundRequestUiEvent.MaxLendersChange(item))
+                            },
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        LargeDropdownMenu(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = stringResource(SharedRes.strings.select_grace_duration_label),
+                            selectedItem = state.graceDuration,
+                            items = getDurations(),
+                            onItemSelected = { _, item ->
+                                onEvent(FundRequestUiEvent.GraceDurationChange(item))
+                            },
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        LargeDropdownMenu(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = stringResource(SharedRes.strings.select_repayment_duration_label),
+                            selectedItem = state.repaymentDuration,
+                            items = getDurations(),
+                            onItemSelected = { _, item ->
+                                onEvent(FundRequestUiEvent.RepaymentDurationChange(item))
+                            },
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TopLabeledTextField(
+                            inputField = state.interestRate,
+                            onValueChange = { onEvent(FundRequestUiEvent.InterestRateChange(it)) },
+                            label = stringResource(SharedRes.strings.enter_loan_interest_rate_label),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next,
+                                keyboardType = KeyboardType.Number
+                            ),
+                            trailingIcon = { TextFieldTrailingText("%") },
+                            modifier = commonModifier.onFocusChanged {}
+                        )
+                    }
+                }
+
+                Spacer(
+                    modifier = Modifier.conditional(
+                        condition = state.showLoanSchedule,
+                        ifTrue = { Modifier.height(40.dp) },
+                        ifFalse = { Modifier.weight(1f) }
+                    )
+                )
+
+                DefaultButton(
+                    enabled = state.canSubmit,
+                    onClick = {
+                        if (state.canRequestFunds) onEvent(FundRequestUiEvent.SubmitFundRequest)
+                        else showDialog = true
+                    }
+                ) {
+                    Text(stringResource(SharedRes.strings.proceed))
+                }
+
+                PromptDialog(
+                    visible = showDialog,
+                    title = String.Empty,
+                    message = stringResource(SharedRes.strings.tokenize_card_prompt),
+                    buttonText = stringResource(SharedRes.strings.okay_label),
+                    onDismiss = { showDialog = false },
+                    onButtonClick = { onEvent(FundRequestUiEvent.TokenizeCard) }
+                )
+            }
         }
     }
-}
 
-private fun getDurations(): ImmutableList<Int> {
-    return persistentListOf(3, 6, 9, 12, 15, 18)
-}
+    private fun getDurations(): ImmutableList<Int> {
+        return persistentListOf(3, 6, 9, 12, 15, 18)
+    }
 
-private fun getNumberOfLenders(): ImmutableList<Int> {
-    return persistentListOf(1, 2, 3)
+    private fun getNumberOfLenders(): ImmutableList<Int> {
+        return persistentListOf(1, 2, 3)
+    }
 }

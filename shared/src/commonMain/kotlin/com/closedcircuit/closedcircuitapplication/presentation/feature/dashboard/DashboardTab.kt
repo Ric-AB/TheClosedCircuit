@@ -2,7 +2,6 @@
 
 package com.closedcircuit.closedcircuitapplication.presentation.feature.dashboard
 
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -12,7 +11,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -151,39 +149,37 @@ internal object DashboardTab : Tab, KoinComponent {
             messageBarState = messageBarState,
             topBar = { DashboardTopAppBar(navigateToNotificationScreen = navigateToNotificationScreen) }
         ) { innerPadding ->
-            BoxWithConstraints {
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                        .padding(innerPadding)
-                        .verticalScroll(rememberScrollState())
-                        .padding(vertical = verticalScreenPadding)
-                ) {
-                    WalletCard(
-                        wallet = null,
-                        modifier = Modifier.padding(horizontal = horizontalScreenPadding)
-                    )
+            Column(
+                modifier = Modifier.fillMaxSize()
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = verticalScreenPadding)
+            ) {
+                WalletCard(
+                    wallet = null,
+                    modifier = Modifier.padding(horizontal = horizontalScreenPadding)
+                )
 
-                    when (state) {
-                        is DashboardUiState.Content -> {
-                            LoadedDashboard(
-                                modifier = Modifier.fillMaxWidth(),
-                                state = state,
-                                navigateToPlanListScreen = navigateToPlanListScreen,
-                                navigateToLoginScreen = navigateToLoginScreen
-                            )
-                        }
+                when (state) {
+                    is DashboardUiState.Content -> {
+                        LoadedDashboard(
+                            modifier = Modifier.fillMaxWidth(),
+                            state = state,
+                            navigateToPlanListScreen = navigateToPlanListScreen,
+                            navigateToLoginScreen = navigateToLoginScreen
+                        )
+                    }
 
-                        DashboardUiState.Empty -> {
-                            EmptyDashboard(
-                                onClick = navigateToCreatePlan,
-                                modifier = Modifier.fillMaxWidth()
-                                    .padding(horizontal = horizontalScreenPadding),
-                            )
-                        }
+                    DashboardUiState.Empty -> {
+                        EmptyDashboard(
+                            onClick = navigateToCreatePlan,
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = horizontalScreenPadding),
+                        )
+                    }
 
-                        DashboardUiState.Loading -> {
-                            BackgroundLoader(Modifier.fillMaxWidth().height(this@BoxWithConstraints.maxHeight))
-                        }
+                    DashboardUiState.Loading -> {
+                        BackgroundLoader(Modifier.fillMaxWidth().weight(1f))
                     }
                 }
             }

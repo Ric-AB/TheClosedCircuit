@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -41,6 +42,10 @@ internal class PaymentScreen(private val url: String) : Screen, KoinComponent {
             }
         }
 
+        LaunchedEffect(webViewState.lastLoadedUrl) {
+            viewModel.onEvent(PaymentUiEvent.UrlChange(webViewState.lastLoadedUrl.orEmpty()))
+        }
+
         ScreenContent(webViewState = webViewState)
     }
 
@@ -52,7 +57,7 @@ internal class PaymentScreen(private val url: String) : Screen, KoinComponent {
                     .padding(innerPadding)
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
-                WebView(webViewState)
+                WebView(state = webViewState, modifier = Modifier.fillMaxSize())
             }
         }
     }

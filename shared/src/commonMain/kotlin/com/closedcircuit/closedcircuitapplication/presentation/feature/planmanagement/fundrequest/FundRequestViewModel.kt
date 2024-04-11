@@ -14,6 +14,7 @@ import com.closedcircuit.closedcircuitapplication.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.util.InputField
+import com.closedcircuit.closedcircuitapplication.util.orFalse
 import kotlinx.coroutines.launch
 
 class FundRequestViewModel(
@@ -23,7 +24,9 @@ class FundRequestViewModel(
     userRepository: UserRepository
 ) : BaseScreenModel<FundRequestUiState, FundRequestResult>() {
 
-    private val canRequestFund = mutableStateOf(userRepository.userFlow.value?.isCardTokenized)
+    private val canRequestFund =
+        mutableStateOf(userRepository.userFlow.value?.isCardTokenized.orFalse())
+
     private val loading = mutableStateOf(false)
     private val selectedFundType = mutableStateOf<FundType?>(null)
     private val minimumLoanRange = InputField()
@@ -37,7 +40,8 @@ class FundRequestViewModel(
     override fun uiState(): FundRequestUiState {
         return FundRequestUiState(
             loading = loading.value,
-            canRequestFunds = canRequestFund.value == true,
+            showLoanSchedule = selectedFundType.value != FundType.DONATION,
+            canRequestFunds = canRequestFund.value,
             selectedFundType = selectedFundType.value,
             minimumLoanRange = minimumLoanRange,
             maximumLoanRange = maximumLoanRange,
@@ -80,12 +84,15 @@ class FundRequestViewModel(
 
     private fun generateTokenizationLink() {
         screenModelScope.launch {
+            loading.value = true
             paymentRepository.generateTokenizationLink()
                 .onSuccess { paymentLink ->
                     _resultChannel.send(FundRequestResult.TokenizeRequestSuccess(paymentLink))
                 }.onError { _, message ->
                     _resultChannel.send(FundRequestResult.Error(message))
                 }
+
+            loading.value = false
         }
     }
 

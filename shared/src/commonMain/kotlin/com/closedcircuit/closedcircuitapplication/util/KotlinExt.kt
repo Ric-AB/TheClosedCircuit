@@ -19,6 +19,8 @@ fun Double?.orZero() = this ?: Double.Zero
 
 fun Int?.orZero() = this ?: Int.Zero
 
+fun Boolean?.orFalse() = this ?: false
+
 fun <T> SnapshotStateList<T>.replaceAll(items: Collection<T>) {
     clear()
     addAll(items)

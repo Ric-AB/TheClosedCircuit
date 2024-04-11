@@ -2,14 +2,9 @@ package com.closedcircuit.closedcircuitapplication.presentation.feature.payment
 
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.presentation.util.BaseScreenModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class PaymentViewModel : BaseScreenModel<Unit, PaymentResult>() {
-
-    private val _paymentResultFlow = MutableStateFlow<PaymentResult?>(null)
-    val paymentResultFlow = _paymentResultFlow.asStateFlow()
 
     fun onEvent(event: PaymentUiEvent) {
         when (event) {
