@@ -1,8 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.core.storage
 
-import com.closedcircuit.closedcircuitapplication.domain.app.AppSettings
-import com.closedcircuit.closedcircuitapplication.domain.session.Session
-import com.closedcircuit.closedcircuitapplication.domain.user.User
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.app.AppSettings
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.Session
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
 

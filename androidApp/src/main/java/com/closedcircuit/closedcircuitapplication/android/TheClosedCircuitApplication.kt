@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.android
 
 import android.app.Application
-import com.closedcircuit.closedcircuitapplication.di.startAppDI
+import com.closedcircuit.closedcircuitapplication.beneficiary.di.startAppDI
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import org.koin.android.ext.koin.androidContext

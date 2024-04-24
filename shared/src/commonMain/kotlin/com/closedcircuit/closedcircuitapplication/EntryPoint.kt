@@ -1,8 +1,8 @@
 package com.closedcircuit.closedcircuitapplication
 
 import androidx.compose.runtime.Composable
-import com.closedcircuit.closedcircuitapplication.presentation.navigation.AppNavigation
-import com.closedcircuit.closedcircuitapplication.presentation.theme.AppTheme
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.AppNavigation
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.AppTheme
 
 @Composable
 fun EntryPoint(useDarkTheme: Boolean, dynamicColors: Boolean) {

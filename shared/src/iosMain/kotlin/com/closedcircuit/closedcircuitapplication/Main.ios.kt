@@ -4,8 +4,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.interop.LocalUIViewController
 import androidx.compose.ui.window.ComposeUIViewController
 import com.closedcircuit.closedcircuitapplication.core.storage.storageDir
-import com.closedcircuit.closedcircuitapplication.presentation.LocalImagePicker
-import com.closedcircuit.closedcircuitapplication.presentation.util.ImagePickerFactory
+import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.ImagePickerFactory
 import platform.Foundation.NSHomeDirectory
 import platform.UIKit.UIScreen
 import platform.UIKit.UIUserInterfaceStyle

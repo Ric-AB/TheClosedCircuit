@@ -254,4 +254,11 @@
     <string name="x_percent_tasks_completed_label">%1$s tasks completed</string>
     <string name="plan_analytic_label">Plan analytics</string>
     <string name="donations_label">Donations</string>
+
+    <!--    Sponsor plan-->
+    <string name="how_can_you_help_label">How can you help?</string>
+    <string name="how_can_you_help_message_label">You can support by funding part, single or multiple budgets through loans or donations.</string>
+    <string name="estimated_profit_label">Estimated profit</string>
+    <string name="start_chat_label">Start chat</string>
+
 </resources>
