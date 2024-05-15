@@ -75,7 +75,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budgets
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.TaskDuration
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.editplan.EditPlanScreen

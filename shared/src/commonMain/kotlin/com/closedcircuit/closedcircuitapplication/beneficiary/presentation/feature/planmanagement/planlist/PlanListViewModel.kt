@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map

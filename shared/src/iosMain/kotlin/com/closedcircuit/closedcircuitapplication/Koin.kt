@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.di.startAppDI
+import com.closedcircuit.closedcircuitapplication.common.di.startAppDI
 
 fun initKoin() {
     startAppDI()

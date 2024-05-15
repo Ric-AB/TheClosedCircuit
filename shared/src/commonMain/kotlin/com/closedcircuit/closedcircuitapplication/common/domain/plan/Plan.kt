@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan
+package com.closedcircuit.closedcircuitapplication.common.domain.plan
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID

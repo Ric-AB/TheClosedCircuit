@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanOption
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanOption
 
 sealed interface CreatePlanUiEvent {
     data class CategoryChange(val category: PlanOption) : CreatePlanUiEvent

@@ -23,7 +23,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.FundType
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
@@ -66,7 +66,15 @@ internal class FundRequestSummaryScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
-                PlanDetailsGrid(modifier = Modifier.fillMaxWidth(), plan = plan, miniMode = true)
+                PlanDetailsGrid(
+                    modifier = Modifier.fillMaxWidth(),
+                    sector = plan.sector,
+                    duration = plan.duration.value.toString(),
+                    estimatedCostPrice = plan.estimatedCostPrice.value.toString(),
+                    estimatedSellingPrice = plan.estimatedSellingPrice.value.toString(),
+                    targetAmount = plan.targetAmount.value.toString(),
+                    totalFundsRaised = plan.totalFundsRaised.value.toString()
+                )
 
                 Spacer(Modifier.height(24.dp))
                 HeaderWithMessage(

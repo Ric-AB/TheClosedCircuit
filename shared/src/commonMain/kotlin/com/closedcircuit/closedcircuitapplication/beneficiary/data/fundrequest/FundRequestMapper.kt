@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest.dto.ApiFundRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.fundrequest.FundRequest
+import com.closedcircuit.closedcircuitapplication.common.data.fundrequest.dto.ApiFundRequest
+import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
@@ -10,7 +10,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amoun
 fun FundRequest.toApiFundRequest(): ApiFundRequest {
     return if (fundType == FundType.DONATION) {
         ApiFundRequest(
-            planId = planId.value,
+            planId = planId?.value,
             meansOfSupport = fundType.requestValue,
             minimumLoanRange = null,
             maximumLoanRange = null,
@@ -32,7 +32,7 @@ fun FundRequest.toApiFundRequest(): ApiFundRequest {
             graceDuration = graceDuration,
             repaymentDuration = repaymentDuration,
             interestRate = interestRate,
-            planId = planId.value,
+            planId = planId?.value,
             id = null,
             beneficiaryId = null,
             createdAt = null,
@@ -44,8 +44,8 @@ fun FundRequest.toApiFundRequest(): ApiFundRequest {
 fun ApiFundRequest.toFundRequest(): FundRequest {
     return FundRequest(
         id = ID(id.orEmpty()),
-        planId = ID(planId.orEmpty()),
-        beneficiaryId = ID(beneficiaryId.orEmpty()),
+        planId = planId?.let { ID(it) },
+        beneficiaryId = beneficiaryId?.let { ID(it) },
         fundType = FundType.fromText(meansOfSupport),
         minimumLoanRange = minimumLoanRange?.toDouble()?.let { Amount(it) },
         maximumLoanRange = maximumLoanRange?.toDouble()?.let { Amount(it) },

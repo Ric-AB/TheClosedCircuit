@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.di
+package com.closedcircuit.closedcircuitapplication.common.di
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

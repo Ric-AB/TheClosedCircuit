@@ -4,8 +4,8 @@ import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.BudgetRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.StepRepository
 

@@ -15,14 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
-fun PlanDetailsGrid(modifier: Modifier, plan: Plan, miniMode: Boolean) {
+fun PlanDetailsGrid(
+    modifier: Modifier,
+    sector: String,
+    duration: String,
+    estimatedCostPrice: String,
+    estimatedSellingPrice: String,
+    targetAmount: String?,
+    totalFundsRaised: String?,
+) {
 
     @Composable
     fun GridRow(item1: @Composable () -> Unit, item2: @Composable () -> Unit) {
@@ -44,32 +51,32 @@ fun PlanDetailsGrid(modifier: Modifier, plan: Plan, miniMode: Boolean) {
             item1 = {
                 GridItem(
                     imageResource = SharedRes.images.ic_briefcase,
-                    header = plan.sector,
+                    header = sector,
                     message = stringResource(SharedRes.strings.business_sector)
                 )
             },
             item2 = {
                 GridItem(
                     imageResource = SharedRes.images.ic_calendar,
-                    header = plan.duration.value.toString(),
+                    header = duration,
                     message = stringResource(SharedRes.strings.plan_duration)
                 )
             }
         )
 
-        if (!miniMode) {
+        if (targetAmount != null && totalFundsRaised != null) {
             GridRow(
                 item1 = {
                     GridItem(
                         imageResource = SharedRes.images.ic_target_arrow,
-                        header = plan.targetAmount.value.toString(),
+                        header = targetAmount,
                         message = stringResource(SharedRes.strings.target_amount)
                     )
                 },
                 item2 = {
                     GridItem(
                         imageResource = SharedRes.images.ic_funds,
-                        header = plan.totalFundsRaised.value.toString(),
+                        header = totalFundsRaised,
                         message = stringResource(SharedRes.strings.total_funds_raised)
                     )
                 }
@@ -80,14 +87,14 @@ fun PlanDetailsGrid(modifier: Modifier, plan: Plan, miniMode: Boolean) {
             item1 = {
                 GridItem(
                     imageResource = SharedRes.images.ic_orange_bag,
-                    header = plan.estimatedCostPrice.value.toString(),
+                    header = estimatedCostPrice,
                     message = stringResource(SharedRes.strings.estimated_cost_price_per_unit_label)
                 )
             },
             item2 = {
                 GridItem(
                     imageResource = SharedRes.images.ic_purple_file,
-                    header = plan.estimatedSellingPrice.value.toString(),
+                    header = estimatedSellingPrice,
                     message = stringResource(SharedRes.strings.estimated_selling_price_per_unit_label)
                 )
             }

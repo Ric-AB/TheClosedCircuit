@@ -81,6 +81,9 @@ kotlin {
                 implementation(libs.sqldelight.coroutines)
                 implementation(libs.sqldelight.primitiveAdapters)
 
+                // image loading
+                implementation(libs.landscapist.coil)
+
                 // webview
                 api(libs.webview.compose)
             }

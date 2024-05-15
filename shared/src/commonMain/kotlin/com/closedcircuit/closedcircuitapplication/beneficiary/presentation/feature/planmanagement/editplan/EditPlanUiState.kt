@@ -1,8 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.editplan
 
 import androidx.compose.runtime.mutableStateOf
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanOption
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanOption
 import com.closedcircuit.closedcircuitapplication.common.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.validation.AmountValidator
 import com.closedcircuit.closedcircuitapplication.common.util.validation.TextValidator

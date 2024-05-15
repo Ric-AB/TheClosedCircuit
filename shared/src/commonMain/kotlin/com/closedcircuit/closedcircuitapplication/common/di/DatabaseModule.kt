@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.di
+package com.closedcircuit.closedcircuitapplication.common.di
 
 import app.cash.sqldelight.db.SqlDriver
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase

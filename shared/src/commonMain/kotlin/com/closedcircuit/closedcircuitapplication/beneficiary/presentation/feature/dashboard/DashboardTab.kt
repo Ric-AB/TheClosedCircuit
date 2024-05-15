@@ -71,7 +71,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan.CreatePlanNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
@@ -98,6 +98,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.seco
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.secondary5
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.PlanSummaryScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -130,7 +131,7 @@ internal object DashboardTab : Tab, KoinComponent {
             messageBarState = messageBarState,
             state = viewModel.uiState(),
             navigateToCreatePlan = { navigator.push(CreatePlanNavigator) },
-            navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
+            navigateToPlanListScreen = { navigator.push(PlanSummaryScreen()) },
             navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
             navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
         )

@@ -1,7 +1,8 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto
+package com.closedcircuit.closedcircuitapplication.common.data.plan.dto
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.ApiBudget
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.dto.ApiStep
+import com.closedcircuit.closedcircuitapplication.common.data.fundrequest.dto.ApiFundRequest
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -30,9 +31,9 @@ data class ApiPlan(
     @SerialName("funds_raised")
     val fundsRaised: Double?,
     @SerialName("tasks_completed")
-    val tasksCompleted: Double?,
+    val tasksCompleted: Double? = null,
     @SerialName("total_funds_raised")
-    val totalFundsRaised: String?,
+    val totalFundsRaised: String? = null,
     @SerialName("plan_analytics")
     val analytics: String,
     val wallet: String,
@@ -41,8 +42,14 @@ data class ApiPlan(
     val hasRequestedFund: Boolean?,
     @SerialName("is_sponsored")
     val isSponsored: Boolean?,
+    @SerialName("fund_request")
+    val fundRequest: ApiFundRequest,
     @SerialName("accountability_partners")
     val accountabilityPartners: List<String>,
+    @SerialName("beneficiary_fullname")
+    val beneficiaryFullName: String?,
+    @SerialName("beneficiary_id")
+    val beneficiaryId: String? = null,
     val steps: List<ApiStep>,
     val budgets: List<ApiBudget>,
     @SerialName("created_at")

@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.util.TypeWithStringProperties
+import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 
 /**
  * @param data The list of data items to display in the table.

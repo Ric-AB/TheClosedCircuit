@@ -12,7 +12,7 @@ object ClosedCircuitApiEndpoints {
     const val RESET_PASSWORD = "user/reset-password/"
     const val VERIFY_TRANSACTION_STATUS = "v1/transactions/webhook"
     const val PLAN_DETAILS_NO_AUTH = "v1/plan_details/{id}"
-    const val PLAN_DETAILS_BY_FUND_REQUEST_ID_NO_AUTH = "v1/fund_request/{id}/"
+    const val PLAN_BY_FUND_REQUEST_ID = "v1/fund_request/{id}/"
 
     //beneficiary
     const val DASHBOARD = "user/beneficiary/get_details/"

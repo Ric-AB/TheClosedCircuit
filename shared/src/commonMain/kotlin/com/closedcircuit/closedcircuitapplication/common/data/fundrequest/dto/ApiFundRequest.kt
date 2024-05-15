@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest.dto
+package com.closedcircuit.closedcircuitapplication.common.data.fundrequest.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 data class ApiFundRequest(
     val id: String?,
     @SerialName("plan")
-    val planId: String?,
+    val planId: String? = null,
     @SerialName("beneficiary")
-    val beneficiaryId: String?,
+    val beneficiaryId: String? = null,
     @SerialName("means_of_support")
     val meansOfSupport: String?,
     @SerialName("minimum_loan_range")
@@ -25,7 +25,7 @@ data class ApiFundRequest(
     @SerialName("interest_rate")
     val interestRate: Int?,
     @SerialName("created_at")
-    val createdAt: String?,
+    val createdAt: String? = null,
     @SerialName("updated_at")
-    val updatedAt: String?
+    val updatedAt: String? = null
 )

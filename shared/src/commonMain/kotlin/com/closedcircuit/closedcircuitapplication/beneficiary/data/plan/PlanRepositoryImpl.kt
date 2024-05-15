@@ -10,9 +10,9 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.toSteps
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plans
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plans
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.StepRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable

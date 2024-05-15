@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plans
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plans
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import kotlinx.collections.immutable.ImmutableList
 

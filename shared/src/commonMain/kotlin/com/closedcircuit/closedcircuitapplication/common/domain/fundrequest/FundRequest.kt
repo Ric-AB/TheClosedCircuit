@@ -1,14 +1,16 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.fundrequest
+package com.closedcircuit.closedcircuitapplication.common.domain.fundrequest
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FundRequest(
     val id: ID,
-    val beneficiaryId: ID,
-    val planId: ID,
+    val beneficiaryId: ID?,
+    val planId: ID?,
     val fundType: FundType,
     val minimumLoanRange: Amount?,
     val maximumLoanRange: Amount?,

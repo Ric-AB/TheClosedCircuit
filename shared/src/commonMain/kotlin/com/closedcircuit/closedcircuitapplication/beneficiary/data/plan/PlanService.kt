@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.plan
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.ApiPlan
+import com.closedcircuit.closedcircuitapplication.common.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.SavePlanPayload
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.GetPlansResponse
 import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.CREATE_PLAN

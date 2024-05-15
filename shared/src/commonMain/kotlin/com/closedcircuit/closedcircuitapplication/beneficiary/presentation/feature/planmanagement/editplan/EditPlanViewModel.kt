@@ -9,9 +9,9 @@ import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.TaskDuration
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanOption
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanOption
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan.CreatePlanResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel

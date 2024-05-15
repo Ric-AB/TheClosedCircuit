@@ -5,7 +5,7 @@ import androidx.compose.runtime.collectAsState
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.getOrNull
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.DonationRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.common.util.Zero

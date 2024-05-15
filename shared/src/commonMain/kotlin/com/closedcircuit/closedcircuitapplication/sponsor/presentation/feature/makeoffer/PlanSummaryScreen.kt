@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.plan
+package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -16,79 +16,116 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.TitleText
-import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.PlanDetailsGrid
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TitleText
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TopAppBarTitle
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary2
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary3
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.coil3.CoilImage
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
 
-internal class PlanSummaryScreen(private val plan: Plan) : Screen, KoinComponent {
+internal class PlanSummaryScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(goBack = navigator::pop)
+        val viewModel = getScreenModel<MakeOfferViewModel>()
+        ScreenContent(viewModel.planSummaryState, goBack = navigator::pop)
     }
 
     @Composable
-    private fun ScreenContent(goBack: () -> Unit) {
-        BaseScaffold { innerPadding ->
-            Column(
-                modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
-            ) {
-                TitleText(stringResource(SharedRes.strings.how_can_you_help_label))
-                Text(stringResource(SharedRes.strings.how_can_you_help_message_label))
-
-                Spacer(Modifier.height(16.dp))
-                TitleText(stringResource(SharedRes.strings.plan_summary_label))
-                PlanDetailsGrid(modifier = Modifier.fillMaxWidth(), plan = plan, miniMode = true)
-
-                // todo replace with image
-                Spacer(Modifier.fillMaxWidth().height(100.dp))
-
-                Text(
-                    text = stringResource(SharedRes.strings.plan_description_label),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                // todo move to viewmodel
-                val estimatedCost = plan.estimatedCostPrice.value
-                val estimatedSellingPrice = plan.estimatedSellingPrice.value
-                val progress = remember {
-                    ((estimatedSellingPrice - estimatedCost) / estimatedCost).toFloat()
+    private fun ScreenContent(state: PlanSummaryUiState, goBack: () -> Unit) {
+        BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
+            Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                when (state) {
+                    is PlanSummaryUiState.Content -> Content(state)
+                    is PlanSummaryUiState.Error -> Text(state.message)
+                    PlanSummaryUiState.Loading -> BackgroundLoader()
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-                ProfitProgressBar(progress = progress)
-
             }
         }
     }
 
     @Composable
-    fun ProfitProgressBar(progress: Float, size: Dp = 170.dp, indicatorThickness: Dp = 20.dp) {
+    private fun Content(state: PlanSummaryUiState.Content) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
+        ) {
+            TitleText(stringResource(SharedRes.strings.how_can_you_help_label))
+            BodyText(stringResource(SharedRes.strings.how_can_you_help_message_label))
+
+            Spacer(Modifier.height(24.dp))
+            TitleText(stringResource(SharedRes.strings.plan_summary_label))
+
+            Spacer(Modifier.height(16.dp))
+            PlanDetailsGrid(
+                modifier = Modifier.fillMaxWidth(),
+                sector = state.businessSector,
+                duration = state.planDuration,
+                estimatedCostPrice = state.estimatedCostPrice,
+                estimatedSellingPrice = state.estimatedSellingPrice,
+                targetAmount = null,
+                totalFundsRaised = null
+            )
+
+            Spacer(Modifier.height(16.dp))
+            CoilImage(
+                imageModel = { state.planImage },
+                imageOptions = ImageOptions(
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.Center
+                )
+            )
+
+            TopAppBarTitle(text = stringResource(SharedRes.strings.plan_description_label))
+            BodyText(text = state.planDescription)
+
+            Spacer(modifier = Modifier.height(16.dp))
+            ProfitProgressBar(
+                progress = state.estimatedProfitFraction,
+                percentageValue = state.estimatedProfitPercent
+            )
+
+
+            Spacer(Modifier.height(40.dp))
+            DefaultButton(onClick = {}) {
+                Text(stringResource(SharedRes.strings.proceed))
+            }
+        }
+    }
+
+    @Composable
+    private fun ProfitProgressBar(
+        progress: Float,
+        percentageValue: String,
+        size: Dp = 170.dp,
+        indicatorThickness: Dp = 20.dp
+    ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Canvas(modifier = Modifier.size(size)) {
@@ -123,7 +160,7 @@ internal class PlanSummaryScreen(private val plan: Plan) : Screen, KoinComponent
                         .size(size - (indicatorThickness * 4))
                 ) {
                     Text(
-                        text = "${(progress * 100).toDouble()} %",
+                        text = "$percentageValue %",
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -137,6 +174,5 @@ internal class PlanSummaryScreen(private val plan: Plan) : Screen, KoinComponent
                     .align(Alignment.CenterHorizontally)
             )
         }
-
     }
 }

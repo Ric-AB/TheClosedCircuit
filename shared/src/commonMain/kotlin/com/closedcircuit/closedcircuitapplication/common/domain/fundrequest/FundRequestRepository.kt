@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.fundrequest
+package com.closedcircuit.closedcircuitapplication.common.domain.fundrequest
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 
