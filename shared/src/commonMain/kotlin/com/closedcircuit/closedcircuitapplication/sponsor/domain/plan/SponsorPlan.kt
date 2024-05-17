@@ -1,10 +1,12 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.domain.plan
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.TaskDuration
+import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budgets
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import kotlinx.serialization.Serializable
 
@@ -31,4 +33,6 @@ data class SponsorPlan(
     val fundRequest: FundRequest,
     val hasRequestedFund: Boolean,
     val isSponsored: Boolean,
+    val steps: Steps,
+    val budgets: Budgets
 )

@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.util.validation
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Email
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 
 class EmailValidator : InputValidator {
 

@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.details
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.LoanStatus
+import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
 
 sealed interface LoanDetailsUiEvent {
     object Fetch : LoanDetailsUiEvent

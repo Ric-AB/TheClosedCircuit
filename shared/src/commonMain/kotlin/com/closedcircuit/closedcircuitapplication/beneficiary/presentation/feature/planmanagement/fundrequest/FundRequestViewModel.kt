@@ -7,8 +7,8 @@ import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequestRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.FundType
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.PaymentRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository

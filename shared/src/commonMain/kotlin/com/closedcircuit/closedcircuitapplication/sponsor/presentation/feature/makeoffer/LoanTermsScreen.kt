@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
@@ -31,11 +32,19 @@ internal class LoanTermsScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(goBack = navigator::pop)
+        val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+        ScreenContent(
+            state = viewModel.loanTermsState.value,
+            goBack = navigator::pop,
+            navigateToLoanSchedule = { navigator.push(LoanScheduleScreen()) })
     }
 
     @Composable
-    private fun ScreenContent(goBack: () -> Unit) {
+    private fun ScreenContent(
+        state: LoanTermsUiState,
+        goBack: () -> Unit,
+        navigateToLoanSchedule: () -> Unit
+    ) {
         BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -46,16 +55,28 @@ internal class LoanTermsScreen : Screen, KoinComponent {
                 BodyText(stringResource(SharedRes.strings.review_loan_terms_message_label))
 
                 Spacer(Modifier.height(24.dp))
-                ScreenTextField("6 Months", "Grace duration")
+                ScreenTextField(
+                    text = stringResource(SharedRes.strings.x_months, state.graceDuration),
+                    label = stringResource(SharedRes.strings.grace_duration_label)
+                )
 
                 Spacer(Modifier.height(8.dp))
-                ScreenTextField("6 Months", "Grace duration")
+                ScreenTextField(
+                    text = stringResource(SharedRes.strings.x_months, state.repaymentDuration),
+                    label = stringResource(SharedRes.strings.repayment_duration_label)
+                )
 
                 Spacer(Modifier.height(8.dp))
-                ScreenTextField("6 Months", "Grace duration")
+                ScreenTextField(
+                    text = stringResource(
+                        SharedRes.strings.x_percent_interest_rate_label,
+                        state.interestRate
+                    ),
+                    label = stringResource(SharedRes.strings.loan_interest_rate_label)
+                )
 
                 Spacer(Modifier.height(40.dp))
-                DefaultButton(onClick = {}) {
+                DefaultButton(onClick = navigateToLoanSchedule) {
                     Text(stringResource(SharedRes.strings.proceed))
                 }
             }

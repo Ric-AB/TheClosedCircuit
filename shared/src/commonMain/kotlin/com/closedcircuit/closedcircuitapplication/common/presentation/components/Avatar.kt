@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.DpSize
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.rememberBitmapFromBytes
 

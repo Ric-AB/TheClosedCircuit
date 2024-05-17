@@ -98,7 +98,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.seco
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.secondary5
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.PlanSummaryScreen
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferNavigator
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -131,9 +131,10 @@ internal object DashboardTab : Tab, KoinComponent {
             messageBarState = messageBarState,
             state = viewModel.uiState(),
             navigateToCreatePlan = { navigator.push(CreatePlanNavigator) },
-            navigateToPlanListScreen = { navigator.push(PlanSummaryScreen()) },
+            navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
             navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
-            navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) }
+            navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) },
+            action = { navigator.push(MakeOfferNavigator()) }
         )
     }
 
@@ -144,7 +145,8 @@ internal object DashboardTab : Tab, KoinComponent {
         navigateToCreatePlan: () -> Unit,
         navigateToPlanListScreen: () -> Unit,
         navigateToNotificationScreen: () -> Unit,
-        navigateToLoginScreen: () -> Unit
+        navigateToLoginScreen: () -> Unit,
+        action: () -> Unit
     ) {
         BaseScaffold(
             messageBarState = messageBarState,
@@ -167,7 +169,8 @@ internal object DashboardTab : Tab, KoinComponent {
                             modifier = Modifier.fillMaxWidth(),
                             state = state,
                             navigateToPlanListScreen = navigateToPlanListScreen,
-                            navigateToLoginScreen = navigateToLoginScreen
+                            navigateToLoginScreen = navigateToLoginScreen,
+                            action = action
                         )
                     }
 
@@ -192,7 +195,8 @@ internal object DashboardTab : Tab, KoinComponent {
         modifier: Modifier,
         state: DashboardUiState.Content,
         navigateToPlanListScreen: () -> Unit,
-        navigateToLoginScreen: () -> Unit
+        navigateToLoginScreen: () -> Unit,
+        action: () -> Unit
     ) {
         Column(modifier = modifier) {
             val topSponsors = state.topSponsors
@@ -243,6 +247,10 @@ internal object DashboardTab : Tab, KoinComponent {
 
             DefaultButton(onClick = navigateToPlanListScreen) {
                 Text("Go")
+            }
+
+            DefaultButton(onClick = action) {
+                Text("Go1")
             }
 
             DefaultButton(onClick = navigateToLoginScreen) {

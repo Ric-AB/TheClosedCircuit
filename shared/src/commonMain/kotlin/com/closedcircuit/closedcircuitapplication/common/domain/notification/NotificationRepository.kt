@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.notification
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import kotlinx.collections.immutable.ImmutableList
 
 typealias Notifications = ImmutableList<Notification>

@@ -132,8 +132,8 @@
     <string name="add_budget">Add Budget</string>
     <string name="edit_budget">Edit Budget</string>
     <string name="save">Save</string>
-    <string name="x_months">%d Months</string>
-    <string name="x_weeks">%d Weeks</string>
+    <string name="x_months">%1$s Months</string>
+    <string name="x_weeks">%1$s Weeks</string>
     <string name="budget_items">Budget items</string>
     <string name="budget_name">Budget name</string>
     <string name="budget_cost">Budget cost</string>
@@ -312,4 +312,12 @@
     <string name="grace_label">Grace</string>
     <string name="repayment_label">Repayment</string>
     <string name="total_loan_duration_label">Total loan duration</string>
+    <string name="plan_steps_and_budgets_label">Plan steps and budgets</string>
+    <string name="cost_x_label">Cost(%1$s)</string>
+    <string name="total_label">Total</string>
+    <string name="select_all_label">Select all</string>
+    <string name="grace_duration_label">Grace duration</string>
+    <string name="repayment_duration_label">Repayment duration</string>
+    <string name="loan_interest_rate_label">Loan interest rate</string>
+    <string name="x_percent_interest_rate_label">%1$s interest rate</string>
 </resources>

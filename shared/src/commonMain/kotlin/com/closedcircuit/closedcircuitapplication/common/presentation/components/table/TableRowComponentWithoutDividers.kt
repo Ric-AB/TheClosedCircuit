@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,7 +23,7 @@ import androidx.compose.ui.unit.dp
 fun TableRowComponentWithoutDividers(
     data: List<String>,
     rowTextStyle: TextStyle,
-    rowBackGroundColor: Color,
+    rowBackgroundColor: Color,
     dividerThickness: Dp,
     horizontalDividerColor: Color,
     contentAlignment: Alignment,
@@ -38,7 +37,7 @@ fun TableRowComponentWithoutDividers(
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(rowBackGroundColor),
+                .background(rowBackgroundColor),
         ) {
             data.forEachIndexed { index, title ->
                 val weight = if (index == columnToIndexIncreaseWidth) 8f else 2f
@@ -60,11 +59,11 @@ fun TableRowComponentWithoutDividers(
                 }
             }
         }
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(dividerThickness)
-                .background(horizontalDividerColor),
-        )
+//        Divider(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(dividerThickness)
+//                .background(horizontalDividerColor),
+//        )
     }
 }

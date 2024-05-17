@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 fun TableHeaderComponentWithoutColumnDividers(
     headerTableTitles: List<String>,
     headerTitlesTextStyle: TextStyle,
-    headerTitlesBackGroundColor: Color,
+    headerTitlesBackgroundColor: Color,
     dividerThickness: Dp,
     contentAlignment: Alignment,
     textAlign: TextAlign,
@@ -35,7 +35,7 @@ fun TableHeaderComponentWithoutColumnDividers(
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(headerTitlesBackGroundColor)
+                .background(headerTitlesBackgroundColor)
                 .padding(horizontal = tablePadding),
         ) {
             headerTableTitles.forEachIndexed { index, title ->
@@ -61,7 +61,7 @@ fun TableHeaderComponentWithoutColumnDividers(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(dividerThickness)
-                .background(headerTitlesBackGroundColor),
+                .background(headerTitlesBackgroundColor),
         )
     }
 }

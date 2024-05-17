@@ -1,9 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.step
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.TaskDuration
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
 import kotlinx.serialization.Serializable
 

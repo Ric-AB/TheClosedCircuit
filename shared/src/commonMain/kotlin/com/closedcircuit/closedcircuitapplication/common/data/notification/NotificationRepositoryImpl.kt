@@ -3,7 +3,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.notification
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.notification.dto.DeleteMultipleNotificationRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.notification.NotificationRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.notification.Notifications
 import kotlinx.coroutines.CoroutineDispatcher

@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.fundrequest
 
 import androidx.compose.runtime.Stable
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.util.InputField
 
 @Stable

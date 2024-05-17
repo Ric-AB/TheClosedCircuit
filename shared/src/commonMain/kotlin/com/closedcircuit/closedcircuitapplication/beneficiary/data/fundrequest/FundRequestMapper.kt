@@ -2,10 +2,10 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest
 
 import com.closedcircuit.closedcircuitapplication.common.data.fundrequest.dto.ApiFundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.FundType
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 
 fun FundRequest.toApiFundRequest(): ApiFundRequest {
     return if (fundType == FundType.DONATION) {

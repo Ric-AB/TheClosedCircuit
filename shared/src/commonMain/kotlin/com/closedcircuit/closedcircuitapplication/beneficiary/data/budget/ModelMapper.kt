@@ -3,9 +3,9 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.budget
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.ApiBudget
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.SaveBudgetPayload
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import database.BudgetEntity
 import kotlinx.collections.immutable.toImmutableList
 

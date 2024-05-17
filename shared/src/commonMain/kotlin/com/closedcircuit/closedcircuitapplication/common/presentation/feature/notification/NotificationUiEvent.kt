@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 
 sealed interface NotificationUiEvent {
     object MarkAllAsRead : NotificationUiEvent

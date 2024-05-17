@@ -24,7 +24,7 @@ fun TableRowComponent(
     data: List<String>,
     rowBorderColor: Color,
     rowTextStyle: TextStyle,
-    rowBackGroundColor: Color,
+    rowBackgroundColor: Color,
     contentAlignment: Alignment,
     textAlign: TextAlign,
     tablePadding: Dp,
@@ -34,7 +34,7 @@ fun TableRowComponent(
     Row(
         Modifier
             .fillMaxWidth()
-            .background(rowBackGroundColor)
+            .background(rowBackgroundColor)
             .padding(tablePadding),
     ) {
         data.forEachIndexed { index, title ->

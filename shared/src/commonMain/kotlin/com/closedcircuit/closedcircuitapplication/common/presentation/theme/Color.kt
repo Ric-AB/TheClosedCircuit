@@ -71,6 +71,7 @@ val primary1 = Color(0xFF376A20)
 val primary2 = Color(0xFF76961F)
 val primary3 = Color(0xFFBFEEFBCD)
 val primary4 = Color(0xFF2E7C36)
+val primary5 = Color(0xFFB7E143)
 
 val secondary1 = Color(0xFFD91D1D)
 val secondary2 = Color(0xFFFF9234)

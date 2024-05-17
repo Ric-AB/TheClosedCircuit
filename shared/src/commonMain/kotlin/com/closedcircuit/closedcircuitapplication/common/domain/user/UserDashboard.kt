@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.user
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 
 data class UserDashboard(

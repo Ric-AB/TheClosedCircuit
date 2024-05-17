@@ -7,9 +7,9 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Email
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.PhoneNumber
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
 import kotlinx.coroutines.channels.Channel

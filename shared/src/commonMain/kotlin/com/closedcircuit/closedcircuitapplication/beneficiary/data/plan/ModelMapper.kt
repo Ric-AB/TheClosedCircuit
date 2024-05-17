@@ -2,11 +2,11 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.plan
 
 import com.closedcircuit.closedcircuitapplication.common.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.SavePlanPayload
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.TaskDuration
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import database.PlanEntity
 import kotlinx.collections.immutable.toImmutableList

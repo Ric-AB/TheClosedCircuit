@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.session
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Token
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Token
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.AuthenticationState
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable

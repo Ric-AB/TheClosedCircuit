@@ -1,13 +1,18 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.components.table
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
@@ -23,7 +28,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStr
  * @param headerTableTitles The list of header titles to display at the top of the table.
  * @param headerTitlesBorderColor The color of the border for the header titles, by default it will be [Color.LightGray].
  * @param headerTitlesTextStyle The text style to apply to the header titles, by default it will be [MaterialTheme.typography.bodySmall].
- * @param headerTitlesBackGroundColor The background color for the header titles, by default it will be [Color.White].
+ * @param headerTitlesBackgroundColor The background color for the header titles, by default it will be [Color.White].
  * @param tableRowColors The list of background colors to alternate between rows in the table, by default it will be a list of: [Color.White], [Color.White].
  * @param rowBorderColor The color of the border for the table rows, by default it will be [Color.LightGray].
  * @param rowTextStyle The text style to apply to the data cells in the table rows, by default it will be [MaterialTheme.typography.bodySmall].
@@ -41,8 +46,12 @@ inline fun <reified T : TypeWithStringProperties> Table(
     headerTableTitles: List<String>,
     headerTitlesBorderColor: Color = Color.LightGray,
     headerTitlesTextStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-    headerTitlesBackGroundColor: Color = Color.White,
-    tableRowColors: List<Color> = listOf(Color.White, Color.White),
+    headerTitlesBackgroundColor: Color = Color.Transparent,
+    footerTableTitles: List<String> = emptyList(),
+    footerTitlesBorderColor: Color = Color.LightGray,
+    footerTitlesTextStyle: TextStyle = headerTitlesTextStyle,
+    footerTitlesBackgroundColor: Color = Color.Transparent,
+    tableRowColors: List<Color> = listOf(Color.Transparent, Color.Transparent),
     rowBorderColor: Color = Color.LightGray,
     rowTextStyle: TextStyle = MaterialTheme.typography.bodySmall,
     tableElevation: Dp = 0.dp,
@@ -51,12 +60,13 @@ inline fun <reified T : TypeWithStringProperties> Table(
         width = 1.dp,
         color = Color.LightGray,
     ),
-    disableVerticalDividers: Boolean = false,
+    disableVerticalDividers: Boolean = true,
+    disableHorizontalDividers: Boolean = true,
     dividerThickness: Dp = 1.dp,
     horizontalDividerColor: Color = Color.LightGray,
-    contentAlignment: Alignment = Alignment.Center,
-    textAlign: TextAlign = TextAlign.Center,
-    tablePadding: Dp = 0.dp,
+    contentAlignment: Alignment = Alignment.CenterStart,
+    textAlign: TextAlign = TextAlign.Start,
+    tablePadding: Dp = 12.dp,
     columnToIndexIncreaseWidth: Int? = null,
 ) {
     OutlinedCard(
@@ -70,7 +80,7 @@ inline fun <reified T : TypeWithStringProperties> Table(
                     TableHeaderComponentWithoutColumnDividers(
                         headerTableTitles = headerTableTitles,
                         headerTitlesTextStyle = headerTitlesTextStyle,
-                        headerTitlesBackGroundColor = headerTitlesBackGroundColor,
+                        headerTitlesBackgroundColor = headerTitlesBackgroundColor,
                         dividerThickness = dividerThickness,
                         contentAlignment = contentAlignment,
                         textAlign = textAlign,
@@ -82,7 +92,7 @@ inline fun <reified T : TypeWithStringProperties> Table(
                         headerTableTitles = headerTableTitles,
                         headerTitlesBorderColor = headerTitlesBorderColor,
                         headerTitlesTextStyle = headerTitlesTextStyle,
-                        headerTitlesBackGroundColor = headerTitlesBackGroundColor,
+                        headerTitlesBackgroundColor = headerTitlesBackgroundColor,
                         contentAlignment = contentAlignment,
                         textAlign = textAlign,
                         tablePadding = tablePadding,
@@ -106,7 +116,7 @@ inline fun <reified T : TypeWithStringProperties> Table(
                     TableRowComponentWithoutDividers(
                         data = rowData,
                         rowTextStyle = rowTextStyle,
-                        rowBackGroundColor = tableRowBackgroundColor,
+                        rowBackgroundColor = tableRowBackgroundColor,
                         dividerThickness = dividerThickness,
                         horizontalDividerColor = horizontalDividerColor,
                         contentAlignment = contentAlignment,
@@ -120,13 +130,33 @@ inline fun <reified T : TypeWithStringProperties> Table(
                         rowBorderColor = rowBorderColor,
                         dividerThickness = dividerThickness,
                         rowTextStyle = rowTextStyle,
-                        rowBackGroundColor = tableRowBackgroundColor,
+                        rowBackgroundColor = tableRowBackgroundColor,
                         contentAlignment = contentAlignment,
                         textAlign = textAlign,
                         tablePadding = tablePadding,
                         columnToIndexIncreaseWidth = columnToIndexIncreaseWidth,
                     )
                 }
+            }
+
+            if (footerTableTitles.isNotEmpty()) {
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(dividerThickness)
+                        .background(horizontalDividerColor),
+                )
+
+                TableHeaderComponentWithoutColumnDividers(
+                    headerTableTitles = footerTableTitles,
+                    headerTitlesTextStyle = footerTitlesTextStyle,
+                    headerTitlesBackgroundColor = footerTitlesBackgroundColor,
+                    dividerThickness = dividerThickness,
+                    contentAlignment = contentAlignment,
+                    textAlign = textAlign,
+                    tablePadding = tablePadding,
+                    columnToIndexIncreaseWidth = columnToIndexIncreaseWidth,
+                )
             }
         }
     }

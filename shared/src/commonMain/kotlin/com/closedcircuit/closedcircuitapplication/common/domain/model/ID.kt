@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.model
+package com.closedcircuit.closedcircuitapplication.common.domain.model
 
 import com.closedcircuit.closedcircuitapplication.common.util.randomUUID
 import kotlinx.serialization.Serializable

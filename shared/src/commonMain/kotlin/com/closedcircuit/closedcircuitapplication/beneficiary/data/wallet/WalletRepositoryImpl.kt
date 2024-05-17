@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.wallet
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.wallet.Wallet
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.wallet.WalletRepository
 import kotlinx.coroutines.flow.Flow

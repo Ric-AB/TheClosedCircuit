@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
@@ -30,11 +31,15 @@ internal class LoanScheduleScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(goBack = navigator::pop)
+        val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+        ScreenContent(
+            state = viewModel.loanScheduleState.value,
+            goBack = navigator::pop
+        )
     }
 
     @Composable
-    private fun ScreenContent(goBack: () -> Unit) {
+    private fun ScreenContent(state: LoanScheduleUiState, goBack: () -> Unit) {
         BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -47,18 +52,29 @@ internal class LoanScheduleScreen : Screen, KoinComponent {
                 LoanBreakdown(
                     modifier = Modifier.fillMaxWidth(),
                     type = LoanBreakdownType.LOAN,
-                    data = persistentListOf("NGN 100,000", "NGN 200,000", "NGN 300,000")
+                    data = persistentListOf(
+                        state.loanAmount,
+                        state.interestAmount,
+                        state.repaymentAmount
+                    )
                 )
 
                 Spacer(Modifier.height(16.dp))
                 LoanBreakdown(
                     modifier = Modifier.fillMaxWidth(),
                     type = LoanBreakdownType.DURATION,
-                    data = persistentListOf("3 Months", "6 Months", "9 Months")
+                    data = persistentListOf(
+                        stringResource(SharedRes.strings.x_months, state.graceDuration),
+                        stringResource(SharedRes.strings.x_months, state.repaymentDuration),
+                        stringResource(SharedRes.strings.x_months, state.totalDuration),
+                    )
                 )
 
                 Spacer(Modifier.height(16.dp))
-                Table(headerTableTitles = listOf("Dates", "Repayment amount"), data = listOf())
+                Table(
+                    headerTableTitles = listOf("Dates", "Repayment amount"),
+                    data = state.repaymentBreakdown
+                )
             }
         }
     }

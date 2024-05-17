@@ -1,11 +1,11 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Country
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Email
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.KycStatus
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
+import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
 
 data class ProfileUIState(

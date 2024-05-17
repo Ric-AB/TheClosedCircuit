@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.fundrequest
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 
 sealed interface FundRequestUiEvent {
     object TokenizeCard: FundRequestUiEvent

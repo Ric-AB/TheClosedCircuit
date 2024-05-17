@@ -11,6 +11,7 @@ import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEn
 import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.GET_PLAN_LOAN_OFFERS
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
@@ -28,6 +29,7 @@ interface LoanService {
     @GET(GET_LOAN_OFFER)
     suspend fun fetchLoan(@Path("id") loanId: String): ApiResponse<ApiLoanDetails>
 
+    @Headers("Content-Type: application/json")
     @PATCH(ACCEPT_DELCINE_OFFER)
     suspend fun acknowledgeLoan(
         @Path("id") loanId: String,

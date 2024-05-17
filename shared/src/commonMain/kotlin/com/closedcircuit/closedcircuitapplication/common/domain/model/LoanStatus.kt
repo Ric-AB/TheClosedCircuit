@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.model
+package com.closedcircuit.closedcircuitapplication.common.domain.model
 
 enum class LoanStatus {
     PENDING, ACCEPTED, PAID, DECLINED;

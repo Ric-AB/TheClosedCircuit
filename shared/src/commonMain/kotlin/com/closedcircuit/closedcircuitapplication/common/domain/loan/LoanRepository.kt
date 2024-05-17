@@ -1,8 +1,11 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan
+package com.closedcircuit.closedcircuitapplication.common.domain.loan
 
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.Loan
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanDetails
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.LoanStatus
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
 import kotlinx.collections.immutable.ImmutableList
 
 typealias Loans = ImmutableList<Loan>

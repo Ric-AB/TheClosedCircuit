@@ -1,8 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.user
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.UserDashboardResponse
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.KycDocumentType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import kotlinx.coroutines.flow.StateFlow
 
 interface UserRepository {

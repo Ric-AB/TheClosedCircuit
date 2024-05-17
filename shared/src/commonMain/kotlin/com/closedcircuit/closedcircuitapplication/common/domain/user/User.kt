@@ -1,15 +1,15 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.user
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.AccountType
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Country
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Currency
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Email
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.KycStatus
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.AccountType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
 import kotlinx.serialization.Serializable
 
 @Serializable

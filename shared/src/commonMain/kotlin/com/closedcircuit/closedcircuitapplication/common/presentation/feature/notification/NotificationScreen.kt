@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.CircularIndicator
@@ -251,7 +251,7 @@ private fun NotificationItem(
             )
     ) {
         Avatar(
-            avatar = com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar(""),
+            avatar = com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar(""),
             size = DpSize(50.dp, 50.dp)
         )
 

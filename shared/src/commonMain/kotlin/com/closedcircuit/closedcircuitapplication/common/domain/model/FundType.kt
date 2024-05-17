@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.model
+package com.closedcircuit.closedcircuitapplication.common.domain.model
 
 enum class FundType(val displayText: String, val requestValue: String) {
     LOAN("Loans", "loans"),

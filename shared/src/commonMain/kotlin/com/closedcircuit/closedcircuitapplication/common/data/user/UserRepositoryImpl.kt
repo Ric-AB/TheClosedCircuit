@@ -5,10 +5,10 @@ import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.UpdateUserRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.KycDocumentType
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserDashboard

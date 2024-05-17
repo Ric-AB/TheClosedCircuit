@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.kyc
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.KycDocumentType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 
 sealed interface KycUiEvent {
     data class DocumentTypeChange(val documentType: KycDocumentType) : KycUiEvent

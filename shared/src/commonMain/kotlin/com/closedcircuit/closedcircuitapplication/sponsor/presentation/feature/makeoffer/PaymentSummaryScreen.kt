@@ -11,7 +11,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
@@ -31,11 +33,21 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(goBack = navigator::pop)
+        val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+        ScreenContent(
+            selectedFundingLevel = viewModel.fundingLevelState.fundingLevel!!,
+            state = viewModel.fundingItemsState,
+            goBack = navigator::pop,
+            navigateToLoanTerms = { navigator.push(LoanTermsScreen()) })
     }
 
     @Composable
-    private fun ScreenContent(goBack: () -> Unit) {
+    private fun ScreenContent(
+        selectedFundingLevel: FundingLevel,
+        state: FundingItemsUiState,
+        goBack: () -> Unit,
+        navigateToLoanTerms: () -> Unit
+    ) {
         BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -46,15 +58,37 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                 TopAppBarTitle(stringResource(SharedRes.strings.payment_summary_label))
 
                 Spacer(Modifier.height(24.dp))
-                Table(headerTableTitles = listOf("Steps", "Cost"), data = emptyList())
+                Table(
+                    data = state.selectedItems,
+                    headerTableTitles = listOf(
+                        selectedFundingLevel.getLabel(),
+                        stringResource(SharedRes.strings.cost_label)
+                    ),
+                    footerTableTitles = listOf(
+                        stringResource(SharedRes.strings.total_label),
+                        state.formattedTotalOfSelectedItems
+                    ),
+                    contentAlignment = Alignment.CenterStart
+                )
 
                 Spacer(Modifier.height(40.dp))
                 DefaultButton(onClick = {}) {
-                    Text(stringResource(SharedRes.strings.donate_x_label, "NGN 500,000"))
+                    Text(
+                        stringResource(
+                            SharedRes.strings.donate_x_label,
+                            state.formattedTotalOfSelectedItems
+                        )
+                    )
                 }
 
-                DefaultOutlinedButton(onClick = {}) {
-                    Text(stringResource(SharedRes.strings.loan_x_label))
+                Spacer(Modifier.height(16.dp))
+                DefaultOutlinedButton(onClick = navigateToLoanTerms) {
+                    Text(
+                        stringResource(
+                            SharedRes.strings.loan_x_label,
+                            state.formattedTotalOfSelectedItems
+                        )
+                    )
                 }
             }
         }

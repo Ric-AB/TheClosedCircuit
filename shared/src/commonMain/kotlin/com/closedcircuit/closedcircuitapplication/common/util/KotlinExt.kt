@@ -9,15 +9,23 @@ expect fun randomUUID(): String
 val String.Companion.Empty
     inline get() = ""
 
-val Double.Companion.Zero
-    inline get() = 0.0
+fun String.capitalizeFirstChar(): String {
+    return this.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+}
+
+fun Int?.orZero() = this ?: Int.Zero
 
 val Int.Companion.Zero
     inline get() = 0
 
+val Double.Companion.Zero
+    inline get() = 0.0
+
 fun Double?.orZero() = this ?: Double.Zero
 
-fun Int?.orZero() = this ?: Int.Zero
+fun Double.round(decimals: Int): Double {
+    return kotlin.math.round(this)
+}
 
 fun Boolean?.orFalse() = this ?: false
 

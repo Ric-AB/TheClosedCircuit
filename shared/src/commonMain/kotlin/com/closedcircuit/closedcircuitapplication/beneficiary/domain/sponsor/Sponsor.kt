@@ -1,8 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Avatar
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 
 data class Sponsor(
     val avatar: Avatar,

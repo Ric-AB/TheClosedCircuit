@@ -24,7 +24,7 @@ fun TableHeaderComponent(
     headerTableTitles: List<String>,
     headerTitlesBorderColor: Color,
     headerTitlesTextStyle: TextStyle,
-    headerTitlesBackGroundColor: Color,
+    headerTitlesBackgroundColor: Color,
     contentAlignment: Alignment,
     textAlign: TextAlign,
     tablePadding: Dp,
@@ -34,7 +34,7 @@ fun TableHeaderComponent(
     Row(
         Modifier
             .fillMaxWidth()
-            .background(headerTitlesBackGroundColor)
+            .background(headerTitlesBackgroundColor)
             .padding(horizontal = tablePadding),
     ) {
         headerTableTitles.forEachIndexed { index, title ->

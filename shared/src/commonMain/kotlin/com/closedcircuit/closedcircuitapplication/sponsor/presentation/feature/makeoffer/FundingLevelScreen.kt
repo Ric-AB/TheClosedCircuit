@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
@@ -21,25 +21,31 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TopAppBarTitle
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.collections.immutable.toImmutableList
 import org.koin.core.component.KoinComponent
 
 
-internal class SelectFundingLevelScreen : Screen, KoinComponent {
+internal class FundingLevelScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getScreenModel<MakeOfferViewModel>()
-//        ScreenContent(goBack = navigator::pop, state = viewModel.planSummaryState, onEvent = {})
+        val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+        ScreenContent(
+            goBack = navigator::pop,
+            state = viewModel.fundingLevelState,
+            onEvent = viewModel::onEvent,
+            navigateToSelectFundingItems = { navigator.push(FundingItemsScreen()) }
+        )
     }
 
     @Composable
     private fun ScreenContent(
-        state: SelectFundingLevelUiState,
+        state: FundingLevelUiState,
         goBack: () -> Unit,
-        onEvent: (MakeOfferEvent) -> Unit
+        onEvent: (MakeOfferEvent) -> Unit,
+        navigateToSelectFundingItems: () -> Unit
     ) {
         BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Column(
@@ -52,15 +58,15 @@ internal class SelectFundingLevelScreen : Screen, KoinComponent {
                 Spacer(Modifier.height(24.dp))
                 LargeDropdownMenu(
                     modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(SharedRes.strings.select_category),
-                    items = FundingLevel.values().toList().toImmutableList(),
-                    itemToString = { it.value },
+                    label = stringResource(SharedRes.strings.select_funding_level_label),
+                    items = state.fundingLevels,
+                    itemToString = { it.value.capitalizeFirstChar() },
                     selectedItem = state.fundingLevel,
                     onItemSelected = { _, item -> onEvent(MakeOfferEvent.FundingLevelChange(item)) },
                 )
 
                 Spacer(Modifier.height(40.dp))
-                DefaultButton(onClick = {}) {
+                DefaultButton(onClick = navigateToSelectFundingItems, enabled = state.canProceed) {
                     Text(stringResource(SharedRes.strings.proceed))
                 }
             }

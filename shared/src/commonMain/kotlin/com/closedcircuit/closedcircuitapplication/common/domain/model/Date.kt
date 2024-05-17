@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.model
+package com.closedcircuit.closedcircuitapplication.common.domain.model
 
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.formatDate
 import kotlinx.datetime.Clock

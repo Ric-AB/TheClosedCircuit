@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import kotlinx.serialization.Serializable
 
