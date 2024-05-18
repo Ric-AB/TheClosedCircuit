@@ -109,9 +109,18 @@ kotlin {
             }
         }
 
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
+        val iosX64Main by getting {
+            resources.srcDirs("build/generated/moko/iosX64Main/src")
+        }
+
+        val iosArm64Main by getting {
+            resources.srcDirs("build/generated/moko/iosArm64Main/src")
+        }
+
+        val iosSimulatorArm64Main by getting {
+            resources.srcDirs("build/generated/moko/iosSimulatorArm64Main/src")
+        }
+
         val iosMain by creating {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
@@ -126,6 +135,10 @@ kotlin {
 }
 
 android {
+    sourceSets {
+        getByName("main").java.srcDirs("build/generated/moko/androidMain/src")
+    }
+
     namespace = "com.closedcircuit.closedcircuitapplication"
     compileSdk = 34
     defaultConfig {
@@ -134,16 +147,27 @@ android {
 }
 
 dependencies {
-    listOf(
-        "kspCommonMainMetadata",
-        "kspAndroid",
-        "kspIosX64",
-        "kspIosArm64",
-        "kspIosSimulatorArm64"
-    ).forEach {
-        add(it, libs.kotlinInject.compiler)
-        add(it, libs.ktorfit.ksp)
+    with(libs.ktorfit.ksp) {
+        add("kspCommonMainMetadata", this)
+        add("kspAndroid", this)
+        add("kspAndroidTest", this)
+        add("kspIosX64", this)
+        add("kspIosX64Test", this)
+        add("kspIosArm64", this)
+        add("kspIosArm64Test", this)
+        add("kspIosSimulatorArm64", this)
+        add("kspIosSimulatorArm64Test", this)
     }
+//    listOf(
+//        "kspCommonMainMetadata",
+//        "kspAndroid",
+//        "kspIosX64",
+//        "kspIosArm64",
+//        "kspIosSimulatorArm64"
+//    ).forEach {
+//        add(it, libs.kotlinInject.compiler)
+//        add(it, libs.ktorfit.ksp)
+//    }
 }
 
 sqldelight {

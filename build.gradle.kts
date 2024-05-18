@@ -16,15 +16,15 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-subprojects {
-    // Configure KtorFit
-    plugins.withType<de.jensklingenberg.ktorfit.gradle.KtorfitGradleSubPlugin> {
-        configure<de.jensklingenberg.ktorfit.gradle.KtorfitGradleConfiguration> {
-            version = libs.versions.ktorfit.asProvider().get()
-            logging = project.hasProperty("debugApp")
-        }
-    }
-}
+//subprojects {
+//    // Configure KtorFit
+//    plugins.withType<de.jensklingenberg.ktorfit.gradle.KtorfitGradleSubPlugin> {
+//        configure<de.jensklingenberg.ktorfit.gradle.KtorfitGradleConfiguration> {
+//            version = libs.versions.ktorfit.asProvider().get()
+//            logging = project.hasProperty("debugApp")
+//        }
+//    }
+//}
 
 
 apply(from = "gradle/config/android-library.gradle")

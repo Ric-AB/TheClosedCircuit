@@ -12,7 +12,7 @@ actual class ImagePickerFactory(
     @Composable
     actual fun createPicker(): ImagePicker {
         return remember {
-            com.closedcircuit.closedcircuitapplication.common.presentation.util.ImagePicker(
+            ImagePicker(
                 rootController
             )
         }

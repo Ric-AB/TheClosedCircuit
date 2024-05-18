@@ -1,33 +1,34 @@
 [versions]
 
-agp = "8.1.0"
+agp = "8.1.4"
 androidx-activityCompose = "1.7.2"
 androidx-appcompat = "1.6.1"
-androidx-composeCompiler = "1.4.7"
+androidx-composeCompiler = "1.5.13"
 atomicfu = "0.17.3"
 buildConfig = "3.1.0"
-compose = "1.5.11"
+compose = "1.6.1"
 compose-uitooling = "1.5.1"
 composeImageLoader = "1.4.1"
 koin = "3.4.2"
 koin-compose = "3.4.5"
 koin-compose-kmm = "1.0.3"
-kotlin = "1.8.21"
+kotlin = "1.9.23"
 kotlin-inject = '0.6.1'
 kotlinx-collections = "0.3.7"
 kotlinx-coroutines = "1.7.3"
 kotlinx-datetime = "0.4.0"
 kotlinx-serialization = "1.5.1"
+ksp = "1.9.23-1.0.20"
 kstore = "0.6.0"
-ktor = "2.3.3"
-ktorfit = "1.4.4"
-ktorfit-compiler = '1.0.0'
+ktor = "2.3.10"
+ktorfit = "1.13.0"
+#ktorfit-compiler = '1.13.0'
 landscapist-version = "2.3.3"
 mokoResources = "0.23.0"
 napier = "2.6.1"
 sqlDelight = "2.0.0"
 voyager = "1.0.0"
-webview = "1.8.8"
+webview = "1.9.7"
 
 [libraries]
 
@@ -80,9 +81,9 @@ atomicfu = { id = "org.jetbrains.kotlinx.atomicfu-gradle-plugin", version.ref = 
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
-ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit-compiler" }
+ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 mokoResources = { id = "dev.icerock.mobile.multiplatform-resources", version.ref = "mokoResources" }
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 sqlDelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }

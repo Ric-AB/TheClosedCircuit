@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.util
 
 import androidx.compose.runtime.Composable
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.refTo
 import platform.UIKit.UIImage
 import platform.UIKit.UIImageJPEGRepresentation
@@ -22,6 +23,7 @@ actual class ImagePicker(
 
     private var onImagePicked: (ByteArray) -> Unit = {}
 
+    @OptIn(ExperimentalForeignApi::class)
     private val delegate = object : NSObject(), UIImagePickerControllerDelegateProtocol,
         UINavigationControllerDelegateProtocol {
         override fun imagePickerController(

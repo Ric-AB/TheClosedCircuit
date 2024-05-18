@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.util
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.convert
 import kotlinx.datetime.LocalDateTime
 import platform.Foundation.NSCalendar
@@ -19,6 +20,7 @@ actual fun formatDate(localDateTime: LocalDateTime, format: String): String {
     return formatter.stringFromDate(date)
 }
 
+@OptIn(ExperimentalForeignApi::class)
 private fun LocalDateTime.toNsDate(): NSDate? {
     val calendar = NSCalendar.currentCalendar
     val components = NSDateComponents()
