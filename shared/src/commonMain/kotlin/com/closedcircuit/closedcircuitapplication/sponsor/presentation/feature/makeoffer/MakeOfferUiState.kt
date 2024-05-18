@@ -1,10 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
@@ -13,6 +11,8 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.floor
 
+typealias Step = FundingItem
+typealias Budget = FundingItem
 
 sealed interface PlanSummaryUiState {
     object Loading : PlanSummaryUiState
@@ -47,7 +47,7 @@ data class FundingItemsUiState(
     val allItemsSelected get() = availableItems.all { it.isSelected }
     val selectedItems get() = availableItems.filter { it.isSelected }
     val totalOfSelectedItems get() = Amount(selectedItems.sumOf { it.cost })
-    val formattedTotalOfSelectedItems get() = totalOfSelectedItems.value.toString()
+    val formattedTotalOfSelectedItems get() = totalOfSelectedItems.getFormattedValue()
     val canProceed get() = availableItems.any { it.isSelected }
 }
 
@@ -74,7 +74,7 @@ data class LoanScheduleUiState(
     val graceDuration: String,
     val repaymentDuration: String,
     val totalDuration: String,
-    val repaymentBreakdown: ImmutableList<Item>
+    val repaymentBreakdown: ImmutableList<TableItem>
 ) {
     companion object {
         fun init(loanAmount: Double, fundRequest: FundRequest?): LoanScheduleUiState {
@@ -88,9 +88,9 @@ data class LoanScheduleUiState(
             val interestAmount = (loanAmount * interestRate * durationInYears).div(100)
             val repaymentAmount = (loanAmount + interestAmount)
             val totalDuration = graceDuration + repaymentDuration
-            val repaymentAmountPerMonth = repaymentAmount / totalDuration
+            val repaymentAmountPerMonth = Amount(repaymentAmount / totalDuration)
             val repaymentBreakdown = List(totalDuration - 1) {
-                Item("Month ${it + 1}", repaymentAmountPerMonth.toString())
+                TableItem("Month ${it + 1}", repaymentAmountPerMonth.getFormattedValue())
             }.toImmutableList()
 
             return LoanScheduleUiState(
@@ -106,7 +106,7 @@ data class LoanScheduleUiState(
     }
 }
 
-data class Item(
+data class TableItem(
     val index: String,
     val value: String
 ) : TypeWithStringProperties {

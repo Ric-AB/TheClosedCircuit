@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.AccountTyp
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 @Stable
 data class KycUiState(

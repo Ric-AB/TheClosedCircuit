@@ -5,9 +5,9 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.ApiU
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.UpdateUserRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.UserDashboardResponse
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.DASHBOARD
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.KYC
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.USER
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.DASHBOARD
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.KYC
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.USER
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers

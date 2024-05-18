@@ -1,9 +1,11 @@
-package com.closedcircuit.closedcircuitapplication.common.util
+package com.closedcircuit.closedcircuitapplication.common.presentation.util
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+
+expect fun formatNumberToCurrency(number: Double, symbol: String = ""): String
 
 class NumberCommaTransformation : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {

@@ -1,10 +1,11 @@
-package com.closedcircuit.closedcircuitapplication.common.util
+package com.closedcircuit.closedcircuitapplication.common.presentation.util
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.closedcircuit.closedcircuitapplication.common.util.validation.InputValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.InputValidator
+import com.closedcircuit.closedcircuitapplication.common.util.Empty
 
 
 data class InputField(

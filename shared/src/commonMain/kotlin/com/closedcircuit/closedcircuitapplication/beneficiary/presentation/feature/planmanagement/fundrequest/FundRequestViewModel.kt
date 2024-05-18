@@ -13,7 +13,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.Pay
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import kotlinx.coroutines.launch
 

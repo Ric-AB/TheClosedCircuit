@@ -1,10 +1,10 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.register
 
-import com.closedcircuit.closedcircuitapplication.common.util.validation.EmailValidator
-import com.closedcircuit.closedcircuitapplication.common.util.validation.NameValidator
-import com.closedcircuit.closedcircuitapplication.common.util.validation.PasswordValidator
-import com.closedcircuit.closedcircuitapplication.common.util.validation.PhoneNumberValidator
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.EmailValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.NameValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PasswordValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PhoneNumberValidator
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 data class RegisterUIState(
     val firstNameField: InputField = InputField(name = "firstName", validator = NameValidator()),

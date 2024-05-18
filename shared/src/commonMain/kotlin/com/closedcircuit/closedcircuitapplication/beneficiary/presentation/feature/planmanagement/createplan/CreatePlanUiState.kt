@@ -1,9 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanOption
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
-import com.closedcircuit.closedcircuitapplication.common.util.validation.AmountValidator
-import com.closedcircuit.closedcircuitapplication.common.util.validation.TextValidator
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.AmountValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.TextValidator
 import kotlinx.collections.immutable.ImmutableList
 
 data class CreatePlanUIState(

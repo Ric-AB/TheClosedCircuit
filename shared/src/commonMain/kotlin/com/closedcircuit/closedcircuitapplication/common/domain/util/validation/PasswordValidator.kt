@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.common.util.validation
+package com.closedcircuit.closedcircuitapplication.common.domain.util.validation
 
 enum class PasswordCriteria {
     Length, Case, Digit, SpecialCharacter

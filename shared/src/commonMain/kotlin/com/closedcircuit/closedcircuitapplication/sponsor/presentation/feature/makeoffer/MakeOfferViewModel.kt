@@ -55,29 +55,34 @@ class MakeOfferViewModel(
                 .onSuccess { sponsorPlan ->
                     initialize(sponsorPlan)
 
-                    val estimatedCostPrice = sponsorPlan.estimatedCostPrice.value
-                    val estimatedSellingPrice = sponsorPlan.estimatedSellingPrice.value
+                    val estimatedCostPrice = sponsorPlan.estimatedCostPrice
+                    val estimatedSellingPrice = sponsorPlan.estimatedSellingPrice
                     val estimatedProfitFraction = estimatedSellingPrice.minus(estimatedCostPrice)
                         .div(estimatedCostPrice)
+                        .value
                         .round(2)
 
                     val estimatedProfitPercent = estimatedProfitFraction.times(100)
                     val stepsWithBudget = sponsorPlan.steps
+                        .map { step -> step.toFundingItem() }
                         .associateWith { step ->
-                            sponsorPlan.budgets.filter { it.stepID == step.id }.toImmutableList()
+                            sponsorPlan.budgets
+                                .filter { it.stepID == step.id }
+                                .map { budget -> budget.toFundingItem() }
+                                .toImmutableList()
                         }.toImmutableMap()
 
                     planSummaryState = PlanSummaryUiState.Content(
                         businessSector = sponsorPlan.sector,
                         planDuration = sponsorPlan.duration.value.toString(),
-                        estimatedCostPrice = estimatedCostPrice.toString(),
-                        estimatedSellingPrice = estimatedSellingPrice.toString(),
+                        estimatedCostPrice = estimatedCostPrice.getFormattedValue(),
+                        estimatedSellingPrice = estimatedSellingPrice.getFormattedValue(),
                         planImage = sponsorPlan.avatar.value,
                         planDescription = sponsorPlan.description,
                         estimatedProfitPercent = estimatedProfitPercent.toString(),
                         estimatedProfitFraction = estimatedProfitFraction.toFloat(),
                         stepsWithBudgets = stepsWithBudget,
-                        total = sponsorPlan.targetAmount.value.toString()
+                        total = sponsorPlan.targetAmount.getFormattedValue()
                     )
                 }.onError { _, message ->
                     planSummaryState = PlanSummaryUiState.Error(message)
@@ -93,7 +98,7 @@ class MakeOfferViewModel(
     private fun createLoanSchedule() {
         loanScheduleState = mutableStateOf(
             LoanScheduleUiState.init(
-                loanAmount = fundingItemsState.formattedTotalOfSelectedItems,
+                loanAmount = fundingItemsState.totalOfSelectedItems.value,
                 fundRequest = sponsoringPlan.fundRequest
             )
         )
@@ -133,7 +138,7 @@ class MakeOfferViewModel(
         return FundingItem(
             id = id,
             name = name,
-            formattedCost = targetAmount.value.toString(),
+            formattedCost = targetAmount.getFormattedValue(),
             cost = targetAmount.value,
             isSelected = false
         )
@@ -143,7 +148,7 @@ class MakeOfferViewModel(
         return FundingItem(
             id = id,
             name = name,
-            formattedCost = targetFunds.value.toString(),
+            formattedCost = targetFunds.getFormattedValue(),
             cost = targetFunds.value,
             isSelected = false
         )
@@ -153,7 +158,7 @@ class MakeOfferViewModel(
         return FundingItem(
             id = id,
             name = name,
-            formattedCost = cost.value.toString(),
+            formattedCost = cost.getFormattedValue(),
             cost = cost.value,
             isSelected = false
         )

@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
-import com.closedcircuit.closedcircuitapplication.common.util.validation.AmountValidator
-import com.closedcircuit.closedcircuitapplication.common.util.validation.TextValidator
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.AmountValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.TextValidator
 
 data class SaveStepUIState(
     val loading: Boolean = false,

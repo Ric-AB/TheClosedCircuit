@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 
 import androidx.compose.runtime.Stable
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 @Stable
 data class FundRequestUiState(

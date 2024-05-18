@@ -49,7 +49,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.vert
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.conditional
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
-import com.closedcircuit.closedcircuitapplication.common.util.NumberCommaTransformation
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList

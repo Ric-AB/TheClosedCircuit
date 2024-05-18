@@ -63,7 +63,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.common.util.NumberCommaTransformation
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow

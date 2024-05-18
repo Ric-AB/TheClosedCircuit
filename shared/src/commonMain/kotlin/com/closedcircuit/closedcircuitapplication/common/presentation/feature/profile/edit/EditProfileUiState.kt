@@ -2,10 +2,10 @@ package com.closedcircuit.closedcircuitapplication.common.presentation.feature.p
 
 import androidx.compose.runtime.mutableStateOf
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
-import com.closedcircuit.closedcircuitapplication.common.util.validation.EmailValidator
-import com.closedcircuit.closedcircuitapplication.common.util.validation.NameValidator
-import com.closedcircuit.closedcircuitapplication.common.util.validation.PhoneNumberValidator
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.EmailValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.NameValidator
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PhoneNumberValidator
 
 data class EditProfileUIState(
     val firstNameField: InputField,

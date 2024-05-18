@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 data class ProfileVerificationUIState(
     val email: Email,

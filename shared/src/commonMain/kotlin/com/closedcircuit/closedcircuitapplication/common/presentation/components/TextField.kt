@@ -46,8 +46,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.icon.rememberVisibility
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.icon.rememberVisibilityOff
-import com.closedcircuit.closedcircuitapplication.common.util.InputField
-import com.closedcircuit.closedcircuitapplication.common.util.validation.PasswordValidator
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PasswordValidator
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay

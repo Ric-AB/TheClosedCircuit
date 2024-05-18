@@ -36,8 +36,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
@@ -159,12 +157,13 @@ internal class PlanSummaryScreen : Screen, KoinComponent {
                 MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
             items.entries.forEachIndexed { stepIndex, entry ->
                 val step = entry.key
+                val stepNumber = stepIndex + 1
                 ListItem(
-                    label = "Step ${stepIndex + 1}:",
+                    label = stringResource(SharedRes.strings.step_x_colon_label, stepNumber),
                     title = step.name,
                     amount = stringResource(
                         SharedRes.strings.cost_x_label,
-                        step.targetFunds.value.toString()
+                        step.formattedCost
                     ),
                     backgroundColor = primary5,
                     textStyle = boldFontStyle
@@ -172,10 +171,14 @@ internal class PlanSummaryScreen : Screen, KoinComponent {
 
                 val budgets = entry.value
                 budgets.forEachIndexed { budgetIndex, budget ->
+                    val budgetNumber = budgetIndex + 1
                     ListItem(
-                        label = "Budget item ${budgetIndex + 1}:",
+                        label = stringResource(
+                            SharedRes.strings.budget_item_x_colon_label,
+                            budgetNumber
+                        ),
                         title = budget.name,
-                        amount = budget.cost.value.toString(),
+                        amount = budget.formattedCost,
                         backgroundColor = primary3,
                         textStyle = MaterialTheme.typography.bodySmall
                     )

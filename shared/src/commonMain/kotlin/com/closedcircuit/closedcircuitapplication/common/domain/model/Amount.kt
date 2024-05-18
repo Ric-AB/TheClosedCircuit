@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.model
 
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.formatNumberToCurrency
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
@@ -9,6 +10,10 @@ value class Amount(val value: Double) {
 
     init {
         require(value >= 0.toDouble()) { "Price ($value) cannot be less than 0.0" }
+    }
+
+    fun getFormattedValue(): String {
+        return formatNumberToCurrency(value, "NGN")
     }
 
     operator fun minus(other: Amount): Amount {

@@ -5,10 +5,10 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.loan.dto.Ackn
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.loan.dto.ApiLoanDetails
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.loan.dto.LoanPreviewResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.loan.dto.LoansResponse
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.ACCEPT_DELCINE_OFFER
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.GET_LOAN_OFFER
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.GET_LOAN_PREVIEWS
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.GET_PLAN_LOAN_OFFERS
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.ACCEPT_DELCINE_OFFER
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.GET_LOAN_OFFER
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.GET_LOAN_PREVIEWS
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.GET_PLAN_LOAN_OFFERS
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers

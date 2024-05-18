@@ -2,8 +2,8 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.payment
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.payment.dto.TokenizeCardResponse
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.TOKENIZE_CARD
-import com.closedcircuit.closedcircuitapplication.common.util.ClosedCircuitApiEndpoints.VERIFY_TRANSACTION_STATUS
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.TOKENIZE_CARD
+import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.VERIFY_TRANSACTION_STATUS
 import de.jensklingenberg.ktorfit.http.POST
 
 interface PaymentService {
