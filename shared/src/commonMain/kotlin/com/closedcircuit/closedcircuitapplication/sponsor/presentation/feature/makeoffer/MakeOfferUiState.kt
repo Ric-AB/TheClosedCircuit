@@ -4,7 +4,9 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
+import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
+import com.closedcircuit.closedcircuitapplication.common.util.Empty
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
@@ -42,13 +44,37 @@ data class FundingLevelUiState(
 }
 
 data class FundingItemsUiState(
-    val availableItems: SnapshotStateList<FundingItem> = SnapshotStateList()
+    val minLoanAmount: String,
+    val maxLoanAmount: String,
+    val availableItems: SnapshotStateList<FundingItem>,
+    val enteredAmount: String
 ) {
     val allItemsSelected get() = availableItems.all { it.isSelected }
     val selectedItems get() = availableItems.filter { it.isSelected }
     val totalOfSelectedItems get() = Amount(selectedItems.sumOf { it.cost })
     val formattedTotalOfSelectedItems get() = totalOfSelectedItems.getFormattedValue()
     val canProceed get() = availableItems.any { it.isSelected }
+    val canOfferLoan get() = fundRequest.fundType != FundType.DONATION
+
+    val isBelowMinimumAmount get() = totalOfSelectedItems.value < fundRequest.minimumLoanRange?.value.orZero()
+    val isAboveMaximumAmount get() = totalOfSelectedItems.value > fundRequest.maximumLoanRange?.value.orZero()
+
+    private lateinit var fundRequest: FundRequest
+
+    constructor(fundRequest: FundRequest) : this(
+        minLoanAmount = fundRequest.minimumLoanRange?.getFormattedValue().orEmpty(),
+        maxLoanAmount = fundRequest.maximumLoanRange?.getFormattedValue().orEmpty(),
+        availableItems = SnapshotStateList(),
+        enteredAmount = String.Empty
+    ) {
+        this.fundRequest = fundRequest
+    }
+
+    companion object {
+        fun init(fundRequest: FundRequest): FundingItemsUiState {
+            return FundingItemsUiState(fundRequest)
+        }
+    }
 }
 
 data class LoanTermsUiState(

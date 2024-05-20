@@ -9,10 +9,13 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
 import com.closedcircuit.closedcircuitapplication.common.util.round
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
+import com.closedcircuit.closedcircuitapplication.sponsor.data.offer.dto.OfferPayload
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.offer.OfferRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
 import kotlinx.collections.immutable.toImmutableList
@@ -20,7 +23,8 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
 
 class MakeOfferViewModel(
-    private val planRepository: PlanRepository
+    private val planRepository: PlanRepository,
+    private val offerRepository: OfferRepository
 ) : ScreenModel {
 
     private lateinit var sponsoringPlan: SponsorPlan
@@ -30,10 +34,11 @@ class MakeOfferViewModel(
     var fundingLevelState by mutableStateOf(FundingLevelUiState())
         private set
 
-    val fundingItemsState by mutableStateOf(FundingItemsUiState())
+    val fundingItemsState by mutableStateOf(FundingItemsUiState.init(sponsoringPlan.fundRequest))
 
     lateinit var loanTermsState: MutableState<LoanTermsUiState>
     lateinit var loanScheduleState: MutableState<LoanScheduleUiState>
+    lateinit var fundType: FundType
 
     init {
         fetchPlanByFundRequestId()
@@ -43,9 +48,11 @@ class MakeOfferViewModel(
         when (event) {
             MakeOfferEvent.FetchPlan -> fetchPlanByFundRequestId()
             is MakeOfferEvent.FundingLevelChange -> updateFundingLevel(event.fundingLevel)
+            is MakeOfferEvent.FundTypeChange -> updateFundType(event.fundType)
             MakeOfferEvent.ToggleAllFundingItems -> toggleAllFundingItems()
             is MakeOfferEvent.ToggleFundingItem -> toggleFundingItem(event.index)
             MakeOfferEvent.SubmitSelection -> createLoanSchedule()
+            MakeOfferEvent.SubmitOffer -> submitOffer()
         }
     }
 
@@ -90,6 +97,38 @@ class MakeOfferViewModel(
         }
     }
 
+    private fun submitOffer() {
+        val payload = getOfferPayload()
+        screenModelScope.launch {
+            offerRepository.sendOffer(payload).onSuccess { response ->
+
+            }
+        }
+    }
+
+    private fun getOfferPayload(): OfferPayload {
+        val fundingLevel = fundingLevelState.fundingLevel!!
+        val selectedItemIds = fundingItemsState.selectedItems.map { it.id.value }
+        val otherAmount =
+            if (fundingLevelState.fundingLevel == FundingLevel.OTHER) fundingItemsState.enteredAmount
+            else null
+
+        val fundingLevelValue = fundingLevel.value
+        val fundRequestId = sponsoringPlan.fundRequest.id.value
+        val isDonation = fundType == FundType.DONATION
+        val stepIds = if (fundingLevel == FundingLevel.STEP) selectedItemIds else null
+        val budgetIds = if (fundingLevel == FundingLevel.BUDGET) selectedItemIds else null
+
+        return OfferPayload(
+            otherAmount = otherAmount,
+            fundingLevel = fundingLevelValue,
+            fundRequest = fundRequestId,
+            isDonation = isDonation,
+            steps = stepIds,
+            budgets = budgetIds
+        )
+    }
+
     private fun initialize(sponsorPlan: SponsorPlan) {
         sponsoringPlan = sponsorPlan
         loanTermsState = mutableStateOf(LoanTermsUiState.init(sponsorPlan.fundRequest))
@@ -107,6 +146,10 @@ class MakeOfferViewModel(
     private fun updateFundingLevel(fundingLevel: FundingLevel) {
         fundingLevelState = fundingLevelState.copy(fundingLevel = fundingLevel)
         updateSelectableItems(fundingLevel)
+    }
+
+    private fun updateFundType(fundType: FundType) {
+        this.fundType = fundType
     }
 
     private fun updateSelectableItems(fundingLevel: FundingLevel) {

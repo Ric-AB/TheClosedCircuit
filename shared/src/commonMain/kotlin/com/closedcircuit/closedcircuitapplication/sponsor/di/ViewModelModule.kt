@@ -4,5 +4,5 @@ import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.m
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    factory { MakeOfferViewModel(get()) }
+    factory { MakeOfferViewModel(get(), get()) }
 }

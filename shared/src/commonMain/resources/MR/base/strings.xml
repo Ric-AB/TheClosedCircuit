@@ -322,4 +322,14 @@
     <string name="x_percent_interest_rate_label">%1$s interest rate</string>
     <string name="step_x_colon_label">Step %1$s:</string>
     <string name="budget_item_x_colon_label">Budget item %1$s:</string>
+    <string name="loan_range_below_min_prompt">"You can only loan an amount within the beneficiary’s
+        loan range of %1$s to %2$s. We’ll love you to still support by donating towards the success
+        of the plan."
+    </string>
+    <string name="loan_range_above_max_prompt">The amount you are offering is higher than the
+        maximum loan range (%1$s to %2$s)
+    </string>
+    <string name="you_are_about_to_donate_prompt">"You are about to donate the sum of %1$s. The
+        Closed Circuit will transfer the money to the beneficiary’s app wallet."
+    </string>
 </resources>
