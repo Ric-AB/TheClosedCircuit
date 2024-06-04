@@ -57,7 +57,7 @@ fun ApiPlan.asPlanEntity() = PlanEntity(
 )
 
 fun Plan.asRequest() = SavePlanPayload(
-    avatar = avatar.value,
+    // todo change default avatar
     category = category,
     sector = sector,
     type = type.orEmpty(),

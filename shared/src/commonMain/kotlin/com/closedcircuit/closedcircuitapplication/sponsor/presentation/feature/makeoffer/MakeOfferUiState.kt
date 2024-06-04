@@ -6,7 +6,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
-import com.closedcircuit.closedcircuitapplication.common.util.Empty
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
@@ -47,7 +47,7 @@ data class FundingItemsUiState(
     val minLoanAmount: String,
     val maxLoanAmount: String,
     val availableItems: SnapshotStateList<FundingItem>,
-    val enteredAmount: String
+    val enteredAmount: InputField
 ) {
     val allItemsSelected get() = availableItems.all { it.isSelected }
     val selectedItems get() = availableItems.filter { it.isSelected }
@@ -55,9 +55,9 @@ data class FundingItemsUiState(
     val formattedTotalOfSelectedItems get() = totalOfSelectedItems.getFormattedValue()
     val canProceed get() = availableItems.any { it.isSelected }
     val canOfferLoan get() = fundRequest.fundType != FundType.DONATION
-
     val isBelowMinimumAmount get() = totalOfSelectedItems.value < fundRequest.minimumLoanRange?.value.orZero()
     val isAboveMaximumAmount get() = totalOfSelectedItems.value > fundRequest.maximumLoanRange?.value.orZero()
+    val isEnteredAmountBelowMinAmount get() = enteredAmount.value.toDouble() < fundRequest.minimumLoanRange?.value.orZero()
 
     private lateinit var fundRequest: FundRequest
 
@@ -65,7 +65,7 @@ data class FundingItemsUiState(
         minLoanAmount = fundRequest.minimumLoanRange?.getFormattedValue().orEmpty(),
         maxLoanAmount = fundRequest.maximumLoanRange?.getFormattedValue().orEmpty(),
         availableItems = SnapshotStateList(),
-        enteredAmount = String.Empty
+        enteredAmount = InputField()
     ) {
         this.fundRequest = fundRequest
     }
@@ -149,4 +149,9 @@ data class FundingItem(
 ) : TypeWithStringProperties {
     override val properties: List<String>
         get() = listOf(name, formattedCost)
+}
+
+sealed interface MakeOfferResult {
+    object Success : MakeOfferResult
+    data class Error(val message: String) : MakeOfferResult
 }

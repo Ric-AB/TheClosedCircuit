@@ -7,9 +7,9 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
 import com.closedcircuit.closedcircuitapplication.common.util.round
 import com.closedcircuit.closedcircuitapplication.core.network.onError
@@ -20,6 +20,8 @@ import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.PlanReposi
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class MakeOfferViewModel(
@@ -28,17 +30,15 @@ class MakeOfferViewModel(
 ) : ScreenModel {
 
     private lateinit var sponsoringPlan: SponsorPlan
-    var planSummaryState by mutableStateOf<PlanSummaryUiState>(PlanSummaryUiState.Loading)
-        private set
-
-    var fundingLevelState by mutableStateOf(FundingLevelUiState())
-        private set
-
-    val fundingItemsState by mutableStateOf(FundingItemsUiState.init(sponsoringPlan.fundRequest))
-
+    var planSummaryState by mutableStateOf<PlanSummaryUiState>(PlanSummaryUiState.Loading); private set
+    var fundingLevelState by mutableStateOf(FundingLevelUiState()); private set
+    lateinit var fundingItemsState: MutableState<FundingItemsUiState>
     lateinit var loanTermsState: MutableState<LoanTermsUiState>
     lateinit var loanScheduleState: MutableState<LoanScheduleUiState>
-    lateinit var fundType: FundType
+    lateinit var fundType: FundType; private set
+
+    private val _makeOfferResultChannel = Channel<MakeOfferResult>()
+    val makeOfferResultChannel: ReceiveChannel<MakeOfferResult> = _makeOfferResultChannel
 
     init {
         fetchPlanByFundRequestId()
@@ -51,7 +51,7 @@ class MakeOfferViewModel(
             is MakeOfferEvent.FundTypeChange -> updateFundType(event.fundType)
             MakeOfferEvent.ToggleAllFundingItems -> toggleAllFundingItems()
             is MakeOfferEvent.ToggleFundingItem -> toggleFundingItem(event.index)
-            MakeOfferEvent.SubmitSelection -> createLoanSchedule()
+            MakeOfferEvent.CreateSchedule -> createLoanSchedule()
             MakeOfferEvent.SubmitOffer -> submitOffer()
         }
     }
@@ -101,16 +101,26 @@ class MakeOfferViewModel(
         val payload = getOfferPayload()
         screenModelScope.launch {
             offerRepository.sendOffer(payload).onSuccess { response ->
-
+                if (fundType == FundType.LOAN) {
+                    _makeOfferResultChannel.send(MakeOfferResult.Success)
+                } else {
+                    chargeAmount(response.id)
+                }
+            }.onError { _, message ->
+                _makeOfferResultChannel.send(MakeOfferResult.Error(message))
             }
         }
     }
 
+    private fun chargeAmount(loanID: String) {
+
+    }
+
     private fun getOfferPayload(): OfferPayload {
         val fundingLevel = fundingLevelState.fundingLevel!!
-        val selectedItemIds = fundingItemsState.selectedItems.map { it.id.value }
+        val selectedItemIds = fundingItemsState.value.selectedItems.map { it.id.value }
         val otherAmount =
-            if (fundingLevelState.fundingLevel == FundingLevel.OTHER) fundingItemsState.enteredAmount
+            if (fundingLevelState.fundingLevel == FundingLevel.OTHER) fundingItemsState.value.enteredAmount
             else null
 
         val fundingLevelValue = fundingLevel.value
@@ -120,7 +130,7 @@ class MakeOfferViewModel(
         val budgetIds = if (fundingLevel == FundingLevel.BUDGET) selectedItemIds else null
 
         return OfferPayload(
-            otherAmount = otherAmount,
+            otherAmount = otherAmount?.value,
             fundingLevel = fundingLevelValue,
             fundRequest = fundRequestId,
             isDonation = isDonation,
@@ -132,12 +142,13 @@ class MakeOfferViewModel(
     private fun initialize(sponsorPlan: SponsorPlan) {
         sponsoringPlan = sponsorPlan
         loanTermsState = mutableStateOf(LoanTermsUiState.init(sponsorPlan.fundRequest))
+        fundingItemsState = mutableStateOf(FundingItemsUiState.init(sponsoringPlan.fundRequest))
     }
 
     private fun createLoanSchedule() {
         loanScheduleState = mutableStateOf(
             LoanScheduleUiState.init(
-                loanAmount = fundingItemsState.totalOfSelectedItems.value,
+                loanAmount = fundingItemsState.value.totalOfSelectedItems.value,
                 fundRequest = sponsoringPlan.fundRequest
             )
         )
@@ -145,36 +156,44 @@ class MakeOfferViewModel(
 
     private fun updateFundingLevel(fundingLevel: FundingLevel) {
         fundingLevelState = fundingLevelState.copy(fundingLevel = fundingLevel)
-        updateSelectableItems(fundingLevel)
+        updateFundingItems(fundingLevel)
     }
 
     private fun updateFundType(fundType: FundType) {
         this.fundType = fundType
     }
 
-    private fun updateSelectableItems(fundingLevel: FundingLevel) {
-        val availableItems = fundingItemsState.availableItems
+    private fun updateFundingItems(fundingLevel: FundingLevel) {
+        val availableItems = fundingItemsState.value.availableItems
         when (fundingLevel) {
-            FundingLevel.PLAN -> availableItems.add(sponsoringPlan.toFundingItem())
-            FundingLevel.STEP -> availableItems.addAll(sponsoringPlan.steps.map { it.toFundingItem() })
-            FundingLevel.BUDGET -> availableItems.addAll(sponsoringPlan.budgets.map { it.toFundingItem() })
+            FundingLevel.PLAN -> availableItems.replaceAll(listOf(sponsoringPlan.toFundingItem()))
+            FundingLevel.STEP -> availableItems.replaceAll(sponsoringPlan.steps.map { it.toFundingItem() })
+            FundingLevel.BUDGET -> availableItems.replaceAll(sponsoringPlan.budgets.map { it.toFundingItem() })
             FundingLevel.OTHER -> {}
         }
     }
 
     private fun toggleAllFundingItems() {
-        val newSelectionState = !fundingItemsState.allItemsSelected
-        val newList = fundingItemsState.availableItems
+        val newSelectionState = !fundingItemsState.value.allItemsSelected
+        val newList = fundingItemsState.value.availableItems
             .map { it.copy(isSelected = newSelectionState) }
 
-        fundingItemsState.availableItems.replaceAll(newList)
+        fundingItemsState.value.availableItems.replaceAll(newList)
     }
 
     private fun toggleFundingItem(index: Int) {
-        val currentItem = fundingItemsState.availableItems[index]
+        val availableItems = fundingItemsState.value.availableItems
+        val currentItem = availableItems[index]
         val currentItemSelected = currentItem.isSelected
-        fundingItemsState.availableItems[index] =
-            currentItem.copy(isSelected = !currentItemSelected)
+        availableItems[index] = currentItem.copy(isSelected = !currentItemSelected)
+
+        // deselect subsequent items when current item is deselected
+        if (currentItemSelected) {
+            availableItems.subList(index, availableItems.lastIndex)
+                .forEachIndexed { i, fundingItem ->
+                    availableItems[i] = fundingItem.copy(isSelected = false)
+                }
+        }
     }
 
     private fun SponsorPlan.toFundingItem(): FundingItem {

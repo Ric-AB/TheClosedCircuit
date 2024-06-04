@@ -8,6 +8,6 @@ sealed interface MakeOfferEvent {
     data class FundTypeChange(val fundType: FundType) : MakeOfferEvent
     data class ToggleFundingItem(val index: Int) : MakeOfferEvent
     object ToggleAllFundingItems : MakeOfferEvent
-    object SubmitSelection : MakeOfferEvent
+    object CreateSchedule : MakeOfferEvent
     object SubmitOffer : MakeOfferEvent
 }

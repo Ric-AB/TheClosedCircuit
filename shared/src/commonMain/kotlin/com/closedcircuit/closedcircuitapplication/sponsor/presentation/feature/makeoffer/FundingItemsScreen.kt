@@ -53,12 +53,12 @@ internal class FundingItemsScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
         ScreenContent(
-            state = viewModel.fundingItemsState,
+            state = viewModel.fundingItemsState.value,
             selectedFundingLevel = viewModel.fundingLevelState.fundingLevel!!,
             goBack = navigator::pop,
             onEvent = viewModel::onEvent,
             navigateToPaymentSummary = {
-                viewModel.onEvent(MakeOfferEvent.SubmitSelection)
+                viewModel.onEvent(MakeOfferEvent.CreateSchedule)
                 navigator.push(PaymentSummaryScreen())
             }
         )
