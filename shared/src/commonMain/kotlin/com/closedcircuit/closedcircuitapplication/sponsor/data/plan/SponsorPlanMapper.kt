@@ -10,9 +10,9 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
-import com.closedcircuit.closedcircuitapplication.common.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
+import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
 
 fun ApiPlan.asSponsorPlan() = SponsorPlan(

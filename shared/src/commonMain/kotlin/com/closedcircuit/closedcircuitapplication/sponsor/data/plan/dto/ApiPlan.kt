@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.common.data.plan.dto
+package com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.ApiBudget
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.dto.ApiStep
