@@ -43,8 +43,15 @@ class RegisterViewModel(
         if (areFieldsValid()) {
             val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
             val email = emailField.value.lowercase().trim()
-            val fullName =
-                "${firstNameField.value.trim()} ${nickNameField.value.trim()} ${lastNameField.value.trim()}"
+            val firstName = firstNameField.value.trim()
+            val nickName = nickNameField.value.trim()
+            val lastName = lastNameField.value.trim()
+            val fullName = listOfNotNull(
+                firstName,
+                nickName.takeIf { it.isNotBlank() },
+                lastName
+            ).joinToString(" ")
+
             val phoneNumber = phoneNumberField.value.trim()
             val password = passwordField.value
             val confirmPassword = confirmPasswordField.value
