@@ -1,7 +1,10 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,10 +17,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
+import cafe.adriel.voyager.navigator.tab.Tab
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.OnboardingScreen
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.BeneficiaryTabs
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.BeneficiaryBottomTabs
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import kotlinx.coroutines.CoroutineScope
@@ -68,7 +73,7 @@ object SplashScreen : Screen, KoinComponent {
 
         LaunchedEffect(Unit) {
             when (isLoggedInUseCase()) {
-                AuthenticationState.LOGGED_IN -> navigator.replace(BeneficiaryTabs)
+                AuthenticationState.LOGGED_IN -> navigator.replace(BeneficiaryBottomTabs)
                 AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen())
                 AuthenticationState.FIRST_TIME -> navigator.replace(OnboardingScreen)
             }
@@ -81,4 +86,18 @@ object SplashScreen : Screen, KoinComponent {
 fun findRootNavigator(navigator: Navigator): Navigator {
     return if (navigator.parent == null) navigator
     else findRootNavigator(navigator.parent!!)
+}
+
+@Composable
+fun RowScope.TabNavigationItem(tab: Tab) {
+    val tabNavigator = LocalTabNavigator.current
+    NavigationBarItem(
+        selected = tabNavigator.current == tab,
+        onClick = { tabNavigator.current = tab },
+        icon = {
+            tab.options.icon?.let {
+                Icon(painter = it, contentDescription = tab.options.title)
+            }
+        }
+    )
 }

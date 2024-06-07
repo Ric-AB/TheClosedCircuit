@@ -9,6 +9,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val dataModule = module {
-    single<PlanRepository> { PlanRepositoryImpl(get(), get(named(namedIODispatcher))) }
+    single<PlanRepository> { PlanRepositoryImpl(get(), get(), get(named(namedIODispatcher))) }
     single<OfferRepository> { OfferRepositoryImpl(get()) }
 }

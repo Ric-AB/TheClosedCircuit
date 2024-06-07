@@ -30,6 +30,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
@@ -281,7 +282,7 @@ internal object DashboardTab : Tab, KoinComponent {
 
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
-                        imageVector = Icons.Rounded.KeyboardArrowRight,
+                        imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp)
                     )
@@ -303,7 +304,10 @@ internal object DashboardTab : Tab, KoinComponent {
                             }
 
                             Spacer(modifier = Modifier.height(12.dp))
-                            LinearProgressIndicator(progress = it.fundsRaised.toFloat())
+                            LinearProgressIndicator(
+                                progress = { it.fundsRaised.toFloat() },
+                            )
+
                             Text(
                                 text = stringResource(
                                     SharedRes.strings.x_percent_funds_raised_label,
@@ -315,7 +319,10 @@ internal object DashboardTab : Tab, KoinComponent {
                             )
 
                             Spacer(modifier = Modifier.height(12.dp))
-                            LinearProgressIndicator(progress = it.tasksCompleted.toFloat())
+                            LinearProgressIndicator(
+                                progress = { it.tasksCompleted.toFloat() },
+                            )
+
                             Text(
                                 text = stringResource(
                                     SharedRes.strings.x_percent_tasks_completed_label,

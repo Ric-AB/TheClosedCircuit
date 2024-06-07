@@ -1,26 +1,21 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature
+package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
-import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.account.AccountTab
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.ProfileNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.TabNavigationItem
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.justPadding
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.dashboard.SponsorDashboardTab
 
-internal object BeneficiaryTabs : Screen {
-
+class SponsorBottomTabs : Screen {
     @Composable
     override fun Content() {
         TabNavigator(tab = DashboardTab) {
@@ -32,27 +27,12 @@ internal object BeneficiaryTabs : Screen {
                 },
                 bottomBar = {
                     NavigationBar {
-                        TabNavigationItem(DashboardTab)
+                        TabNavigationItem(SponsorDashboardTab)
                         TabNavigationItem(ProfileNavigator)
                         TabNavigationItem(MessageTab)
-                        TabNavigationItem(AccountTab)
                     }
                 }
             )
         }
     }
-}
-
-@Composable
-private fun RowScope.TabNavigationItem(tab: Tab) {
-    val tabNavigator = LocalTabNavigator.current
-    NavigationBarItem(
-        selected = tabNavigator.current == tab,
-        onClick = { tabNavigator.current = tab },
-        icon = {
-            tab.options.icon?.let {
-                Icon(painter = it, contentDescription = tab.options.title)
-            }
-        }
-    )
 }

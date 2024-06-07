@@ -7,13 +7,19 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.asStepEn
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.asSteps
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.ApiPlan
+import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.DashboardPlanDto
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.DashboardPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.FundingLevel
 
 fun ApiPlan.asSponsorPlan() = SponsorPlan(
     id = ID(id),
@@ -40,3 +46,20 @@ fun ApiPlan.asSponsorPlan() = SponsorPlan(
     steps = steps.asStepEntities().asSteps(),
     budgets = budgets.asBudgetEntities().asBudgets()
 )
+
+fun DashboardPlanDto.toDashboardPlan() = DashboardPlan(
+    id = ID(id),
+    avatar = Avatar(avatar),
+    sector = sector,
+    beneficiaryFullName = Name(beneficiaryFullName),
+    beneficiaryId = beneficiaryId?.let { ID(it) },
+    currency = currency?.let { Currency(it) },
+    amountFunded = Amount(amountFunded.toDouble()),
+    fundingType = FundType.valueOf(fundingType),
+    fundingLevel = FundingLevel.valueOf(fundingLevel),
+    fundingDate = Date(fundingDate),
+    fundsRaised = Amount(fundsRaised.toDouble()),
+    tasksCompleted = tasksCompleted
+)
+
+fun List<DashboardPlanDto>.toDashboardPlans() = map { it.toDashboardPlan() }
