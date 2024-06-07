@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.details
+package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loandetails
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
@@ -17,11 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -41,11 +40,9 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
@@ -56,24 +53,7 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<LoanDetailsViewModel> { parametersOf(loanID) }
         val messageBarState = rememberMessageBarState()
-
-        LaunchedEffect(Unit) {
-            viewModel.onEvent(LoanDetailsUiEvent.Fetch)
-        }
-
-        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
-            when (it) {
-                is LoanDetailsResult.Error -> messageBarState.addError(it.message)
-                LoanDetailsResult.Success -> navigator.pop()
-            }
-        }
-
-        ScreenContent(
-            state = viewModel.uiState(),
-            messageBarState = messageBarState,
-            goBack = navigator::pop,
-            onEvent = viewModel::onEvent
-        )
+        ScreenContent(viewModel.state, messageBarState, goBack = navigator::pop, viewModel::onEvent)
     }
 
     @Composable
@@ -134,13 +114,8 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
 
             if (state.canTransact) {
                 Spacer(Modifier.height(40.dp))
-                DefaultButton(onClick = { onEvent(LoanDetailsUiEvent.Submit(LoanStatus.ACCEPTED)) }) {
+                DefaultOutlinedButton(onClick = { onEvent(LoanDetailsUiEvent.Cancel) }) {
                     Text(stringResource(SharedRes.strings.accept_offer_label))
-                }
-
-                Spacer(Modifier.height(8.dp))
-                DefaultOutlinedButton(onClick = { onEvent(LoanDetailsUiEvent.Submit(LoanStatus.DECLINED)) }) {
-                    Text(stringResource(SharedRes.strings.decline_offer_label))
                 }
             }
         }

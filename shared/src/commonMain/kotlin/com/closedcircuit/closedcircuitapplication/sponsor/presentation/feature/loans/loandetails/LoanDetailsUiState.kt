@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.details
+package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loandetails
 
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanSchedule
 import kotlinx.collections.immutable.ImmutableList

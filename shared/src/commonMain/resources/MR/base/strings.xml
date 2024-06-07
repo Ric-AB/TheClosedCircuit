@@ -342,4 +342,8 @@
         loan range for this plan. You can only donate this amount.*
     </string>
     <string name="plans_funded_label">Plans funded</string>
+    <string name="withdraw_fund_label">Withdraw funds</string>
+    <string name="loan_offers_label">Loan offers</string>
+    <string name="current_loans_label">Current loans</string>
+    <string name="loans_declined_label">Loans declined</string>
 </resources>

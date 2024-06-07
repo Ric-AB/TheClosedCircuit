@@ -25,6 +25,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.on
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.BeneficiaryBottomTabs
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -73,7 +74,7 @@ object SplashScreen : Screen, KoinComponent {
 
         LaunchedEffect(Unit) {
             when (isLoggedInUseCase()) {
-                AuthenticationState.LOGGED_IN -> navigator.replace(BeneficiaryBottomTabs)
+                AuthenticationState.LOGGED_IN -> navigator.replace(SponsorBottomTabs())
                 AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen())
                 AuthenticationState.FIRST_TIME -> navigator.replace(OnboardingScreen)
             }

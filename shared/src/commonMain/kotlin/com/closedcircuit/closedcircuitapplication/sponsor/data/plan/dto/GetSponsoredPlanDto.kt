@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetSponsoredPlanDto(
     val plans: List<DashboardPlanDto>,
-    @SerialName("pending_plan")
+    @SerialName("pending_plans")
     val pendingPlan: List<PendingPlanDto>
 )

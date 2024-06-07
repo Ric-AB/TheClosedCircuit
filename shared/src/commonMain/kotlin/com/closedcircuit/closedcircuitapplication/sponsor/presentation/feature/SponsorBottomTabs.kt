@@ -13,12 +13,13 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.me
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.ProfileNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.TabNavigationItem
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.justPadding
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.account.SponsorAccountTab
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.dashboard.SponsorDashboardTab
 
 class SponsorBottomTabs : Screen {
     @Composable
     override fun Content() {
-        TabNavigator(tab = DashboardTab) {
+        TabNavigator(tab = SponsorDashboardTab) {
             Scaffold(
                 content = {
                     Column(modifier = Modifier.justPadding(bottom = it.calculateBottomPadding())) {
@@ -30,6 +31,7 @@ class SponsorBottomTabs : Screen {
                         TabNavigationItem(SponsorDashboardTab)
                         TabNavigationItem(ProfileNavigator)
                         TabNavigationItem(MessageTab)
+                        TabNavigationItem(SponsorAccountTab)
                     }
                 }
             )

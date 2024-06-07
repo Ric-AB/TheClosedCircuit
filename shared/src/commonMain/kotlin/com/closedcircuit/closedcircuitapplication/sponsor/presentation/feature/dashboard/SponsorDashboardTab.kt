@@ -105,7 +105,8 @@ object SponsorDashboardTab : Tab, KoinComponent {
                 when (state) {
                     is SponsorDashboardUiState.Content -> {
                         LoadedDashboard(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = horizontalScreenPadding),
                             state = state,
                             navigateToPlanListScreen = {}
                         )
@@ -138,12 +139,15 @@ object SponsorDashboardTab : Tab, KoinComponent {
     ) {
         Column(modifier = modifier) {
             val plans = state.plans
-            if (plans.isNotEmpty()) {
-                SectionHeader(
-                    text = stringResource(SharedRes.strings.plans_funded_label),
-                    seeAllClick = navigateToPlanListScreen
-                )
+            val seeAllClick = if (plans.isNotEmpty()) navigateToPlanListScreen else null
 
+            Spacer(Modifier.height(40.dp))
+            SectionHeader(
+                text = stringResource(SharedRes.strings.plans_funded_label),
+                seeAllClick = seeAllClick
+            )
+
+            if (plans.isNotEmpty()) {
                 plans.forEach { PlanItem(modifier = Modifier.fillMaxWidth(), plan = it) }
             } else {
                 NoPlan(modifier = Modifier.fillMaxWidth(), userFirstName = state.userFirstName)
@@ -198,7 +202,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
 
     @Composable
     private fun NoPlan(modifier: Modifier, userFirstName: String) {
-        Card(modifier = modifier.padding(horizontal = horizontalScreenPadding)) {
+        Card(modifier = modifier) {
             Row(
                 modifier = Modifier.fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 12.dp)
@@ -231,7 +235,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
     @Composable
     private fun SectionHeader(
         text: String,
-        seeAllClick: () -> Unit
+        seeAllClick: (() -> Unit)?
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -244,21 +248,23 @@ object SponsorDashboardTab : Tab, KoinComponent {
                 fontWeight = FontWeight.SemiBold
             )
 
-            TextButton(
-                onClick = seeAllClick,
-                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.secondary)
-            ) {
-                Text(
-                    text = stringResource(SharedRes.strings.see_all_label),
-                    style = MaterialTheme.typography.bodySmall,
-                )
+            if (seeAllClick != null) {
+                TextButton(
+                    onClick = seeAllClick,
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.secondary)
+                ) {
+                    Text(
+                        text = stringResource(SharedRes.strings.see_all_label),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
 
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
         }
     }

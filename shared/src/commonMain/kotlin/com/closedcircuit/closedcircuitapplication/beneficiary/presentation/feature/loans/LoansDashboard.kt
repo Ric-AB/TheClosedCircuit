@@ -58,7 +58,8 @@ internal class LoansDashboard : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         ScreenContent(
             goBack = navigator::pop,
-            navigateToLoansPreview = { navigator.push(LoansPreviewScreen(it)) })
+            navigateToLoansPreview = { navigator.push(LoansPreviewScreen(it)) }
+        )
     }
 
     @Composable

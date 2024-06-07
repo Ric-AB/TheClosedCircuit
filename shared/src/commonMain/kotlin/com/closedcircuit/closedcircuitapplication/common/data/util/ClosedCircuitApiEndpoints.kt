@@ -52,9 +52,9 @@ object ClosedCircuitApiEndpoints {
 
     //sponsor
     const val MAKE_OFFER = "v1/loan_offer/"
-    const val GET_OFFERS = "v1/loan_offer/sponsor/plans/"
-    const val GET_OFFER = "v1/loan_offer/sponsor/{id}/"
-    const val CANCEL_OFFER = "v1/loan_offer/sponsor/{id}/"
+    const val GET_SPONSOR_OFFERS = "v1/loan_offer/sponsor/plans/"
+    const val GET_SPONSOR_OFFER_DETAILS = "v1/loan_offer/sponsor/{id}/"
+    const val CANCEL_LOAN_OFFER = "v1/loan_offer/sponsor/{id}/"
     const val GET_DASHBOARD_PLANS = "v1/sponsor/dashboard/"
     const val GET_PLAN_DETAILS = "v1/sponsor/dashboard/plans/{id}/"
     const val GET_STEP_PROOFS = "v1/sponsor/dashboard/steps/{id}/"

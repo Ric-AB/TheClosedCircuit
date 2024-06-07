@@ -7,7 +7,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.Loan
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanDetails
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanSchedule
+import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanSchedule
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.Loans
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar

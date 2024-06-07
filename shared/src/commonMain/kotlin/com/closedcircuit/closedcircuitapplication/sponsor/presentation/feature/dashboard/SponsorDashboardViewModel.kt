@@ -24,7 +24,8 @@ class SponsorDashboardViewModel(
 
     private fun fetchDashboardPlans() {
         screenModelScope.launch {
-            val userFirstName = userRepository.userFlow.value?.firstName?.value.orEmpty()
+            println("USER:::: ${userRepository.userFlow.value}")
+            val userFirstName = userRepository.userFlow.value?.firstName?.value ?: "Richard"
             planRepository.fetchSponsoredPlans().onSuccess {
                 val plans = it.toImmutableList()
                 state = SponsorDashboardUiState.Content(

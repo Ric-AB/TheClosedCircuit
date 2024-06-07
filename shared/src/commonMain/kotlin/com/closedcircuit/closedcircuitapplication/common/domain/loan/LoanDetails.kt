@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan
 
+import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanSchedule
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date

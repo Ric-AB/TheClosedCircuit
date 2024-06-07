@@ -46,6 +46,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.hori
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
@@ -70,7 +71,7 @@ internal class LoginScreen : Screen, KoinComponent {
 
                 LoginResult.Success -> {
                     delay(500) //wait for loader to hide
-                    navigator.replaceAll(BeneficiaryBottomTabs)
+                    navigator.replaceAll(SponsorBottomTabs())
                 }
             }
         }
