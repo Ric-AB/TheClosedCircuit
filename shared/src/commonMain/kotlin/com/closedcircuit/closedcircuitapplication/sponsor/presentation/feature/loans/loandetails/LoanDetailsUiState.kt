@@ -7,11 +7,14 @@ sealed interface LoanDetailsUiState {
     object Loading : LoanDetailsUiState
     data class Content(
         val loading: Boolean,
-        val canTransact: Boolean,
+        val canInitiatePayment: Boolean,
+        val canCancelOffer: Boolean,
         val loanAmount: String,
         val interestAmount: String,
         val repaymentAmount: String,
-        val repaymentSchedule: ImmutableList<LoanSchedule>
+        val graceDuration: String,
+        val repaymentDuration: String,
+        val totalDuration: String,
     ) : LoanDetailsUiState
 
     data class Error(val message: String) : LoanDetailsUiState
@@ -24,7 +27,7 @@ sealed interface LoanDetailsUiState {
 
 
 sealed interface LoanDetailsResult {
-    object Success : LoanDetailsResult
-
+    object CancelSuccess : LoanDetailsResult
+    data class InitiatePaymentSuccess(val paymentLink: String) : LoanDetailsResult
     data class Error(val message: String) : LoanDetailsResult
 }

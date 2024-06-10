@@ -4,7 +4,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.loan.dto.AcknowledgeLoanPayload
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.Loan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanDetails
+import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanDetails
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanSchedule

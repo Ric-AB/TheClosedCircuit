@@ -346,4 +346,6 @@
     <string name="loan_offers_label">Loan offers</string>
     <string name="current_loans_label">Current loans</string>
     <string name="loans_declined_label">Loans declined</string>
+    <string name="proceed_to_pay_label">Proceed to pay</string>
+    <string name="cancel_label">Cancel</string>
 </resources>

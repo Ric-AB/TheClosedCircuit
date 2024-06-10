@@ -16,7 +16,7 @@ data class LoanOfferDetails(
     val interestAmount: Amount,
     val loanAmount: Amount,
     val repaymentAmount: Amount?,
-    val gracePeriod: PositiveInt,
+    val graceDuration: PositiveInt,
     val sponsorFullName: Name,
     val avatar: Avatar,
     val interestRate: PositiveInt,

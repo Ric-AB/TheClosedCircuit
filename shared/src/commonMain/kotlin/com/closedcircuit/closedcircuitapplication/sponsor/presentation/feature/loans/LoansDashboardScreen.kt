@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -80,7 +82,7 @@ class LoansDashboardScreen : Screen {
 
                     LoanSection(
                         modifier = Modifier.fillMaxWidth(),
-                        imagePainter = painterResource(SharedRes.images.ic_green_check),
+                        imagePainter = rememberVectorPainter(Icons.Filled.Check),
                         text = stringResource(SharedRes.strings.accepted_loan_offers_label),
                         onClick = { navigateToLoansScreen(LoanStatus.ACCEPTED) }
                     )
@@ -121,7 +123,8 @@ class LoansDashboardScreen : Screen {
                 Icon(
                     painter = imagePainter,
                     contentDescription = null,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(40.dp),
+                    tint = MaterialTheme.colorScheme.primary
                 )
 
                 Spacer(Modifier.width(16.dp))
@@ -139,5 +142,4 @@ class LoansDashboardScreen : Screen {
             }
         }
     }
-
 }
