@@ -28,16 +28,16 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -72,16 +72,16 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budgets
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
-import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
-import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.editplan.EditPlanScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.fundrequest.FundRequestScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails.StepDetailsScreen
+import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budgets
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
@@ -246,17 +246,17 @@ private fun PlanSummary(
             modifier = Modifier.width(itemWidth)
         )
 
-        Divider(modifier = dividerModifier)
+        HorizontalDivider(modifier = dividerModifier)
         Item(
             imagePainter = painterResource(SharedRes.images.ic_target_arrow),
-            text = "NGN ${targetAmount.value}",
+            text = targetAmount.getFormattedValue(),
             modifier = Modifier.width(itemWidth)
         )
 
-        Divider(modifier = dividerModifier)
+        HorizontalDivider(modifier = dividerModifier)
         Item(
             imagePainter = painterResource(SharedRes.images.ic_rising_arrow),
-            text = "NGN ${amountRaised.value}",
+            text = amountRaised.getFormattedValue(),
             modifier = Modifier.width(itemWidth)
         )
     }
@@ -271,7 +271,11 @@ private fun ActionItemsTabs(
     navigateToStepDetails: (Step) -> Unit,
     navigateToSaveStep: () -> Unit
 ) {
-    val list = listOf("Steps", "Budgets")
+    val list = listOf(
+        stringResource(SharedRes.strings.steps),
+        stringResource(SharedRes.strings.budgets)
+    )
+
     val pagerState = rememberPagerState(initialPage = 0) { list.size }
     val coroutineScope = rememberCoroutineScope()
 
@@ -369,8 +373,15 @@ private fun StepItem(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            AmountItem(label = "Target funds", value = targetAmount)
-            AmountItem(label = "Total funds raised", value = amountRaised)
+            AmountItem(
+                label = stringResource(SharedRes.strings.target_funds_label),
+                value = targetAmount
+            )
+
+            AmountItem(
+                label = stringResource(SharedRes.strings.total_funds_raised),
+                value = amountRaised
+            )
         }
     }
 }
@@ -387,8 +398,8 @@ private fun StepList(modifier: Modifier, steps: Steps, navigateToStepDetails: (S
             StepItem(
                 modifier = itemModifier,
                 name = it.name,
-                targetAmount = "NGN ${it.targetFunds.value}",
-                amountRaised = "NGN ${it.totalFundsRaised.value}",
+                targetAmount = it.targetFunds.getFormattedValue(),
+                amountRaised = it.totalFundsRaised.getFormattedValue(),
                 onClick = { navigateToStepDetails(it) }
             )
         }
@@ -497,7 +508,10 @@ private fun PlanDetailsAppBar(
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = onNavClick) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "navigation icon")
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "navigation icon"
+                )
             }
         },
         title = {},

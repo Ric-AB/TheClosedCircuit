@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist
 
@@ -13,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,14 +28,14 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan.CreatePlanNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.plandetails.PlanDetailsScreen
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.ProgressIndicator
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TaskLinearProgress
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -115,23 +113,26 @@ private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> U
                 fontWeight = FontWeight.SemiBold
             )
 
+            Spacer(modifier = Modifier.height(4.dp))
             BodyText(text = plan.description)
 
             Spacer(modifier = Modifier.height(16.dp))
-            ProgressIndicator(
-                modifier = Modifier.fillMaxWidth(),
+            TaskLinearProgress(
                 progress = fundsRaised.first,
-                displayText = stringResource(
+                label = stringResource(
                     SharedRes.strings.percentage_funds_raised,
                     fundsRaised.second
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            ProgressIndicator(
+            TaskLinearProgress(
                 modifier = Modifier.fillMaxWidth(),
                 progress = plan.tasksCompleted.toFloat(),
-                displayText = stringResource(SharedRes.strings.percentage_task_completed, "50")
+                label = stringResource(
+                    SharedRes.strings.percentage_task_completed,
+                    plan.tasksCompletedAsPercentage
+                )
             )
         }
     }

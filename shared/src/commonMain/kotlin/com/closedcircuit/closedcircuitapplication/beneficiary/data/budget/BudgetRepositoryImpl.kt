@@ -2,13 +2,13 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.budget
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
-import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
+import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budgets
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
+import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow

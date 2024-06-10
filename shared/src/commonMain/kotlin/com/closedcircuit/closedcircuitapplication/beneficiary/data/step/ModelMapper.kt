@@ -2,11 +2,11 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.step
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.dto.ApiStep
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.dto.SaveStepPayload
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import database.StepEntity
 import kotlinx.collections.immutable.toImmutableList
 

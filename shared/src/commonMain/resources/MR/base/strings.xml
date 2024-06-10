@@ -125,6 +125,9 @@
     <string name="add_step">Add Step</string>
     <string name="target_amount">Target amount</string>
     <string name="business_sector">Business sector</string>
+    <string name="target_funds_label">Target funds</string>
+    <string name="total_funds_raised">Total funds raised</string>
+    <string name="delete_step_label">Delete step</string>
     <string name="plan_duration">Plan duration</string>
     <string name="step_name">Step name</string>
     <string name="step_description">Step description</string>

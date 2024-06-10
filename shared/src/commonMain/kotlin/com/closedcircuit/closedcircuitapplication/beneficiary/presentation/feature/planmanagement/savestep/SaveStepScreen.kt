@@ -52,7 +52,7 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
@@ -62,9 +62,9 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
-import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent

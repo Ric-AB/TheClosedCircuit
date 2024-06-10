@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,16 +24,16 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultOutlinedButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.PlanDetailsGrid
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.PlanDetailsGrid
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
@@ -130,7 +130,7 @@ internal class FundRequestSummaryScreen(
             SectionHeader(stringResource(SharedRes.strings.steps))
             steps.forEach {
                 StepItem(it)
-                Divider()
+                HorizontalDivider()
             }
         }
     }
@@ -145,7 +145,7 @@ internal class FundRequestSummaryScreen(
                 BodyText(step.name, color = Color.Black)
 
                 Spacer(Modifier.height(4.dp))
-                BodyText(step.targetFunds.value.toString())
+                BodyText(step.targetFunds.getFormattedValue())
             }
         }
     }

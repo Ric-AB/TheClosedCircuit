@@ -39,7 +39,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Shapes
@@ -71,15 +70,16 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
-import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan.CreatePlanNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TaskLinearProgress
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
@@ -305,33 +305,23 @@ internal object DashboardTab : Tab, KoinComponent {
                             }
 
                             Spacer(modifier = Modifier.height(12.dp))
-                            LinearProgressIndicator(
-                                progress = { it.fundsRaised.toFloat() },
-                            )
-
-                            Text(
-                                text = stringResource(
+                            TaskLinearProgress(
+                                modifier = Modifier.fillMaxWidth(),
+                                progress = it.fundsRaised.toFloat(),
+                                label = stringResource(
                                     SharedRes.strings.x_percent_funds_raised_label,
-                                    it.fundsRaised.times(100)
-                                ),
-                                style = MaterialTheme.typography.labelMedium,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    it.fundsRaisedAsPercentage
+                                )
                             )
 
                             Spacer(modifier = Modifier.height(12.dp))
-                            LinearProgressIndicator(
-                                progress = { it.tasksCompleted.toFloat() },
-                            )
-
-                            Text(
-                                text = stringResource(
+                            TaskLinearProgress(
+                                modifier = Modifier.fillMaxWidth(),
+                                progress = it.tasksCompleted.toFloat(),
+                                label = stringResource(
                                     SharedRes.strings.x_percent_tasks_completed_label,
-                                    it.tasksCompleted.times(100)
-                                ),
-                                style = MaterialTheme.typography.labelMedium,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    it.tasksCompletedAsPercentage
+                                )
                             )
                         }
                     }

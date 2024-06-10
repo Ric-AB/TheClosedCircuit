@@ -1,8 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.plan
 
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
 import kotlinx.serialization.Serializable
@@ -29,6 +29,9 @@ data class Plan(
     val isSponsored: Boolean,
     val accountabilityPartners: List<String>,
 ) {
+
+    val fundsRaisedAsPercentage = fundsRaised.times(100)
+    val tasksCompletedAsPercentage = tasksCompleted.times(100)
 
     companion object {
         fun buildPlan(

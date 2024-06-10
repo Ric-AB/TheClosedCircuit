@@ -16,13 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,10 +43,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepScreen
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BudgetItem
@@ -172,18 +172,16 @@ private fun StepSummary(stepDuration: TaskDuration, targetAmount: Amount, amount
             text = stringResource(SharedRes.strings.x_months, stepDuration.value)
         )
 
-        Divider(modifier = dividerModifier)
-
+        HorizontalDivider(modifier = dividerModifier)
         Item(
             imagePainter = painterResource(SharedRes.images.ic_target_arrow),
-            text = "NGN ${targetAmount.value}"
+            text = targetAmount.getFormattedValue()
         )
 
-        Divider(modifier = dividerModifier)
-
+        HorizontalDivider(modifier = dividerModifier)
         Item(
             imagePainter = painterResource(SharedRes.images.ic_rising_arrow),
-            text = "NGN ${amountRaised.value}"
+            text = amountRaised.getFormattedValue()
         )
     }
 }
@@ -193,7 +191,10 @@ private fun StepDetailsAppBar(goBack: () -> Unit, navigateToSaveStep: () -> Unit
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = goBack) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "navigation icon")
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "navigation icon"
+                )
             }
         },
         title = { },
@@ -229,7 +230,7 @@ private fun DropDownMenu() {
         IconButton(onClick = { expanded = !expanded }) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
-                contentDescription = "More"
+                contentDescription = "more"
             )
         }
 
@@ -238,7 +239,7 @@ private fun DropDownMenu() {
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("Delete step") },
+                text = { Text(stringResource(SharedRes.strings.delete_step_label)) },
                 onClick = { }
             )
         }

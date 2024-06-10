@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails
 
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budgets
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import kotlinx.collections.immutable.persistentListOf
 
 data class StepDetailsUiState(

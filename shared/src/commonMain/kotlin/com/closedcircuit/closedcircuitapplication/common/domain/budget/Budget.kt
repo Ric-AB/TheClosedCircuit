@@ -1,8 +1,8 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget
+package com.closedcircuit.closedcircuitapplication.common.domain.budget
 
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,13 +1,13 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase
 
-import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.budget.Budget
+import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.step.StepRepository
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 
 class CreatePlanUseCase(
     private val planRepository: PlanRepository,

@@ -11,26 +11,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProgressIndicator(
-    modifier: Modifier = Modifier,
-    progress: Float,
-    displayText: String,
-) {
+fun TaskLinearProgress(modifier: Modifier = Modifier, progress: Float, label: String) {
     Column(modifier = modifier) {
         LinearProgressIndicator(
-            modifier = Modifier.fillMaxWidth(),
-            progress = progress,
-            strokeCap = StrokeCap.Round
+            progress = { progress },
+            strokeCap = StrokeCap.Round,
+            modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(Modifier.height(4.dp))
         Text(
-            text = displayText,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.labelMedium
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
     }
 }

@@ -45,7 +45,7 @@ fun BudgetItem(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = targetAmount.value.toString())
+            Text(text = targetAmount.getFormattedValue())
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -55,15 +55,16 @@ fun BudgetItem(
             ) {
                 Text(text = "Funds raised progress", style = MaterialTheme.typography.labelSmall)
                 Text(
-                    text = amountRaised.value.toString(),
+                    text = amountRaised.getFormattedValue(),
                     style = MaterialTheme.typography.labelSmall
                 )
             }
 
+            Spacer(Modifier.height(4.dp))
             LinearProgressIndicator(
+                progress = { 0.7F },
                 modifier = Modifier.fillMaxWidth(),
-                progress = 0.7F,
-                strokeCap = StrokeCap.Round
+                strokeCap = StrokeCap.Round,
             )
         }
     }
