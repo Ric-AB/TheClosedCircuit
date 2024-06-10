@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.closedcircuit.closedcircuitapplication.common.presentation.components
 
@@ -11,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -25,6 +23,7 @@ import androidx.compose.ui.unit.DpSize
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.rememberBitmapFromBytes
+import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
 fun Avatar(
@@ -52,6 +51,10 @@ fun Avatar(
                     contentDescription = "person",
                     modifier = Modifier.size(size.div(2)),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                CoilImage(
+                    imageModel = { avatar.value },
                 )
             }
         }

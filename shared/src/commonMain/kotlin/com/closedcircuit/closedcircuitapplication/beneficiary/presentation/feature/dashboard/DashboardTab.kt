@@ -34,7 +34,6 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -169,7 +168,7 @@ internal object DashboardTab : Tab, KoinComponent {
                         LoadedDashboard(
                             modifier = Modifier.fillMaxWidth(),
                             state = state,
-                            navigateToPlanListScreen = navigateToPlanListScreen,
+                            navigateToPlanList = navigateToPlanListScreen,
                             navigateToLoginScreen = navigateToLoginScreen,
                             action = action
                         )
@@ -195,7 +194,7 @@ internal object DashboardTab : Tab, KoinComponent {
     private fun LoadedDashboard(
         modifier: Modifier,
         state: DashboardUiState.Content,
-        navigateToPlanListScreen: () -> Unit,
+        navigateToPlanList: () -> Unit,
         navigateToLoginScreen: () -> Unit,
         action: () -> Unit
     ) {
@@ -232,7 +231,8 @@ internal object DashboardTab : Tab, KoinComponent {
                 Spacer(Modifier.height(32.dp))
                 RecentPlans(
                     recentPlans = recentPlans,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    navigateToPlanList = navigateToPlanList
                 )
             }
 
@@ -246,7 +246,7 @@ internal object DashboardTab : Tab, KoinComponent {
                 )
             }
 
-            DefaultButton(onClick = navigateToPlanListScreen) {
+            DefaultButton(onClick = navigateToPlanList) {
                 Text("Go")
             }
 
@@ -263,7 +263,8 @@ internal object DashboardTab : Tab, KoinComponent {
     @Composable
     private fun RecentPlans(
         modifier: Modifier,
-        recentPlans: ImmutableList<Plan>
+        recentPlans: ImmutableList<Plan>,
+        navigateToPlanList: () -> Unit
     ) {
         Column(modifier = modifier) {
             SectionHeader(
@@ -272,7 +273,7 @@ internal object DashboardTab : Tab, KoinComponent {
                 bottomPadding = 0.dp
             ) {
                 TextButton(
-                    onClick = {},
+                    onClick = navigateToPlanList,
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Text(

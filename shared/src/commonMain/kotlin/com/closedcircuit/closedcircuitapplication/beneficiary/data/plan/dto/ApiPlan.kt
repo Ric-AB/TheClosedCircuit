@@ -46,8 +46,6 @@ data class ApiPlan(
     val fundRequest: List<ApiFundRequest>,
     @SerialName("accountability_partners")
     val accountabilityPartners: List<String>,
-    @SerialName("beneficiary_fullname")
-    val beneficiaryFullName: String?,
     @SerialName("beneficiary_id")
     val beneficiaryId: String? = null,
     val steps: List<ApiStep>,
