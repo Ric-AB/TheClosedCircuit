@@ -12,4 +12,9 @@ enum class FundingLevel(val value: String) {
         BUDGET -> "Budgets"
         OTHER -> "Other"
     }
+
+    companion object {
+        val map = values().associateBy { it.value }
+        fun fromText(text: String): FundingLevel? = map[text]
+    }
 }

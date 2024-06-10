@@ -13,15 +13,15 @@ data class LoanOfferDetailsDto(
     @SerialName("repayment_amount")
     val repaymentAmount: String,
     @SerialName("grace_period")
-    val gracePeriod: String,
+    val gracePeriod: Int,
     @SerialName("sponsor_fullname")
     val sponsorFullName: String,
     @SerialName("avatar")
     val avatar: String,
     @SerialName("interest_rate")
-    val interestRate: String,
+    val interestRate: Int,
     @SerialName("repayment_duration")
-    val repaymentDuration: String,
+    val repaymentDuration: Int,
     @SerialName("created_at")
     val createdAt: String,
     @SerialName("updated_at")
@@ -41,9 +41,9 @@ data class LoanOfferDetailsDto(
     @SerialName("budgets")
     val budgets: List<String>,
     @SerialName("is_step")
-    val isStep: Boolean,
+    val isStep: Boolean? = null,
     @SerialName("is_budget")
-    val isBudget: Boolean,
+    val isBudget: Boolean? = null,
     @SerialName("is_other_amount")
-    val isOtherAmount: Boolean,
+    val isOtherAmount: Boolean? = null,
 )
