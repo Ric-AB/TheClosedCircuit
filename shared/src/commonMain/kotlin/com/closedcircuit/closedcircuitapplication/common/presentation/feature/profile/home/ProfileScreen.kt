@@ -205,7 +205,7 @@ private fun ProfileHeader(
         }
 
         Avatar(
-            avatar = avatar,
+            imageUrl = avatar.value,
             size = DpSize(90.dp, 90.dp)
         )
     }

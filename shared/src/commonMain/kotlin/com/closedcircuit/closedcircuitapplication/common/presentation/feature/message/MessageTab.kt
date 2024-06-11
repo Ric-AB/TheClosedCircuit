@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 
 internal object MessageTab : Tab {
@@ -16,7 +17,7 @@ internal object MessageTab : Tab {
         @Composable
         get() {
             val title = stringResource(SharedRes.strings.message)
-            val icon = rememberVectorPainter(Icons.Outlined.Email)
+            val icon = painterResource(SharedRes.images.ic_double_chat_bubble)
 
             return remember {
                 TabOptions(

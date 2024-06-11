@@ -54,7 +54,7 @@ internal object AccountTab : Tab {
         @Composable
         get() {
             val title = stringResource(SharedRes.strings.account)
-            val icon = rememberVectorPainter(Icons.Outlined.AccountBox)
+            val icon = painterResource(SharedRes.images.ic_person_wrapped)
 
             return remember {
                 TabOptions(

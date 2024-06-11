@@ -77,12 +77,10 @@ import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TaskLinearProgress
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent1
@@ -98,7 +96,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.seco
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.secondary5
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferNavigator
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -132,9 +129,7 @@ internal object DashboardTab : Tab, KoinComponent {
             state = viewModel.uiState(),
             navigateToCreatePlan = { navigator.push(CreatePlanNavigator) },
             navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
-            navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
-            navigateToLoginScreen = { navigator.replaceAll(LoginScreen()) },
-            action = { navigator.push(MakeOfferNavigator()) }
+            navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
         )
     }
 
@@ -144,9 +139,7 @@ internal object DashboardTab : Tab, KoinComponent {
         state: DashboardUiState,
         navigateToCreatePlan: () -> Unit,
         navigateToPlanListScreen: () -> Unit,
-        navigateToNotificationScreen: () -> Unit,
-        navigateToLoginScreen: () -> Unit,
-        action: () -> Unit
+        navigateToNotificationScreen: () -> Unit
     ) {
         BaseScaffold(
             messageBarState = messageBarState,
@@ -168,9 +161,7 @@ internal object DashboardTab : Tab, KoinComponent {
                         LoadedDashboard(
                             modifier = Modifier.fillMaxWidth(),
                             state = state,
-                            navigateToPlanList = navigateToPlanListScreen,
-                            navigateToLoginScreen = navigateToLoginScreen,
-                            action = action
+                            navigateToPlanList = navigateToPlanListScreen
                         )
                     }
 
@@ -194,9 +185,7 @@ internal object DashboardTab : Tab, KoinComponent {
     private fun LoadedDashboard(
         modifier: Modifier,
         state: DashboardUiState.Content,
-        navigateToPlanList: () -> Unit,
-        navigateToLoginScreen: () -> Unit,
-        action: () -> Unit
+        navigateToPlanList: () -> Unit
     ) {
         Column(modifier = modifier) {
             val topSponsors = state.topSponsors
@@ -245,18 +234,6 @@ internal object DashboardTab : Tab, KoinComponent {
                     donations = recentDonations
                 )
             }
-
-            DefaultButton(onClick = navigateToPlanList) {
-                Text("Go")
-            }
-
-            DefaultButton(onClick = action) {
-                Text("Go1")
-            }
-
-            DefaultButton(onClick = navigateToLoginScreen) {
-                Text("Logout")
-            }
         }
     }
 
@@ -298,7 +275,7 @@ internal object DashboardTab : Tab, KoinComponent {
                     ScreenCard(modifier = Modifier.width(250.dp)) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Avatar(avatar = it.avatar, size = DpSize(40.dp, 40.dp))
+                                Avatar(imageUrl = it.avatar.value, size = DpSize(40.dp, 40.dp))
 
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(text = it.name)
@@ -419,7 +396,7 @@ internal object DashboardTab : Tab, KoinComponent {
                     modifier = Modifier.padding(vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Avatar(avatar = it.sponsorAvatar, size = DpSize(40.dp, 40.dp))
+                    Avatar(imageUrl = it.sponsorAvatar.value, size = DpSize(40.dp, 40.dp))
 
                     Spacer(Modifier.width(8.dp))
                     Column(modifier = Modifier.weight(1f)) {

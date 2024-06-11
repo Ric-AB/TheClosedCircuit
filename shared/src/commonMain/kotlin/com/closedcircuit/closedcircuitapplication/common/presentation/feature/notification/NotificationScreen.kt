@@ -251,7 +251,7 @@ private fun NotificationItem(
             )
     ) {
         Avatar(
-            avatar = com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar(""),
+            imageUrl = "",
             size = DpSize(50.dp, 50.dp)
         )
 

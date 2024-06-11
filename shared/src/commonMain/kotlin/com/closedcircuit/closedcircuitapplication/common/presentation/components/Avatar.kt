@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.DpSize
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.rememberBitmapFromBytes
 import com.skydoves.landscapist.coil3.CoilImage
@@ -28,7 +27,7 @@ import com.skydoves.landscapist.coil3.CoilImage
 @Composable
 fun Avatar(
     modifier: Modifier = Modifier,
-    avatar: Avatar,
+    imageUrl: String,
     shape: Shape = CircleShape,
     size: DpSize,
 ) {
@@ -45,7 +44,7 @@ fun Avatar(
                 .fillMaxSize()
                 .align(Alignment.CenterHorizontally)
         ) {
-            if (avatar.isEmpty()) {
+            if (imageUrl.isEmpty()) {
                 Icon(
                     imageVector = Icons.Rounded.Person,
                     contentDescription = "person",
@@ -54,7 +53,7 @@ fun Avatar(
                 )
             } else {
                 CoilImage(
-                    imageModel = { avatar.value },
+                    imageModel = { imageUrl },
                 )
             }
         }

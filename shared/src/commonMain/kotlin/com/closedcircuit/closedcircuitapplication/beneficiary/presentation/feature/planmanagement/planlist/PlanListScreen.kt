@@ -102,7 +102,7 @@ private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> U
     OutlinedCard(modifier = modifier, onClick = onClick) {
         Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
             Avatar(
-                avatar = plan.avatar,
+                imageUrl = plan.avatar.value,
                 size = DpSize(50.dp, 50.dp)
             )
 

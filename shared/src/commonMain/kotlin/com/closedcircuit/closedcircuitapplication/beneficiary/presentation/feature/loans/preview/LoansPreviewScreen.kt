@@ -167,7 +167,7 @@ internal class LoansPreviewScreen(private val loanStatus: LoanStatus) : Screen, 
                         val avatarSize = 24
                         loanPreview.sponsorAvatars.forEachIndexed { index, avatar ->
                             Avatar(
-                                avatar = avatar,
+                                imageUrl = avatar.value,
                                 size = DpSize(avatarSize.dp, avatarSize.dp),
                                 modifier = Modifier.offset(x = ((index * avatarSize) / 2).dp)
                             )

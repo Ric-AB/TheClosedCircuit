@@ -40,7 +40,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
@@ -163,7 +162,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Avatar(avatar = plan.avatar, size = DpSize(50.dp, 50.dp))
+                    Avatar(imageUrl = plan.avatar.value, size = DpSize(50.dp, 50.dp))
 
                     Spacer(Modifier.width(8.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

@@ -163,7 +163,7 @@ private fun Header(plan: Plan, screenWidth: Dp) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.padding(horizontal = horizontalScreenPadding)) {
             Avatar(
-                avatar = plan.avatar,
+                imageUrl = plan.avatar.value,
                 size = DpSize(80.dp, 80.dp),
                 shape = Shapes().large
             )

@@ -71,7 +71,7 @@ internal class LoginScreen : Screen, KoinComponent {
 
                 LoginResult.Success -> {
                     delay(500) //wait for loader to hide
-                    navigator.replaceAll(SponsorBottomTabs())
+                    navigator.replaceAll(BeneficiaryBottomTabs)
                 }
             }
         }

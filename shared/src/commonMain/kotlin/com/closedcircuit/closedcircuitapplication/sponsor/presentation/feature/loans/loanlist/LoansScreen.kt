@@ -125,7 +125,7 @@ internal class LoansScreen(private val loanStatus: LoanStatus) : Screen, KoinCom
         }
 
         Row(modifier = modifier) {
-            Avatar(avatar = loanOffer.beneficiaryAvatar!!, size = DpSize(50.dp, 50.dp))
+            Avatar(imageUrl = loanOffer.beneficiaryAvatar!!.value, size = DpSize(50.dp, 50.dp))
             Spacer(Modifier.width(8.dp))
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

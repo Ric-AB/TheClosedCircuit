@@ -136,7 +136,7 @@ internal class LoansScreen(private val planID: ID, private val loanStatus: LoanS
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Avatar(avatar = loan.sponsorAvatar, size = DpSize(50.dp, 50.dp))
+                    Avatar(imageUrl = loan.sponsorAvatar.value, size = DpSize(50.dp, 50.dp))
 
                     Spacer(Modifier.width(8.dp))
                     Text(text = loan.sponsorFullName.value)

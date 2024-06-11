@@ -11,6 +11,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
@@ -20,7 +21,7 @@ internal object ProfileNavigator : Tab, KoinComponent {
         @Composable
         get() {
             val title = stringResource(SharedRes.strings.profile)
-            val icon = rememberVectorPainter(Icons.Outlined.Person)
+            val icon = painterResource(SharedRes.images.ic_person_with_suitcase)
 
             return remember {
                 TabOptions(

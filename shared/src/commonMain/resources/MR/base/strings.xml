@@ -351,4 +351,8 @@
     <string name="loans_declined_label">Loans declined</string>
     <string name="proceed_to_pay_label">Proceed to pay</string>
     <string name="cancel_label">Cancel</string>
+    <string name="settings_label">Settings</string>
+    <string name="support_label">Support</string>
+    <string name="about_us_label">About us</string>
+    <string name="logout_label">Logout</string>
 </resources>
