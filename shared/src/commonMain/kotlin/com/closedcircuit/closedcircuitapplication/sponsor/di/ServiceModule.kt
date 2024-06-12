@@ -9,7 +9,7 @@ import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.PlanService
 import de.jensklingenberg.ktorfit.Ktorfit
 import org.koin.dsl.module
 
-val networkModule = module {
+val serviceModule = module {
     single { createNoAuthPlanService(get(noAuthQualifier)) }
     single { createOfferService(get(authQualifier)) }
     single { createPlanService(get(authQualifier)) }

@@ -12,7 +12,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpSendPipeline
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonBuilder
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.di
 
 val beneficiaryModules = listOf(
     dataModule,
-    networkModule,
+    serviceModule,
     useCaseModule,
     viewModelModule
 )

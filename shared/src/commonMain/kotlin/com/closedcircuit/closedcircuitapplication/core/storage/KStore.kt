@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.core.storage
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.app.AppSettings
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.Session
+import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettings
+import com.closedcircuit.closedcircuitapplication.common.domain.session.Session
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
 import io.github.xxfast.kstore.KStore
 

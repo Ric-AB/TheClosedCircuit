@@ -1,8 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.app.AppSettingsRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.SessionRepository
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.AuthenticationState
+import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
 
 class IsLoggedInUseCase(
     private val sessionRepository: SessionRepository,

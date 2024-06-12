@@ -26,7 +26,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.justPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 
-internal object BeneficiaryBottomTabs : Screen {
+internal class BeneficiaryBottomTabs() : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

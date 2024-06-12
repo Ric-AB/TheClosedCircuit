@@ -1,5 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.session
 
+import com.closedcircuit.closedcircuitapplication.common.domain.session.Session
+
 interface SessionRepository {
 
     suspend fun get(): Session?

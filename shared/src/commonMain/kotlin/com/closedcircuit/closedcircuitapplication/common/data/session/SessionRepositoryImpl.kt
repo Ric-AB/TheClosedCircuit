@@ -1,6 +1,6 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.session
+package com.closedcircuit.closedcircuitapplication.common.data.session
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.Session
+import com.closedcircuit.closedcircuitapplication.common.domain.session.Session
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Token

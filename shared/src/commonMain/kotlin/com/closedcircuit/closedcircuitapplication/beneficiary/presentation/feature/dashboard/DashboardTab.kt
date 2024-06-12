@@ -129,7 +129,7 @@ internal object DashboardTab : Tab, KoinComponent {
             state = viewModel.uiState(),
             navigateToCreatePlan = { navigator.push(CreatePlanNavigator) },
             navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
-            navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
+            navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
         )
     }
 
@@ -139,7 +139,7 @@ internal object DashboardTab : Tab, KoinComponent {
         state: DashboardUiState,
         navigateToCreatePlan: () -> Unit,
         navigateToPlanListScreen: () -> Unit,
-        navigateToNotificationScreen: () -> Unit
+        navigateToNotificationScreen: () -> Unit,
     ) {
         BaseScaffold(
             messageBarState = messageBarState,

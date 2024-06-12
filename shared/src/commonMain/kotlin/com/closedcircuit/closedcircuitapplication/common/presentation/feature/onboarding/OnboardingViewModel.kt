@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.common.presentation.feature.o
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.app.AppSettingsRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

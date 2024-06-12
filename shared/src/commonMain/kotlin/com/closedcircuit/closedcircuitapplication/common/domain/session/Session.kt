@@ -1,8 +1,8 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.session
+package com.closedcircuit.closedcircuitapplication.common.domain.session
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Token
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.AuthenticationState
+import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 
@@ -15,7 +15,7 @@ data class Session(
 ) {
 
     companion object {
-        const val sessionDurationInHours = 6
+        const val SESSION_DURATION_IN_HOURS = 6
     }
 
     fun currentAuthenticationState(hasOnboarded: Boolean): AuthenticationState {
@@ -24,7 +24,7 @@ data class Session(
         val lastLoginAsLocalDateTime = lastLogin.toInstant()
         val now = Clock.System.now()
         val differenceInHours = now - lastLoginAsLocalDateTime
-        return if (differenceInHours.inWholeHours <= sessionDurationInHours) AuthenticationState.LOGGED_IN
+        return if (differenceInHours.inWholeHours <= SESSION_DURATION_IN_HOURS) AuthenticationState.LOGGED_IN
         else AuthenticationState.LOGGED_OUT
     }
 }

@@ -10,7 +10,10 @@ fun startAppDI(appDeclaration: KoinAppDeclaration = {}) = startKoin {
         networkModule +
                 coroutineModule +
                 databaseModule +
-                platformModule
+                platformModule +
+                viewModelModule +
+                serviceModule +
+                dataModule
     )
     modules(beneficiaryModules)
     modules(sponsorModules)

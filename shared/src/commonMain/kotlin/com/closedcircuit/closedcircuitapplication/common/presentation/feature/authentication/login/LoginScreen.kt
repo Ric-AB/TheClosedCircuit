@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.BeneficiaryBottomTabs
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
@@ -42,11 +41,11 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.passwordrecovery.ResetPasswordEmailScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.WelcomeScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.delay
@@ -71,7 +70,7 @@ internal class LoginScreen : Screen, KoinComponent {
 
                 LoginResult.Success -> {
                     delay(500) //wait for loader to hide
-                    navigator.replaceAll(BeneficiaryBottomTabs)
+                    navigator.replaceAll(ProtectedNavigator())
                 }
             }
         }
