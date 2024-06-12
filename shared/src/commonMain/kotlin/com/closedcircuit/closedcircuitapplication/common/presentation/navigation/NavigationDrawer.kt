@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -83,7 +80,7 @@ fun NavigationDrawer(
                     NavigationDrawerItem(
                         icon = {
                             Icon(
-                                imageVector = Icons.Default.Notifications,
+                                painter = painterResource(SharedRes.images.ic_notification),
                                 tint = MaterialTheme.colorScheme.onSurface,
                                 contentDescription = "notification"
                             )
@@ -96,7 +93,7 @@ fun NavigationDrawer(
                     NavigationDrawerItem(
                         icon = {
                             Icon(
-                                imageVector = Icons.Default.Settings,
+                                painter = painterResource(SharedRes.images.ic_settings),
                                 contentDescription = "settings",
                                 tint = MaterialTheme.colorScheme.onSurface
                             )

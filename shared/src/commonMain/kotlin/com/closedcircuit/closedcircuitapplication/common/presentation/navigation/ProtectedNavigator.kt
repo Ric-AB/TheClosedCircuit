@@ -8,7 +8,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.BeneficiaryBottomTabs
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.splashscreen.SplashScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.SplashScreen
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
 import org.koin.core.component.KoinComponent

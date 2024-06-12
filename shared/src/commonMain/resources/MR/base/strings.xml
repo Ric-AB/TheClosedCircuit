@@ -355,4 +355,15 @@
     <string name="support_label">Support</string>
     <string name="about_us_label">About us</string>
     <string name="logout_label">Logout</string>
+    <string name="security_label">Security</string>
+    <string name="enable_touch_id_to_sign_in_label">Enable touch ID to sign in</string>
+    <string name="enable_auto_lock_security_label">Enable auto lock security</string>
+    <string name="two_factor_authentication_label">2-step verification</string>
+    <string name="change_password_label">Change password</string>
+    <string name="allow_notification_label">Allow notification</string>
+    <string name="email_notifications_label">Email notifications</string>
+    <string name="display_label">Display</string>
+    <string name="enable_prompts_label">Enable prompts</string>
+    <string name="currency_label">Currency</string>
+    <string name="user_profile_label">User profile</string>
 </resources>

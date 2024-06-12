@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.common.presentation.feature.splashscreen
+package com.closedcircuit.closedcircuitapplication.common.presentation.feature
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
