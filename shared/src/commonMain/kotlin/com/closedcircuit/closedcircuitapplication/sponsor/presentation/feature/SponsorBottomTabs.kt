@@ -22,6 +22,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.au
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.ProfileNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawerProfileState
@@ -50,6 +51,12 @@ class SponsorBottomTabs : Screen {
         NavigationDrawer(
             drawerState = drawerState,
             profileState = profileState,
+            navigateToSettings = {
+                scope.launch {
+                    drawerState.close()
+                    navigator.push(SettingsScreen())
+                }
+            },
             logout = { navigator.replaceAll(LoginScreen()) }
         ) {
             TabNavigator(tab = SponsorDashboardTab) {

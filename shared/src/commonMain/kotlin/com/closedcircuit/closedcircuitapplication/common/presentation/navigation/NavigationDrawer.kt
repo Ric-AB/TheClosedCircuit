@@ -39,6 +39,7 @@ fun NavigationDrawer(
     modifier: Modifier = Modifier,
     drawerState: DrawerState,
     profileState: NavigationDrawerProfileState,
+    navigateToSettings: () -> Unit,
     logout: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -100,7 +101,7 @@ fun NavigationDrawer(
                         },
                         label = { Text(stringResource(SharedRes.strings.settings_label)) },
                         selected = false,
-                        onClick = {}
+                        onClick = navigateToSettings
                     )
 
                     NavigationDrawerItem(
