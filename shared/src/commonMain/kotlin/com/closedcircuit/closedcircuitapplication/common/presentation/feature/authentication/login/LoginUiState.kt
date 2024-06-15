@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login
 
 import androidx.compose.runtime.mutableStateOf
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 data class LoginUIState(
@@ -14,6 +15,6 @@ data class LoginUIState(
 }
 
 sealed interface LoginResult {
-    object Success : LoginResult
+    data class Success(val activeProfile: ProfileType) : LoginResult
     data class Failure(val message: String) : LoginResult
 }

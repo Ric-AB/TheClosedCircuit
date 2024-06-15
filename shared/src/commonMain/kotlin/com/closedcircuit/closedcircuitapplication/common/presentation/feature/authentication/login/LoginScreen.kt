@@ -42,13 +42,13 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.au
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.register.RegisterScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayReplaceAll
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -68,9 +68,8 @@ internal class LoginScreen : Screen, KoinComponent {
                     messageBarState.addError(it.message)
                 }
 
-                LoginResult.Success -> {
-                    delay(500) //wait for loader to hide
-                    navigator.replaceAll(ProtectedNavigator())
+                is LoginResult.Success -> {
+                    navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
                 }
             }
         }

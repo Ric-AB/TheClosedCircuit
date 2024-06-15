@@ -5,12 +5,43 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
+import cafe.adriel.voyager.core.annotation.InternalVoyagerApi
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.lifecycle.NavigatorDisposable
 import cafe.adriel.voyager.navigator.lifecycle.NavigatorLifecycleStore
+import kotlinx.coroutines.delay
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+
+fun findRootNavigator(navigator: Navigator): Navigator {
+    return if (navigator.parent == null) navigator
+    else findRootNavigator(navigator.parent!!)
+}
+
+@OptIn(InternalVoyagerApi::class)
+fun findNavigator(key: String, navigator: Navigator): Navigator {
+    if (navigator.key == key) return navigator
+    val parentNavigator = navigator.parent ?: return navigator
+    return findNavigator(key, parentNavigator)
+}
+
+suspend fun Navigator.delayPush(screen: Screen, delay: Duration = 3.milliseconds) {
+    delay(delay)
+    push(screen)
+}
+
+suspend fun Navigator.delayReplaceAll(screen: Screen, delay: Duration = 3.milliseconds) {
+    delay(delay)
+    replaceAll(screen)
+}
+
+suspend fun Navigator.delayPop(delay: Duration = 3.milliseconds) {
+    delay(delay)
+    pop()
+}
 
 val Navigator.navigationResult: VoyagerResultExtension
     @Composable get() = remember {

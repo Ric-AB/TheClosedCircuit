@@ -26,7 +26,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     // onboarding
     factory { OnboardingViewModel(get()) }
-    factory { LoginViewModel(get()) }
+    factory { LoginViewModel(get(), get()) }
     factory { RegisterViewModel(get()) }
     single { ResetPasswordKoinContainer() } // todo replace with scoped navigator
     scope<ResetPasswordKoinContainer> {

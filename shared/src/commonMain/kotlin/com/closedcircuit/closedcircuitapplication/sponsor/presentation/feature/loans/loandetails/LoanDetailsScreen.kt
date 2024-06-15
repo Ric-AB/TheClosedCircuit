@@ -25,6 +25,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.LoanBreakdownType
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPop
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
@@ -47,8 +48,7 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
                 LoanDetailsResult.CancelSuccess -> {
-                    delay(300)
-                    navigator.pop()
+                    navigator.delayPop()
                 }
 
                 is LoanDetailsResult.Error -> messageBarState.addError(it.message)

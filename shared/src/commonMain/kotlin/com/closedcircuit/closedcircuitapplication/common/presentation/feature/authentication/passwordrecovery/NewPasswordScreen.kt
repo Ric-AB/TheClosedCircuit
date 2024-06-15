@@ -31,6 +31,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayReplaceAll
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
@@ -60,8 +61,7 @@ internal class NewPasswordScreen : Screen, KoinComponent,
                 }
 
                 ResetPasswordResult.Success -> {
-                    delay(300)
-                    navigator.replaceAll(LoginScreen())
+                    navigator.delayReplaceAll(LoginScreen())
                     viewModel.onDispose()
                 }
             }

@@ -38,6 +38,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideUpTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPush
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
@@ -73,8 +74,7 @@ internal class ProfileVerificationScreen(val email: Email) : Screen, KoinCompone
                 ProfileVerificationResult.RequestOtpSuccess -> messageBarState.addSuccess("Otp code has been sent to ${email.value}")
                 is ProfileVerificationResult.VerifyOtpFailure -> otpError = true
                 ProfileVerificationResult.VerifyOtpSuccess -> {
-                    delay(300)
-                    navigator.push(
+                    navigator.delayPush(
                         SuccessScreen(
                             title = "Email verification successful",
                             message = "",
