@@ -8,12 +8,14 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.LoginUseCase
+import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val appSettingsRepository: AppSettingsRepository
 ) : ScreenModel {
 
     var state by mutableStateOf(LoginUIState())
@@ -38,8 +40,9 @@ class LoginViewModel(
             val email = state.emailField.value
             val password = state.passwordField.value
             loginUseCase(email, password).onSuccess {
+                val activeProfile = appSettingsRepository.getActiveProfile()
                 state = state.copy(isLoading = false)
-                _loginResultChannel.send(LoginResult.Success)
+                _loginResultChannel.send(LoginResult.Success(activeProfile))
             }.onError { _, message ->
                 state = state.copy(isLoading = false)
                 _loginResultChannel.send(LoginResult.Failure(message))

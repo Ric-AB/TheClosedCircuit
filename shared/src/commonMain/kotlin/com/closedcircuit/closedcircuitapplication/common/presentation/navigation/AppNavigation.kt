@@ -27,11 +27,6 @@ internal fun AppNavigation() {
     }
 }
 
-fun findRootNavigator(navigator: Navigator): Navigator {
-    return if (navigator.parent == null) navigator
-    else findRootNavigator(navigator.parent!!)
-}
-
 @Composable
 fun RowScope.TabNavigationItem(tab: Tab) {
     val tabNavigator = LocalTabNavigator.current

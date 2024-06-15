@@ -38,6 +38,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardTab
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
@@ -47,14 +49,12 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayReplaceAll
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
-import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -77,8 +77,7 @@ internal class RegisterScreen : Screen, KoinComponent,
                 }
 
                 RegisterResult.Success -> {
-                    delay(500) //wait for loader to hide
-                    navigator.replaceAll(DashboardTab)
+                    navigator.delayReplaceAll(DashboardTab)
                 }
             }
         }

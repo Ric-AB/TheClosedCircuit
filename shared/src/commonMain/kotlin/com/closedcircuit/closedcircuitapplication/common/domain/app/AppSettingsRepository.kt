@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 interface AppSettingsRepository {
 
     suspend fun updateOnboardingState()
-    fun onboardingStateFlow(): Flow<Boolean>
     suspend fun hasOnboarded(): Boolean
     suspend fun setActiveProfile(profileType: ProfileType)
-    fun getActiveProfile(): Flow<ProfileType>
+    suspend fun getActiveProfile(): ProfileType
+    fun getAppSettings(): Flow<AppSettings>
 }
