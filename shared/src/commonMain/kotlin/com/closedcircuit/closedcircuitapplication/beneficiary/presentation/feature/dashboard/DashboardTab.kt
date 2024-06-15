@@ -129,7 +129,6 @@ internal object DashboardTab : Tab, KoinComponent {
             state = viewModel.uiState(),
             navigateToCreatePlan = { navigator.push(CreatePlanNavigator) },
             navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
-            navigateToNotificationScreen = { navigator.push(NotificationScreen()) },
         )
     }
 
@@ -139,12 +138,8 @@ internal object DashboardTab : Tab, KoinComponent {
         state: DashboardUiState,
         navigateToCreatePlan: () -> Unit,
         navigateToPlanListScreen: () -> Unit,
-        navigateToNotificationScreen: () -> Unit,
     ) {
-        BaseScaffold(
-            messageBarState = messageBarState,
-            topBar = { DashboardTopAppBar(navigateToNotificationScreen = navigateToNotificationScreen) }
-        ) { innerPadding ->
+        BaseScaffold(messageBarState = messageBarState) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)

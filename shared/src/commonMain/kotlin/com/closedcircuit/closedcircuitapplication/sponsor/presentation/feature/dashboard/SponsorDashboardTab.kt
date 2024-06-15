@@ -86,10 +86,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
 
     @Composable
     private fun ScreenContent(messageBarState: MessageBarState, state: SponsorDashboardUiState) {
-        BaseScaffold(
-            messageBarState = messageBarState,
-            topBar = { DashboardTopAppBar(navigateToNotificationScreen = {}) }
-        ) { innerPadding ->
+        BaseScaffold(messageBarState = messageBarState) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)

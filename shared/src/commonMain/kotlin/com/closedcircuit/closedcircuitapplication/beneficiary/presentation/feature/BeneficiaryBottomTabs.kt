@@ -23,6 +23,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.ProfileNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
@@ -57,7 +58,7 @@ internal class BeneficiaryBottomTabs : Screen {
                     topBar = {
                         BeneficiaryTopAppBar(
                             navigationIconClick = { scope.launch { drawerState.open() } },
-                            navigateToNotificationScreen = {}
+                            navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
                         )
                     },
                     content = {
