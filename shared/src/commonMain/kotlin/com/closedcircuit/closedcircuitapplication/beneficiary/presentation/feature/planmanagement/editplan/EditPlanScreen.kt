@@ -31,7 +31,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navig
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.LargeDropdownMenu
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldDialogMenu
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldTrailingText
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TopLabeledTextField
@@ -109,7 +109,7 @@ private fun ScreenContent(
                 .padding(vertical = verticalScreenPadding)
         ) {
 
-            LargeDropdownMenu(
+            TextFieldDialogMenu(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_sector),
                 items = sectors,
@@ -119,7 +119,7 @@ private fun ScreenContent(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            LargeDropdownMenu(
+            TextFieldDialogMenu(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_business_type),
                 items = businessTypes,

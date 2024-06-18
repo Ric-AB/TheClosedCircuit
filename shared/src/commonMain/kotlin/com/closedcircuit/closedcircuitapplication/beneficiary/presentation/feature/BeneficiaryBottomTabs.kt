@@ -1,6 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -68,8 +71,8 @@ internal class BeneficiaryBottomTabs : Screen {
                             navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
                         )
                     },
-                    content = {
-                        Column(modifier = Modifier.justPadding(bottom = it.calculateBottomPadding())) {
+                    content = { padding ->
+                        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                             CurrentTab()
                         }
                     },

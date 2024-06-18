@@ -32,19 +32,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,7 +61,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -81,8 +78,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TaskLinearProgress
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent1
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent2
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent3
@@ -120,9 +115,9 @@ internal object DashboardTab : Tab, KoinComponent {
 
     @Composable
     override fun Content() {
-        val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
+        val navigator = LocalNavigator.currentOrThrow
         val messageBarState = rememberMessageBarState()
-        val viewModel = getScreenModel<DashboardViewModel>()
+        val viewModel = navigator.getNavigatorScreenModel<DashboardViewModel>()
 
         ScreenContent(
             messageBarState = messageBarState,
@@ -464,22 +459,6 @@ internal object DashboardTab : Tab, KoinComponent {
             }
         }
     }
-
-    @Composable
-    private fun DashboardTopAppBar(navigateToNotificationScreen: () -> Unit) {
-        TopAppBar(
-            title = { },
-            actions = {
-                IconButton(onClick = navigateToNotificationScreen) {
-                    Icon(
-                        imageVector = Icons.Outlined.Notifications,
-                        contentDescription = "notifications"
-                    )
-                }
-            }
-        )
-    }
-
 
     @Composable
     private fun PlanAnalytics(

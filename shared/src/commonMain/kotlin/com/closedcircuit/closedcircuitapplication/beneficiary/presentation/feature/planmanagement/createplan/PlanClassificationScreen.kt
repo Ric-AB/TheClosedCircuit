@@ -18,7 +18,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.Cre
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.EditableAvatar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.LargeDropdownMenu
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldDialogMenu
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
@@ -61,7 +61,7 @@ private fun ScreenContent(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            LargeDropdownMenu(
+            TextFieldDialogMenu(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_category),
                 items = uiState.categories,
@@ -71,7 +71,7 @@ private fun ScreenContent(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            LargeDropdownMenu(
+            TextFieldDialogMenu(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_sector),
                 items = uiState.sectors,
@@ -81,7 +81,7 @@ private fun ScreenContent(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-            LargeDropdownMenu(
+            TextFieldDialogMenu(
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_business_type),
                 items = uiState.businessTypes,

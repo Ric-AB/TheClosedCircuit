@@ -17,7 +17,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.LargeDropdownMenu
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldDialogMenu
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TopAppBarTitle
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
@@ -56,7 +56,7 @@ internal class FundingLevelScreen : Screen, KoinComponent {
                 TopAppBarTitle(stringResource(SharedRes.strings.how_would_you_like_to_sponsor_label))
 
                 Spacer(Modifier.height(24.dp))
-                LargeDropdownMenu(
+                TextFieldDialogMenu(
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(SharedRes.strings.select_funding_level_label),
                     items = state.fundingLevels,

@@ -11,34 +11,10 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails.StepDetailsViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.passwordrecovery.ResetPasswordKoinContainer
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.passwordrecovery.ResetPasswordViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.register.RegisterViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.OnboardingViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.payment.PaymentViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationViewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    // onboarding
-    factory { OnboardingViewModel(get()) }
-    factory { LoginViewModel(get(), get()) }
-    factory { RegisterViewModel(get()) }
-    single { ResetPasswordKoinContainer() } // todo replace with scoped navigator
-    scope<ResetPasswordKoinContainer> {
-        scoped { ResetPasswordViewModel(get()) }
-    }
-
     factory { DashboardViewModel(get(), get(), get()) }
-
-    // profile
-    factory { ProfileViewModel(get(), get()) }
-    factory { parameters -> EditProfileViewModel(parameters.get(), get()) }
-    factory { parameters -> ProfileVerificationViewModel(parameters.get(), get()) }
 
     // plan management
     factory { PlanListViewModel(get()) }
@@ -48,14 +24,8 @@ val viewModelModule = module {
     factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }
     factory { parameters -> FundRequestViewModel(parameters.get(), get(), get(), get()) }
 
-
-    factory { NotificationViewModel(get()) }
-
     // kyc
     factory { KycViewModel(get()) }
-
-    // payment
-    factory { PaymentViewModel() }
 
     // loan
     factory { LoansPreviewViewModel(get()) }

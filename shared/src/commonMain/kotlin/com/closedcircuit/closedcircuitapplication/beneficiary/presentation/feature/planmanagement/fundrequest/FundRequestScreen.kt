@@ -35,7 +35,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.components
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultOutlinedTextField
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.LargeDropdownMenu
+import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldDialogMenu
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.PromptDialog
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldTrailingText
@@ -116,7 +116,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                 TitleText(text = stringResource(SharedRes.strings.how_do_you_want_to_be_supported_label))
 
                 Spacer(modifier = Modifier.height(8.dp))
-                LargeDropdownMenu(
+                TextFieldDialogMenu(
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(SharedRes.strings.select_category),
                     selectedItem = state.selectedFundType,
@@ -161,7 +161,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
-                        LargeDropdownMenu(
+                        TextFieldDialogMenu(
                             modifier = Modifier.fillMaxWidth(),
                             label = stringResource(SharedRes.strings.select_maximum_number_of_lenders_label),
                             selectedItem = state.numberOfLenders,
@@ -172,7 +172,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
-                        LargeDropdownMenu(
+                        TextFieldDialogMenu(
                             modifier = Modifier.fillMaxWidth(),
                             label = stringResource(SharedRes.strings.select_grace_duration_label),
                             selectedItem = state.graceDuration,
@@ -183,7 +183,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
-                        LargeDropdownMenu(
+                        TextFieldDialogMenu(
                             modifier = Modifier.fillMaxWidth(),
                             label = stringResource(SharedRes.strings.select_repayment_duration_label),
                             selectedItem = state.repaymentDuration,
