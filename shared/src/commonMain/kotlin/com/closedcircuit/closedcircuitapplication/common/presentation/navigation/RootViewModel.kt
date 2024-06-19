@@ -1,38 +1,48 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 
-import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.closedcircuit.closedcircuitapplication.common.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
-import kotlinx.coroutines.launch
+import com.closedcircuit.closedcircuitapplication.common.domain.usecase.IsLoggedInUseCase
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 
 class RootViewModel(
     private val appSettingsRepository: AppSettingsRepository,
-    private val isLoggedInUseCase: IsLoggedInUseCase
+    private val isLoggedInUseCase: IsLoggedInUseCase,
+    userRepository: UserRepository
 ) : ScreenModel {
 
-    val state = mutableStateOf<RootState?>(null)
-
-    init {
-        initRootState()
-    }
-
-    private fun initRootState() {
-        screenModelScope.launch {
-            val authState = isLoggedInUseCase()
-            val activeProfile = appSettingsRepository.getActiveProfile()
-            state.value = RootState(
-                activeProfile = activeProfile,
-                authState = authState
-            )
-        }
-    }
+    private val authStateFlow = flow { emit(isLoggedInUseCase()) }
+    private val activeProfileFlow = flow { emit(appSettingsRepository.getActiveProfile()) }
+    private val userFlow = userRepository.userFlow.filterNotNull()
+    val state = combine(
+        authStateFlow,
+        activeProfileFlow,
+        userFlow
+    ) { authState, activeProfile, user ->
+        RootState(
+            authState = authState,
+            activeProfile = activeProfile,
+            fullName = user.fullName.value,
+            profileUrl = user.avatar.value
+        )
+    }.stateIn(
+        scope = screenModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = null
+    )
 }
 
 data class RootState(
     val authState: AuthenticationState,
-    val activeProfile: ProfileType
+    val activeProfile: ProfileType,
+    val fullName: String,
+    val profileUrl: String
 )

@@ -29,16 +29,18 @@ import dev.icerock.moko.resources.compose.stringResource
 
 @Stable
 data class NavigationDrawerProfileState(
-    val profileUrl: String,
-    val fullName: String,
-    val email: String
+    val profileUrl: String = "",
+    val fullName: String = "--",
+    val email: String = ""
 )
 
 @Composable
 fun NavigationDrawer(
     modifier: Modifier = Modifier,
     drawerState: DrawerState,
-    profileState: NavigationDrawerProfileState,
+    profileUrl: String,
+    fullName: String,
+    activeProfile: String,
     navigateToSettings: () -> Unit,
     logout: () -> Unit,
     content: @Composable () -> Unit
@@ -54,21 +56,21 @@ fun NavigationDrawer(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Avatar(
-                            imageUrl = profileState.profileUrl,
+                            imageUrl = profileUrl,
                             size = DpSize(60.dp, 60.dp)
                         )
 
                         Spacer(Modifier.width(12.dp))
                         Column {
                             Text(
-                                text = profileState.fullName,
+                                text = fullName,
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.SemiBold
                             )
 
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                text = profileState.email,
+                                text = activeProfile,
                                 style = MaterialTheme.typography.bodySmall,
                             )
                         }

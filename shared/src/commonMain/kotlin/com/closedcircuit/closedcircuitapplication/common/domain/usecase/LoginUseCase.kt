@@ -7,7 +7,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.LoginResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.SessionRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 
 class LoginUseCase(
     private val userRepository: UserRepository,

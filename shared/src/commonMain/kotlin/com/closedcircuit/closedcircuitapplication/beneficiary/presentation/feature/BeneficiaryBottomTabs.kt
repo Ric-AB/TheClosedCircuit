@@ -1,7 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -13,10 +12,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
@@ -31,9 +31,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.pr
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawerProfileState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.TabNavigationItem
-import com.closedcircuit.closedcircuitapplication.common.presentation.util.justPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
@@ -43,18 +42,15 @@ internal class BeneficiaryBottomTabs : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val profileState = remember {
-            NavigationDrawerProfileState(
-                profileUrl = "",
-                fullName = "Richard Bajomo",
-                email = "richardbajomo@gmail.com"
-            )
-        }
+        val viewModel = navigator.getNavigatorScreenModel<RootViewModel>()
+        val rootState = viewModel.state.collectAsState().value
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
         NavigationDrawer(
             drawerState = drawerState,
-            profileState = profileState,
+            profileUrl = rootState?.profileUrl ?: "",
+            fullName = rootState?.fullName ?: "__",
+            activeProfile = rootState?.activeProfile?.displayText ?: "",
             navigateToSettings = {
                 scope.launch {
                     drawerState.close()

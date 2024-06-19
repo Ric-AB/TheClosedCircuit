@@ -7,7 +7,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

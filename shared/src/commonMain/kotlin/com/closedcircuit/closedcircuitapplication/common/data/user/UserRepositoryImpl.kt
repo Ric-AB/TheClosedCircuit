@@ -1,5 +1,8 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.user
+package com.closedcircuit.closedcircuitapplication.common.data.user
 
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.UserService
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.asApiUser
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.asUser
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
@@ -12,7 +15,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserDashboard
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import io.github.xxfast.kstore.KStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

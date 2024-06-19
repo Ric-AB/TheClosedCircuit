@@ -11,7 +11,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch

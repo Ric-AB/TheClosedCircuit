@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -26,7 +27,7 @@ class SplashScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = navigator.getNavigatorScreenModel<RootViewModel>()
-        val rootState = viewModel.state.value
+        val rootState = viewModel.state.collectAsState().value
 
         LaunchedEffect(rootState) {
             if (rootState != null) {

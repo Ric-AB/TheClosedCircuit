@@ -11,7 +11,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.PaymentRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse

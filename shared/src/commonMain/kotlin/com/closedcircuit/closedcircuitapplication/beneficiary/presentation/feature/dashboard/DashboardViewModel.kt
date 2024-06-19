@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.DonationRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
@@ -47,6 +47,10 @@ class DashboardViewModel(
         val showAnalytics =
             listOf(completedPlanCount, ongoingPlanCount, notStartedPlanCount).any { it > Int.Zero }
 
+        if (allPlans.isEmpty()) {
+            return@combine DashboardUiState.Empty
+        }
+
         DashboardUiState.Content(
             firstName = user?.firstName?.value.orEmpty(),
             recentPlans = allPlans.take(3).toImmutableList(),
@@ -57,7 +61,11 @@ class DashboardViewModel(
             notStartedPlansCount = notStartedPlanCount,
             showAnalytics = showAnalytics
         )
-    }.stateIn(screenModelScope, SharingStarted.WhileSubscribed(5_000L), DashboardUiState.Loading)
+    }.stateIn(
+        scope = screenModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = DashboardUiState.Loading
+    )
 
     @Composable
     override fun uiState(): DashboardUiState {
