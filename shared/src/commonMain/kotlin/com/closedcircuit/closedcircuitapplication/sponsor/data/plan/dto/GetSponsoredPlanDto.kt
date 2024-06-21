@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetSponsoredPlanDto(
-    val plans: List<DashboardPlanDto>,
+    val plans: List<FundedPlanPreviewDto>,
     @SerialName("pending_plans")
     val pendingPlan: List<PendingPlanDto>
 )

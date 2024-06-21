@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name_label">The Closed Circuit</string>
+
     <!--    Onboarding -->
     <string name="onboarding_one_title">Easily raise funds for your business or project</string>
     <string name="onboarding_one_description">Start a business or project and get your family,
@@ -99,8 +101,8 @@
 
     <!--    Plan management-->
     <string name="plans">Plans</string>
-    <string name="percentage_funds_raised">%s funds raised</string>
-    <string name="percentage_task_completed">%s task completed</string>
+    <string name="percentage_funds_raised">%s\% funds raised</string>
+    <string name="percentage_task_completed">%s\% task completed</string>
     <string name="start_a_plan">Start a Plan</string>
     <string name="new_plan">New Plan</string>
     <string name="select_category">Select category</string>
@@ -366,4 +368,11 @@
     <string name="enable_prompts_label">Enable prompts</string>
     <string name="currency_label">Currency</string>
     <string name="user_profile_label">User profile</string>
+    <string name="funding_label">Funding</string>
+    <string name="beneficiary_colon_label">Beneficiary: </string>
+    <string name="plan_sector_colon_label">Plan sector: </string>
+    <string name="amount_funded_colon_label">Amount funded: </string>
+    <string name="funding_type_colon_label">Funding type: </string>
+    <string name="plan_funding_label">Plan funding</string>
+    <string name="plan_progress_label">Plan progress</string>
 </resources>

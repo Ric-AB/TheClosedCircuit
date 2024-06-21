@@ -12,12 +12,15 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.common.domain.model.PositiveInt
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.ApiPlan
-import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.DashboardPlanDto
-import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.DashboardPlan
+import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.FundedPlanDto
+import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.FundedPlanPreviewDto
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.FundingLevel
 
@@ -47,7 +50,7 @@ fun ApiPlan.asSponsorPlan() = SponsorPlan(
     budgets = budgets.asBudgetEntities().asBudgets()
 )
 
-fun DashboardPlanDto.toDashboardPlan() = DashboardPlan(
+fun FundedPlanPreviewDto.toDashboardPlan() = FundedPlanPreview(
     id = ID(id),
     avatar = Avatar(avatar),
     sector = sector,
@@ -55,11 +58,35 @@ fun DashboardPlanDto.toDashboardPlan() = DashboardPlan(
     beneficiaryId = beneficiaryId?.let { ID(it) },
     currency = currency?.let { Currency(it) },
     amountFunded = Amount(amountFunded.toDouble()),
-    fundingType = FundType.valueOf(fundingType),
-    fundingLevel = FundingLevel.valueOf(fundingLevel),
+    fundingType = FundType.fromText(fundingType),
+    fundingLevel = FundingLevel.fromText(fundingLevel),
     fundingDate = Date(fundingDate),
-    fundsRaised = Amount(fundsRaised.toDouble()),
-    tasksCompleted = tasksCompleted
+    fundsRaisedPercent = fundsRaisedPercent,
+    tasksCompletedPercent = tasksCompletedPercent
 )
 
-fun List<DashboardPlanDto>.toDashboardPlans() = map { it.toDashboardPlan() }
+fun FundedPlanDto.toFundedPlan() = FundedPlan(
+    id = ID(id),
+    avatar = Avatar(avatar),
+    name = name,
+    description = description,
+    category = category,
+    sector = sector,
+    type = type,
+    duration = PositiveInt(duration),
+    estimatedSellingPrice = Amount(estimatedSellingPrice),
+    estimatedCostPrice = Amount(estimatedCostPrice),
+    targetAmount = Amount(targetAmount),
+    analytics = analytics,
+    userID = ID(userId),
+    beneficiaryId =  ID(beneficiaryId),
+    fundRequestID = ID(fundRequestId),
+    currency = Currency(currency),
+    hasRequestedFunds = hasRequestedFund,
+    isSponsored = isSponsored,
+    accountabilityPartnerIds = accountabilityPartnerIds.map { ID(it) },
+    createdAt = Date(createdAt),
+    updatedAt = Date(updatedAt)
+)
+
+fun List<FundedPlanPreviewDto>.toDashboardPlans() = map { it.toDashboardPlan() }

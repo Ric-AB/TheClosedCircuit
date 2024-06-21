@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.DpSize
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.rememberBitmapFromBytes
+import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
@@ -54,6 +55,7 @@ fun Avatar(
             } else {
                 CoilImage(
                     imageModel = { imageUrl },
+                    imageOptions = ImageOptions(contentScale = ContentScale.Crop)
                 )
             }
         }

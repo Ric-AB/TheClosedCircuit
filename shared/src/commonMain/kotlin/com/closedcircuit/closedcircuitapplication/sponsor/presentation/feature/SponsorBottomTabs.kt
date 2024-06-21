@@ -1,6 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,10 +30,10 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.TabNavigationItem
-import com.closedcircuit.closedcircuitapplication.common.presentation.util.justPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.account.SponsorAccountTab
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.dashboard.SponsorDashboardTab
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.list.FundedPlanListScreen
 import dev.icerock.moko.resources.compose.painterResource
 import kotlinx.coroutines.launch
 
@@ -65,8 +67,8 @@ class SponsorBottomTabs : Screen {
                             navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
                         )
                     },
-                    content = {
-                        Column(modifier = Modifier.justPadding(bottom = it.calculateBottomPadding())) {
+                    content = { padding ->
+                        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                             CurrentTab()
                         }
                     },
@@ -76,7 +78,7 @@ class SponsorBottomTabs : Screen {
                             TabNavigationItem(ProfileNavigator)
                             BottomNavFab(
                                 imageResource = SharedRes.images.ic_funds,
-                                onClick = { }
+                                onClick = { navigator.push(FundedPlanListScreen()) }
                             )
                             TabNavigationItem(MessageTab)
                             TabNavigationItem(SponsorAccountTab)

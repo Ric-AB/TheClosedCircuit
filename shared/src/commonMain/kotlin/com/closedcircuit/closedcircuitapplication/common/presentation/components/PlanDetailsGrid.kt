@@ -25,8 +25,8 @@ fun PlanDetailsGrid(
     modifier: Modifier,
     sector: String,
     duration: String,
-    estimatedCostPrice: String,
-    estimatedSellingPrice: String,
+    estimatedCostPrice: String?,
+    estimatedSellingPrice: String?,
     targetAmount: String?,
     totalFundsRaised: String?,
 ) {
@@ -83,22 +83,24 @@ fun PlanDetailsGrid(
             )
         }
 
-        GridRow(
-            item1 = {
-                GridItem(
-                    imageResource = SharedRes.images.ic_orange_bag,
-                    header = estimatedCostPrice,
-                    message = stringResource(SharedRes.strings.estimated_cost_price_per_unit_label)
-                )
-            },
-            item2 = {
-                GridItem(
-                    imageResource = SharedRes.images.ic_purple_file,
-                    header = estimatedSellingPrice,
-                    message = stringResource(SharedRes.strings.estimated_selling_price_per_unit_label)
-                )
-            }
-        )
+        if (estimatedCostPrice != null && estimatedSellingPrice != null) {
+            GridRow(
+                item1 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_orange_bag,
+                        header = estimatedCostPrice,
+                        message = stringResource(SharedRes.strings.estimated_cost_price_per_unit_label)
+                    )
+                },
+                item2 = {
+                    GridItem(
+                        imageResource = SharedRes.images.ic_purple_file,
+                        header = estimatedSellingPrice,
+                        message = stringResource(SharedRes.strings.estimated_selling_price_per_unit_label)
+                    )
+                }
+            )
+        }
     }
 }
 

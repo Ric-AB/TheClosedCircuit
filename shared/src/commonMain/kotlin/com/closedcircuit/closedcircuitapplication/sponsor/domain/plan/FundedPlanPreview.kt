@@ -9,7 +9,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.FundingLevel
 
-data class DashboardPlan(
+data class FundedPlanPreview(
     val id: ID,
     val avatar: Avatar,
     val sector: String,
@@ -20,6 +20,6 @@ data class DashboardPlan(
     val fundingType: FundType,
     val fundingLevel: FundingLevel,
     val fundingDate: Date,
-    val fundsRaised: Amount,
-    val tasksCompleted: String
+    val fundsRaisedPercent: Double,
+    val tasksCompletedPercent: Double
 )

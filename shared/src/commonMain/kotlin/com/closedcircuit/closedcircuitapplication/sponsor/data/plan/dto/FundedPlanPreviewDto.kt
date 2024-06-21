@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DashboardPlanDto(
+data class FundedPlanPreviewDto(
     @SerialName("plan_id")
     val id: String,
     @SerialName("plan_avatar")
@@ -25,7 +25,7 @@ data class DashboardPlanDto(
     @SerialName("funding_date")
     val fundingDate: String,
     @SerialName("funds_raised")
-    val fundsRaised: String,
+    val fundsRaisedPercent: Double,
     @SerialName("tasks_completed")
-    val tasksCompleted: String
+    val tasksCompletedPercent: Double
 )

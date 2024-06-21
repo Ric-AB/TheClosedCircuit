@@ -27,13 +27,6 @@ import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 
-@Stable
-data class NavigationDrawerProfileState(
-    val profileUrl: String = "",
-    val fullName: String = "--",
-    val email: String = ""
-)
-
 @Composable
 fun NavigationDrawer(
     modifier: Modifier = Modifier,

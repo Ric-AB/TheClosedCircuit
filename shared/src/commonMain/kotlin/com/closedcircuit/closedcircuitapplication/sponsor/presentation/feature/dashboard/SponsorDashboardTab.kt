@@ -21,7 +21,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,15 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
@@ -50,7 +46,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.DashboardPlan
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.components.FundedPlanItem
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
@@ -100,7 +96,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
 
                 when (state) {
                     is SponsorDashboardUiState.Content -> {
-                        LoadedDashboard(
+                        Body(
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = horizontalScreenPadding),
                             state = state,
@@ -128,7 +124,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
     }
 
     @Composable
-    private fun LoadedDashboard(
+    private fun Body(
         modifier: Modifier,
         state: SponsorDashboardUiState.Content,
         navigateToPlanListScreen: () -> Unit,
@@ -144,54 +140,20 @@ object SponsorDashboardTab : Tab, KoinComponent {
             )
 
             if (plans.isNotEmpty()) {
-                plans.forEach { PlanItem(modifier = Modifier.fillMaxWidth(), plan = it) }
+                plans.forEach { fundedPlanPreview ->
+                    FundedPlanItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        beneficiaryFullName = fundedPlanPreview.beneficiaryFullName.value,
+                        planImageUrl = fundedPlanPreview.avatar.value,
+                        planSector = fundedPlanPreview.sector,
+                        amountFunded = fundedPlanPreview.amountFunded.getFormattedValue(),
+                        fundingType = fundedPlanPreview.fundingType.displayText,
+                        fundsRaisedPercent = fundedPlanPreview.fundsRaisedPercent,
+                        taskCompletedPercent = fundedPlanPreview.tasksCompletedPercent
+                    )
+                }
             } else {
                 NoPlan(modifier = Modifier.fillMaxWidth(), userFirstName = state.userFirstName)
-            }
-        }
-    }
-
-    @Composable
-    private fun PlanItem(modifier: Modifier, plan: DashboardPlan) {
-        Card(modifier = modifier) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Avatar(imageUrl = plan.avatar.value, size = DpSize(50.dp, 50.dp))
-
-                    Spacer(Modifier.width(8.dp))
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("Plan sector: ${plan.sector}")
-                        Text("Amount funded: ${plan.amountFunded.getFormattedValue()}")
-                        Text("Funding type: ${plan.fundingType.displayText}")
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-                LinearProgressIndicator(progress = { plan.fundsRaised.value.toFloat() })
-                Text(
-                    text = stringResource(
-                        SharedRes.strings.x_percent_funds_raised_label,
-                        plan.fundsRaised.value.times(100)
-                    ),
-                    style = MaterialTheme.typography.labelMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-                LinearProgressIndicator(progress = { plan.tasksCompleted.toFloat() })
-                Text(
-                    text = stringResource(
-                        SharedRes.strings.x_percent_tasks_completed_label,
-                        plan.tasksCompleted.toFloat().times(100)
-                    ),
-                    style = MaterialTheme.typography.labelMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
             }
         }
     }

@@ -15,6 +15,7 @@ enum class FundingLevel(val value: String) {
 
     companion object {
         val map = values().associateBy { it.value }
-        fun fromText(text: String): FundingLevel? = map[text]
+        fun fromText(text: String): FundingLevel =
+            map[text] ?: throw RuntimeException("No matching value for $text")
     }
 }
