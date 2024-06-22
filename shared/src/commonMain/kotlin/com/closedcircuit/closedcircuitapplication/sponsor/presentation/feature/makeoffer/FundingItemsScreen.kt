@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Shapes
@@ -35,14 +35,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.TopAppBarTitle
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopAppBarTitle
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
@@ -241,10 +242,10 @@ internal class FundingItemsScreen : Screen, KoinComponent {
                 }
             }
 
-            Divider(
-                thickness = 1.dp,
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth(),
+                thickness = 1.dp
             )
         }
     }

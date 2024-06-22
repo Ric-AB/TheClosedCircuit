@@ -18,6 +18,7 @@ import com.closedcircuit.closedcircuitapplication.sponsor.data.offer.dto.OfferPa
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.offer.OfferRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.channels.Channel

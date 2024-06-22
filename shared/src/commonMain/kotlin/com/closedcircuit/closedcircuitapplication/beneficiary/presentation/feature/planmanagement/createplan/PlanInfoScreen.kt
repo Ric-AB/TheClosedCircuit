@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.CreatePlanUseCase
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldTrailingText
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.TopLabeledTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldTrailingText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes

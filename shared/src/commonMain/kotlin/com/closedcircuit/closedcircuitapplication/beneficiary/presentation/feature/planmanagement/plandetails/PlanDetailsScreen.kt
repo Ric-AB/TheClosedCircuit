@@ -82,10 +82,10 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDurati
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BudgetItem
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes

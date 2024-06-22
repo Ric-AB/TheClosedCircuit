@@ -15,13 +15,13 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.components.FundedPlanItem
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundedPlanItem
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 

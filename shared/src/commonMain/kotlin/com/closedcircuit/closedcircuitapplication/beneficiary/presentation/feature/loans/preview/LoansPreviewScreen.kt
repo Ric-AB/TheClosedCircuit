@@ -31,10 +31,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.loanlist.LoansScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding

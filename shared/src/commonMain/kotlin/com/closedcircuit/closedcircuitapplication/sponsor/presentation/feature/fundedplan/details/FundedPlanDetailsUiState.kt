@@ -8,8 +8,8 @@ sealed interface FundedPlanDetailsUiState {
         val planDescription: String,
         val planSector: String,
         val planDuration: Int,
-        val targetAmount: String,
-        val totalFundsRaised: String,
+        val estimatedCostPrice: String,
+        val estimatedSellingPrice: String,
     ) : FundedPlanDetailsUiState
 
     data class Error(val message: String) : FundedPlanDetailsUiState

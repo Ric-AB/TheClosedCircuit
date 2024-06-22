@@ -47,10 +47,10 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BudgetItem
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.icon.rememberTask
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BudgetItem
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.icon.rememberTask
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource

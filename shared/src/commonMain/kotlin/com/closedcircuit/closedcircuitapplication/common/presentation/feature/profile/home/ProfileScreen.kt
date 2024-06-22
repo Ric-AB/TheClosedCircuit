@@ -23,8 +23,8 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -58,11 +58,11 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.Avatar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
@@ -407,7 +407,7 @@ private fun ProfileModalBottomSheet(
                     onClick = if (!isEmailVerified) navigateToProfileVerificationScreen else null
                 )
 
-                Divider()
+                HorizontalDivider()
                 Item(
                     label = stringResource(SharedRes.strings.document_verification),
                     status = documentStatusValues.first,
@@ -415,7 +415,7 @@ private fun ProfileModalBottomSheet(
                     onClick = navigateToKycScreen
                 )
 
-                Divider()
+                HorizontalDivider()
                 Item(
                     label = stringResource(SharedRes.strings.phone_number_verification),
                     status = phoneNumberStatusValues.first,

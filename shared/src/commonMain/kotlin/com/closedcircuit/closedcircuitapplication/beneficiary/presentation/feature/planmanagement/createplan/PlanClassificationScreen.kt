@@ -16,9 +16,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.EditableAvatar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.TextFieldDialogMenu
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EditableAvatar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldDialogMenu
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent

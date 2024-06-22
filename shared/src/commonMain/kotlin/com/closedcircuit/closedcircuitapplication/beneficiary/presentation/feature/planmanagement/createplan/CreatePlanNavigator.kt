@@ -26,11 +26,11 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.SuccessScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.SuccessScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
@@ -126,9 +126,9 @@ private fun CreatePlanAppBar(progress: Float, onNavIconClick: () -> Unit) {
         )
 
         LinearProgressIndicator(
+            progress = { animatedProgress },
             modifier = Modifier.fillMaxWidth(),
-            progress = animatedProgress,
-            strokeCap = StrokeCap.Round
+            strokeCap = StrokeCap.Round,
         )
     }
 }

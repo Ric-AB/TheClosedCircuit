@@ -37,16 +37,16 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.MessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.WalletCard
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.components.FundedPlanItem
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundedPlanItem
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 

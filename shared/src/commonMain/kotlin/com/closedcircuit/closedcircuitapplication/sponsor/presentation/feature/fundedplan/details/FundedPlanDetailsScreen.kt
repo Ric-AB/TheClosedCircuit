@@ -34,11 +34,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BackgroundLoader
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.PlanDetailsGrid
-import com.closedcircuit.closedcircuitapplication.common.presentation.components.TitleText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlanDetailsGrid
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -88,9 +88,9 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
                     planDescription = state.planDescription,
                     planImageUrl = state.planImageUrl,
                     planSector = state.planSector,
-                    planDuration = state.planDuration.value.toString(),
-                    targetAmount = state.targetAmount,
-                    totalFundsRaised = state.totalFundsRaised,
+                    planDuration = state.planDuration.toString(),
+                    estimatedCostPrice = state.estimatedCostPrice,
+                    estimatedSellingPrice = state.estimatedSellingPrice,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -108,18 +108,18 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
         planImageUrl: String,
         planSector: String,
         planDuration: String,
-        targetAmount: String,
-        totalFundsRaised: String
+        estimatedCostPrice: String,
+        estimatedSellingPrice: String
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             PlanDetailsGrid(
                 modifier = Modifier.fillMaxWidth(),
                 sector = planSector,
                 duration = planDuration,
-                targetAmount = targetAmount,
-                totalFundsRaised = totalFundsRaised,
-                estimatedCostPrice = null,
-                estimatedSellingPrice = null
+                estimatedCostPrice = estimatedCostPrice,
+                estimatedSellingPrice = estimatedSellingPrice,
+                targetAmount = null,
+                totalFundsRaised = null
             )
 
             Spacer(Modifier.height(20.dp))

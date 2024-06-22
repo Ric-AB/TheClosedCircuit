@@ -2,19 +2,20 @@ package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.floor
 
-typealias Step = FundingItem
-typealias Budget = FundingItem
+
 
 sealed interface PlanSummaryUiState {
     object Loading : PlanSummaryUiState
@@ -28,7 +29,7 @@ sealed interface PlanSummaryUiState {
         val planDescription: String,
         val estimatedProfitPercent: String,
         val estimatedProfitFraction: Float,
-        val stepsWithBudgets: ImmutableMap<Step, ImmutableList<Budget>>,
+        val stepsWithBudgets: ImmutableMap<StepItem, ImmutableList<BudgetItem>>,
         val total: String
     ) : PlanSummaryUiState
 
@@ -138,17 +139,6 @@ data class TableItem(
 ) : TypeWithStringProperties {
     override val properties: List<String>
         get() = listOf(index, value)
-}
-
-data class FundingItem(
-    val id: ID,
-    val name: String,
-    val formattedCost: String,
-    val cost: Double,
-    val isSelected: Boolean
-) : TypeWithStringProperties {
-    override val properties: List<String>
-        get() = listOf(name, formattedCost)
 }
 
 sealed interface MakeOfferResult {

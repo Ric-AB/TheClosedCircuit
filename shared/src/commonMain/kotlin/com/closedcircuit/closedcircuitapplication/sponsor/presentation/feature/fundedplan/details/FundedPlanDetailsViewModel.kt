@@ -28,8 +28,8 @@ class FundedPlanDetailsViewModel(
                     planDescription = it.description,
                     planSector = it.sector,
                     planDuration = it.duration.value,
-                    targetAmount = it.targetAmount.getFormattedValue(),
-                    totalFundsRaised = ""
+                    estimatedCostPrice = it.estimatedCostPrice.getFormattedValue(),
+                    estimatedSellingPrice = it.estimatedSellingPrice.getFormattedValue()
                 )
             }.onError { _, message ->
                 state.value = FundedPlanDetailsUiState.Error(message)

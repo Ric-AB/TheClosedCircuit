@@ -6,7 +6,6 @@ import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.f
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loandetails.LoanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loanlist.LoansViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferViewModel
-import io.ktor.http.parameters
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -15,5 +14,5 @@ val viewModelModule = module {
     factory { parameters -> LoansViewModel(parameters.get(), get()) }
     factory { parameters -> LoanDetailsViewModel(parameters.get(), get()) }
     factory { FundedPlanListViewModel(get()) }
-    factory { FundedPlanDetailsViewModel(get()) }
+    factory { parameters -> FundedPlanDetailsViewModel(parameters.get(), get()) }
 }
