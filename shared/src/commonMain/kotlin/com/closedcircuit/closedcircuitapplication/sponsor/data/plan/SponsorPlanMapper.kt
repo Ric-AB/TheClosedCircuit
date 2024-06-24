@@ -19,6 +19,7 @@ import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.FundedPlanDto
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.FundedPlanPreviewDto
+import com.closedcircuit.closedcircuitapplication.sponsor.data.step.toFundedSteps
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
@@ -79,11 +80,12 @@ fun FundedPlanDto.toFundedPlan() = FundedPlan(
     targetAmount = Amount(targetAmount),
     analytics = analytics,
     userID = ID(userId),
-    beneficiaryId =  ID(beneficiaryId),
+    beneficiaryId = ID(beneficiaryId),
     fundRequestID = ID(fundRequestId),
     currency = Currency(currency),
     hasRequestedFunds = hasRequestedFund,
     isSponsored = isSponsored,
+    steps = steps.toFundedSteps(),
     accountabilityPartnerIds = accountabilityPartnerIds.map { ID(it) },
     createdAt = Date(createdAt),
     updatedAt = Date(updatedAt)

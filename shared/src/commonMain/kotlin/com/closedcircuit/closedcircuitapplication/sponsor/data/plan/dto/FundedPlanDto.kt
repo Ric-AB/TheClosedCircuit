@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto
 
+import com.closedcircuit.closedcircuitapplication.sponsor.data.step.dto.FundedStepDto
 import kotlinx.serialization.SerialName
 
 data class FundedPlanDto(
@@ -37,7 +38,7 @@ data class FundedPlanDto(
     val fundRequestId: String,
     @SerialName("is_sponsored")
     val isSponsored: Boolean?,
-//    val steps: List<FundedPlanStepDto>,
+    val steps: List<FundedStepDto>,
     @SerialName("accountability_partners")
     val accountabilityPartnerIds: List<String>,
     @SerialName("created_at")

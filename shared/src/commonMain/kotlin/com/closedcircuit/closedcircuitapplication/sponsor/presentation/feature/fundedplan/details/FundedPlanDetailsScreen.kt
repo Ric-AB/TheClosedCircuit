@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -42,8 +41,10 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.skydoves.landscapist.coil3.CoilImage
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.PlanImage
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepsWithBudgetTable
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
@@ -97,6 +98,7 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
                 FundedPlanTabs(
                     modifier = Modifier.height(screenHeight),
                     scrollState = scrollState,
+                    state = state
                 )
             }
         }
@@ -123,11 +125,11 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
             )
 
             Spacer(Modifier.height(20.dp))
-            CoilImage(
-                imageModel = { planImageUrl },
+            PlanImage(
+                imageUrl = planImageUrl,
+                shape = Shapes().small,
                 modifier = Modifier.fillMaxWidth()
                     .height(150.dp)
-                    .clip(Shapes().small)
             )
 
             Spacer(Modifier.height(20.dp))
@@ -137,7 +139,11 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
     }
 
     @Composable
-    private fun FundedPlanTabs(modifier: Modifier, scrollState: ScrollState) {
+    private fun FundedPlanTabs(
+        modifier: Modifier,
+        scrollState: ScrollState,
+        state: FundedPlanDetailsUiState.Content,
+    ) {
         val list = listOf(
             stringResource(SharedRes.strings.plan_summary_label),
             stringResource(SharedRes.strings.plan_funding_label),
@@ -185,18 +191,20 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
                 val listModifier = Modifier.fillMaxSize()
                     .padding(horizontal = 12.dp)
 
-                when {
-                    page == 0 -> {
-//                        StepList(
-//                            modifier = listModifier,
-//                            steps = steps,
-//                            navigateToStepDetails = navigateToStepDetails
-//                        )
+                when (page) {
+                    0 -> {
+                        StepsWithBudgetTable(
+                            items = state.stepsWithBudgets,
+                            total = state.total
+                        )
                     }
 
-                    page == 1 -> {
-//                        BudgetList(modifier = listModifier, budgets = budgets)
+                    1 -> {
+
                     }
+
+                    2 -> {}
+                    else -> {}
                 }
             }
         }

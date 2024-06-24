@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,7 +25,6 @@ import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -44,9 +44,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.prim
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary3
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.PlanImage
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepsWithBudgetTable
-import com.skydoves.landscapist.ImageOptions
-import com.skydoves.landscapist.coil3.CoilImage
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
@@ -111,12 +110,11 @@ internal class PlanSummaryScreen : Screen, KoinComponent {
             )
 
             Spacer(Modifier.height(16.dp))
-            CoilImage(
-                imageModel = { state.planImage },
-                imageOptions = ImageOptions(
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center
-                )
+            PlanImage(
+                imageUrl = state.planImage,
+                shape = Shapes().small,
+                modifier = Modifier.fillMaxWidth()
+                    .height(150.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))

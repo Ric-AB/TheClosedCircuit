@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PositiveInt
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.step.FundedStep
 
 data class FundedPlan(
     val id: ID,
@@ -26,6 +27,7 @@ data class FundedPlan(
     val currency: Currency,
     val hasRequestedFunds: Boolean?,
     val isSponsored: Boolean?,
+    val steps: List<FundedStep>,
     val accountabilityPartnerIds: List<ID>,
     val createdAt: Date,
     val updatedAt: Date
