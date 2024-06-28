@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.model
 
-enum class FundType(val displayText: String, val requestValue: String) {
+enum class FundType(val label: String, val requestValue: String) {
     LOAN("Loans", "loans"),
     DONATION("Donations (Cash gifts)", "donations"),
     BOTH("Both (Loans and Donations)", "both");

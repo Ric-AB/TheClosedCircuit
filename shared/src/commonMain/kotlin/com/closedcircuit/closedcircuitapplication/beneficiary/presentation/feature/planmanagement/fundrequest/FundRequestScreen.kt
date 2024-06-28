@@ -121,7 +121,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                     label = stringResource(SharedRes.strings.select_category),
                     selectedItem = state.selectedFundType,
                     items = FundType.values().toList().toImmutableList(),
-                    itemToString = { it.displayText },
+                    itemToString = { it.label },
                     onItemSelected = { _, item -> onEvent(FundRequestUiEvent.FundTypeChange(item)) },
                 )
 

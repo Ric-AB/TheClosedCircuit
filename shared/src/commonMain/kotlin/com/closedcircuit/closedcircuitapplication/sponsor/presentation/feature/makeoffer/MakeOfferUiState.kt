@@ -8,13 +8,11 @@ import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStr
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.floor
-
 
 
 sealed interface PlanSummaryUiState {
@@ -47,7 +45,7 @@ data class FundingLevelUiState(
 data class FundingItemsUiState(
     val minLoanAmount: String,
     val maxLoanAmount: String,
-    val availableItems: SnapshotStateList<FundingItem>,
+    val availableItems: SnapshotStateList<SelectableFundingItem>,
     val enteredAmount: InputField
 ) {
     val allItemsSelected get() = availableItems.all { it.isSelected }
@@ -101,7 +99,7 @@ data class LoanScheduleUiState(
     val graceDuration: String,
     val repaymentDuration: String,
     val totalDuration: String,
-    val repaymentBreakdown: ImmutableList<TableItem>
+    val repaymentBreakdown: ImmutableList<RepaymentItem>
 ) {
     companion object {
         fun init(loanAmount: Double, fundRequest: FundRequest?): LoanScheduleUiState {
@@ -117,7 +115,7 @@ data class LoanScheduleUiState(
             val totalDuration = graceDuration + repaymentDuration
             val repaymentAmountPerMonth = Amount(repaymentAmount / totalDuration)
             val repaymentBreakdown = List(totalDuration - 1) {
-                TableItem("Month ${it + 1}", repaymentAmountPerMonth.getFormattedValue())
+                RepaymentItem("Month ${it + 1}", repaymentAmountPerMonth.getFormattedValue())
             }.toImmutableList()
 
             return LoanScheduleUiState(
@@ -133,7 +131,18 @@ data class LoanScheduleUiState(
     }
 }
 
-data class TableItem(
+data class SelectableFundingItem(
+    val id: String,
+    val name: String,
+    val formattedCost: String,
+    val cost: Double,
+    val isSelected: Boolean
+) : TypeWithStringProperties {
+    override val properties: List<String>
+        get() = listOf(name, formattedCost)
+}
+
+data class RepaymentItem(
     val index: String,
     val value: String
 ) : TypeWithStringProperties {

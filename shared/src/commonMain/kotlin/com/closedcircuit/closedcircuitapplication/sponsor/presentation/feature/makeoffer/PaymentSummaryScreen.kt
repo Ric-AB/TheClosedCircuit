@@ -95,7 +95,7 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                 Table(
                     data = state.selectedItems,
                     headerTableTitles = listOf(
-                        selectedFundingLevel.getLabel(),
+                        selectedFundingLevel.label,
                         stringResource(SharedRes.strings.cost_label)
                     ),
                     footerTableTitles = listOf(

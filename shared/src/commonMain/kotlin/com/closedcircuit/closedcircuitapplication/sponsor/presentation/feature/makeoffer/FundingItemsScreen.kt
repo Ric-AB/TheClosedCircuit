@@ -43,7 +43,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
@@ -85,7 +84,7 @@ internal class FundingItemsScreen : Screen, KoinComponent {
 
                 Spacer(Modifier.height(24.dp))
                 SelectItemTable(
-                    fundingLevelLabel = selectedFundingLevel.getLabel(),
+                    fundingLevelLabel = selectedFundingLevel.label,
                     isAllSelected = state.allItemsSelected,
                     items = state.availableItems,
                     onEvent = onEvent
@@ -103,7 +102,7 @@ internal class FundingItemsScreen : Screen, KoinComponent {
     private fun SelectItemTable(
         fundingLevelLabel: String,
         isAllSelected: Boolean,
-        items: SnapshotStateList<FundingItem>,
+        items: SnapshotStateList<SelectableFundingItem>,
         onEvent: (MakeOfferEvent) -> Unit
     ) {
         OutlinedCard(
@@ -136,7 +135,7 @@ internal class FundingItemsScreen : Screen, KoinComponent {
 
     @Composable
     private fun SelectItemTableBody(
-        items: SnapshotStateList<FundingItem>,
+        items: SnapshotStateList<SelectableFundingItem>,
         modifier: Modifier,
         contentAlignment: Alignment,
         onToggle: (Int) -> Unit,

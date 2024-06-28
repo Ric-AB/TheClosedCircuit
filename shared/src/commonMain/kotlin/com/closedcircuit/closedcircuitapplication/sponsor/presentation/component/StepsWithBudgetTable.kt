@@ -17,8 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary3
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary5
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
@@ -31,15 +29,10 @@ typealias StepItem = FundingItem
 typealias BudgetItem = FundingItem
 
 data class FundingItem(
-    val id: ID,
+    val id: String,
     val name: String,
     val formattedCost: String,
-    val cost: Double,
-    val isSelected: Boolean
-) : TypeWithStringProperties {
-    override val properties: List<String>
-        get() = listOf(name, formattedCost)
-}
+)
 
 @Composable
 fun StepsWithBudgetTable(items: ImmutableMap<StepItem, ImmutableList<BudgetItem>>, total: String) {

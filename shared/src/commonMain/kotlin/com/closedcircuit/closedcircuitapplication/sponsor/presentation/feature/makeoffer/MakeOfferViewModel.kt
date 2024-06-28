@@ -75,7 +75,7 @@ class MakeOfferViewModel(
                         .map { step -> step.toFundingItem() }
                         .associateWith { step ->
                             sponsorPlan.budgets
-                                .filter { it.stepID == step.id }
+                                .filter { it.stepID.value == step.id }
                                 .map { budget -> budget.toFundingItem() }
                                 .toImmutableList()
                         }.toImmutableMap()
@@ -119,12 +119,12 @@ class MakeOfferViewModel(
 
     private fun getOfferPayload(): OfferPayload {
         val fundingLevel = fundingLevelState.fundingLevel!!
-        val selectedItemIds = fundingItemsState.value.selectedItems.map { it.id.value }
+        val selectedItemIds = fundingItemsState.value.selectedItems.map { it.id }
         val otherAmount =
             if (fundingLevelState.fundingLevel == FundingLevel.OTHER) fundingItemsState.value.enteredAmount
             else null
 
-        val fundingLevelValue = fundingLevel.value
+        val fundingLevelValue = fundingLevel.requestValue
         val fundRequestId = sponsoringPlan.fundRequest.id.value
         val isDonation = fundType == FundType.DONATION
         val stepIds = if (fundingLevel == FundingLevel.STEP) selectedItemIds else null
@@ -167,9 +167,9 @@ class MakeOfferViewModel(
     private fun updateFundingItems(fundingLevel: FundingLevel) {
         val availableItems = fundingItemsState.value.availableItems
         when (fundingLevel) {
-            FundingLevel.PLAN -> availableItems.replaceAll(listOf(sponsoringPlan.toFundingItem()))
-            FundingLevel.STEP -> availableItems.replaceAll(sponsoringPlan.steps.map { it.toFundingItem() })
-            FundingLevel.BUDGET -> availableItems.replaceAll(sponsoringPlan.budgets.map { it.toFundingItem() })
+            FundingLevel.PLAN -> availableItems.replaceAll(listOf(sponsoringPlan.toSelectableItem()))
+            FundingLevel.STEP -> availableItems.replaceAll(sponsoringPlan.steps.map { it.toSelectableItem() })
+            FundingLevel.BUDGET -> availableItems.replaceAll(sponsoringPlan.budgets.map { it.toSelectableItem() })
             FundingLevel.OTHER -> {}
         }
     }
@@ -197,9 +197,9 @@ class MakeOfferViewModel(
         }
     }
 
-    private fun SponsorPlan.toFundingItem(): FundingItem {
-        return FundingItem(
-            id = id,
+    private fun SponsorPlan.toSelectableItem(): SelectableFundingItem {
+        return SelectableFundingItem(
+            id = id.value,
             name = name,
             formattedCost = targetAmount.getFormattedValue(),
             cost = targetAmount.value,
@@ -207,9 +207,9 @@ class MakeOfferViewModel(
         )
     }
 
-    private fun Step.toFundingItem(): FundingItem {
-        return FundingItem(
-            id = id,
+    private fun Step.toSelectableItem(): SelectableFundingItem {
+        return SelectableFundingItem(
+            id = id.value,
             name = name,
             formattedCost = targetFunds.getFormattedValue(),
             cost = targetFunds.value,
@@ -217,13 +217,29 @@ class MakeOfferViewModel(
         )
     }
 
-    private fun Budget.toFundingItem(): FundingItem {
-        return FundingItem(
-            id = id,
+    private fun Budget.toSelectableItem(): SelectableFundingItem {
+        return SelectableFundingItem(
+            id = id.value,
             name = name,
             formattedCost = cost.getFormattedValue(),
             cost = cost.value,
             isSelected = false
+        )
+    }
+
+    private fun Step.toFundingItem(): FundingItem {
+        return FundingItem(
+            id = id.value,
+            name = name,
+            formattedCost = targetFunds.getFormattedValue(),
+        )
+    }
+
+    private fun Budget.toFundingItem(): FundingItem {
+        return FundingItem(
+            id = id.value,
+            name = name,
+            formattedCost = cost.getFormattedValue(),
         )
     }
 }

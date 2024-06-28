@@ -87,7 +87,7 @@ internal class FundRequestSummaryScreen(
                 HeaderWithMessage(
                     modifier = Modifier.fillMaxWidth(),
                     header = stringResource(SharedRes.strings.mode_of_support_label),
-                    message = modeOfSupport.displayText
+                    message = modeOfSupport.label
                 )
 
                 Spacer(Modifier.height(24.dp))

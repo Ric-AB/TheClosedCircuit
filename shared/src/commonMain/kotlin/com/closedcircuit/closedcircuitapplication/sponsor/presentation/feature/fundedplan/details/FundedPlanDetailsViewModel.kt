@@ -3,13 +3,11 @@ package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.budget.FundedBudget
-import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.step.FundedStep
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
@@ -18,7 +16,7 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
 
 class FundedPlanDetailsViewModel(
-    private val planID: ID,
+    private val fundedPlanPreview: FundedPlanPreview,
     private val planRepository: PlanRepository
 ) : ScreenModel {
 
@@ -30,7 +28,7 @@ class FundedPlanDetailsViewModel(
 
     private fun fetchFundedPlanDetails() {
         screenModelScope.launch {
-            planRepository.fetchFundedPlanDetails(planID).onSuccess { fundedPlan ->
+            planRepository.fetchFundedPlanDetails(fundedPlanPreview.id).onSuccess { fundedPlan ->
                 val stepsWithBudget = fundedPlan.steps
                     .associateWith { step ->
                         step.budgets
@@ -39,6 +37,9 @@ class FundedPlanDetailsViewModel(
                     }.mapKeys { it.key.toFundingItem() }
                     .toImmutableMap()
 
+                val fundedStepItems = fundedPlan.steps.map { it.toFundedStepItem() }
+                    .toImmutableList()
+
                 state.value = FundedPlanDetailsUiState.Content(
                     planImageUrl = fundedPlan.avatar.value,
                     planDescription = fundedPlan.description,
@@ -46,8 +47,13 @@ class FundedPlanDetailsViewModel(
                     planDuration = fundedPlan.duration.value,
                     estimatedCostPrice = fundedPlan.estimatedCostPrice.getFormattedValue(),
                     estimatedSellingPrice = fundedPlan.estimatedSellingPrice.getFormattedValue(),
+                    amountFunded = fundedPlanPreview.amountFunded.getFormattedValue(),
+                    fundingType = fundedPlanPreview.fundingType.label,
+                    fundingLevel = fundedPlanPreview.fundingLevel.label,
+                    fundingDate = fundedPlanPreview.fundingDate.format(Date.Format.dd_mmm_yyyy),
                     stepsWithBudgets = stepsWithBudget,
-                    total = fundedPlan.targetAmount.getFormattedValue()
+                    total = fundedPlan.targetAmount.getFormattedValue(),
+                    fundedStepItems = fundedStepItems
                 )
             }.onError { _, message ->
                 state.value = FundedPlanDetailsUiState.Error(message)
@@ -55,24 +61,23 @@ class FundedPlanDetailsViewModel(
         }
     }
 
+    private fun FundedStep.toFundedStepItem(): FundedStepItem {
+        return FundedStepItem(name, status)
+    }
+
     private fun FundedStep.toFundingItem(): FundingItem {
         return FundingItem(
-            id = id,
+            id = id.value,
             name = name,
             formattedCost = targetFunds.getFormattedValue(),
-            cost = targetFunds.value,
-            isSelected = false
         )
     }
 
     private fun FundedBudget.toFundingItem(): FundingItem {
         return FundingItem(
-            id = id,
+            id = id.value,
             name = name,
             formattedCost = cost.getFormattedValue(),
-            cost = cost.value,
-            isSelected = false
         )
     }
-
 }

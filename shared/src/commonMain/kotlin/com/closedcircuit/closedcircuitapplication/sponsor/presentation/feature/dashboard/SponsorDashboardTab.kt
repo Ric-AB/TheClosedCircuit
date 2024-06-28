@@ -147,7 +147,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
                         planImageUrl = fundedPlanPreview.avatar.value,
                         planSector = fundedPlanPreview.sector,
                         amountFunded = fundedPlanPreview.amountFunded.getFormattedValue(),
-                        fundingType = fundedPlanPreview.fundingType.displayText,
+                        fundingType = fundedPlanPreview.fundingType.label,
                         fundsRaisedPercent = fundedPlanPreview.fundsRaisedPercent,
                         taskCompletedPercent = fundedPlanPreview.tasksCompletedPercent
                     )
