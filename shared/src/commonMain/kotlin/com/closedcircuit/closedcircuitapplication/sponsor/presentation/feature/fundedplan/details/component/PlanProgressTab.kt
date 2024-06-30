@@ -29,6 +29,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun PlanProgressTab(
     modifier: Modifier,
+    stepItemsWithProofs: ImmutableList<FundedStepItem>,
     stepItems: ImmutableList<FundedStepItem>,
     navigateToStepApproval: (ID) -> Unit
 ) {
@@ -42,18 +43,20 @@ fun PlanProgressTab(
             Table(headerTableTitles = headerTitles, data = stepItems)
         }
 
-        item {
-            Spacer(Modifier.height(40.dp))
-            Text(
-                text = stringResource(SharedRes.strings.step_approval_label),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
+        if (stepItemsWithProofs.isNotEmpty()) {
+            item {
+                Spacer(Modifier.height(40.dp))
+                Text(
+                    text = stringResource(SharedRes.strings.step_approval_label),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-            Spacer(Modifier.height(20.dp))
-            stepItems.forEach {
-                StepApprovalCard(it, navigateToStepApproval)
                 Spacer(Modifier.height(20.dp))
+                stepItemsWithProofs.forEach {
+                    StepApprovalCard(it, navigateToStepApproval)
+                    Spacer(Modifier.height(20.dp))
+                }
             }
         }
     }

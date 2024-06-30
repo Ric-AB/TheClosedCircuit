@@ -1,4 +1,3 @@
-
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist
 
 import androidx.compose.foundation.layout.Arrangement
@@ -120,7 +119,7 @@ private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> U
             TaskLinearProgress(
                 progress = fundsRaised.first,
                 label = stringResource(
-                    SharedRes.strings.percentage_funds_raised,
+                    SharedRes.strings.x_percent_funds_raised_label,
                     fundsRaised.second
                 )
             )
@@ -130,7 +129,7 @@ private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> U
                 modifier = Modifier.fillMaxWidth(),
                 progress = plan.tasksCompleted.toFloat(),
                 label = stringResource(
-                    SharedRes.strings.percentage_task_completed,
+                    SharedRes.strings.x_percent_tasks_completed_label,
                     plan.tasksCompletedAsPercentage
                 )
             )

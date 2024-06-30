@@ -30,6 +30,7 @@ class SplashScreen : Screen, KoinComponent {
         val rootState = viewModel.state.collectAsState().value
 
         LaunchedEffect(rootState) {
+            println("###:: $rootState")
             if (rootState != null) {
                 when (rootState.authState) {
                     AuthenticationState.LOGGED_IN -> navigator.replace(ProtectedNavigator(rootState.activeProfile))

@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.auth
+package com.closedcircuit.closedcircuitapplication.common.data.auth
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.GenerateOtpRequest

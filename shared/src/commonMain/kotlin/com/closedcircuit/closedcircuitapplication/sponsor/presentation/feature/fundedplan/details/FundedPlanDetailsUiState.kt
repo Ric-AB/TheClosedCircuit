@@ -23,7 +23,8 @@ sealed interface FundedPlanDetailsUiState {
         val fundingDate: String,
         val stepsWithBudgets: ImmutableMap<StepItem, ImmutableList<BudgetItem>>,
         val itemsTotal: String,
-        val fundedStepItems: ImmutableList<FundedStepItem>
+        val fundedStepItems: ImmutableList<FundedStepItem>,
+        val fundedStepItemsWithProofs: ImmutableList<FundedStepItem>
     ) : FundedPlanDetailsUiState
 
     data class Error(val message: String) : FundedPlanDetailsUiState

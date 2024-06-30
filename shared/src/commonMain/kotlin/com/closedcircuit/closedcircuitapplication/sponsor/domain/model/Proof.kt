@@ -4,5 +4,5 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 
 data class Proof(
     val id: ID,
-    val documents: List<Document>
+    val files: List<File>
 )

@@ -92,7 +92,7 @@ fun FundedPlanItem(
                 modifier = Modifier.fillMaxWidth(),
                 progress = taskCompletedPercent.div(100).toFloat(),
                 label = stringResource(
-                    SharedRes.strings.x_percent_funds_raised_label,
+                    SharedRes.strings.x_percent_tasks_completed_label,
                     taskCompletedPercent.toString()
                 )
             )

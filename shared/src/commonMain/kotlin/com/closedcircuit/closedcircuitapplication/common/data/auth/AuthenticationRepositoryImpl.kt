@@ -9,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.Regi
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.ResetPasswordRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.VerifyOtpRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
+import com.closedcircuit.closedcircuitapplication.common.data.auth.AuthService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext

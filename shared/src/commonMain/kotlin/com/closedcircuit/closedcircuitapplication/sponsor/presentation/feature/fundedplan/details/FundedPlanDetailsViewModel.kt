@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.StepStatus
 import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
@@ -38,6 +39,11 @@ class FundedPlanDetailsViewModel(
                     }.mapKeys { it.key.toFundingItem() }
                     .toImmutableMap()
 
+                val fundedStepItemsWithProofs = fundedPlan.steps
+                    .filter { it.status != StepStatus.NOT_COMPLETED }
+                    .map { it.toFundedStepItem() }
+                    .toImmutableList()
+
                 val fundedStepItems = fundedPlan.steps.map { it.toFundedStepItem() }
                     .toImmutableList()
 
@@ -54,7 +60,8 @@ class FundedPlanDetailsViewModel(
                     fundingDate = fundedPlanPreview.fundingDate.format(Date.Format.dd_mmm_yyyy),
                     stepsWithBudgets = stepsWithBudget,
                     itemsTotal = fundedPlan.targetAmount.getFormattedValue(),
-                    fundedStepItems = fundedStepItems
+                    fundedStepItems = fundedStepItems,
+                    fundedStepItemsWithProofs = fundedStepItemsWithProofs
                 )
             }.onError { _, message ->
                 state.value = FundedPlanDetailsUiState.Error(message)

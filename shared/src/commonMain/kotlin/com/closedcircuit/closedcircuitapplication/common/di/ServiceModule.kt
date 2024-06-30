@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.di
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.AuthService
+import com.closedcircuit.closedcircuitapplication.common.data.auth.AuthService
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.notification.NotificationService
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.payment.PaymentService
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.UserService

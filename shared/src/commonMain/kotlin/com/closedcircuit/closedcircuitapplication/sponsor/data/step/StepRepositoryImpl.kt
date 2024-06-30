@@ -4,7 +4,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
-import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.Document
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.File
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.Proof
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.step.StepRepository
 
@@ -17,8 +17,8 @@ class StepRepositoryImpl(
             response.proofs.map { proofDto ->
                 Proof(
                     id = ID(proofDto.id),
-                    documents = proofDto.documents.map {
-                        Document(
+                    files = proofDto.files.map {
+                        File(
                             url = ImageUrl(it.url),
                             title = it.title,
                             description = it.description

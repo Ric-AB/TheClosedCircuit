@@ -109,7 +109,6 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
     ) {
         BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
             val screenHeight = maxHeight
-            val screenWidth = maxWidth
             val scrollState = rememberScrollState()
 
             Column(
@@ -258,6 +257,7 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
                         PlanProgressTab(
                             modifier = commonModifier,
                             stepItems = state.fundedStepItems,
+                            stepItemsWithProofs = state.fundedStepItemsWithProofs,
                             navigateToStepApproval = navigateToStepApproval
                         )
                     }

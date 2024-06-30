@@ -16,5 +16,5 @@ val viewModelModule = module {
     factory { parameters -> LoanDetailsViewModel(parameters.get(), get()) }
     factory { FundedPlanListViewModel(get()) }
     factory { parameters -> FundedPlanDetailsViewModel(parameters.get(), get()) }
-    factory { parameters -> StepApprovalViewModel(parameters.get(), get()) }
+    factory { parameters -> StepApprovalViewModel(parameters.get(), get(), get()) }
 }

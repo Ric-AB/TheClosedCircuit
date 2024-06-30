@@ -9,7 +9,6 @@ import com.closedcircuit.closedcircuitapplication.common.domain.usecase.IsLogged
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 
@@ -21,7 +20,7 @@ class RootViewModel(
 
     private val authStateFlow = flow { emit(isLoggedInUseCase()) }
     private val activeProfileFlow = flow { emit(appSettingsRepository.getActiveProfile()) }
-    private val userFlow = userRepository.userFlow.filterNotNull()
+    private val userFlow = userRepository.userFlow
     val state = combine(
         authStateFlow,
         activeProfileFlow,
@@ -30,8 +29,8 @@ class RootViewModel(
         RootState(
             authState = authState,
             activeProfile = activeProfile,
-            fullName = user.fullName.value,
-            profileUrl = user.avatar.value
+            fullName = user?.fullName?.value.orEmpty(),
+            profileUrl = user?.avatar?.value.orEmpty()
         )
     }.stateIn(
         scope = screenModelScope,
