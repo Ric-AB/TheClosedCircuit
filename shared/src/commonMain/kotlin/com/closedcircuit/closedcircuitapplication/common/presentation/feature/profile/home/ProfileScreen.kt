@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
@@ -165,7 +165,7 @@ private fun ScreenContent(
 private fun ProfileHeader(
     modifier: Modifier = Modifier,
     firstName: Name,
-    avatar: Avatar,
+    avatar: ImageUrl,
     onInfoClick: () -> Unit
 ) {
     Row(

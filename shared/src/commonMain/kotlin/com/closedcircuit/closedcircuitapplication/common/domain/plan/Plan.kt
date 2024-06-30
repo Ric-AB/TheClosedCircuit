@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.plan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Plan(
     val id: ID,
-    val avatar: Avatar,
+    val avatar: ImageUrl,
     val category: String,
     val sector: String,
     val type: String?,
@@ -36,7 +36,7 @@ data class Plan(
     companion object {
         fun buildPlan(
             id: ID = ID.generateRandomUUID(),
-            avatar: Avatar = Avatar(String.Empty),
+            avatar: ImageUrl = ImageUrl(String.Empty),
             category: String = String.Empty,
             sector: String = String.Empty,
             type: String? = String.Empty,

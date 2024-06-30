@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.data.loan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
@@ -17,7 +17,7 @@ fun LoanOfferDto.toLoanOffer() = LoanOffer(
     loanOfferId = loanOfferId?.let { ID(it) },
     businessName = businessName,
     beneficiaryName = beneficiaryName?.let { Name(it) },
-    beneficiaryAvatar = beneficiaryAvatar?.let { Avatar(it) },
+    beneficiaryAvatar = beneficiaryAvatar?.let { ImageUrl(it) },
     planSector = planSector,
     loanAmount = loanAmount?.let { Amount(it.toDouble()) },
     createdAt = createdAt?.let { Date(it) }
@@ -30,7 +30,7 @@ fun LoanOfferDetailsDto.toLoanOffer() = LoanOfferDetails(
     repaymentAmount = Amount(repaymentAmount.toDouble()),
     graceDuration = PositiveInt(gracePeriod),
     sponsorFullName = Name(sponsorFullName),
-    avatar = Avatar(avatar),
+    avatar = ImageUrl(avatar),
     interestRate = PositiveInt(interestRate),
     repaymentDuration = PositiveInt(repaymentDuration),
     createdAt = Date(createdAt),

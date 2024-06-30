@@ -3,7 +3,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.plan
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.SavePlanPayload
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
@@ -13,7 +13,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 fun PlanEntity.asPlan() = Plan(
     id = ID(id),
-    avatar = Avatar(avatar),
+    avatar = ImageUrl(avatar),
     category = category,
     sector = sector,
     type = type,

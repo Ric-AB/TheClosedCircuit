@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.notification
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.notification.dto.ApiNotification
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
@@ -14,7 +14,7 @@ fun ApiNotification.asNotification() = Notification(
     userID = ID(userID),
     fullName = Name(fullName),
     message = message,
-    avatar = Avatar(avatar),
+    avatar = ImageUrl(avatar),
     businessName = businessName,
     amountOffered = Amount(amountOffered),
     isRead = isRead,

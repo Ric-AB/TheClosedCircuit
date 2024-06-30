@@ -383,4 +383,10 @@
     <string name="view_proofs_label">View proofs</string>
     <string name="funded_plan_label">Funded plan</string>
     <string name="general_funding_label">General funding</string>
+    <string name="budget_label">Budget</string>
+    <string name="step_proofs_label">Step proofs</string>
+    <string name="image_description_label">Image description</string>
+    <string name="approve_label">Approve</string>
+    <string name="approved_label">Approved</string>
+    <string name="details_label">Details</string>
 </resources>

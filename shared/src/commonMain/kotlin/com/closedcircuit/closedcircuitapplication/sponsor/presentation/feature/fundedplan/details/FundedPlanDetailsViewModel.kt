@@ -12,11 +12,9 @@ import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.step.FundedStep
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
-import kotlin.math.cos
 
 class FundedPlanDetailsViewModel(
     private val fundedPlanPreview: FundedPlanPreview,
@@ -66,6 +64,7 @@ class FundedPlanDetailsViewModel(
 
     private fun FundedStep.toFundedStepItem(): FundedStepItem {
         return FundedStepItem(
+            id = id,
             name = name,
             status = status.displayText,
             budgets = budgets.map { it.toFundedBudgetItem() }.toImmutableList()
@@ -73,11 +72,7 @@ class FundedPlanDetailsViewModel(
     }
 
     private fun FundedBudget.toFundedBudgetItem(): FundedBudgetItem {
-        return FundedBudgetItem(
-            id = id.value,
-            name = name,
-            listOfProofs = persistentListOf()
-        )
+        return FundedBudgetItem(name = name)
     }
 
     private fun FundedStep.toFundingItem(): FundingItem {

@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details
 
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepItem
@@ -29,6 +30,7 @@ sealed interface FundedPlanDetailsUiState {
 }
 
 data class FundedStepItem(
+    val id: ID,
     val name: String,
     val status: String,
     val budgets: ImmutableList<FundedBudgetItem>
@@ -37,8 +39,4 @@ data class FundedStepItem(
         get() = listOf(name, status)
 }
 
-data class FundedBudgetItem(
-    val id: String,
-    val name: String,
-    val listOfProofs: ImmutableList<String>
-)
+data class FundedBudgetItem(val name: String)

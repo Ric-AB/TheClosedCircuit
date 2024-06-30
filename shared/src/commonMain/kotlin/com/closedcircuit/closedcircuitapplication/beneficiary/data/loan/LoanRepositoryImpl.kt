@@ -10,7 +10,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanReposit
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanSchedule
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.Loans
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
@@ -34,7 +34,7 @@ class LoanRepositoryImpl(
                         planName = it.businessName,
                         totalSponsors = it.totalSponsors,
                         totalAmountOffered = Amount(it.totalAmountOffered.toDouble()),
-                        sponsorAvatars = it.sponsorAvatars.map { s: String -> Avatar(s) }
+                        sponsorAvatars = it.sponsorAvatars.map { s: String -> ImageUrl(s) }
                     )
                 }.toImmutableList()
             }
@@ -48,7 +48,7 @@ class LoanRepositoryImpl(
                     response.plans.map {
                         Loan(
                             loanId = ID(it.loanOfferId),
-                            sponsorAvatar = Avatar(it.avatar),
+                            sponsorAvatar = ImageUrl(it.avatar),
                             sponsorFullName = Name(it.sponsorFullName),
                             loanAmount = Amount(it.loanAmount.toDouble()),
                             gracePeriod = it.gracePeriod,
@@ -77,7 +77,7 @@ class LoanRepositoryImpl(
                     }.orEmpty(),
                     gracePeriod = it.gracePeriod ?: 0,
                     sponsorFullName = Name(it.sponsorFullName),
-                    sponsorAvatar = Avatar(it.avatar.orEmpty()),
+                    sponsorAvatar = ImageUrl(it.avatar.orEmpty()),
                     createdAt = Date(it.createdAt),
                     updatedAt = Date(it.updatedAt),
                     fundingLevel = it.fundingLevel.orEmpty(),

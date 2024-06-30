@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.sponsor.domain.plan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budgets
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SponsorPlan(
     val id: ID,
-    val avatar: Avatar,
+    val avatar: ImageUrl,
     val category: String,
     val sector: String,
     val type: String?,

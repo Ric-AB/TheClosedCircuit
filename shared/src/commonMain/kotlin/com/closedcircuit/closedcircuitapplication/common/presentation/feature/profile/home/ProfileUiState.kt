@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home
 
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
@@ -21,7 +21,7 @@ data class ProfileUIState(
 }
 
 data class PersonalData(
-    val avatar: Avatar,
+    val avatar: ImageUrl,
     val fullName: Name,
     val firstName: Name,
     val email: Email,

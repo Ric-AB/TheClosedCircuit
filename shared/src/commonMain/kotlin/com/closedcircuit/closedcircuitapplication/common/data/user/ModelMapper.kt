@@ -10,7 +10,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
@@ -20,7 +20,7 @@ fun ApiUser.asUser() = User(
     email = Email(email),
     fullName = Name(fullName),
     preferredName = preferredName?.let { Name(it) },
-    avatar = Avatar(avatar),
+    avatar = ImageUrl(avatar),
     isVerified = isVerified,
     phoneNumber = PhoneNumber(phoneNumber),
     country = Country(country),
@@ -50,7 +50,7 @@ fun User.asApiUser() = ApiUser(
 )
 
 fun SponsorResponse.toSponsor() = Sponsor(
-    avatar = Avatar(sponsorAvatar),
+    avatar = ImageUrl(sponsorAvatar),
     fullName = Name(sponsorFullName),
     loanAmount = Amount(loanAmount.toDouble())
 )

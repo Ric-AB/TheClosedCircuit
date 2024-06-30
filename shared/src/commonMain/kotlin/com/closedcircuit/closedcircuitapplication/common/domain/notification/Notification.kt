@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.domain.notification
 
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
@@ -11,7 +11,7 @@ data class Notification(
     val userID: ID,
     val fullName: Name,
     val message: String,
-    val avatar: Avatar,
+    val avatar: ImageUrl,
     val businessName: String,
     val amountOffered: Amount,
     val isRead: Boolean,

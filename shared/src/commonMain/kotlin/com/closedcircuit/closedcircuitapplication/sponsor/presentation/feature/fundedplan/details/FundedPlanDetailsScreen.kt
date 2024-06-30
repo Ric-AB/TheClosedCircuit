@@ -34,6 +34,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
@@ -44,6 +45,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.vert
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.PlanImage
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.approval.StepApprovalScreen
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.component.PlanFundingTab
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.component.PlanProgressTab
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.component.PlanSummaryTab
@@ -62,18 +64,33 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
         val viewModel =
             getScreenModel<FundedPlanDetailsViewModel> { parametersOf(fundedPlanPreview) }
 
-        ScreenContent(state = viewModel.state.value, goBack = navigator::pop)
+        ScreenContent(
+            state = viewModel.state.value,
+            goBack = navigator::pop,
+            navigateToStepApproval = { navigator.push(StepApprovalScreen(it)) }
+        )
     }
 
     @Composable
-    private fun ScreenContent(state: FundedPlanDetailsUiState, goBack: () -> Unit) {
+    private fun ScreenContent(
+        state: FundedPlanDetailsUiState,
+        goBack: () -> Unit,
+        navigateToStepApproval: (ID) -> Unit
+    ) {
         BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
                     .padding(horizontal = horizontalScreenPadding)
             ) {
                 when (state) {
-                    is FundedPlanDetailsUiState.Content -> Body(innerPadding, state)
+                    is FundedPlanDetailsUiState.Content -> {
+                        Body(
+                            innerPadding = innerPadding,
+                            state = state,
+                            navigateToStepApproval = navigateToStepApproval
+                        )
+                    }
+
                     is FundedPlanDetailsUiState.Error -> {
                         Text(state.message)
                     }
@@ -85,7 +102,11 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
     }
 
     @Composable
-    private fun Body(innerPadding: PaddingValues, state: FundedPlanDetailsUiState.Content) {
+    private fun Body(
+        innerPadding: PaddingValues,
+        state: FundedPlanDetailsUiState.Content,
+        navigateToStepApproval: (ID) -> Unit
+    ) {
         BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
             val screenHeight = maxHeight
             val screenWidth = maxWidth
@@ -105,10 +126,11 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                FundedPlanTabs(
+                Tabs(
                     modifier = Modifier.height(screenHeight),
                     scrollState = scrollState,
-                    state = state
+                    state = state,
+                    navigateToStepApproval = navigateToStepApproval
                 )
             }
         }
@@ -155,10 +177,11 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
     }
 
     @Composable
-    private fun FundedPlanTabs(
+    private fun Tabs(
         modifier: Modifier,
         scrollState: ScrollState,
         state: FundedPlanDetailsUiState.Content,
+        navigateToStepApproval: (ID) -> Unit,
     ) {
         val list = listOf(
             stringResource(SharedRes.strings.plan_summary_label),
@@ -234,7 +257,8 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
                     2 -> {
                         PlanProgressTab(
                             modifier = commonModifier,
-                            stepItems = state.fundedStepItems
+                            stepItems = state.fundedStepItems,
+                            navigateToStepApproval = navigateToStepApproval
                         )
                     }
 

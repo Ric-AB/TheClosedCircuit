@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donation
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.DonationRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
@@ -24,7 +24,7 @@ class DonationRepositoryImpl(
                 response.donations.map {
                     Donation(
                         id = ID(it.donationId),
-                        sponsorAvatar = Avatar(it.sponsorAvatar),
+                        sponsorAvatar = ImageUrl(it.sponsorAvatar),
                         sponsorFullName = Name(it.sponsorFullName),
                         planName = it.planName,
                         amount = Amount(it.amount.toDouble())

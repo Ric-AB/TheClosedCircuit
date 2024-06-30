@@ -1,0 +1,31 @@
+package com.closedcircuit.closedcircuitapplication.sponsor.data.step
+
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.Document
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.Proof
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.step.StepRepository
+
+class StepRepositoryImpl(
+    private val stepService: StepService
+) : StepRepository {
+
+    override suspend fun fetchStepProofs(stepId: ID): ApiResponse<List<Proof>> {
+        return stepService.fetchStepProofs(stepId.value).mapOnSuccess { response ->
+            response.proofs.map { proofDto ->
+                Proof(
+                    id = ID(proofDto.id),
+                    documents = proofDto.documents.map {
+                        Document(
+                            url = ImageUrl(it.url),
+                            title = it.title,
+                            description = it.description
+                        )
+                    }
+                )
+            }
+        }
+    }
+}

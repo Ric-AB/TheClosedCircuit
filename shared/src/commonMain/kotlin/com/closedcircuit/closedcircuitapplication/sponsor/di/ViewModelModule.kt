@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.di
 
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.dashboard.SponsorDashboardViewModel
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.approval.StepApprovalViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.FundedPlanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.list.FundedPlanListViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loandetails.LoanDetailsViewModel
@@ -15,4 +16,5 @@ val viewModelModule = module {
     factory { parameters -> LoanDetailsViewModel(parameters.get(), get()) }
     factory { FundedPlanListViewModel(get()) }
     factory { parameters -> FundedPlanDetailsViewModel(parameters.get(), get()) }
+    factory { parameters -> StepApprovalViewModel(parameters.get(), get()) }
 }

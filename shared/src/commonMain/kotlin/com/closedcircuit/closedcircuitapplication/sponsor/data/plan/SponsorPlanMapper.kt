@@ -6,7 +6,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest.t
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.asStepEntities
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.asSteps
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
@@ -27,7 +27,7 @@ import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.m
 
 fun ApiPlan.asSponsorPlan() = SponsorPlan(
     id = ID(id),
-    avatar = Avatar(avatar),
+    avatar = ImageUrl(avatar),
     category = category,
     sector = sector,
     type = type,
@@ -53,7 +53,7 @@ fun ApiPlan.asSponsorPlan() = SponsorPlan(
 
 fun FundedPlanPreviewDto.toDashboardPlan() = FundedPlanPreview(
     id = ID(id),
-    avatar = Avatar(avatar),
+    avatar = ImageUrl(avatar),
     sector = sector,
     beneficiaryFullName = Name(beneficiaryFullName),
     beneficiaryId = beneficiaryId?.let { ID(it) },
@@ -68,7 +68,7 @@ fun FundedPlanPreviewDto.toDashboardPlan() = FundedPlanPreview(
 
 fun FundedPlanDto.toFundedPlan() = FundedPlan(
     id = ID(id),
-    avatar = Avatar(avatar),
+    avatar = ImageUrl(avatar),
     name = name,
     description = description,
     category = category,

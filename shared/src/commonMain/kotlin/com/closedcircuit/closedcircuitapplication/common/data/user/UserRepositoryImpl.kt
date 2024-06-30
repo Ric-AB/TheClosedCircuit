@@ -9,7 +9,7 @@ import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.UpdateUserRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
@@ -82,7 +82,7 @@ class UserRepositoryImpl(
                     totalFundsRaised = Amount(response.totalFundsRaised.toDouble()),
                     topSponsors = response.topSponsors.map {
                         Sponsor(
-                            avatar = Avatar(it.sponsorAvatar),
+                            avatar = ImageUrl(it.sponsorAvatar),
                             fullName = Name(it.sponsorFullName),
                             loanAmount = Amount(it.loanAmount.toDouble())
                         )

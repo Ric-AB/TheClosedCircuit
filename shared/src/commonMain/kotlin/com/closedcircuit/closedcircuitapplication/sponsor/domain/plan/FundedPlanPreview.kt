@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.domain.plan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
@@ -11,7 +11,7 @@ import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.m
 
 data class FundedPlanPreview(
     val id: ID,
-    val avatar: Avatar,
+    val avatar: ImageUrl,
     val sector: String,
     val beneficiaryFullName: Name,
     val beneficiaryId: ID?,

@@ -5,7 +5,7 @@ import kotlin.jvm.JvmInline
 
 @Serializable
 @JvmInline
-value class Avatar(val value: String) {
+value class ImageUrl(val value: String) {
     init {
         val regex =
             Regex("(@)?(href=')?(HREF=')?(HREF=\")?(href=\")?(http://)?[a-zA-Z_0-9\\-]+(\\.\\w[a-zA-Z_0-9\\-]+)+(/[#&\\n\\-=?+%/.\\w]+)?")

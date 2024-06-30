@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.domain.loan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
@@ -18,7 +18,7 @@ data class LoanOfferDetails(
     val repaymentAmount: Amount?,
     val graceDuration: PositiveInt,
     val sponsorFullName: Name,
-    val avatar: Avatar,
+    val avatar: ImageUrl,
     val interestRate: PositiveInt,
     val repaymentDuration: PositiveInt,
     val createdAt: Date,

@@ -13,14 +13,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.table.Table
-import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.FundedStepItem
 import dev.icerock.moko.resources.compose.stringResource
@@ -28,7 +27,11 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun PlanProgressTab(modifier: Modifier, stepItems: ImmutableList<FundedStepItem>) {
+fun PlanProgressTab(
+    modifier: Modifier,
+    stepItems: ImmutableList<FundedStepItem>,
+    navigateToStepApproval: (ID) -> Unit
+) {
     LazyColumn(modifier = modifier) {
         item {
             val headerTitles = persistentListOf(
@@ -49,7 +52,7 @@ fun PlanProgressTab(modifier: Modifier, stepItems: ImmutableList<FundedStepItem>
 
             Spacer(Modifier.height(20.dp))
             stepItems.forEach {
-                StepApprovalCard(it)
+                StepApprovalCard(it, navigateToStepApproval)
                 Spacer(Modifier.height(20.dp))
             }
         }
@@ -57,7 +60,7 @@ fun PlanProgressTab(modifier: Modifier, stepItems: ImmutableList<FundedStepItem>
 }
 
 @Composable
-private fun StepApprovalCard(step: FundedStepItem) {
+private fun StepApprovalCard(step: FundedStepItem, navigateToStepApproval: (ID) -> Unit) {
     OutlinedCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 12.dp),
@@ -95,7 +98,10 @@ private fun StepApprovalCard(step: FundedStepItem) {
             }
 
             Spacer(Modifier.height(24.dp))
-            OutlinedButton(modifier = Modifier.align(Alignment.CenterHorizontally), onClick = {}) {
+            OutlinedButton(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = { navigateToStepApproval(step.id) }
+            ) {
                 Text(stringResource(SharedRes.strings.view_proofs_label))
             }
         }

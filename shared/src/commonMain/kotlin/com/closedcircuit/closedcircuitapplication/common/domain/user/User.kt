@@ -9,7 +9,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Avatar
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,7 +18,7 @@ data class User(
     val email: Email,
     val fullName: Name,
     val preferredName: Name?,
-    val avatar: Avatar,
+    val avatar: ImageUrl,
     val isVerified: Boolean,
     val phoneNumber: PhoneNumber,
     val country: Country,
