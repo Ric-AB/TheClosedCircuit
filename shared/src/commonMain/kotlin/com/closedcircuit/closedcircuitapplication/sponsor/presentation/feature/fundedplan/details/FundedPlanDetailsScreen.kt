@@ -2,12 +2,10 @@ package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,7 +14,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Tab
@@ -25,17 +22,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -44,41 +37,47 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlanDetailsGrid
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.table.Table
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.PlanImage
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepsWithBudgetTable
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.component.PlanFundingTab
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.component.PlanProgressTab
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.component.PlanSummaryTab
 import dev.icerock.moko.resources.compose.stringResource
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 
 
 @OptIn(ExperimentalFoundationApi::class)
-internal class FundedPlanDetailsScreen : Screen, KoinComponent {
+internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlanPreview) : Screen,
+    KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getScreenModel<FundedPlanDetailsViewModel>()
+        val viewModel =
+            getScreenModel<FundedPlanDetailsViewModel> { parametersOf(fundedPlanPreview) }
+
         ScreenContent(state = viewModel.state.value, goBack = navigator::pop)
     }
 
     @Composable
     private fun ScreenContent(state: FundedPlanDetailsUiState, goBack: () -> Unit) {
-        BaseScaffold { innerPadding ->
+        BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Column(
-                modifier = Modifier.fillMaxSize().padding(innerPadding)
-                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
+                modifier = Modifier.fillMaxSize()
+                    .padding(horizontal = horizontalScreenPadding)
             ) {
                 when (state) {
                     is FundedPlanDetailsUiState.Content -> Body(innerPadding, state)
-                    is FundedPlanDetailsUiState.Error -> {}
+                    is FundedPlanDetailsUiState.Error -> {
+                        Text(state.message)
+                    }
+
                     FundedPlanDetailsUiState.Loading -> BackgroundLoader()
                 }
             }
@@ -144,7 +143,13 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
             )
 
             Spacer(Modifier.height(20.dp))
-            TitleText(stringResource(SharedRes.strings.plan_description_label))
+            Text(
+                text = stringResource(SharedRes.strings.plan_description_label),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(Modifier.height(4.dp))
             BodyText(planDescription)
         }
     }
@@ -181,130 +186,60 @@ internal class FundedPlanDetailsScreen : Screen, KoinComponent {
             }
 
             HorizontalPager(
+                pageSpacing = horizontalScreenPadding,
                 state = pagerState,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .nestedScroll(
-                        remember {
-                            object : NestedScrollConnection {
-                                override fun onPreScroll(
-                                    available: Offset,
-                                    source: NestedScrollSource
-                                ): Offset {
-                                    return if (available.y > 0) Offset.Zero else Offset(
-                                        x = 0f,
-                                        y = -scrollState.dispatchRawDelta(-available.y)
-                                    )
-                                }
-                            }
-                        })
+                verticalAlignment = Alignment.Top,
+                pageNestedScrollConnection = remember {
+                    object : NestedScrollConnection {
+                        override fun onPreScroll(
+                            available: Offset,
+                            source: NestedScrollSource
+                        ): Offset {
+                            return if (available.y > 0) Offset.Zero else Offset(
+                                x = 0f,
+                                y = -scrollState.dispatchRawDelta(-available.y)
+                            )
+                        }
+                    }
+                }
             ) { page: Int ->
+
+                val commonModifier = remember {
+                    Modifier.fillMaxWidth().padding(top = verticalScreenPadding)
+                }
 
                 when (page) {
                     0 -> {
-                        StepsWithBudgetTable(
+                        PlanSummaryTab(
+                            modifier = commonModifier,
                             items = state.stepsWithBudgets,
-                            total = state.total
+                            total = state.itemsTotal
                         )
                     }
 
                     1 -> {
-                        FundedPlanTab(
+                        PlanFundingTab(
+                            modifier = commonModifier,
                             planSector = state.planSector,
                             amountFunded = state.amountFunded,
                             fundingType = state.fundingType,
                             fundingLevel = state.fundingLevel,
                             fundingDate = state.fundingDate,
+                            itemsTotal = state.itemsTotal,
+                            stepsWithBudgets = state.stepsWithBudgets,
                             navigateToFundPlan = {}
                         )
                     }
 
                     2 -> {
-                        PlanProgressTab()
+                        PlanProgressTab(
+                            modifier = commonModifier,
+                            stepItems = state.fundedStepItems
+                        )
                     }
 
                     else -> {}
                 }
-            }
-        }
-    }
-
-    @Composable
-    private fun PlanProgressTab() {
-        Column {
-            val headerTitles = persistentListOf(
-                stringResource(SharedRes.strings.step_name),
-                stringResource(SharedRes.strings.status_label)
-            )
-
-            Table(headerTableTitles = headerTitles, data = emptyList())
-        }
-    }
-
-    @Composable
-    private fun FundedPlanTab(
-        planSector: String,
-        amountFunded: String,
-        fundingType: String,
-        fundingLevel: String,
-        fundingDate: String,
-        navigateToFundPlan: () -> Unit
-    ) {
-        @Composable
-        fun ItemText(text: AnnotatedString) {
-            Text(text = text, style = MaterialTheme.typography.bodySmall)
-        }
-
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Card {
-                ItemText(
-                    text = getAnnotatedString(
-                        label = stringResource(SharedRes.strings.plan_sector_colon_label),
-                        value = planSector
-                    )
-                )
-
-                ItemText(
-                    text = getAnnotatedString(
-                        label = stringResource(SharedRes.strings.amount_funded_colon_label),
-                        value = amountFunded
-                    )
-                )
-
-                ItemText(
-                    text = getAnnotatedString(
-                        label = stringResource(SharedRes.strings.funding_type_colon_label),
-                        value = fundingType
-                    )
-                )
-
-                ItemText(
-                    text = getAnnotatedString(
-                        label = stringResource(SharedRes.strings.funding_level_colon_label),
-                        value = fundingLevel
-                    )
-                )
-
-                ItemText(
-                    text = getAnnotatedString(
-                        label = stringResource(SharedRes.strings.funding_date_colon_label),
-                        value = fundingDate
-                    )
-                )
-            }
-
-            Spacer(Modifier.height(40.dp))
-            DefaultButton(onClick = navigateToFundPlan) {
-                Text(stringResource(SharedRes.strings.fund_plan_label))
-            }
-        }
-    }
-
-    private fun getAnnotatedString(label: String, value: String): AnnotatedString {
-        return buildAnnotatedString {
-            append(label)
-            withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
-                append(value)
             }
         }
     }

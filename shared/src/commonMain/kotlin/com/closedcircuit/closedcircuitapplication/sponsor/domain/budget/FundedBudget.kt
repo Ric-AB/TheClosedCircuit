@@ -14,7 +14,7 @@ data class FundedBudget(
     val cost: Amount,
     val isSponsored: Boolean,
     val fundsRaised: Amount,
-    val isCompleted: Boolean,
+    val isFunded: Boolean,
     val approverIds: List<ID>,
     val createdAt: Date,
     val updatedAt: Date

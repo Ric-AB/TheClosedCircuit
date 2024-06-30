@@ -4,6 +4,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PositiveInt
+import com.closedcircuit.closedcircuitapplication.common.domain.model.StepStatus
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.budget.FundedBudget
 
 data class FundedStep(
@@ -16,7 +17,7 @@ data class FundedStep(
     val targetFunds: Amount,
     val totalFundsRaised: Amount,
     val isSponsored: Boolean,
-    val status: String,
+    val status: StepStatus,
     val budgets: List<FundedBudget>,
     val approverIds: List<ID>,
     val createdAt: Date,

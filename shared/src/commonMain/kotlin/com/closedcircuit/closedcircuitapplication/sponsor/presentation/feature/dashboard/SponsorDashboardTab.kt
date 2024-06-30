@@ -15,16 +15,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,11 +42,13 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundedPlanItem
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.FundedPlanDetailsScreen
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.list.FundedPlanListScreen
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
-@OptIn(ExperimentalMaterial3Api::class)
 object SponsorDashboardTab : Tab, KoinComponent {
 
     override val options: TabOptions
@@ -77,11 +75,17 @@ object SponsorDashboardTab : Tab, KoinComponent {
         ScreenContent(
             messageBarState = messageBarState,
             state = viewModel.state,
+            navigateToPlanListScreen = { navigator.push(FundedPlanListScreen()) },
+            navigateToFundedPlanDetails = { navigator.push(FundedPlanDetailsScreen(it)) }
         )
     }
 
     @Composable
-    private fun ScreenContent(messageBarState: MessageBarState, state: SponsorDashboardUiState) {
+    private fun ScreenContent(
+        messageBarState: MessageBarState, state: SponsorDashboardUiState,
+        navigateToPlanListScreen: () -> Unit,
+        navigateToFundedPlanDetails: (FundedPlanPreview) -> Unit
+    ) {
         BaseScaffold(messageBarState = messageBarState) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -100,7 +104,8 @@ object SponsorDashboardTab : Tab, KoinComponent {
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = horizontalScreenPadding),
                             state = state,
-                            navigateToPlanListScreen = {}
+                            navigateToPlanListScreen = navigateToPlanListScreen,
+                            navigateToFundedPlanDetails = navigateToFundedPlanDetails
                         )
                     }
 
@@ -128,6 +133,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
         modifier: Modifier,
         state: SponsorDashboardUiState.Content,
         navigateToPlanListScreen: () -> Unit,
+        navigateToFundedPlanDetails: (FundedPlanPreview) -> Unit
     ) {
         Column(modifier = modifier) {
             val plans = state.plans
@@ -149,7 +155,8 @@ object SponsorDashboardTab : Tab, KoinComponent {
                         amountFunded = fundedPlanPreview.amountFunded.getFormattedValue(),
                         fundingType = fundedPlanPreview.fundingType.label,
                         fundsRaisedPercent = fundedPlanPreview.fundsRaisedPercent,
-                        taskCompletedPercent = fundedPlanPreview.tasksCompletedPercent
+                        taskCompletedPercent = fundedPlanPreview.tasksCompletedPercent,
+                        onClick = { navigateToFundedPlanDetails(fundedPlanPreview) }
                     )
                 }
             } else {
@@ -225,20 +232,5 @@ object SponsorDashboardTab : Tab, KoinComponent {
                 }
             }
         }
-    }
-
-    @Composable
-    private fun DashboardTopAppBar(navigateToNotificationScreen: () -> Unit) {
-        TopAppBar(
-            title = { },
-            actions = {
-                IconButton(onClick = navigateToNotificationScreen) {
-                    Icon(
-                        imageVector = Icons.Outlined.Notifications,
-                        contentDescription = "notifications"
-                    )
-                }
-            }
-        )
     }
 }

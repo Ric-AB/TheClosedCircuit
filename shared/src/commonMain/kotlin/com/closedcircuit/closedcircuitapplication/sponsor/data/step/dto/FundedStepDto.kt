@@ -2,7 +2,9 @@ package com.closedcircuit.closedcircuitapplication.sponsor.data.step.dto
 
 import com.closedcircuit.closedcircuitapplication.sponsor.data.budget.dto.FundedBudgetDto
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FundedStepDto(
     val id: String,
     @SerialName("step_name")

@@ -34,9 +34,10 @@ fun FundedPlanItem(
     amountFunded: String,
     fundingType: String,
     fundsRaisedPercent: Double,
-    taskCompletedPercent: Double
+    taskCompletedPercent: Double,
+    onClick: () -> Unit
 ) {
-    Card(modifier = modifier) {
+    Card(modifier = modifier, onClick = onClick) {
         Column(
             modifier = Modifier.fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 16.dp)

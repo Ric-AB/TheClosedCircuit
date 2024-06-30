@@ -101,8 +101,8 @@
 
     <!--    Plan management-->
     <string name="plans">Plans</string>
-    <string name="percentage_funds_raised">%s\% funds raised</string>
-    <string name="percentage_task_completed">%s\% task completed</string>
+    <string name="percentage_funds_raised">%s\%% funds raised</string>
+    <string name="percentage_task_completed">%s\%% task completed</string>
     <string name="start_a_plan">Start a Plan</string>
     <string name="new_plan">New Plan</string>
     <string name="select_category">Select category</string>
@@ -369,14 +369,18 @@
     <string name="currency_label">Currency</string>
     <string name="user_profile_label">User profile</string>
     <string name="funding_label">Funding</string>
-    <string name="beneficiary_colon_label">Beneficiary:</string>
-    <string name="plan_sector_colon_label">Plan sector:</string>
-    <string name="amount_funded_colon_label">Amount funded:</string>
-    <string name="funding_type_colon_label">Funding type:</string>
-    <string name="funding_level_colon_label">Funding level:</string>
-    <string name="funding_date_colon_label">Funding date:</string>
+    <string name="beneficiary_colon_label">Beneficiary:\u0020</string>
+    <string name="plan_sector_colon_label">Plan sector:\u0020</string>
+    <string name="amount_funded_colon_label">Amount funded:\u0020</string>
+    <string name="funding_type_colon_label">Funding type:\u0020</string>
+    <string name="funding_level_colon_label">Funding level:\u0020</string>
+    <string name="funding_date_colon_label">Funding date:\u0020</string>
     <string name="fund_plan_label">Fund plan</string>
     <string name="plan_funding_label">Plan funding</string>
     <string name="plan_progress_label">Plan progress</string>
     <string name="status_label">Status</string>
+    <string name="step_approval_label">Step approval</string>
+    <string name="view_proofs_label">View proofs</string>
+    <string name="funded_plan_label">Funded plan</string>
+    <string name="general_funding_label">General funding</string>
 </resources>

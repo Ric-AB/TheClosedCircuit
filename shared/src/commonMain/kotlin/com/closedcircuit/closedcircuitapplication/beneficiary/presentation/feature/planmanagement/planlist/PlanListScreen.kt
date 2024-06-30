@@ -97,7 +97,7 @@ private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> U
     val fundsRaised = remember {
         val value = (plan.totalFundsRaised / plan.targetAmount).value.toFloat()
         val percentage = value * 100
-        Pair(value, "$percentage%")
+        Pair(value, "$percentage")
     }
     OutlinedCard(modifier = modifier, onClick = onClick) {
         Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {

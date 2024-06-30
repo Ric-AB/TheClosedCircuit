@@ -1,7 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.data.budget.dto
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FundedBudgetDto(
     val id: String,
     @SerialName("plan")
@@ -20,8 +22,8 @@ data class FundedBudgetDto(
     val isSponsored: Boolean,
     @SerialName("funds_raised")
     val fundsRaised: Float,
-    @SerialName("is_completed")
-    val isCompleted: Boolean,
+    @SerialName("is_funded")
+    val isFunded: Boolean,
     @SerialName("approvers")
     val approverIds: List<String>,
     @SerialName("created_at")

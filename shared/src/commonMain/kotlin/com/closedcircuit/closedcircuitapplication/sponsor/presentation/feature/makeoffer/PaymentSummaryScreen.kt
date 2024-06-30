@@ -101,8 +101,7 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                     footerTableTitles = listOf(
                         stringResource(SharedRes.strings.total_label),
                         state.formattedTotalOfSelectedItems
-                    ),
-                    contentAlignment = Alignment.CenterStart
+                    )
                 )
 
                 Spacer(Modifier.height(40.dp))

@@ -1,6 +1,5 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details
 
-import androidx.compose.runtime.Stable
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepItem
@@ -22,7 +21,7 @@ sealed interface FundedPlanDetailsUiState {
         val fundingLevel: String,
         val fundingDate: String,
         val stepsWithBudgets: ImmutableMap<StepItem, ImmutableList<BudgetItem>>,
-        val total: String,
+        val itemsTotal: String,
         val fundedStepItems: ImmutableList<FundedStepItem>
     ) : FundedPlanDetailsUiState
 
@@ -31,8 +30,15 @@ sealed interface FundedPlanDetailsUiState {
 
 data class FundedStepItem(
     val name: String,
-    val status: String
+    val status: String,
+    val budgets: ImmutableList<FundedBudgetItem>
 ) : TypeWithStringProperties {
     override val properties: List<String>
         get() = listOf(name, status)
 }
+
+data class FundedBudgetItem(
+    val id: String,
+    val name: String,
+    val listOfProofs: ImmutableList<String>
+)

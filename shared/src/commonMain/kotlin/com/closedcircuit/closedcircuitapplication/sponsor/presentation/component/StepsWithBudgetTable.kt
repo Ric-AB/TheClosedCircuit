@@ -32,11 +32,17 @@ data class FundingItem(
     val id: String,
     val name: String,
     val formattedCost: String,
+    val fundingStatus: String = formattedCost
 )
 
 @Composable
-fun StepsWithBudgetTable(items: ImmutableMap<StepItem, ImmutableList<BudgetItem>>, total: String) {
-    Column {
+fun StepsWithBudgetTable(
+    modifier: Modifier = Modifier,
+    items: ImmutableMap<StepItem, ImmutableList<BudgetItem>>,
+    total: String,
+    showFundingStatus: Boolean = false
+) {
+    Column(modifier) {
         val boldFontStyle =
             MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
         items.entries.forEachIndexed { stepIndex, entry ->
@@ -56,13 +62,15 @@ fun StepsWithBudgetTable(items: ImmutableMap<StepItem, ImmutableList<BudgetItem>
             val budgets = entry.value
             budgets.forEachIndexed { budgetIndex, budget ->
                 val budgetNumber = budgetIndex + 1
+                val budgetAmountText = if (showFundingStatus) budget.fundingStatus
+                else budget.formattedCost
                 ListItem(
                     label = stringResource(
                         SharedRes.strings.budget_item_x_colon_label,
                         budgetNumber
                     ),
                     title = budget.name,
-                    amount = budget.formattedCost,
+                    amount = budgetAmountText,
                     backgroundColor = primary3,
                     textStyle = MaterialTheme.typography.bodySmall
                 )

@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,7 +22,9 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundedPlanItem
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.FundedPlanDetailsScreen
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
@@ -31,11 +34,19 @@ internal class FundedPlanListScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<FundedPlanListViewModel>()
-        ScreenContent(state = viewModel.state.value, goBack = navigator::pop)
+        ScreenContent(
+            state = viewModel.state.value,
+            goBack = navigator::pop,
+            navigateToFundedPlanDetails = { navigator.push(FundedPlanDetailsScreen(it)) }
+        )
     }
 
     @Composable
-    private fun ScreenContent(state: FundedPlanListUiState, goBack: () -> Unit) {
+    private fun ScreenContent(
+        state: FundedPlanListUiState,
+        goBack: () -> Unit,
+        navigateToFundedPlanDetails: (FundedPlanPreview) -> Unit
+    ) {
         BaseScaffold(
             topBar = {
                 DefaultAppBar(
@@ -49,7 +60,7 @@ internal class FundedPlanListScreen : Screen, KoinComponent {
             ) {
 
                 when (state) {
-                    is FundedPlanListUiState.Content -> Body(state)
+                    is FundedPlanListUiState.Content -> Body(state, navigateToFundedPlanDetails)
                     is FundedPlanListUiState.Error -> {}
                     FundedPlanListUiState.Loading -> BackgroundLoader()
                 }
@@ -58,7 +69,10 @@ internal class FundedPlanListScreen : Screen, KoinComponent {
     }
 
     @Composable
-    private fun Body(state: FundedPlanListUiState.Content) {
+    private fun Body(
+        state: FundedPlanListUiState.Content,
+        navigateToFundedPlanDetails: (FundedPlanPreview) -> Unit
+    ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(
@@ -75,7 +89,8 @@ internal class FundedPlanListScreen : Screen, KoinComponent {
                     amountFunded = fundedPlanPreview.amountFunded.getFormattedValue(),
                     fundingType = fundedPlanPreview.fundingType.label,
                     fundsRaisedPercent = fundedPlanPreview.fundsRaisedPercent,
-                    taskCompletedPercent = fundedPlanPreview.tasksCompletedPercent
+                    taskCompletedPercent = fundedPlanPreview.tasksCompletedPercent,
+                    onClick = { navigateToFundedPlanDetails(fundedPlanPreview) }
                 )
             }
         }

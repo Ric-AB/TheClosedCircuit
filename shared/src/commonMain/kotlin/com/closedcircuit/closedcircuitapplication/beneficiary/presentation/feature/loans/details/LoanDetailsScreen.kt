@@ -151,7 +151,6 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
         Table(
             data = repaymentSchedule,
             headerTableTitles = headerTitles,
-            disableVerticalDividers = true
         )
     }
 }

@@ -6,7 +6,7 @@ import kotlin.jvm.JvmInline
 
 @Serializable
 @JvmInline
-value class Amount(val value: Double) {
+value class Amount(val value: Double) : Comparable<Amount> {
 
     init {
         require(value >= 0.toDouble()) { "Price ($value) cannot be less than 0.0" }
@@ -27,5 +27,9 @@ value class Amount(val value: Double) {
 
     operator fun plus(other: Amount): Amount {
         return Amount(value + other.value)
+    }
+
+    override fun compareTo(other: Amount): Int {
+        return compareValuesBy(this, other, Amount::value)
     }
 }

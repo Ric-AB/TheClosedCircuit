@@ -2,7 +2,9 @@ package com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto
 
 import com.closedcircuit.closedcircuitapplication.sponsor.data.step.dto.FundedStepDto
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FundedPlanDto(
     val id: String,
     val avatar: String,

@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.budget.FundedBudget
@@ -11,9 +12,11 @@ import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.step.FundedStep
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.FundingItem
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
+import kotlin.math.cos
 
 class FundedPlanDetailsViewModel(
     private val fundedPlanPreview: FundedPlanPreview,
@@ -43,7 +46,7 @@ class FundedPlanDetailsViewModel(
                 state.value = FundedPlanDetailsUiState.Content(
                     planImageUrl = fundedPlan.avatar.value,
                     planDescription = fundedPlan.description,
-                    planSector = fundedPlan.sector,
+                    planSector = fundedPlan.sector.capitalizeFirstChar(),
                     planDuration = fundedPlan.duration.value,
                     estimatedCostPrice = fundedPlan.estimatedCostPrice.getFormattedValue(),
                     estimatedSellingPrice = fundedPlan.estimatedSellingPrice.getFormattedValue(),
@@ -52,7 +55,7 @@ class FundedPlanDetailsViewModel(
                     fundingLevel = fundedPlanPreview.fundingLevel.label,
                     fundingDate = fundedPlanPreview.fundingDate.format(Date.Format.dd_mmm_yyyy),
                     stepsWithBudgets = stepsWithBudget,
-                    total = fundedPlan.targetAmount.getFormattedValue(),
+                    itemsTotal = fundedPlan.targetAmount.getFormattedValue(),
                     fundedStepItems = fundedStepItems
                 )
             }.onError { _, message ->
@@ -62,7 +65,19 @@ class FundedPlanDetailsViewModel(
     }
 
     private fun FundedStep.toFundedStepItem(): FundedStepItem {
-        return FundedStepItem(name, status)
+        return FundedStepItem(
+            name = name,
+            status = status.displayText,
+            budgets = budgets.map { it.toFundedBudgetItem() }.toImmutableList()
+        )
+    }
+
+    private fun FundedBudget.toFundedBudgetItem(): FundedBudgetItem {
+        return FundedBudgetItem(
+            id = id.value,
+            name = name,
+            listOfProofs = persistentListOf()
+        )
     }
 
     private fun FundedStep.toFundingItem(): FundingItem {
@@ -74,10 +89,20 @@ class FundedPlanDetailsViewModel(
     }
 
     private fun FundedBudget.toFundingItem(): FundingItem {
+        val fundingStatus = when {
+            fundsRaised >= cost -> "Funded"
+            !isFunded -> cost.getFormattedValue()
+            else -> {
+                val amountLeft = cost - fundsRaised
+                "${amountLeft.getFormattedValue()} left"
+            }
+        }
+
         return FundingItem(
             id = id.value,
             name = name,
             formattedCost = cost.getFormattedValue(),
+            fundingStatus = fundingStatus
         )
     }
 }
