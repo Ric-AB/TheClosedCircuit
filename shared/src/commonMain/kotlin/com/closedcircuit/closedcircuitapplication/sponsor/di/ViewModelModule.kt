@@ -15,6 +15,17 @@ val viewModelModule = module {
     factory { parameters -> LoansViewModel(parameters.get(), get()) }
     factory { parameters -> LoanDetailsViewModel(parameters.get(), get()) }
     factory { FundedPlanListViewModel(get()) }
-    factory { parameters -> FundedPlanDetailsViewModel(parameters.get(), get()) }
-    factory { parameters -> StepApprovalViewModel(parameters.get(), get(), get()) }
+    factory { parameters -> FundedPlanDetailsViewModel(parameters.get(), get(), get()) }
+    factory { parameters ->
+        StepApprovalViewModel(
+            planID = parameters.get(),
+            stepID = parameters.get(),
+            canApprove = parameters.get(),
+            isStepApprovedByUser = parameters.get(),
+            planRepository = get(),
+            stepRepository = get(),
+            budgetRepository = get(),
+            userRepository = get()
+        )
+    }
 }

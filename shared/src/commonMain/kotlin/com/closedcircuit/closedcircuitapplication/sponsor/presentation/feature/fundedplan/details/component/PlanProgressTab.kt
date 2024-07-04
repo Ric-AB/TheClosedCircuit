@@ -31,7 +31,7 @@ fun PlanProgressTab(
     modifier: Modifier,
     stepItemsWithProofs: ImmutableList<FundedStepItem>,
     stepItems: ImmutableList<FundedStepItem>,
-    navigateToStepApproval: (ID) -> Unit
+    navigateToStepApproval: (FundedStepItem) -> Unit
 ) {
     LazyColumn(modifier = modifier) {
         item {
@@ -63,7 +63,7 @@ fun PlanProgressTab(
 }
 
 @Composable
-private fun StepApprovalCard(step: FundedStepItem, navigateToStepApproval: (ID) -> Unit) {
+private fun StepApprovalCard(step: FundedStepItem, navigateToStepApproval: (FundedStepItem) -> Unit) {
     OutlinedCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 12.dp),
@@ -103,7 +103,7 @@ private fun StepApprovalCard(step: FundedStepItem, navigateToStepApproval: (ID) 
             Spacer(Modifier.height(24.dp))
             OutlinedButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { navigateToStepApproval(step.id) }
+                onClick = { navigateToStepApproval(step) }
             ) {
                 Text(stringResource(SharedRes.strings.view_proofs_label))
             }

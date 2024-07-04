@@ -8,6 +8,9 @@ sealed interface StepApprovalUiState {
 
     data class Content(
         val loading: Boolean,
+        val canApproveStep: Boolean,
+        val canApproveBudget: Boolean,
+        val stepApprovalEnabled: Boolean,
         val proofItems: ImmutableList<ProofItem>
     ) : StepApprovalUiState
 
@@ -29,6 +32,8 @@ data class ProofItem(
 
 sealed interface StepApprovalResult {
     object ApproveBudgetSuccess : StepApprovalResult
+
+    object ApproveStepSuccess : StepApprovalResult
 
     data class Error(val message: String) : StepApprovalResult
 }

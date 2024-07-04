@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
+import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
@@ -14,6 +15,6 @@ fun PlanImage(modifier: Modifier = Modifier, imageUrl: String, shape: Shape) {
     CoilImage(
         imageModel = { imageUrl },
         modifier = modifier
-            .clip(shape)
+            .clip(shape),
     )
 }

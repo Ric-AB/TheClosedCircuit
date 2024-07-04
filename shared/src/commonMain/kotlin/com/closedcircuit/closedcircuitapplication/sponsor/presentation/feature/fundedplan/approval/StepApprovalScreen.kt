@@ -42,6 +42,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary6
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.PlanImage
@@ -52,16 +53,35 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
 
-internal class StepApprovalScreen(private val stepID: ID) : Screen, KoinComponent {
+internal class StepApprovalScreen(
+    private val planID: ID,
+    private val stepID: ID,
+    private val canApprove: Boolean,
+    private val isStepApprovedByUser: Boolean
+) : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getScreenModel<StepApprovalViewModel> { parametersOf(stepID) }
+        val viewModel = getScreenModel<StepApprovalViewModel> {
+            parametersOf(
+                planID,
+                stepID,
+                canApprove,
+                isStepApprovedByUser
+            )
+        }
         val messageBarState = rememberMessageBarState()
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
-                StepApprovalResult.ApproveBudgetSuccess -> messageBarState.addSuccess("You successfully approved a budget item!")
+                StepApprovalResult.ApproveBudgetSuccess ->
+                    messageBarState.addSuccess("You successfully approved a budget item.")
+
+                StepApprovalResult.ApproveStepSuccess ->
+                    messageBarState.addSuccess("You successfully approved this step.") {
+                        navigator.pop()
+                    }
+
                 is StepApprovalResult.Error -> messageBarState.addError(it.message)
             }
         }
@@ -107,24 +127,28 @@ internal class StepApprovalScreen(private val stepID: ID) : Screen, KoinComponen
     private fun Body(state: StepApprovalUiState.Content, onEvent: (StepApprovalUiEvent) -> Unit) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(40.dp)
+            verticalArrangement = Arrangement.spacedBy(40.dp),
+            contentPadding = PaddingValues(bottom = verticalScreenPadding)
         ) {
             items(state.proofItems) {
                 ProofItem(
                     modifier = Modifier.fillMaxWidth(),
                     item = it,
+                    canApproveBudget = state.canApproveBudget,
                     approveBudget = { onEvent(StepApprovalUiEvent.ApproveBudget(it.id)) }
                 )
             }
 
-            item {
-                DefaultButton(
-                    enabled = false,
-                    onClick = { onEvent(StepApprovalUiEvent.ApproveStep) },
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(horizontal = horizontalScreenPadding)
-                ) {
-                    Text(stringResource(SharedRes.strings.approve_step_label))
+            if (state.canApproveStep) {
+                item {
+                    DefaultButton(
+                        enabled = state.stepApprovalEnabled,
+                        onClick = { onEvent(StepApprovalUiEvent.ApproveStep) },
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = horizontalScreenPadding)
+                    ) {
+                        Text(stringResource(SharedRes.strings.approve_step_label))
+                    }
                 }
             }
         }
@@ -134,6 +158,7 @@ internal class StepApprovalScreen(private val stepID: ID) : Screen, KoinComponen
     private fun ProofItem(
         modifier: Modifier,
         item: ProofItem,
+        canApproveBudget: Boolean,
         approveBudget: () -> Unit
     ) {
         Column(modifier) {
@@ -171,12 +196,14 @@ internal class StepApprovalScreen(private val stepID: ID) : Screen, KoinComponen
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
-            ApproveButton(
-                modifier = commonModifier.align(Alignment.End),
-                isApproved = item.isApproved,
-                onClick = approveBudget
-            )
+            if (canApproveBudget) {
+                Spacer(Modifier.height(20.dp))
+                ApproveButton(
+                    modifier = commonModifier.align(Alignment.End),
+                    isApproved = item.isApproved,
+                    onClick = approveBudget
+                )
+            }
         }
     }
 
@@ -199,7 +226,7 @@ internal class StepApprovalScreen(private val stepID: ID) : Screen, KoinComponen
                     Image(
                         painter = painterResource(SharedRes.images.ic_green_check),
                         contentDescription = null,
-                        modifier = Modifier.size(14.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             } else {

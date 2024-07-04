@@ -7,4 +7,6 @@ import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.Proof
 interface StepRepository {
 
     suspend fun fetchStepProofs(stepId: ID): ApiResponse<List<Proof>>
+
+    suspend fun approveStep(stepId: ID): ApiResponse<Unit>
 }

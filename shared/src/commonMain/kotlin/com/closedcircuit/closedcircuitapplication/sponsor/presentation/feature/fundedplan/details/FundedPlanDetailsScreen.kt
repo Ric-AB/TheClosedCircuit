@@ -34,7 +34,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
@@ -67,7 +66,16 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
         ScreenContent(
             state = viewModel.state.value,
             goBack = navigator::pop,
-            navigateToStepApproval = { navigator.push(StepApprovalScreen(it)) }
+            navigateToStepApproval = { fundedStep, canApprove ->
+                navigator.push(
+                    StepApprovalScreen(
+                        planID = fundedStep.planID,
+                        stepID = fundedStep.id,
+                        isStepApprovedByUser = fundedStep.isApprovedByUser,
+                        canApprove = canApprove
+                    )
+                )
+            }
         )
     }
 
@@ -75,7 +83,7 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
     private fun ScreenContent(
         state: FundedPlanDetailsUiState,
         goBack: () -> Unit,
-        navigateToStepApproval: (ID) -> Unit
+        navigateToStepApproval: (FundedStepItem, Boolean) -> Unit
     ) {
         BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Column(
@@ -105,7 +113,7 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
     private fun Body(
         innerPadding: PaddingValues,
         state: FundedPlanDetailsUiState.Content,
-        navigateToStepApproval: (ID) -> Unit
+        navigateToStepApproval: (FundedStepItem, Boolean) -> Unit
     ) {
         BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
             val screenHeight = maxHeight
@@ -129,7 +137,7 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
                     modifier = Modifier.height(screenHeight),
                     scrollState = scrollState,
                     state = state,
-                    navigateToStepApproval = navigateToStepApproval
+                    navigateToStepApproval = { navigateToStepApproval(it, state.canApprove) }
                 )
             }
         }
@@ -180,7 +188,7 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
         modifier: Modifier,
         scrollState: ScrollState,
         state: FundedPlanDetailsUiState.Content,
-        navigateToStepApproval: (ID) -> Unit,
+        navigateToStepApproval: (FundedStepItem) -> Unit,
     ) {
         val list = listOf(
             stringResource(SharedRes.strings.plan_summary_label),

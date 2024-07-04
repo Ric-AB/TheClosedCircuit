@@ -24,16 +24,19 @@ sealed interface FundedPlanDetailsUiState {
         val stepsWithBudgets: ImmutableMap<StepItem, ImmutableList<BudgetItem>>,
         val itemsTotal: String,
         val fundedStepItems: ImmutableList<FundedStepItem>,
-        val fundedStepItemsWithProofs: ImmutableList<FundedStepItem>
+        val fundedStepItemsWithProofs: ImmutableList<FundedStepItem>,
+        val canApprove: Boolean
     ) : FundedPlanDetailsUiState
 
     data class Error(val message: String) : FundedPlanDetailsUiState
 }
 
 data class FundedStepItem(
+    val planID: ID,
     val id: ID,
     val name: String,
     val status: String,
+    val isApprovedByUser: Boolean,
     val budgets: ImmutableList<FundedBudgetItem>
 ) : TypeWithStringProperties {
     override val properties: List<String>
