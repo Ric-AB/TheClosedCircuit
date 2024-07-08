@@ -13,6 +13,7 @@ koin = "3.4.2"
 koin-compose = "3.4.5"
 koin-compose-kmm = "1.0.3"
 kotlin = "1.9.23"
+kotlin-firebase-sdk = "1.13.0"
 kotlin-inject = '0.6.1'
 kotlinx-collections = "0.3.7"
 kotlinx-coroutines = "1.7.3"
@@ -36,6 +37,12 @@ androidx-activityCompose = { module = "androidx.activity:activity-compose", vers
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
 composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
+firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "kotlin-firebase-sdk" }
+firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "kotlin-firebase-sdk" }
+firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "kotlin-firebase-sdk" }
+firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "kotlin-firebase-sdk" }
+firebase-messaging = { module = "dev.gitlive:firebase-messaging", version.ref = "kotlin-firebase-sdk" }
+firebase-storage = { module = "dev.gitlive:firebase-storage", version.ref = "kotlin-firebase-sdk" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
 koin-compose-kmm = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose-kmm" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }

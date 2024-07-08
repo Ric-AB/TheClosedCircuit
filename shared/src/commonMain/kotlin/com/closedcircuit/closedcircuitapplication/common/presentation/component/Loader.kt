@@ -43,8 +43,8 @@ import androidx.compose.ui.window.PopupProperties
 fun LoadingDialog(visible: Boolean = false) {
     AnimatedVisibility(
         visible = visible,
-        enter = fadeIn(tween(500)),
-        exit = fadeOut(tween(100)),
+        enter = fadeIn(tween(700)),
+        exit = fadeOut(tween(300)),
         modifier = Modifier.fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeContent)
     ) {

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "854787412759",
+    "project_id": "the-closed-circuit-85591",
+    "storage_bucket": "the-closed-circuit-85591.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854787412759:android:54dedcde6b13a0c5b59d52",
+        "android_client_info": {
+          "package_name": "com.closedcircuit.closedcircuitapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "854787412759-rk14gkhrlkeqcv6f0q8dcp0l0u9soo63.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZXj5QQWBhGwDREB-IRIZoNKOfsQKpVys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "854787412759-rk14gkhrlkeqcv6f0q8dcp0l0u9soo63.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

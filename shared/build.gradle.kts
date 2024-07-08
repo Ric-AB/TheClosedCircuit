@@ -56,6 +56,14 @@ kotlin {
                 implementation(libs.voyager.transitions)
                 implementation(libs.voyager.koin)
 
+                // firebase
+                implementation(libs.firebase.analytics)
+                implementation(libs.firebase.auth)
+                implementation(libs.firebase.crashlytics)
+                implementation(libs.firebase.firestore)
+                implementation(libs.firebase.messaging)
+                implementation(libs.firebase.storage)
+
                 // res
                 api(libs.moko.resources)
                 api(libs.moko.resources.compose)
