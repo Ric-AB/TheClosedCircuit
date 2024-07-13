@@ -5,12 +5,14 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.details.LoanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.loanlist.LoansViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.preview.LoansPreviewViewModel
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep.CompleteStepViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.editplan.EditPlanViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.fundrequest.FundRequestViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.plandetails.PlanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails.StepDetailsViewModel
+import io.ktor.http.parametersOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -23,6 +25,7 @@ val viewModelModule = module {
     factory { parameters -> EditPlanViewModel(parameters.get(), get()) }
     factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }
     factory { parameters -> FundRequestViewModel(parameters.get(), get(), get(), get()) }
+    factory { parameters -> CompleteStepViewModel(parameters.get(), get()) }
 
     // kyc
     factory { KycViewModel(get()) }

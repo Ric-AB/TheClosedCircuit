@@ -1,5 +1,6 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto
+package com.closedcircuit.closedcircuitapplication.common.data.user.dto
 
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.PlanStatusResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

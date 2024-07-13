@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.sponsor.data.model
+package com.closedcircuit.closedcircuitapplication.common.data.model
 
 import kotlinx.serialization.Serializable
 

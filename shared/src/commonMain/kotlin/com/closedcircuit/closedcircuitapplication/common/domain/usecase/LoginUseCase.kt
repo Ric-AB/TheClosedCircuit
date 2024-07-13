@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase
+package com.closedcircuit.closedcircuitapplication.common.domain.usecase
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiErrorResponse
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
@@ -6,7 +6,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.LoginResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.SessionRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 
 class LoginUseCase(
@@ -23,6 +23,7 @@ class LoginUseCase(
                 firebaseCustomToken = it.firebaseCustomToken,
                 fcmServerKey = it.fcmServerKey
             )
+
             userRepository.fetchUser(it.userId).onError { code, message ->
                 loginResult = ApiErrorResponse(message, code)
             }

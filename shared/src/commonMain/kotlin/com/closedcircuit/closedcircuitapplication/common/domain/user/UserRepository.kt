@@ -1,7 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.user
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserDashboard
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import kotlinx.coroutines.flow.StateFlow

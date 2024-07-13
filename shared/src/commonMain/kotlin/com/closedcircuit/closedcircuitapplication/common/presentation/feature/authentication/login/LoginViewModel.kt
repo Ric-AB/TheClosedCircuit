@@ -7,7 +7,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.LoginUseCase
+import com.closedcircuit.closedcircuitapplication.common.domain.usecase.LoginUseCase
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel

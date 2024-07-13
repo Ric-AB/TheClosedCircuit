@@ -317,23 +317,22 @@ internal object DashboardTab : Tab, KoinComponent {
                     items(topSponsors) {
                         Card(modifier = modifier.width(250.dp)) {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(horizontal = 12.dp, vertical = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Image(
-                                    imageVector = Icons.Outlined.Person,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(40.dp)
-                                        .background(shape = Shapes().small, color = Color.White)
+                                Avatar(
+                                    imageUrl = it.avatar.value,
+                                    size = DpSize(40.dp, 40.dp)
                                 )
 
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(text = it.fullName.value)
 
-                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(4.dp))
                                     Text(
-                                        text = it.loanAmount.value.toString(),
+                                        text = it.loanAmount.getFormattedValue(),
                                         fontWeight = FontWeight.SemiBold
                                     )
                                 }
@@ -450,9 +449,12 @@ internal object DashboardTab : Tab, KoinComponent {
                         text = text,
                         color = backgroundToTextColorPair[usableIndex].second,
                         modifier = Modifier.clip(Shapes().small)
-                            .background(backgroundToTextColorPair[usableIndex].first)
-                            .clickable(onClick = onClick)
+                            .background(
+                                color = backgroundToTextColorPair[usableIndex].first,
+                                shape = Shapes().small
+                            )
                             .padding(horizontal = 8.dp)
+                            .clickable(onClick = onClick)
                     )
                 }
             }

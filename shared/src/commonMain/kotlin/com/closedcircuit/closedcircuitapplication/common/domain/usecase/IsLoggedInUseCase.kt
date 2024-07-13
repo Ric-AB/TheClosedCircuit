@@ -1,7 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.usecase
 
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.SessionRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
 
 class IsLoggedInUseCase(

@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.user
+package com.closedcircuit.closedcircuitapplication.common.domain.user
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor

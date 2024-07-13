@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.di
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.SessionRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.core.logger.CustomLogger
 import com.closedcircuit.closedcircuitapplication.core.network.DefaultResponseConverter
 import de.jensklingenberg.ktorfit.Ktorfit

@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.ktorfit)
     alias(libs.plugins.ksp)
     alias(libs.plugins.sqlDelight)
+    alias(libs.plugins.googleServices)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -59,7 +60,6 @@ kotlin {
                 // firebase
                 implementation(libs.firebase.analytics)
                 implementation(libs.firebase.auth)
-                implementation(libs.firebase.crashlytics)
                 implementation(libs.firebase.firestore)
                 implementation(libs.firebase.messaging)
                 implementation(libs.firebase.storage)

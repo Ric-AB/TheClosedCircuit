@@ -10,6 +10,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseS
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import com.closedcircuit.closedcircuitapplication.core.network.getOrNull
+import com.closedcircuit.closedcircuitapplication.core.network.onError
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine

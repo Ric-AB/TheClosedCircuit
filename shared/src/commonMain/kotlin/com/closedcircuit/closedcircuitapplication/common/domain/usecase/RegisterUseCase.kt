@@ -5,6 +5,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.usecase.LoginUseCase
 
 class RegisterUseCase(
     private val authRepository: AuthenticationRepository,

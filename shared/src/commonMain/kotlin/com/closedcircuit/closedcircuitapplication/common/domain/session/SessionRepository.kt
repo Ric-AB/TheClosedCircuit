@@ -1,6 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.session
-
-import com.closedcircuit.closedcircuitapplication.common.domain.session.Session
+package com.closedcircuit.closedcircuitapplication.common.domain.session
 
 interface SessionRepository {
 

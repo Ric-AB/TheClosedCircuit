@@ -9,6 +9,7 @@ buildConfig = "3.1.0"
 compose = "1.6.1"
 compose-uitooling = "1.5.1"
 composeImageLoader = "1.4.1"
+googleServices = "4.4.2"
 koin = "3.4.2"
 koin-compose = "3.4.5"
 koin-compose-kmm = "1.0.3"
@@ -88,6 +89,7 @@ atomicfu = { id = "org.jetbrains.kotlinx.atomicfu-gradle-plugin", version.ref = 
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+googleServices = {id = "com.google.gms.google-services", version.ref = "googleServices"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }

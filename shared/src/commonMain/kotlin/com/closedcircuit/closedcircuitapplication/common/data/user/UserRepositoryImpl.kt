@@ -14,7 +14,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumen
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.UserDashboard
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserDashboard
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import io.github.xxfast.kstore.KStore
 import kotlinx.coroutines.CoroutineDispatcher
@@ -84,7 +84,7 @@ class UserRepositoryImpl(
                         Sponsor(
                             avatar = ImageUrl(it.sponsorAvatar),
                             fullName = Name(it.sponsorFullName),
-                            loanAmount = Amount(it.loanAmount.toDouble())
+                            loanAmount = Amount(it.loanAmount)
                         )
                     }
                 )

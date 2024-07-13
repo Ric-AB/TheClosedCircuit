@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto
+package com.closedcircuit.closedcircuitapplication.common.data.user.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,5 +10,5 @@ data class SponsorResponse(
     @SerialName("sponsor_fullname")
     val sponsorFullName: String,
     @SerialName("loan_amount")
-    val loanAmount: String
+    val loanAmount: Double
 )

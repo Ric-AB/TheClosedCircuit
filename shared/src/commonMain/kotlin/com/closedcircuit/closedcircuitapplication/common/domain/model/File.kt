@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.sponsor.domain.model
+package com.closedcircuit.closedcircuitapplication.common.domain.model
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 

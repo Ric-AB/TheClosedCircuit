@@ -1,13 +1,13 @@
 package com.closedcircuit.closedcircuitapplication.common.di
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.AuthenticationRepositoryImpl
+import com.closedcircuit.closedcircuitapplication.common.data.auth.AuthenticationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.notification.NotificationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.payment.PaymentRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.data.user.UserRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.notification.NotificationRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.PaymentRepository
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.session.SessionRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.data.app.AppSettingsRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.data.session.SessionRepositoryImpl

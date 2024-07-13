@@ -1,13 +1,14 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.closedcircuit.closedcircuitapplication.android"
+    namespace = "com.closedcircuit.closedcircuitapplication"
     compileSdk = 34
     defaultConfig {
-        applicationId = "com.closedcircuit.closedcircuitapplication.android"
+        applicationId = "com.closedcircuit.closedcircuitapplication"
         minSdk = 26
         targetSdk = 33
         versionCode = 1
@@ -44,6 +45,8 @@ dependencies {
     implementation(libs.koin.compose)
 
     implementation(project(":shared"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-common:21.0.0")
     implementation("androidx.compose.ui:ui:1.4.3")
     implementation("androidx.compose.ui:ui-tooling:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")

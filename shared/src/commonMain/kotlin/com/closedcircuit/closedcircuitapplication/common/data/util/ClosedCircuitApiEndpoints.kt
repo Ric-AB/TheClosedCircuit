@@ -13,6 +13,8 @@ object ClosedCircuitApiEndpoints {
     const val VERIFY_TRANSACTION_STATUS = "v1/transactions/webhook"
     const val PLAN_DETAILS_NO_AUTH = "v1/plan_details/{id}"
     const val PLAN_BY_FUND_REQUEST_ID = "v1/fund_request/{id}/"
+    const val SAVE_FCM_TOKEN = "v1/registration_tokens/"
+
 
     //beneficiary
     const val DASHBOARD = "user/beneficiary/get_details/"
@@ -65,7 +67,6 @@ object ClosedCircuitApiEndpoints {
 
     //messaging
     const val GET_CONVERSATION_PARTNERS = "user/manage-user/"
-    const val SEND_FCM_TOKEN = "user/manage-user/{id}/"
 
     //payment
     const val TOKENIZE_CARD = "v1/transactions/tokenize-charge"

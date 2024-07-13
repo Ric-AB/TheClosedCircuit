@@ -2,6 +2,7 @@
 
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails
 
+import CompleteStepScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
@@ -73,175 +75,192 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
                 navigator.push(
                     SaveStepScreen(planId = step.planID, step = step)
                 )
-            }
+            },
+            navigateToCompleteStep = { navigator.push(CompleteStepScreen(it)) }
+
         )
     }
-}
 
-@Composable
-private fun ScreenContent(
-    uiState: StepDetailsUiState,
-    goBack: () -> Unit,
-    navigateToSaveStep: () -> Unit
-) {
-    BaseScaffold(
-        topBar = {
-            StepDetailsAppBar(
-                goBack = goBack,
-                navigateToSaveStep = navigateToSaveStep
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            val step = uiState.step
-            Text(
-                text = step.name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(horizontal = horizontalScreenPadding)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            StepSummary(
-                stepDuration = step.duration,
-                targetAmount = step.targetFunds,
-                amountRaised = step.totalFundsRaised
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            BodyText(
-                text = step.description,
-                modifier = Modifier.padding(horizontal = horizontalScreenPadding)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(SharedRes.strings.budget_items),
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(horizontal = horizontalScreenPadding)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+    @Composable
+    private fun ScreenContent(
+        uiState: StepDetailsUiState,
+        goBack: () -> Unit,
+        navigateToSaveStep: () -> Unit,
+        navigateToCompleteStep: (ID) -> Unit
+    ) {
+        BaseScaffold(
+            topBar = {
+                StepDetailsAppBar(
+                    goBack = goBack,
+                    navigateToSaveStep = navigateToSaveStep,
+                    navigateToCompleteStep = { navigateToCompleteStep(uiState.step.id) }
+                )
+            }
+        ) { innerPadding ->
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                modifier = Modifier.fillMaxSize()
+                    .padding(innerPadding)
             ) {
-                uiState.budgets.forEach {
-                    BudgetItem(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                        name = it.name,
-                        targetAmount = it.cost,
-                        amountRaised = it.fundsRaised
-                    )
+                val step = uiState.step
+                Text(
+                    text = step.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(horizontal = horizontalScreenPadding)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                StepSummary(
+                    stepDuration = step.duration,
+                    targetAmount = step.targetFunds,
+                    amountRaised = step.totalFundsRaised
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                BodyText(
+                    text = step.description,
+                    modifier = Modifier.padding(horizontal = horizontalScreenPadding)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(SharedRes.strings.budget_items),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = horizontalScreenPadding)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    uiState.budgets.forEach {
+                        BudgetItem(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                            name = it.name,
+                            targetAmount = it.cost,
+                            amountRaised = it.fundsRaised
+                        )
+                    }
                 }
             }
         }
     }
-}
 
-@Composable
-private fun StepSummary(stepDuration: TaskDuration, targetAmount: Amount, amountRaised: Amount) {
     @Composable
-    fun Item(imagePainter: Painter, text: String, contentDescription: String? = null) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.width(100.dp)
+    private fun StepSummary(
+        stepDuration: TaskDuration,
+        targetAmount: Amount,
+        amountRaised: Amount
+    ) {
+        @Composable
+        fun Item(imagePainter: Painter, text: String, contentDescription: String? = null) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(100.dp)
+            ) {
+                Icon(
+                    painter = imagePainter,
+                    contentDescription = contentDescription
+                )
+
+                Text(text = text, style = MaterialTheme.typography.labelLarge)
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .padding(horizontal = 8.dp)
         ) {
-            Icon(
-                painter = imagePainter,
-                contentDescription = contentDescription
+            val dividerModifier = Modifier.fillMaxHeight(.5f).width(1.dp)
+            Item(
+                imagePainter = painterResource(SharedRes.images.ic_calendar),
+                text = stringResource(SharedRes.strings.x_months, stepDuration.value)
             )
 
-            Text(text = text, style = MaterialTheme.typography.labelLarge)
+            HorizontalDivider(modifier = dividerModifier)
+            Item(
+                imagePainter = painterResource(SharedRes.images.ic_target_arrow),
+                text = targetAmount.getFormattedValue()
+            )
+
+            HorizontalDivider(modifier = dividerModifier)
+            Item(
+                imagePainter = painterResource(SharedRes.images.ic_rising_arrow),
+                text = amountRaised.getFormattedValue()
+            )
         }
     }
 
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .padding(horizontal = 8.dp)
+    @Composable
+    private fun StepDetailsAppBar(
+        goBack: () -> Unit,
+        navigateToSaveStep: () -> Unit,
+        navigateToCompleteStep: () -> Unit
     ) {
-        val dividerModifier = Modifier.fillMaxHeight(.5f).width(1.dp)
-        Item(
-            imagePainter = painterResource(SharedRes.images.ic_calendar),
-            text = stringResource(SharedRes.strings.x_months, stepDuration.value)
-        )
-
-        HorizontalDivider(modifier = dividerModifier)
-        Item(
-            imagePainter = painterResource(SharedRes.images.ic_target_arrow),
-            text = targetAmount.getFormattedValue()
-        )
-
-        HorizontalDivider(modifier = dividerModifier)
-        Item(
-            imagePainter = painterResource(SharedRes.images.ic_rising_arrow),
-            text = amountRaised.getFormattedValue()
-        )
-    }
-}
-
-@Composable
-private fun StepDetailsAppBar(goBack: () -> Unit, navigateToSaveStep: () -> Unit) {
-    TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = goBack) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "navigation icon"
+        TopAppBar(
+            navigationIcon = {
+                IconButton(onClick = goBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "navigation icon"
+                    )
+                }
+            },
+            title = { },
+            actions = {
+                StepDetailsAppBarActions(
+                    onDeleteIconClick = {},
+                    onEditIconClick = navigateToSaveStep,
+                    onCompleteIconClick = navigateToCompleteStep
                 )
             }
-        },
-        title = { },
-        actions = {
-            StepDetailsAppBarActions(onDeleteIconClick = {}, onEditIconClick = navigateToSaveStep)
-        }
-    )
-}
-
-@Composable
-private fun StepDetailsAppBarActions(
-    onDeleteIconClick: () -> Unit,
-    onEditIconClick: () -> Unit
-) {
-    IconButton(onClick = onEditIconClick) {
-        Icon(imageVector = Icons.Outlined.Edit, contentDescription = "edit step")
+        )
     }
 
-    IconButton(onClick = onDeleteIconClick) {
-        Icon(imageVector = rememberTask(), contentDescription = "complete step")
-    }
-
-    DropDownMenu()
-}
-
-@Composable
-private fun DropDownMenu() {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier.wrapContentSize(Alignment.TopEnd)
+    @Composable
+    private fun StepDetailsAppBarActions(
+        onDeleteIconClick: () -> Unit,
+        onEditIconClick: () -> Unit,
+        onCompleteIconClick: () -> Unit
     ) {
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = "more"
-            )
+        IconButton(onClick = onEditIconClick) {
+            Icon(imageVector = Icons.Outlined.Edit, contentDescription = "edit step")
         }
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
+        IconButton(onClick = onCompleteIconClick) {
+            Icon(imageVector = rememberTask(), contentDescription = "complete step")
+        }
+
+        DropDownMenu()
+    }
+
+    @Composable
+    private fun DropDownMenu() {
+        var expanded by remember { mutableStateOf(false) }
+
+        Box(
+            modifier = Modifier.wrapContentSize(Alignment.TopEnd)
         ) {
-            DropdownMenuItem(
-                text = { Text(stringResource(SharedRes.strings.delete_step_label)) },
-                onClick = { }
-            )
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "more"
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(SharedRes.strings.delete_step_label)) },
+                    onClick = { }
+                )
+            }
         }
     }
 }

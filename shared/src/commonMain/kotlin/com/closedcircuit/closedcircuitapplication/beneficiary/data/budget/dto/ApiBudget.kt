@@ -1,5 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto
 
+import com.closedcircuit.closedcircuitapplication.common.data.model.BudgetProofDto
+import com.closedcircuit.closedcircuitapplication.common.data.model.FileDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -25,6 +27,7 @@ data class ApiBudget(
     @SerialName("is_completed")
     val isCompleted: Boolean?,
     val approvers: List<String>,
+    val proof: List<FileDto>? = null,
     @SerialName("created_at")
     val createdAt: String,
     @SerialName("updated_at")
