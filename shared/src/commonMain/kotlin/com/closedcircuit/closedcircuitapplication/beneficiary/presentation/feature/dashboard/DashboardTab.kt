@@ -417,7 +417,7 @@ internal object DashboardTab : Tab, KoinComponent {
 
     @Composable
     private fun EmptyDashboard(modifier: Modifier, onClick: () -> Unit) {
-        Column(modifier = modifier) {
+        Column(modifier = modifier.padding(top = 80.dp)) {
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -448,13 +448,14 @@ internal object DashboardTab : Tab, KoinComponent {
                     Text(
                         text = text,
                         color = backgroundToTextColorPair[usableIndex].second,
+                        style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.clip(Shapes().small)
                             .background(
                                 color = backgroundToTextColorPair[usableIndex].first,
                                 shape = Shapes().small
                             )
-                            .padding(horizontal = 8.dp)
                             .clickable(onClick = onClick)
+                            .padding(12.dp)
                     )
                 }
             }

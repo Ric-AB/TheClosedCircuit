@@ -15,7 +15,9 @@ import com.closedcircuit.closedcircuitapplication.core.network.ApiSuccessRespons
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth
+import dev.gitlive.firebase.messaging.FirebaseMessaging
 import dev.gitlive.firebase.messaging.messaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -23,7 +25,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 
 class AuthenticationRepositoryImpl(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val firebaseAuth: FirebaseAuth = Firebase.auth,
+    private val firebaseMessaging: FirebaseMessaging = Firebase.messaging
 ) : AuthenticationRepository {
 
     override suspend fun loginWithEmailAndPassword(
@@ -39,9 +43,9 @@ class AuthenticationRepositoryImpl(
                     loginResult = ApiErrorResponse(message, code)
                 }
 
-                saveFcmToken(it.userId, it.token).onError { code, message ->
-                    loginResult = ApiErrorResponse(message, code)
-                }
+//                saveFcmToken(it.userId, it.token).onError { code, message ->
+//                    loginResult = ApiErrorResponse(message, code)
+//                }
             }
 
             loginResult
@@ -49,21 +53,25 @@ class AuthenticationRepositoryImpl(
     }
 
     private suspend fun loginWithFirebaseCustomToken(firebaseToken: String): ApiResponse<Unit> {
-        val authResult = Firebase.auth.signInWithCustomToken(firebaseToken)
+        val authResult = firebaseAuth.signInWithCustomToken(firebaseToken)
         return if (authResult.user != null) ApiSuccessResponse(Unit)
         else ApiErrorResponse("Firebase login failed.", -1)
     }
 
     private suspend fun saveFcmToken(userId: String, bearerToken: String): ApiResponse<Unit> {
-        val token = Firebase.messaging.getToken()
-        val request = SaveFcmTokenRequest(
-            registrationToken = token,
-            userId = userId,
-            timestamp = Clock.System.now().toString()
-        )
+        return try {
+            val token = firebaseMessaging.getToken()
+            val request = SaveFcmTokenRequest(
+                registrationToken = token,
+                userId = userId,
+                timestamp = Clock.System.now().toString()
+            )
 
-        val authHeader = "Bearer $bearerToken"
-        return authService.saveFcmToken(request, authHeader)
+            val authHeader = "Bearer $bearerToken"
+            authService.saveFcmToken(request, authHeader)
+        } catch (e: Exception) {
+            ApiErrorResponse(e.message.toString(), -1)
+        }
     }
 
     override suspend fun register(
