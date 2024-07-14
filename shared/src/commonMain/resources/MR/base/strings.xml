@@ -389,13 +389,19 @@
     <string name="details_label">Details</string>
     <string name="approve_step_label">Approve step</string>
     <string name="step_proof_label">Step proof</string>
-    <string name="step_proof_message_label">Please you’ll need to upload pictures or files of task you completed during the execution of this step.</string>
+    <string name="step_proof_message_label">Please you’ll need to upload pictures or files of task
+        you completed during the execution of this step.
+    </string>
     <string name="no_uploads_label">No uploads</string>
     <string name="complete_step_label">Complete step</string>
     <string name="add_proof_label">Add proof</string>
-    <string name="upload_images_label">Upload images</string>
     <string name="budget_item_proof_label">Budget item proof</string>
-    <string name="budget_item_proof_message_label">Please you’ll need to upload pictures or files of task you completed during the execution of this budgeted item.</string>
+    <string name="budget_item_proof_message_label">Please you’ll need to upload pictures or files of
+        task you completed during the execution of this budgeted item.
+    </string>
     <string name="proof_title_label">Proof title</string>
     <string name="proof_description_label">Proof description</string>
+    <string name="upload_image_label">Upload image</string>
+    <string name="select_image_label">Select image</string>
+    <string name="upload_label">Upload</string>
 </resources>

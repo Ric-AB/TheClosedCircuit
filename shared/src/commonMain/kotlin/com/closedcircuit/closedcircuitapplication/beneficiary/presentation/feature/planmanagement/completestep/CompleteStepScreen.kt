@@ -1,3 +1,5 @@
+package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,9 +28,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep.BudgetItem
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep.CompleteStepUiState
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep.CompleteStepViewModel
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.uploadproof.UploadProofScreen
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
@@ -51,11 +51,19 @@ internal class CompleteStepScreen(private val stepID: ID) : Screen, KoinComponen
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<CompleteStepViewModel> { parametersOf(stepID) }
         val state = viewModel.state.collectAsState()
-        ScreenContent(state.value, goBack = navigator::pop)
+        ScreenContent(
+            state.value,
+            goBack = navigator::pop,
+            navigateToUploadScreen = { navigator.push(UploadProofScreen(it)) }
+        )
     }
 
     @Composable
-    private fun ScreenContent(state: CompleteStepUiState, goBack: () -> Unit) {
+    private fun ScreenContent(
+        state: CompleteStepUiState,
+        goBack: () -> Unit,
+        navigateToUploadScreen: (ID) -> Unit
+    ) {
         BaseScaffold(
             topBar = { DefaultAppBar(mainAction = goBack) }
         ) { innerPadding ->
@@ -65,7 +73,7 @@ internal class CompleteStepScreen(private val stepID: ID) : Screen, KoinComponen
 
             ) {
                 when (state) {
-                    is CompleteStepUiState.Content -> Body(state)
+                    is CompleteStepUiState.Content -> Body(state, navigateToUploadScreen)
                     CompleteStepUiState.Loading -> BackgroundLoader()
                 }
             }
@@ -73,7 +81,7 @@ internal class CompleteStepScreen(private val stepID: ID) : Screen, KoinComponen
     }
 
     @Composable
-    private fun Body(state: CompleteStepUiState.Content) {
+    private fun Body(state: CompleteStepUiState.Content, navigateToUploadScreen: (ID) -> Unit) {
         Column(
             modifier = Modifier.fillMaxSize()
                 .verticalScroll(rememberScrollState())
@@ -86,7 +94,7 @@ internal class CompleteStepScreen(private val stepID: ID) : Screen, KoinComponen
 
             Spacer(Modifier.height(24.dp))
             state.budgetItems.forEach {
-                BudgetItem(it)
+                BudgetItem(budget = it, onClick = { navigateToUploadScreen(it.id) })
                 Spacer(Modifier.height(20.dp))
             }
 
@@ -98,14 +106,14 @@ internal class CompleteStepScreen(private val stepID: ID) : Screen, KoinComponen
     }
 
     @Composable
-    private fun BudgetItem(budget: BudgetItem) {
-        Card(modifier = Modifier.fillMaxWidth()) {
+    private fun BudgetItem(budget: BudgetItem, onClick: () -> Unit) {
+        Card(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = painterResource(SharedRes.images.ic_bullseye),
+                    painter = painterResource(SharedRes.images.ic_target_arrow),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp)
                 )

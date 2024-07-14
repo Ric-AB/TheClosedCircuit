@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep
 
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import kotlinx.collections.immutable.ImmutableList
 
 sealed interface CompleteStepUiState {
@@ -12,6 +13,7 @@ sealed interface CompleteStepUiState {
 }
 
 data class BudgetItem(
+    val id: ID,
     val name: String,
     val amount: String,
     val uploadStatus: String

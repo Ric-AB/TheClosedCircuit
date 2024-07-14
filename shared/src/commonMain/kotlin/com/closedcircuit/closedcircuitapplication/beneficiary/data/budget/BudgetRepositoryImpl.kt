@@ -102,4 +102,8 @@ class BudgetRepositoryImpl(
             .executeAsList()
             .asBudgets()
     }
+
+    override suspend fun getBudgetById(id: ID): Budget {
+        return queries.getBudgetEntityByID(id.value).executeAsOne().asBudget()
+    }
 }

@@ -12,7 +12,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails.StepDetailsViewModel
-import io.ktor.http.parametersOf
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.uploadproof.UploadProofViewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -26,6 +26,7 @@ val viewModelModule = module {
     factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }
     factory { parameters -> FundRequestViewModel(parameters.get(), get(), get(), get()) }
     factory { parameters -> CompleteStepViewModel(parameters.get(), get()) }
+    factory { parameters -> UploadProofViewModel(parameters.get(), get()) }
 
     // kyc
     factory { KycViewModel(get()) }

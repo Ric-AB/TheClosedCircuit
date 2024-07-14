@@ -26,4 +26,6 @@ interface BudgetRepository {
     fun getBudgetsForStepAsFlow(stepID: ID): Flow<Budgets>
 
     suspend fun getBudgetsForStep(stepID: ID): Budgets
+
+    suspend fun getBudgetById(id: ID): Budget
 }

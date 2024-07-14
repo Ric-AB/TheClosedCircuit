@@ -1,6 +1,5 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep
 
-import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
@@ -41,6 +40,7 @@ class CompleteStepViewModel(
     private fun List<Budget>.toBudgetItems(): ImmutableList<BudgetItem> {
         return map { budget ->
             BudgetItem(
+                id = budget.id,
                 name = budget.name,
                 amount = budget.cost.getFormattedValue(),
                 uploadStatus = "No upload"
