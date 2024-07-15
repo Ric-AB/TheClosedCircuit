@@ -2,9 +2,11 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.budget
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.UploadProofRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budgets
+import com.closedcircuit.closedcircuitapplication.common.domain.model.File
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
@@ -105,5 +107,10 @@ class BudgetRepositoryImpl(
 
     override suspend fun getBudgetById(id: ID): Budget {
         return queries.getBudgetEntityByID(id.value).executeAsOne().asBudget()
+    }
+
+    override suspend fun uploadProof(budgetID: ID, files: List<File>): ApiResponse<Unit> {
+        val request = UploadProofRequest(proof = files)
+        return budgetService.uploadProof(id = budgetID.value, request = request)
     }
 }

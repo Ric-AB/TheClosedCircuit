@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
@@ -40,10 +44,12 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
-import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.skydoves.landscapist.coil3.CoilImage
 import dev.icerock.moko.resources.compose.painterResource
@@ -57,9 +63,21 @@ internal class UploadProofScreen(private val budgetID: ID) : Screen, KoinCompone
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<UploadProofViewModel> { parametersOf(budgetID) }
+        val messageBarState = rememberMessageBarState()
+
+        viewModel.resultChannel.observeWithScreen {
+            when (it) {
+                is UploadProofResult.UploadError -> messageBarState.addError(it.message)
+                UploadProofResult.UploadSuccess ->
+                    messageBarState.addSuccess(message = "Uploaded successfully") {
+                        navigator.pop()
+                    }
+            }
+        }
 
         ScreenContent(
             state = viewModel.state.value,
+            messageBarState = messageBarState,
             goBack = navigator::pop,
             onEvent = viewModel::onEvent
         )
@@ -68,15 +86,20 @@ internal class UploadProofScreen(private val budgetID: ID) : Screen, KoinCompone
     @Composable
     private fun ScreenContent(
         state: UploadProofUiState,
+        messageBarState: MessageBarState,
         goBack: () -> Unit,
         onEvent: (UploadProofUiEvent) -> Unit
     ) {
         BaseScaffold(
-            topBar = { DefaultAppBar(mainAction = goBack) }
+            topBar = { DefaultAppBar(mainAction = goBack) },
+            contentWindowInsets = WindowInsets.safeDrawing,
+            messageBarState = messageBarState,
+            showLoadingDialog = state.isLoading
         ) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
                 val imagePicker = LocalImagePicker.current
@@ -96,7 +119,7 @@ internal class UploadProofScreen(private val budgetID: ID) : Screen, KoinCompone
                     onClick = { imagePicker.pickImage() }
                 )
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(12.dp))
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -120,13 +143,16 @@ internal class UploadProofScreen(private val budgetID: ID) : Screen, KoinCompone
 
                 Spacer(Modifier.height(20.dp))
                 DefaultOutlinedTextField(
-                    inputField = InputField(),
+                    inputField = state.descriptionField,
                     onValueChange = { onEvent(UploadProofUiEvent.ProofDescriptionChange(it)) },
                     label = stringResource(SharedRes.strings.proof_description_label)
                 )
 
                 Spacer(Modifier.height(40.dp))
-                DefaultButton(onClick = {}, enabled = state.canUpload) {
+                DefaultButton(
+                    onClick = { onEvent(UploadProofUiEvent.Submit) },
+                    enabled = state.canUpload
+                ) {
                     Text(stringResource(SharedRes.strings.upload_label))
                 }
             }

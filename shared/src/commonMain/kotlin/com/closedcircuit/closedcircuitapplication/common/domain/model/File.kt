@@ -1,7 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.model
 
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class File(
     val url: ImageUrl,
     val title: String,

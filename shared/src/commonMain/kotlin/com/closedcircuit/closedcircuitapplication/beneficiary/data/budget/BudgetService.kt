@@ -1,15 +1,17 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.budget
 
-import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.ApiBudget
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.SaveBudgetPayload
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.GetBudgetsResponse
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.SaveBudgetPayload
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.UploadProofRequest
 import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.BUDGET
 import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.BUDGETS
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
+import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
@@ -32,4 +34,11 @@ interface BudgetService {
 
     @DELETE(BUDGET)
     suspend fun deleteBudget(@Path("id") id: String): ApiResponse<Unit>
+
+    @Headers("Content-Type: application/json")
+    @PATCH(BUDGET)
+    suspend fun uploadProof(
+        @Path("id") id: String,
+        @Body request: UploadProofRequest
+    ): ApiResponse<Unit>
 }

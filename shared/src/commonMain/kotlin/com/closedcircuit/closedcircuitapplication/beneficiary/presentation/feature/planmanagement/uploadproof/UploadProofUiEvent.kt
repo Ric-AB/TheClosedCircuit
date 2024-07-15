@@ -19,4 +19,6 @@ sealed interface UploadProofUiEvent {
     data class ImageRemoved(val index: Int) : UploadProofUiEvent
 
     data class ProofDescriptionChange(val description: String) : UploadProofUiEvent
+
+    object Submit : UploadProofUiEvent
 }

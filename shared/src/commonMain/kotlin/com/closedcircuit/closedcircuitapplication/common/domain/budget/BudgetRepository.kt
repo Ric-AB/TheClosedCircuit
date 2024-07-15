@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.budget
 
+import com.closedcircuit.closedcircuitapplication.common.domain.model.File
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import kotlinx.collections.immutable.ImmutableList
@@ -28,4 +29,6 @@ interface BudgetRepository {
     suspend fun getBudgetsForStep(stepID: ID): Budgets
 
     suspend fun getBudgetById(id: ID): Budget
+
+    suspend fun uploadProof(budgetID: ID, files: List<File>): ApiResponse<Unit>
 }

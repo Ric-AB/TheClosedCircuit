@@ -4,6 +4,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 data class UploadProofUiState(
+    val isLoading: Boolean = false,
     val titleField: InputField = InputField(),
     val descriptionField: InputField = InputField(),
     val uploadItems: SnapshotStateList<UploadItem> = SnapshotStateList()
@@ -27,4 +28,10 @@ data class UploadItem(
     override fun hashCode(): Int {
         return bytes.contentHashCode()
     }
+}
+
+sealed interface UploadProofResult {
+    object UploadSuccess : UploadProofResult
+
+    data class UploadError(val message: String) : UploadProofResult
 }
