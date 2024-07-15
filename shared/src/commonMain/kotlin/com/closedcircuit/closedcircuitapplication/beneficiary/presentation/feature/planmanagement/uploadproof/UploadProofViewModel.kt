@@ -12,18 +12,20 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.util.Input
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import dev.gitlive.firebase.storage.StorageReference
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UploadProofViewModel(
     private val budgetID: ID,
     private val budgetRepository: BudgetRepository,
-    private val imageStorageReference: StorageReference
+    private val imageStorageReference: StorageReference,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ScreenModel {
 
     val state = mutableStateOf(UploadProofUiState())
@@ -69,8 +71,8 @@ class UploadProofViewModel(
     private fun uploadProof() {
         screenModelScope.launch {
             state.value = state.value.copy(isLoading = true)
-            val files = state.value.uploadItems.map {
-                async(Dispatchers.IO) {
+            val filesAndNamesPair = state.value.uploadItems.map {
+                async(ioDispatcher) {
                     val fileName = "${ID.generateRandomUUID().value}.jpg"
                     val storage = imageStorageReference.child(fileName)
                     storage.putData(getFirebaseDataObj(it.bytes))
@@ -78,25 +80,34 @@ class UploadProofViewModel(
                     val downloadUrl = storage.getDownloadUrl()
                     val title = state.value.titleField.value
                     val description = state.value.descriptionField.value
-                    File(
+                    val file = File(
                         url = ImageUrl(downloadUrl),
                         title = title,
                         description = description
                     )
+                    Pair(fileName, file)
                 }
             }.awaitAll()
 
+            val files = filesAndNamesPair.map { (_, file) -> file }
             budgetRepository.uploadProof(budgetID, files).onSuccess {
                 state.value = state.value.copy(isLoading = false)
                 _resultChannel.send(UploadProofResult.UploadSuccess)
             }.onError { _, message ->
+                val fileNames = filesAndNamesPair.map { (fileName, _) -> fileName }
+                deleteUploadedFiles(fileNames)
+
                 state.value = state.value.copy(isLoading = false)
                 _resultChannel.send(UploadProofResult.UploadError(message))
             }
         }
     }
 
-    private fun deleteUploadedFiles() {
-
+    private suspend fun deleteUploadedFiles(fileNames: List<String>) {
+        withContext(ioDispatcher) {
+            fileNames.map { fileName ->
+                launch { imageStorageReference.child(fileName).delete() }
+            }.joinAll()
+        }
     }
 }
