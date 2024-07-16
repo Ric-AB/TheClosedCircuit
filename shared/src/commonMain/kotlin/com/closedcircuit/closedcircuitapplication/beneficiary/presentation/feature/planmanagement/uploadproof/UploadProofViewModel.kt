@@ -3,6 +3,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.BudgetRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.File
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
@@ -12,6 +13,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.util.Input
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import dev.gitlive.firebase.storage.StorageReference
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -65,6 +67,16 @@ class UploadProofViewModel(
             state.value = state.value.copy(
                 titleField = InputField(inputValue = mutableStateOf(budget.name)),
             )
+
+            // fetch from api to get uploads
+            state.value = state.value.copy(isLoadingUploads = true)
+            budgetRepository.fetchBudgetById(budgetID).onSuccess {
+                state.value = state.value.copy(
+                    canEditUpload = !it.hasUploadedProof,
+                    existingUploadedItems = it.uploadedItem().toImmutableList(),
+                    isLoadingUploads = false
+                )
+            }
         }
     }
 
@@ -110,4 +122,6 @@ class UploadProofViewModel(
             }.joinAll()
         }
     }
+
+    private fun Budget.uploadedItem() = this.proofs.map { UploadedItem(it.url.value) }
 }

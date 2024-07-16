@@ -16,12 +16,15 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Shapes
@@ -41,6 +44,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.CircularIndicator
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
@@ -116,23 +120,22 @@ internal class UploadProofScreen(private val budgetID: ID) : Screen, KoinCompone
                 UploadComponent(
                     icon = painterResource(SharedRes.images.ic_photos_stack),
                     text = stringResource(SharedRes.strings.select_image_label),
+                    enabled = state.canEditUpload,
                     onClick = { imagePicker.pickImage() }
                 )
 
-                Spacer(Modifier.height(12.dp))
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(state.uploadItems) {
-                        CoilImage(
-                            imageModel = { it.bytes },
-                            modifier = Modifier.size(130.dp, 75.dp).clip(Shapes().small)
-                        )
-                    }
+                if (state.isLoadingUploads) {
+                    Spacer(Modifier.height(12.dp))
+                    CircularIndicator(size = 18.dp)
                 }
 
+                UploadRow(
+                    items = state.uploadItems,
+                    retrieveData = { it.bytes },
+                    removeImage = { onEvent(UploadProofUiEvent.ImageRemoved(it)) }
+                )
+
+                UploadRow(items = state.existingUploadedItems, retrieveData = { it.url })
                 Spacer(Modifier.height(20.dp))
                 DefaultOutlinedTextField(
                     inputField = state.titleField,
@@ -151,7 +154,7 @@ internal class UploadProofScreen(private val budgetID: ID) : Screen, KoinCompone
                 Spacer(Modifier.height(40.dp))
                 DefaultButton(
                     onClick = { onEvent(UploadProofUiEvent.Submit) },
-                    enabled = state.canUpload
+                    enabled = state.canSubmitUpload
                 ) {
                     Text(stringResource(SharedRes.strings.upload_label))
                 }
@@ -160,13 +163,73 @@ internal class UploadProofScreen(private val budgetID: ID) : Screen, KoinCompone
     }
 
     @Composable
-    private fun UploadComponent(icon: Painter, text: String, onClick: () -> Unit) {
+    private fun <T> UploadRow(
+        items: List<T>,
+        retrieveData: (T) -> Any,
+        removeImage: ((Int) -> Unit)? = null
+    ) {
+        if (items.isNotEmpty()) {
+            Column {
+                Spacer(Modifier.height(12.dp))
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    itemsIndexed(items) { index, item ->
+                        val action: () -> Unit = { removeImage?.invoke(index) }
+                        UploadImage(
+                            data = retrieveData(item),
+                            onRemoveIconClick = if (removeImage != null) action else null
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun UploadImage(data: Any, onRemoveIconClick: (() -> Unit)? = null) {
+        Box(Modifier.size(130.dp, 75.dp)) {
+            CoilImage(
+                imageModel = { data },
+                modifier = Modifier.fillMaxSize().clip(Shapes().small)
+            )
+
+            onRemoveIconClick?.let { action ->
+                IconButton(
+                    onClick = action,
+                    modifier = Modifier.padding(top = 4.dp, end = 4.dp)
+                        .clip(CircleShape)
+                        .background(Color.Gray.copy(alpha = 0.7f))
+                        .size(24.dp)
+                        .align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp)
+                    )
+                }
+            }
+        }
+
+    }
+
+    @Composable
+    private fun UploadComponent(
+        icon: Painter,
+        text: String,
+        enabled: Boolean,
+        onClick: () -> Unit
+    ) {
         val colorSurface = MaterialTheme.colorScheme.surfaceVariant
         OutlinedCard(
             modifier = Modifier.fillMaxWidth(),
             shape = Shapes().medium,
             border = BorderStroke(1.dp, colorSurface),
-            onClick = onClick
+            onClick = onClick,
+            enabled = enabled
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

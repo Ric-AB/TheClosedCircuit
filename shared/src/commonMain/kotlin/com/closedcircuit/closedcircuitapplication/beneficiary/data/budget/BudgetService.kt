@@ -41,4 +41,7 @@ interface BudgetService {
         @Path("id") id: String,
         @Body request: UploadProofRequest
     ): ApiResponse<Unit>
+
+    @GET(BUDGET)
+    suspend fun fetchBudgetById(@Path("id") id: String): ApiResponse<ApiBudget>
 }

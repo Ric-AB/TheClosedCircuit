@@ -109,6 +109,10 @@ class BudgetRepositoryImpl(
         return queries.getBudgetEntityByID(id.value).executeAsOne().asBudget()
     }
 
+    override suspend fun fetchBudgetById(id: ID): ApiResponse<Budget> {
+        return budgetService.fetchBudgetById(id.value).mapOnSuccess { it.asBudget() }
+    }
+
     override suspend fun uploadProof(budgetID: ID, files: List<File>): ApiResponse<Unit> {
         val request = UploadProofRequest(proof = files)
         return budgetService.uploadProof(id = budgetID.value, request = request)

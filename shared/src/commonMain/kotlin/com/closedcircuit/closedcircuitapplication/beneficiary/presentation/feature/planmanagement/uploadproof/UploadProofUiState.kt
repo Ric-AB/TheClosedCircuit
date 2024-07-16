@@ -2,14 +2,19 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class UploadProofUiState(
     val isLoading: Boolean = false,
     val titleField: InputField = InputField(),
     val descriptionField: InputField = InputField(),
-    val uploadItems: SnapshotStateList<UploadItem> = SnapshotStateList()
+    val isLoadingUploads: Boolean = false,
+    val canEditUpload: Boolean = false,
+    val uploadItems: SnapshotStateList<UploadItem> = SnapshotStateList(),
+    val existingUploadedItems: ImmutableList<UploadedItem> = persistentListOf()
 ) {
-    val canUpload: Boolean
+    val canSubmitUpload: Boolean
         get() = descriptionField.value.isNotEmpty() && uploadItems.isNotEmpty()
 }
 
@@ -29,6 +34,10 @@ data class UploadItem(
         return bytes.contentHashCode()
     }
 }
+
+data class UploadedItem(
+    val url: String
+)
 
 sealed interface UploadProofResult {
     object UploadSuccess : UploadProofResult

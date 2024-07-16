@@ -30,5 +30,7 @@ interface BudgetRepository {
 
     suspend fun getBudgetById(id: ID): Budget
 
+    suspend fun fetchBudgetById(id: ID): ApiResponse<Budget>
+
     suspend fun uploadProof(budgetID: ID, files: List<File>): ApiResponse<Unit>
 }
