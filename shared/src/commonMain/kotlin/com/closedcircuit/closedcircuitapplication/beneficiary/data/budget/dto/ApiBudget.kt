@@ -1,6 +1,5 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto
 
-import com.closedcircuit.closedcircuitapplication.common.data.model.BudgetProofDto
 import com.closedcircuit.closedcircuitapplication.common.data.model.FileDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

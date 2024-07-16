@@ -96,4 +96,10 @@ class StepRepositoryImpl(
             .mapToOne(defaultDispatcher)
             .map { it.asStep() }
     }
+
+    override suspend fun fetchStepByID(id: ID): ApiResponse<Step> {
+        return stepService.fetchStepById(id.value).mapOnSuccess {
+            it.asStep()
+        }
+    }
 }

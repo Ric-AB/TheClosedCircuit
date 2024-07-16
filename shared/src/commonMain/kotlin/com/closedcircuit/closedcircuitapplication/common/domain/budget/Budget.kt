@@ -2,6 +2,7 @@ package com.closedcircuit.closedcircuitapplication.common.domain.budget
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
+import com.closedcircuit.closedcircuitapplication.common.domain.model.File
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import kotlinx.serialization.Serializable
 
@@ -17,10 +18,18 @@ data class Budget(
     val isSponsored: Boolean,
     val fundsRaised: Amount,
     val isCompleted: Boolean,
-    val approvers: List<String>,
+    val proofs: List<File>,
+    val approvers: List<ID>,
     val createdAt: Date,
     val updatedAt: Date
 ) {
+
+    val hasUploadedProof: Boolean get() = proofs.isNotEmpty()
+
+    fun isApproved(planAccountabilityPartners: List<ID>): Boolean {
+        return approvers.isNotEmpty() && approvers.containsAll(planAccountabilityPartners)
+    }
+
     companion object {
         fun buildBudget(
             id: ID = ID.generateRandomUUID(),
@@ -33,7 +42,8 @@ data class Budget(
             isSponsored: Boolean = false,
             fundsRaised: Amount = Amount(0.0),
             isCompleted: Boolean = false,
-            approvers: List<String> = emptyList(),
+            proofs: List<File> = emptyList(),
+            approvers: List<ID> = emptyList(),
             createdAt: Date = Date.now(),
             updatedAt: Date = Date.now()
         ): Budget {
@@ -48,6 +58,7 @@ data class Budget(
                 isSponsored = isSponsored,
                 fundsRaised = fundsRaised,
                 isCompleted = isCompleted,
+                proofs = proofs,
                 approvers = approvers,
                 createdAt = createdAt,
                 updatedAt = updatedAt

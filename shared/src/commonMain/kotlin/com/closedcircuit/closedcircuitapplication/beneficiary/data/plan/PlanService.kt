@@ -1,12 +1,12 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.plan
 
-import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.ApiPlan
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.SavePlanPayload
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.GetPlansResponse
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.SavePlanPayload
 import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.CREATE_PLAN
 import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.PLAN
 import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.PLANS
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -41,4 +41,7 @@ interface PlanService {
     suspend fun deletePlan(
         @Path("id") id: String,
     ): ApiResponse<Unit>
+
+    @GET(PLAN)
+    suspend fun fetchPlanById(@Path("id") id: String): ApiResponse<ApiPlan>
 }

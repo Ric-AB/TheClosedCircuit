@@ -27,7 +27,7 @@ data class Plan(
     val userID: ID,
     val hasRequestedFund: Boolean,
     val isSponsored: Boolean,
-    val accountabilityPartners: List<String>,
+    val accountabilityPartners: List<ID>,
 ) {
 
     val fundsRaisedAsPercentage = fundsRaised.times(100)
@@ -53,7 +53,7 @@ data class Plan(
             userID: ID = ID.generateRandomUUID(),
             hasRequestedFund: Boolean = false,
             isSponsored: Boolean = false,
-            accountabilityPartners: List<String> = emptyList(),
+            accountabilityPartners: List<ID> = emptyList(),
         ): Plan {
             return Plan(
                 id = id,

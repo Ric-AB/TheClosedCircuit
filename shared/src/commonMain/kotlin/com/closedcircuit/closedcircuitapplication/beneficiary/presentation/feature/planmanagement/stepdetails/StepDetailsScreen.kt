@@ -46,7 +46,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep.CompleteStepScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepScreen
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
@@ -76,8 +75,14 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
                     SaveStepScreen(planId = step.planID, step = step)
                 )
             },
-            navigateToCompleteStep = { navigator.push(CompleteStepScreen(it)) }
-
+            navigateToCompleteStep = {
+                navigator.push(
+                    CompleteStepScreen(
+                        planID = step.planID,
+                        stepID = step.id
+                    )
+                )
+            }
         )
     }
 
@@ -86,14 +91,14 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
         uiState: StepDetailsUiState,
         goBack: () -> Unit,
         navigateToSaveStep: () -> Unit,
-        navigateToCompleteStep: (ID) -> Unit
+        navigateToCompleteStep: (Step) -> Unit
     ) {
         BaseScaffold(
             topBar = {
                 StepDetailsAppBar(
                     goBack = goBack,
                     navigateToSaveStep = navigateToSaveStep,
-                    navigateToCompleteStep = { navigateToCompleteStep(uiState.step.id) }
+                    navigateToCompleteStep = { navigateToCompleteStep(uiState.step) }
                 )
             }
         ) { innerPadding ->

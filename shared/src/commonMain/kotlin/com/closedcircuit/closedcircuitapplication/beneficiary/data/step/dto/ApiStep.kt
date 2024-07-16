@@ -1,10 +1,15 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.step.dto
 
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.ApiBudget
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiStep(
+    @SerialName("plan")
+    val planID: String,
+    @SerialName("user")
+    val userID: String,
     val id: String,
     @SerialName("step_name")
     val name: String,
@@ -15,10 +20,7 @@ data class ApiStep(
     val targetFunds: String,
     @SerialName("total_funds_raised")
     val totalFundsRaised: String,
-    @SerialName("plan")
-    val planID: String,
-    @SerialName("user")
-    val userID: String,
+    val budgets: List<ApiBudget>,
     @SerialName("is_sponsored")
     val isSponsored: Boolean,
     val status: String,

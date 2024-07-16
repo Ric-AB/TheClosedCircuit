@@ -2,10 +2,12 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.budget
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.ApiBudget
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.SaveBudgetPayload
+import com.closedcircuit.closedcircuitapplication.common.data.model.toFile
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import database.BudgetEntity
 import kotlinx.collections.immutable.toImmutableList
 
@@ -18,10 +20,27 @@ fun ApiBudget.asBudgetEntity() = BudgetEntity(
     description = description,
     cost = cost.toDouble(),
     isSponsored = isSponsored,
-    isCompleted = isCompleted ?: false,
+    isCompleted = isCompleted.orFalse(),
     fundsRaised = fundsRaised.toDouble(),
     createdAt = createdAt,
     updatedAt = updatedAt
+)
+
+fun ApiBudget.asBudget() = Budget(
+    id = ID(id),
+    planID = ID(planID),
+    stepID = ID(stepID),
+    userID = ID(userID),
+    name = name,
+    description = description,
+    cost = Amount(cost.toDouble()),
+    isSponsored = isSponsored,
+    fundsRaised = Amount(fundsRaised.toDouble()),
+    isCompleted = isCompleted.orFalse(),
+    proofs = proof.orEmpty().map { it.toFile() },
+    approvers = approvers.map { ID(it) },
+    createdAt = Date(createdAt),
+    updatedAt = Date(updatedAt)
 )
 
 fun BudgetEntity.asBudget() = Budget(
@@ -35,6 +54,7 @@ fun BudgetEntity.asBudget() = Budget(
     isSponsored = isSponsored,
     fundsRaised = Amount(fundsRaised),
     isCompleted = isCompleted,
+    proofs = emptyList(),
     approvers = emptyList(),
     createdAt = Date(createdAt),
     updatedAt = Date(updatedAt)

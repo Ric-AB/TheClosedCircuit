@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.step
 
+import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
@@ -9,14 +10,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Step(
+    val planID: ID,
+    val userID: ID,
     val id: ID,
     val name: String,
     val description: String,
     val duration: TaskDuration,
     val targetFunds: Amount,
     val totalFundsRaised: Amount,
-    val planID: ID,
-    val userID: ID,
+    val budgets: List<Budget> = emptyList(),
     val isSponsored: Boolean,
     val status: String,
     val createdAt: Date,

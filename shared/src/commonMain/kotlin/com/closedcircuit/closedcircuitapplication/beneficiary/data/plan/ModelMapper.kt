@@ -8,6 +8,8 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.util.orFalse
+import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import database.PlanEntity
 import kotlinx.collections.immutable.toImmutableList
 
@@ -44,16 +46,38 @@ fun ApiPlan.asPlanEntity() = PlanEntity(
     duration = duration.toLong(),
     estimatedSellingPrice = estimatedSellingPrice.toDouble(),
     estimatedCostPrice = estimatedCostPrice.toDouble(),
-    fundsRaised = fundsRaised ?: 0.0,
-    tasksCompleted = tasksCompleted ?: 0.0,
+    fundsRaised = fundsRaised.orZero(),
+    tasksCompleted = tasksCompleted.orZero(),
     targetAmount = targetAmount.toDouble(),
-    totalFundsRaised = totalFundsRaised?.toDouble() ?: 0.0,
+    totalFundsRaised = totalFundsRaised?.toDouble().orZero(),
     analytics = analytics,
     userID = user,
     hasRequestedFund = hasRequestedFund ?: false,
     isSponsored = isSponsored ?: false,
     createdAt = createdAt,
     updatedAt = updatedAt
+)
+
+fun ApiPlan.asPlan() = Plan(
+    id = ID(id),
+    avatar = ImageUrl(avatar),
+    category = category,
+    sector = sector,
+    type = type,
+    name = name,
+    description = description,
+    duration = TaskDuration(duration),
+    estimatedSellingPrice = Amount(estimatedSellingPrice.toDouble()),
+    estimatedCostPrice = Amount(estimatedCostPrice.toDouble()),
+    fundsRaised = fundsRaised.orZero(),
+    tasksCompleted = tasksCompleted.orZero(),
+    targetAmount = Amount(targetAmount.toDouble()),
+    totalFundsRaised = Amount(totalFundsRaised?.toDouble().orZero()),
+    analytics = analytics,
+    userID = ID(user),
+    hasRequestedFund = hasRequestedFund.orFalse(),
+    isSponsored = isSponsored.orFalse(),
+    accountabilityPartners = accountabilityPartners.map { ID(it) }
 )
 
 fun Plan.asRequest() = SavePlanPayload(

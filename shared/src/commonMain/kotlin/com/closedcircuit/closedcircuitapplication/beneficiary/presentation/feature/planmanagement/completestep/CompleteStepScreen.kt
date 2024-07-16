@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -45,14 +44,17 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
 
-internal class CompleteStepScreen(private val stepID: ID) : Screen, KoinComponent {
+internal class CompleteStepScreen(
+    private val planID: ID,
+    private val stepID: ID
+) : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getScreenModel<CompleteStepViewModel> { parametersOf(stepID) }
-        val state = viewModel.state.collectAsState()
+        val viewModel = getScreenModel<CompleteStepViewModel> { parametersOf(planID, stepID) }
+        val state = viewModel.state.value
         ScreenContent(
-            state.value,
+            state = state,
             goBack = navigator::pop,
             navigateToUploadScreen = { navigator.push(UploadProofScreen(it)) }
         )
@@ -74,6 +76,10 @@ internal class CompleteStepScreen(private val stepID: ID) : Screen, KoinComponen
             ) {
                 when (state) {
                     is CompleteStepUiState.Content -> Body(state, navigateToUploadScreen)
+                    is CompleteStepUiState.Error -> {
+                        Text(state.message)
+                    }
+
                     CompleteStepUiState.Loading -> BackgroundLoader()
                 }
             }

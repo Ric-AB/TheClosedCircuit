@@ -13,8 +13,10 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.savestep.SaveStepViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails.StepDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.uploadproof.UploadProofViewModel
+import com.closedcircuit.closedcircuitapplication.common.di.namedIODispatcher
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.storage.storage
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -27,12 +29,20 @@ val viewModelModule = module {
     factory { parameters -> EditPlanViewModel(parameters.get(), get()) }
     factory { parameters -> StepDetailsViewModel(parameters.get(), get(), get()) }
     factory { parameters -> FundRequestViewModel(parameters.get(), get(), get(), get()) }
-    factory { parameters -> CompleteStepViewModel(parameters.get(), get()) }
+    factory { parameters ->
+        CompleteStepViewModel(
+            planID = parameters.get(),
+            stepID = parameters.get(),
+            planRepository = get(),
+            stepRepository = get()
+        )
+    }
     factory { parameters ->
         UploadProofViewModel(
             budgetID = parameters.get(),
             budgetRepository = get(),
-            imageStorageReference = Firebase.storage.reference.child("images")
+            imageStorageReference = Firebase.storage.reference.child("images"),
+            ioDispatcher = get(named(namedIODispatcher))
         )
     }
 

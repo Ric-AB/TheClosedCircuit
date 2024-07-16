@@ -20,4 +20,6 @@ interface PlanRepository {
     suspend fun deletePlan(id: ID): ApiResponse<Plan>
 
     fun getPlanByIDAsFlow(id: ID): Flow<Plan>
+
+    suspend fun fetchPlanByID(id: ID): ApiResponse<Plan>
 }

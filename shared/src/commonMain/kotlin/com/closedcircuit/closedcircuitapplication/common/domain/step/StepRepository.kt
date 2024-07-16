@@ -24,4 +24,6 @@ interface StepRepository {
     fun getStepsForPlanAsFlow(planID: ID): Flow<Steps>
 
     fun getStepByIDAsFlow(id: ID): Flow<Step>
+
+    suspend fun fetchStepByID(id: ID): ApiResponse<Step>
 }

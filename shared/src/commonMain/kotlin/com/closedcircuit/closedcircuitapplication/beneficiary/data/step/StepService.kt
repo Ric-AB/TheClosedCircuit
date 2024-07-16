@@ -31,4 +31,7 @@ interface StepService {
 
     @DELETE(STEP)
     suspend fun deleteStep(@Path("id") id: String): ApiResponse<Unit>
+
+    @GET(STEP)
+    suspend fun fetchStepById(@Path("id") id: String): ApiResponse<ApiStep>
 }

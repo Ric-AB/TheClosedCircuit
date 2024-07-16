@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BudgetProofDto(
+data class ProofDto(
     @SerialName("budget")
     val files: List<FileDto>,
     val id: String

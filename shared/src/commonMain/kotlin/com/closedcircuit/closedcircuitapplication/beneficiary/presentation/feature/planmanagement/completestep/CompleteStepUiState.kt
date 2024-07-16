@@ -9,7 +9,7 @@ sealed interface CompleteStepUiState {
         val budgetItems: ImmutableList<BudgetItem>
     ) : CompleteStepUiState
 
-    data class Error(val message: String)
+    data class Error(val message: String) : CompleteStepUiState
 }
 
 data class BudgetItem(
