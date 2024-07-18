@@ -1,17 +1,18 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
-import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plans
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
+import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plans
 import kotlinx.collections.immutable.ImmutableList
 
 sealed interface DashboardUiState {
     object Loading : DashboardUiState
 
-    object Empty: DashboardUiState
+    object Empty : DashboardUiState
 
     data class Content(
         val firstName: String,
+        val hasVerifiedEmail: Boolean,
         val showAnalytics: Boolean,
         val completedPlansCount: Int,
         val ongoingPlansCount: Int,

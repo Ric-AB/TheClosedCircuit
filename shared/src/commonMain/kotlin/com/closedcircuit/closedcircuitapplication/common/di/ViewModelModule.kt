@@ -28,7 +28,7 @@ val viewModelModule = module {
 
     // profile
     factory { ProfileViewModel(get(), get()) }
-    factory { parameters -> EditProfileViewModel(parameters.get(), get()) }
+    factory { EditProfileViewModel(get()) }
     factory { parameters -> ProfileVerificationViewModel(parameters.get(), get()) }
 
     // notification

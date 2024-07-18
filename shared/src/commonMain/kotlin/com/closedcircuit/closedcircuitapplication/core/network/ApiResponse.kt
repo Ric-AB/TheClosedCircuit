@@ -40,6 +40,12 @@ fun <T> ApiResponse<T>.getOrNull(): T? {
     else null
 }
 
+suspend fun <T : Any> ApiResponse<T>.onComplete(
+    executable: suspend () -> Unit
+): ApiResponse<T> = apply {
+    executable()
+}
+
 suspend fun <T : Any> ApiResponse<T>.onSuccess(
     executable: suspend (T) -> Unit
 ): ApiResponse<T> = apply {

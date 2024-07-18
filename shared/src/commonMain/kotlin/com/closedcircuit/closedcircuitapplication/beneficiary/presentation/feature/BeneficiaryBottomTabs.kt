@@ -20,6 +20,7 @@ import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.account.AccountTab
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardTab
@@ -94,24 +95,25 @@ internal class BeneficiaryBottomTabs : Screen {
         navigationIconClick: () -> Unit,
         navigateToNotificationScreen: () -> Unit
     ) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = navigationIconClick) {
-                    Icon(
-                        painter = painterResource(SharedRes.images.ic_hamburger),
-                        contentDescription = "hamburger menu"
-                    )
+        if (LocalTabNavigator.current.current == DashboardTab)
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = navigationIconClick) {
+                        Icon(
+                            painter = painterResource(SharedRes.images.ic_hamburger),
+                            contentDescription = "hamburger menu"
+                        )
+                    }
+                },
+                title = { },
+                actions = {
+                    IconButton(onClick = navigateToNotificationScreen) {
+                        Icon(
+                            painter = painterResource(SharedRes.images.ic_notification),
+                            contentDescription = "notifications"
+                        )
+                    }
                 }
-            },
-            title = { },
-            actions = {
-                IconButton(onClick = navigateToNotificationScreen) {
-                    Icon(
-                        painter = painterResource(SharedRes.images.ic_notification),
-                        contentDescription = "notifications"
-                    )
-                }
-            }
-        )
+            )
     }
 }

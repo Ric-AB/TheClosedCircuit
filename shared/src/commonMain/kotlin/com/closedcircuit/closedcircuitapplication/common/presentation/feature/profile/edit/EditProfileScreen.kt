@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -30,37 +31,35 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
-import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.koin.core.parameter.parametersOf
 
-internal data class EditProfileScreen(private val user: User) :
+internal class EditProfileScreen :
     Screen,
     KoinComponent,
     CustomScreenTransition by SlideUpTransition {
-    private val viewModel: EditProfileViewModel by inject { parametersOf(user) }
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val uiState = viewModel.state
+        val viewModel = getScreenModel<EditProfileViewModel>()
+        val state = viewModel.state
         val messageBarState = rememberMessageBarState()
 
         viewModel.editProfileResult.receiveAsFlow().observeWithScreen {
@@ -70,17 +69,21 @@ internal data class EditProfileScreen(private val user: User) :
                 }
 
                 EditProfileResult.Success -> {
-                    messageBarState.addSuccess("Changes made successfully") {
+                    messageBarState.addSuccess("Profile updated successfully") {
                         navigator.pop()
                     }
                 }
             }
         }
 
+        LaunchedEffect(state.isLoading) {
+            println("##### IAM LOADING ${state.isLoading}")
+        }
+
         ScreenContent(
             goBack = navigator::pop,
             messageBarState = messageBarState,
-            uiState = uiState,
+            state = state,
             onEvent = viewModel::onEvent
         )
     }
@@ -90,12 +93,12 @@ internal data class EditProfileScreen(private val user: User) :
 private fun ScreenContent(
     goBack: () -> Unit,
     messageBarState: MessageBarState,
-    uiState: EditProfileUIState?,
+    state: EditProfileUIState,
     onEvent: (EditProfileUiEvent) -> Unit
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
-        showLoadingDialog = uiState?.isLoading ?: false,
+        showLoadingDialog = state.isLoading,
         topBar = {
             DefaultAppBar(
                 title = stringResource(SharedRes.strings.edit_profile),
@@ -106,111 +109,109 @@ private fun ScreenContent(
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
 
-        uiState?.let { uiState ->
-            val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField) = uiState
-            val inputFieldCommonModifier = Modifier.fillMaxWidth()
-            val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
-                if (isFocused) onEvent(EditProfileUiEvent.InputFieldFocusReceived(fieldName))
-                else onEvent(EditProfileUiEvent.InputFieldFocusLost)
-            }
+        val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField) = state
+        val inputFieldCommonModifier = Modifier.fillMaxWidth()
+        val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
+            if (isFocused) onEvent(EditProfileUiEvent.InputFieldFocusReceived(fieldName))
+            else onEvent(EditProfileUiEvent.InputFieldFocusLost)
+        }
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = horizontalScreenPadding)
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = verticalScreenPadding)
-            ) {
-                DefaultOutlinedTextField(
-                    inputField = firstNameField,
-                    onValueChange = { onEvent(EditProfileUiEvent.FirstNameChange(it)) },
-                    label = stringResource(SharedRes.strings.first_name),
-                    supportingText = {
-                        if (firstNameField.isError) {
-                            Text(text = firstNameField.error)
-                        } else {
-                            NamePrompt()
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = false,
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                        capitalization = KeyboardCapitalization.Words
-                    ),
-                    modifier = inputFieldCommonModifier.onFocusChanged {
-                        handleFocusChange(it.isFocused, firstNameField.name)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = horizontalScreenPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = verticalScreenPadding)
+        ) {
+            DefaultOutlinedTextField(
+                inputField = firstNameField,
+                onValueChange = { onEvent(EditProfileUiEvent.FirstNameChange(it)) },
+                label = stringResource(SharedRes.strings.first_name),
+                supportingText = {
+                    if (firstNameField.isError) {
+                        Text(text = firstNameField.error)
+                    } else {
+                        NamePrompt()
                     }
-                )
-
-                DefaultOutlinedTextField(
-                    inputField = nickNameField,
-                    onValueChange = { onEvent(EditProfileUiEvent.NickNameChange(it)) },
-                    label = stringResource(SharedRes.strings.preferred) + "/" +
-                            stringResource(SharedRes.strings.nick_name),
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = false,
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                        capitalization = KeyboardCapitalization.Words
-                    ),
-                )
-
-                DefaultOutlinedTextField(
-                    inputField = lastNameField,
-                    onValueChange = { onEvent(EditProfileUiEvent.LastNameChange(it)) },
-                    label = stringResource(SharedRes.strings.last_name),
-                    supportingText = {
-                        if (lastNameField.isError) {
-                            Text(text = lastNameField.error)
-                        } else {
-                            NamePrompt()
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = false,
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                        capitalization = KeyboardCapitalization.Words
-                    ),
-                    modifier = inputFieldCommonModifier.onFocusChanged {
-                        handleFocusChange(it.isFocused, lastNameField.name)
-                    }
-                )
-
-                DefaultOutlinedTextField(
-                    inputField = emailField,
-                    onValueChange = { onEvent(EditProfileUiEvent.EmailChange(it)) },
-                    label = stringResource(SharedRes.strings.email),
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = false,
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = inputFieldCommonModifier.onFocusChanged {
-                        handleFocusChange(it.isFocused, emailField.name)
-                    }
-                )
-
-                DefaultOutlinedTextField(
-                    inputField = phoneNumberField,
-                    onValueChange = { onEvent(EditProfileUiEvent.PhoneNumberChange(it)) },
-                    label = stringResource(SharedRes.strings.phone_number),
-                    keyboardOptions = KeyboardOptions(
-                        autoCorrect = false,
-                        keyboardType = KeyboardType.Phone,
-                        imeAction = ImeAction.Next
-                    ),
-                    modifier = inputFieldCommonModifier.onFocusChanged {
-                        handleFocusChange(it.isFocused, phoneNumberField.name)
-                    }
-                )
-
-                DefaultButton(onClick = { onEvent(EditProfileUiEvent.OnSubmit) }) {
-                    Text(text = stringResource(SharedRes.strings.save_changes))
+                },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = false,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+                modifier = inputFieldCommonModifier.onFocusChanged {
+                    handleFocusChange(it.isFocused, firstNameField.name)
                 }
+            )
+
+            DefaultOutlinedTextField(
+                inputField = nickNameField,
+                onValueChange = { onEvent(EditProfileUiEvent.NickNameChange(it)) },
+                label = stringResource(SharedRes.strings.preferred) + "/" +
+                        stringResource(SharedRes.strings.nick_name),
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = false,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+            )
+
+            DefaultOutlinedTextField(
+                inputField = lastNameField,
+                onValueChange = { onEvent(EditProfileUiEvent.LastNameChange(it)) },
+                label = stringResource(SharedRes.strings.last_name),
+                supportingText = {
+                    if (lastNameField.isError) {
+                        Text(text = lastNameField.error)
+                    } else {
+                        NamePrompt()
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = false,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                    capitalization = KeyboardCapitalization.Words
+                ),
+                modifier = inputFieldCommonModifier.onFocusChanged {
+                    handleFocusChange(it.isFocused, lastNameField.name)
+                }
+            )
+
+            DefaultOutlinedTextField(
+                inputField = emailField,
+                onValueChange = { onEvent(EditProfileUiEvent.EmailChange(it)) },
+                label = stringResource(SharedRes.strings.email),
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = false,
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = inputFieldCommonModifier.onFocusChanged {
+                    handleFocusChange(it.isFocused, emailField.name)
+                }
+            )
+
+            DefaultOutlinedTextField(
+                inputField = phoneNumberField,
+                onValueChange = { onEvent(EditProfileUiEvent.PhoneNumberChange(it)) },
+                label = stringResource(SharedRes.strings.phone_number),
+                keyboardOptions = KeyboardOptions(
+                    autoCorrect = false,
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Next
+                ),
+                modifier = inputFieldCommonModifier.onFocusChanged {
+                    handleFocusChange(it.isFocused, phoneNumberField.name)
+                }
+            )
+
+            DefaultButton(onClick = { onEvent(EditProfileUiEvent.OnSubmit) }) {
+                Text(text = stringResource(SharedRes.strings.save_changes))
             }
         }
     }

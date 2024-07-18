@@ -44,7 +44,7 @@ fun LoadingDialog(visible: Boolean = false) {
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn(tween(700)),
-        exit = fadeOut(tween(300)),
+        exit = fadeOut(tween()),
         modifier = Modifier.fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeContent)
     ) {

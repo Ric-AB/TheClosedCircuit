@@ -48,16 +48,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.kyc.KycNavigator
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
@@ -90,11 +87,11 @@ internal class ProfileScreen : Screen, KoinComponent {
             bottomSheetState = bottomSheetState,
             sheetExpanded = isSheetVisible,
             sheetExpandedChange = { isSheetVisible = it },
-            navigateToEditProfileScreen = { navigator.push(EditProfileScreen(it)) },
+            navigateToEditProfileScreen = { navigator.push(EditProfileScreen()) },
             navigateToProfileVerificationScreen = {
-                uiState?.let { navigator.push(ProfileVerificationScreen(it.user.email)) }
+                uiState?.let { navigator.push(ProfileVerificationScreen(Email(it.email))) }
             },
-            navigateToKycScreen = {}
+            navigateToKycScreen = { navigator.push(KycNavigator()) }
         )
     }
 }
@@ -106,7 +103,7 @@ private fun ScreenContent(
     bottomSheetState: SheetState,
     sheetExpanded: Boolean,
     sheetExpandedChange: (Boolean) -> Unit,
-    navigateToEditProfileScreen: (User) -> Unit,
+    navigateToEditProfileScreen: () -> Unit,
     navigateToProfileVerificationScreen: () -> Unit,
     navigateToKycScreen: () -> Unit
 ) {
@@ -119,10 +116,7 @@ private fun ScreenContent(
             )
         }
     ) { innerPadding ->
-
-        uiState?.let {
-            val user = it.user
-
+        uiState?.let { state ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -130,19 +124,19 @@ private fun ScreenContent(
             ) {
                 ProfileHeader(
                     modifier = Modifier.fillMaxWidth(),
-                    firstName = user.firstName,
-                    avatar = user.avatar,
-                    onInfoClick = { sheetExpandedChange(true) }
+                    firstName = state.firstName,
+                    avatar = state.avatar,
+                    showStatusSheet = { sheetExpandedChange(true) }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
                 PersonalData(
                     modifier = Modifier.fillMaxWidth(),
-                    fullName = user.fullName,
-                    email = user.email,
-                    phoneNumber = user.phoneNumber,
-                    country = user.country,
-                    onEditClick = { navigateToEditProfileScreen(user) }
+                    fullName = state.fullName,
+                    email = state.email,
+                    phoneNumber = state.phoneNumber,
+                    country = state.country,
+                    navigateToEditProfile = navigateToEditProfileScreen
                 )
             }
 
@@ -150,9 +144,9 @@ private fun ScreenContent(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 bottomSheetState = bottomSheetState,
                 isVisible = sheetExpanded,
-                isEmailVerified = user.isVerified,
-                documentStatus = user.kycStatus,
-                phoneNumberStatus = user.phoneNumberStatus,
+                isEmailVerified = state.isEmailVerified,
+                documentStatus = state.kycStatus,
+                phoneNumberStatus = state.phoneNumberStatus,
                 closeModal = { sheetExpandedChange(false) },
                 navigateToProfileVerificationScreen = navigateToProfileVerificationScreen,
                 navigateToKycScreen = navigateToKycScreen
@@ -164,9 +158,9 @@ private fun ScreenContent(
 @Composable
 private fun ProfileHeader(
     modifier: Modifier = Modifier,
-    firstName: Name,
-    avatar: ImageUrl,
-    onInfoClick: () -> Unit
+    firstName: String,
+    avatar: String,
+    showStatusSheet: () -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -175,7 +169,7 @@ private fun ProfileHeader(
     ) {
         Column {
             Text(
-                text = stringResource(SharedRes.strings.hello_user, firstName.value),
+                text = stringResource(SharedRes.strings.hello_user, firstName),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -186,8 +180,9 @@ private fun ProfileHeader(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.tertiary,
                     shape = Shapes().extraSmall
-                ).padding(8.dp)
-                    .clickable(enabled = true, onClick = onInfoClick)
+                ).clickable(enabled = true, onClick = showStatusSheet)
+                    .padding(8.dp)
+
             ) {
                 Text(
                     text = stringResource(SharedRes.strings.account_status),
@@ -205,7 +200,7 @@ private fun ProfileHeader(
         }
 
         Avatar(
-            imageUrl = avatar.value,
+            imageUrl = avatar,
             size = DpSize(90.dp, 90.dp)
         )
     }
@@ -214,11 +209,11 @@ private fun ProfileHeader(
 @Composable
 private fun PersonalData(
     modifier: Modifier = Modifier,
-    fullName: Name,
-    email: Email,
-    phoneNumber: PhoneNumber,
-    country: Country,
-    onEditClick: () -> Unit
+    fullName: String,
+    email: String,
+    phoneNumber: String,
+    country: String,
+    navigateToEditProfile: () -> Unit
 ) {
     Column(
         modifier = modifier,
@@ -226,7 +221,7 @@ private fun PersonalData(
         SectionHeader(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(SharedRes.strings.personal_data),
-            onEditClick = onEditClick
+            onEditClick = navigateToEditProfile
         )
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -237,25 +232,25 @@ private fun PersonalData(
             ) {
                 InfoItem(
                     labelRes = SharedRes.strings.full_name,
-                    value = fullName.value,
+                    value = fullName,
                     icon = Icons.Outlined.Person
                 )
 
                 InfoItem(
                     labelRes = SharedRes.strings.email,
-                    value = email.value,
+                    value = email,
                     icon = Icons.Outlined.Email
                 )
 
                 InfoItem(
                     labelRes = SharedRes.strings.phone_number,
-                    value = phoneNumber.value,
+                    value = phoneNumber,
                     icon = Icons.Outlined.Phone
                 )
 
                 InfoItem(
                     labelRes = SharedRes.strings.country,
-                    value = country.value,
+                    value = country,
                     icon = Icons.Outlined.LocationOn
                 )
             }
@@ -274,7 +269,7 @@ private fun SectionHeader(modifier: Modifier, text: String, onEditClick: () -> U
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
             fontWeight = FontWeight.Normal
         )
 
@@ -342,12 +337,12 @@ private fun ProfileModalBottomSheet(
     navigateToProfileVerificationScreen: () -> Unit,
     navigateToKycScreen: () -> Unit
 ) {
-    val mapStatusToDisplayValues: (KycStatus) -> Pair<String, ImageVector> = {
-        when (it) {
-            KycStatus.NOT_STARTED -> Pair("Not started", Icons.Outlined.Info)
-            KycStatus.PENDING -> Pair("Pending", Icons.Outlined.Info)
-            KycStatus.VERIFIED -> Pair("Verified", Icons.Outlined.Info)
-            KycStatus.FAILED -> Pair("Failed", Icons.Outlined.Info)
+    val mapStatusToDisplayValues: (KycStatus) -> Pair<String, ImageVector> = { status ->
+        when (status) {
+            KycStatus.NOT_STARTED -> Pair(status.displayValue, Icons.Outlined.Info)
+            KycStatus.PENDING -> Pair(status.displayValue, Icons.Outlined.Info)
+            KycStatus.VERIFIED -> Pair(status.displayValue, Icons.Outlined.Info)
+            KycStatus.FAILED -> Pair(status.displayValue, Icons.Outlined.Info)
         }
     }
 

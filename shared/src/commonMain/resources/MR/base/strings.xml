@@ -98,6 +98,8 @@
     <string name="email_verification">Email verification</string>
     <string name="document_verification">Document verification</string>
     <string name="phone_number_verification">Phone number verification</string>
+    <string name="pending_label">Pending</string>
+    <string name="failed_label">Failed</string>
 
     <!--    Plan management-->
     <string name="plans">Plans</string>

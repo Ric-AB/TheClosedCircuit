@@ -1,5 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.model
 
-enum class KycStatus {
-    NOT_STARTED, PENDING, VERIFIED, FAILED
+enum class KycStatus(val displayValue: String) {
+    NOT_STARTED("Not started"),
+    PENDING("Pending"),
+    VERIFIED("Verified"),
+    FAILED("Failed")
 }

@@ -1,40 +1,35 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home
 
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
+import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 
 data class ProfileUIState(
-    val user: User,
+    val avatar: String,
+    val firstName: String,
+    val fullName: String,
+    val email: String,
+    val phoneNumber: String,
+    val country: String,
+    val isEmailVerified: Boolean,
+    val phoneNumberStatus: KycStatus,
+    val kycStatus: KycStatus,
 ) {
     companion object {
         fun init(user: User?): ProfileUIState? {
             if (user == null) return null
 
-            return ProfileUIState(user = user)
+            return ProfileUIState(
+                avatar = user.avatar.value,
+                firstName = user.firstName.value,
+                fullName = user.fullName.value,
+                email = user.email.value,
+                phoneNumber = user.phoneNumber.value,
+                country = user.country.value,
+                isEmailVerified = user.isVerified,
+                phoneNumberStatus = user.phoneNumberStatus,
+                kycStatus = user.kycStatus,
+            )
         }
     }
 }
 
-data class PersonalData(
-    val avatar: ImageUrl,
-    val fullName: Name,
-    val firstName: Name,
-    val email: Email,
-    val phoneNumber: PhoneNumber,
-    val country: Country
-)
-
-data class AccountState(
-    val emailVerified: Boolean,
-    val documentStatus: KycStatus,
-    val phoneNumberStatus: KycStatus
-)
-
-data class PlanSummary(
-    val completedPlans: Int,
-)

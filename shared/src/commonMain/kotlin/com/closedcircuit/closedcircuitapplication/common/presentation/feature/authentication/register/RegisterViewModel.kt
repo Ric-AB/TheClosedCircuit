@@ -8,6 +8,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.RegisterUseCase
+import com.closedcircuit.closedcircuitapplication.common.util.trimDuplicateSpace
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
@@ -46,11 +47,7 @@ class RegisterViewModel(
             val firstName = firstNameField.value.trim()
             val nickName = nickNameField.value.trim()
             val lastName = lastNameField.value.trim()
-            val fullName = listOfNotNull(
-                firstName,
-                nickName.takeIf { it.isNotBlank() },
-                lastName
-            ).joinToString(" ")
+            val fullName = "$firstName $nickName $lastName".trimDuplicateSpace()
 
             val phoneNumber = phoneNumberField.value.trim()
             val password = passwordField.value

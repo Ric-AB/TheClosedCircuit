@@ -8,9 +8,9 @@ import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanReposit
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
+import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import com.closedcircuit.closedcircuitapplication.core.network.getOrNull
-import com.closedcircuit.closedcircuitapplication.core.network.onError
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -54,6 +54,7 @@ class DashboardViewModel(
 
         DashboardUiState.Content(
             firstName = user?.firstName?.value.orEmpty(),
+            hasVerifiedEmail = user?.isVerified.orFalse(),
             recentPlans = allPlans.take(3).toImmutableList(),
             topSponsors = userDashboard?.topSponsors?.toImmutableList(),
             recentDonation = donations,

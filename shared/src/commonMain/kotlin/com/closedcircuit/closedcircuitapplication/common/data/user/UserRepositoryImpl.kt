@@ -1,13 +1,12 @@
 package com.closedcircuit.closedcircuitapplication.common.data.user
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.UserService
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.asApiUser
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.asUser
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.UpdateUserRequest
+import com.closedcircuit.closedcircuitapplication.common.data.user.dto.UpdateUserRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType

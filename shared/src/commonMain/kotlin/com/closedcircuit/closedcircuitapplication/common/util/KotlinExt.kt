@@ -13,6 +13,10 @@ fun String.capitalizeFirstChar(): String {
     return this.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 }
 
+fun String.trimDuplicateSpace(): String {
+    return this.replace("\\s+".toRegex(), " ")
+}
+
 fun Int?.orZero() = this ?: Int.Zero
 
 val Int.Companion.Zero

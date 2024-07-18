@@ -6,7 +6,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +31,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -117,12 +115,21 @@ internal object DashboardTab : Tab, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val messageBarState = rememberMessageBarState()
         val viewModel = navigator.getNavigatorScreenModel<DashboardViewModel>()
+        val state = viewModel.uiState()
 
         ScreenContent(
             messageBarState = messageBarState,
-            state = viewModel.uiState(),
-            navigateToCreatePlan = { navigator.push(CreatePlanNavigator) },
-            navigateToPlanListScreen = { navigator.push(PlanListScreen()) },
+            state = state,
+            navigateToCreatePlanOrEmailVerification = {
+                if (state is DashboardUiState.Content && state.hasVerifiedEmail) {
+                    navigator.push(CreatePlanNavigator)
+                }
+            },
+            navigateToPlanListOrEmailVerification = {
+                if (state is DashboardUiState.Content && state.hasVerifiedEmail) {
+                    navigator.push(PlanListScreen())
+                }
+            },
         )
     }
 
@@ -130,8 +137,8 @@ internal object DashboardTab : Tab, KoinComponent {
     private fun ScreenContent(
         messageBarState: MessageBarState,
         state: DashboardUiState,
-        navigateToCreatePlan: () -> Unit,
-        navigateToPlanListScreen: () -> Unit,
+        navigateToCreatePlanOrEmailVerification: () -> Unit,
+        navigateToPlanListOrEmailVerification: () -> Unit,
     ) {
         BaseScaffold(messageBarState = messageBarState) { innerPadding ->
             Column(
@@ -150,13 +157,13 @@ internal object DashboardTab : Tab, KoinComponent {
                         LoadedDashboard(
                             modifier = Modifier.fillMaxWidth(),
                             state = state,
-                            navigateToPlanList = navigateToPlanListScreen
+                            navigateToPlanList = navigateToPlanListOrEmailVerification
                         )
                     }
 
                     DashboardUiState.Empty -> {
                         EmptyDashboard(
-                            onClick = navigateToCreatePlan,
+                            onClick = navigateToCreatePlanOrEmailVerification,
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = horizontalScreenPadding),
                         )

@@ -1,9 +1,9 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.user
+package com.closedcircuit.closedcircuitapplication.common.data.user
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.ApiUser
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.UpdateUserRequest
+import com.closedcircuit.closedcircuitapplication.common.data.user.dto.UpdateUserRequest
 import com.closedcircuit.closedcircuitapplication.common.data.user.dto.UserDashboardResponse
 import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.DASHBOARD
 import com.closedcircuit.closedcircuitapplication.common.data.util.ClosedCircuitApiEndpoints.KYC

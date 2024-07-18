@@ -25,7 +25,7 @@ data class EditProfileUIState(
                 ),
 
                 nickNameField = InputField(
-                    inputValue = mutableStateOf(user.preferredName?.value ?: ""),
+                    inputValue = mutableStateOf(user.preferredName?.value.orEmpty()),
                     name = "nickName"
                 ),
 
