@@ -5,6 +5,8 @@ import androidx.compose.ui.interop.LocalUIViewController
 import androidx.compose.ui.window.ComposeUIViewController
 import com.closedcircuit.closedcircuitapplication.core.storage.storageDir
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
+import com.closedcircuit.closedcircuitapplication.common.presentation.LocalShareHandler
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.IOSShareHandler
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.ImagePickerFactory
 import platform.Foundation.NSHomeDirectory
 import platform.UIKit.UIScreen
@@ -15,7 +17,10 @@ fun MainViewController() = ComposeUIViewController {
     storageDir = NSHomeDirectory()
     val isDarkTheme =
         UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.UIUserInterfaceStyleDark
-    CompositionLocalProvider(LocalImagePicker provides ImagePickerFactory(LocalUIViewController.current).createPicker()) {
+    CompositionLocalProvider(
+        LocalImagePicker provides ImagePickerFactory(LocalUIViewController.current).createPicker(),
+        LocalShareHandler provides IOSShareHandler(LocalUIViewController.current)
+    ) {
         EntryPoint(useDarkTheme = isDarkTheme, dynamicColors = false)
     }
 }

@@ -2,7 +2,6 @@ package com.closedcircuit.closedcircuitapplication.common.presentation.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.closedcircuit.closedcircuitapplication.common.presentation.util.ImagePicker
 import platform.UIKit.UIViewController
 
 actual class ImagePickerFactory(
@@ -11,10 +10,6 @@ actual class ImagePickerFactory(
 
     @Composable
     actual fun createPicker(): ImagePicker {
-        return remember {
-            ImagePicker(
-                rootController
-            )
-        }
+        return remember { ImagePicker(rootController) }
     }
 }

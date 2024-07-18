@@ -404,4 +404,9 @@
     <string name="upload_image_label">Upload image</string>
     <string name="select_image_label">Select image</string>
     <string name="upload_label">Upload</string>
+    <string name="share_plan_link_message_label">Hi there! I am starting a new business or project
+        and I would like you to be a part of it with your funds. The Closed Circuit App allows you
+        to see how I use the funds and to keep me accountable
+        Click the link.\n\n%s
+    </string>
 </resources>

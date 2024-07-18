@@ -2,6 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 
 import androidx.compose.runtime.Stable
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 @Stable
@@ -38,6 +39,6 @@ data class FundRequestUiState(
 
 sealed interface FundRequestResult {
     data class TokenizeRequestSuccess(val link: String) : FundRequestResult
-    data class FundRequestSuccess(val fundType: FundType) : FundRequestResult
+    data class FundRequestSuccess(val fundType: FundType, val fundRequestID: ID) : FundRequestResult
     data class Error(val message: String) : FundRequestResult
 }

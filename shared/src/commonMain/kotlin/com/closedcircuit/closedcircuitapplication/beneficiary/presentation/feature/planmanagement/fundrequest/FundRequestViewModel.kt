@@ -73,7 +73,12 @@ class FundRequestViewModel(
             fundRequestRepository.createFundRequest(request)
                 .onSuccess {
                     val fundType = selectedFundType.value!!
-                    _resultChannel.send(FundRequestResult.FundRequestSuccess(fundType))
+                    _resultChannel.send(
+                        FundRequestResult.FundRequestSuccess(
+                            fundType = fundType,
+                            fundRequestID = it.id
+                        )
+                    )
                 }.onError { _, message ->
                     _resultChannel.send(FundRequestResult.Error(message))
                 }

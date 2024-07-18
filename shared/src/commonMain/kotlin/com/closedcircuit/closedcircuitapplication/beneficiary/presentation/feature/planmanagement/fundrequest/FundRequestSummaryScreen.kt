@@ -23,9 +23,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
+import com.closedcircuit.closedcircuitapplication.common.presentation.LocalShareHandler
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
@@ -34,12 +36,14 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlanDetailsGrid
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.Constants
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
 
 internal class FundRequestSummaryScreen(
+    private val fundRequestID: ID,
     private val modeOfSupport: FundType,
     private val plan: Plan,
     private val steps: Steps
@@ -47,11 +51,22 @@ internal class FundRequestSummaryScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        ScreenContent(goBack = navigator::pop)
+        val shareHandler = LocalShareHandler.current
+        val link = "${Constants.PLAN_LINK_BASE_URL}${fundRequestID.value}"
+        val text = stringResource(SharedRes.strings.share_plan_link_message_label, link)
+        ScreenContent(
+            goBack = navigator::pop,
+            shareLink = { shareHandler.sharePlanLink(text) },
+            navigateToHome = { navigator.popUntilRoot() }
+        )
     }
 
     @Composable
-    private fun ScreenContent(goBack: () -> Unit) {
+    private fun ScreenContent(
+        goBack: () -> Unit,
+        shareLink: () -> Unit,
+        navigateToHome: () -> Unit
+    ) {
         BaseScaffold(
             topBar = {
                 DefaultAppBar(
@@ -94,12 +109,12 @@ internal class FundRequestSummaryScreen(
                 StepList(modifier = Modifier.fillMaxWidth(), steps = steps)
 
                 Spacer(Modifier.height(24.dp))
-                DefaultButton(onClick = {}) {
+                DefaultButton(onClick = shareLink) {
                     Text(stringResource(SharedRes.strings.share_plan_link_label))
                 }
 
                 Spacer(Modifier.height(8.dp))
-                DefaultOutlinedButton(onClick = {}) {
+                DefaultOutlinedButton(onClick = navigateToHome) {
                     Text(stringResource(SharedRes.strings.back_home_label))
                 }
             }

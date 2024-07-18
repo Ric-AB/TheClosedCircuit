@@ -73,7 +73,14 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
             when (it) {
                 is FundRequestResult.Error -> messageBarState.addError(it.message)
                 is FundRequestResult.FundRequestSuccess ->
-                    navigator.push(FundRequestSummaryScreen(it.fundType, plan, steps))
+                    navigator.push(
+                        FundRequestSummaryScreen(
+                            fundRequestID = it.fundRequestID,
+                            modeOfSupport = it.fundType,
+                            plan = plan,
+                            steps = steps
+                        )
+                    )
 
                 is FundRequestResult.TokenizeRequestSuccess -> navigator.push(PaymentScreen(it.link))
             }
