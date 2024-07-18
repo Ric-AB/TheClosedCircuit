@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -62,6 +63,7 @@ fun <T> TextFieldDialogMenu(
 
     Column {
         Text(text = label, style = MaterialTheme.typography.labelMedium)
+        Spacer(Modifier.height(2.dp))
         Box(modifier = modifier.height(IntrinsicSize.Min)) {
             OutlinedTextField(
                 value = selectedItem?.let(itemToString) ?: "",

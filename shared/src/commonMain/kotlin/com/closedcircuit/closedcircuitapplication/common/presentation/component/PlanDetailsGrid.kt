@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
@@ -51,7 +52,7 @@ fun PlanDetailsGrid(
             item1 = {
                 GridItem(
                     imageResource = SharedRes.images.ic_briefcase,
-                    header = sector,
+                    header = sector.capitalizeFirstChar(),
                     message = stringResource(SharedRes.strings.business_sector)
                 )
             },

@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.util
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
 
 
+@Stable
 data class InputField(
     val name: String = String.Empty,
     val inputValue: MutableState<String> = mutableStateOf(String.Empty),
@@ -33,7 +35,7 @@ data class InputField(
     fun validateInput() {
         if (validator == null) return
 
-        val validationResult = validator.validate(inputValue.value)
+        val validationResult = validator.validate(value)
 
         error = if (validationResult.isValid) String.Empty
         else validationResult.validationError

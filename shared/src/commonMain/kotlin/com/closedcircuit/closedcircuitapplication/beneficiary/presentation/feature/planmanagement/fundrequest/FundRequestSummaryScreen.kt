@@ -85,10 +85,10 @@ internal class FundRequestSummaryScreen(
                     modifier = Modifier.fillMaxWidth(),
                     sector = plan.sector,
                     duration = plan.duration.value.toString(),
-                    estimatedCostPrice = plan.estimatedCostPrice.value.toString(),
-                    estimatedSellingPrice = plan.estimatedSellingPrice.value.toString(),
-                    targetAmount = plan.targetAmount.value.toString(),
-                    totalFundsRaised = plan.totalFundsRaised.value.toString()
+                    estimatedCostPrice = plan.estimatedCostPrice.getFormattedValue(),
+                    estimatedSellingPrice = plan.estimatedSellingPrice.getFormattedValue(),
+                    targetAmount = plan.targetAmount.getFormattedValue(),
+                    totalFundsRaised = plan.totalFundsRaised.getFormattedValue()
                 )
 
                 Spacer(Modifier.height(24.dp))
@@ -143,9 +143,12 @@ internal class FundRequestSummaryScreen(
     private fun StepList(modifier: Modifier = Modifier, steps: Steps) {
         Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             SectionHeader(stringResource(SharedRes.strings.steps))
+
+            Spacer(Modifier.height(8.dp))
             steps.forEach {
                 StepItem(it)
                 HorizontalDivider()
+                Spacer(Modifier.height(8.dp))
             }
         }
     }
