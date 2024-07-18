@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.common.domain.session
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Token
-import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
+import dev.gitlive.firebase.auth.FirebaseUser
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 
@@ -18,13 +18,10 @@ data class Session(
         const val SESSION_DURATION_IN_HOURS = 6
     }
 
-    fun currentAuthenticationState(hasOnboarded: Boolean): AuthenticationState {
-        if (!hasOnboarded) return AuthenticationState.FIRST_TIME
-
+    fun hasExpired(firebaseUser: FirebaseUser?): Boolean {
         val lastLoginAsLocalDateTime = lastLogin.toInstant()
         val now = Clock.System.now()
         val differenceInHours = now - lastLoginAsLocalDateTime
-        return if (differenceInHours.inWholeHours <= SESSION_DURATION_IN_HOURS) AuthenticationState.LOGGED_IN
-        else AuthenticationState.LOGGED_OUT
+        return differenceInHours.inWholeHours >= SESSION_DURATION_IN_HOURS || firebaseUser == null
     }
 }

@@ -3,8 +3,10 @@ package com.closedcircuit.closedcircuitapplication.common.domain.usecase
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
+import dev.gitlive.firebase.auth.FirebaseAuth
 
 class IsLoggedInUseCase(
+    private val firebaseAuth: FirebaseAuth,
     private val sessionRepository: SessionRepository,
     private val appSettingsRepository: AppSettingsRepository
 ) {
@@ -13,8 +15,12 @@ class IsLoggedInUseCase(
         val hasOnboarded = appSettingsRepository.hasOnboarded()
         val currentSession = sessionRepository.get()
         return when {
-            currentSession != null -> currentSession.currentAuthenticationState(hasOnboarded)
-            hasOnboarded -> AuthenticationState.LOGGED_OUT
+            !hasOnboarded -> AuthenticationState.FIRST_TIME
+            currentSession != null -> {
+                if (currentSession.hasExpired(firebaseAuth.currentUser)) AuthenticationState.LOGGED_OUT
+                else AuthenticationState.LOGGED_IN
+            }
+
             else -> AuthenticationState.FIRST_TIME
         }
     }
