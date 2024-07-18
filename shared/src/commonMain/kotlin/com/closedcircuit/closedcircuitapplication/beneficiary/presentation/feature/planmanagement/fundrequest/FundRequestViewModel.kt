@@ -36,10 +36,6 @@ class FundRequestViewModel(
     private val repaymentDuration = mutableStateOf<Int?>(null)
     private val interestRate = InputField()
 
-    init {
-        println("######INITIALIZED")
-    }
-
     @Composable
     override fun uiState(): FundRequestUiState {
         return FundRequestUiState(

@@ -27,11 +27,13 @@ class PaymentViewModel : BaseScreenModel<Unit, PaymentResult>() {
     }
 
     private fun String.findParameterValue(parameterName: String): String? {
-        return this.split('&').map {
-            val parts = it.split('=')
-            val name = parts.firstOrNull() ?: ""
-            val value = parts.drop(1).firstOrNull() ?: ""
-            Pair(name, value)
-        }.firstOrNull { it.first == parameterName }?.second
+        val startOfQueryParams = this.indexOfFirst { it == '?' }.plus(1)
+        return this.drop(startOfQueryParams)
+            .split('&').map {
+                val parts = it.split('=')
+                val name = parts.firstOrNull() ?: ""
+                val value = parts.drop(1).firstOrNull() ?: ""
+                Pair(name, value)
+            }.firstOrNull { it.first == parameterName }?.second
     }
 }

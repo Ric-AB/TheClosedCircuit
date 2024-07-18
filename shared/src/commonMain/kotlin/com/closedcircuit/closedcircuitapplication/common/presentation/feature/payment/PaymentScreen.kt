@@ -13,8 +13,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.navigationResult
-import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.WebViewState
@@ -55,7 +53,6 @@ internal class PaymentScreen(private val url: String) : Screen, KoinComponent {
             Column(
                 modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
                 WebView(state = webViewState, modifier = Modifier.fillMaxSize())
             }

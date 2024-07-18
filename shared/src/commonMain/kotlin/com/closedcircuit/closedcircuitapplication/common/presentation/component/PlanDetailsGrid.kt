@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -121,6 +122,7 @@ private fun GridItem(imageResource: ImageResource, header: String, message: Stri
                 color = MaterialTheme.colorScheme.primary
             )
 
+            Spacer(Modifier.height(4.dp))
             Text(
                 text = message,
                 style = MaterialTheme.typography.labelMedium,
