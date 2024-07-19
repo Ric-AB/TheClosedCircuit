@@ -94,7 +94,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
                     .padding(vertical = verticalScreenPadding)
             ) {
                 WalletCard(
-                    wallet = null,
+                    amount = null,
                     modifier = Modifier.padding(horizontal = horizontalScreenPadding)
                 )
 

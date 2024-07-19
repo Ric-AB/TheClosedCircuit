@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.wallet.Wallet
 
 @Composable
-fun WalletCard(wallet: Wallet?, modifier: Modifier) {
+fun WalletCard(amount: String?, modifier: Modifier) {
     @Composable
     fun Card(modifier: Modifier, containerColor: Color) {
         androidx.compose.material3.Card(
@@ -51,7 +51,7 @@ fun WalletCard(wallet: Wallet?, modifier: Modifier) {
         )
 
         Text(
-            text = wallet?.totalFunds?.value?.toString() ?: "--",
+            text = amount ?: "--",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center

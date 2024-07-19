@@ -14,6 +14,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.step.StepReposit
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -82,6 +83,10 @@ class PlanRepositoryImpl(
                 planEntity.asPlan()
             }
         }
+    }
+
+    override fun getRecentPlans(limit: Int): Flow<Plans> {
+        return plansFlow.map { it.take(limit).toImmutableList() }
     }
 
     override fun getPlanByIDAsFlow(id: ID): Flow<Plan> {

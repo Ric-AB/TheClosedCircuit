@@ -21,5 +21,7 @@ interface PlanRepository {
 
     fun getPlanByIDAsFlow(id: ID): Flow<Plan>
 
+    fun getRecentPlans(limit: Int = 3): Flow<Plans>
+
     suspend fun fetchPlanByID(id: ID): ApiResponse<Plan>
 }

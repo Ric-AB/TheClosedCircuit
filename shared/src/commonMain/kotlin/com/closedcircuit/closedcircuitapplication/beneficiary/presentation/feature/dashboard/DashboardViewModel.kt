@@ -37,25 +37,26 @@ class DashboardViewModel(
 
     private val state = combine(
         userRepository.userFlow,
-        planRepository.plansFlow,
+        planRepository.getRecentPlans(),
         userDashboardResponseFlow,
         donationsFlow,
-    ) { user, allPlans, userDashboardResponse, donations ->
+    ) { user, recentPlans, userDashboardResponse, donations ->
         val userDashboard = userDashboardResponse.getOrNull()
         val completedPlanCount = userDashboard?.completedPlansCount.orZero()
         val ongoingPlanCount = userDashboard?.ongoingPlansCount.orZero()
         val notStartedPlanCount = userDashboard?.notStartedPlansCount.orZero()
-        val showAnalytics =
-            listOf(completedPlanCount, ongoingPlanCount, notStartedPlanCount).any { it > Int.Zero }
+        val showAnalytics = listOf(completedPlanCount, ongoingPlanCount, notStartedPlanCount)
+            .any { it > Int.Zero }
 
-        if (allPlans.isEmpty()) {
+        if (recentPlans.isEmpty()) {
             return@combine DashboardUiState.Empty
         }
 
         DashboardUiState.Content(
             firstName = user?.firstName?.value.orEmpty(),
             hasVerifiedEmail = user?.isVerified.orFalse(),
-            recentPlans = allPlans.take(3).toImmutableList(),
+            totalFundsRaised = userDashboard?.totalFundsRaised?.getFormattedValue().orEmpty(),
+            recentPlans = recentPlans,
             topSponsors = userDashboard?.topSponsors?.toImmutableList(),
             recentDonation = donations,
             completedPlansCount = completedPlanCount,

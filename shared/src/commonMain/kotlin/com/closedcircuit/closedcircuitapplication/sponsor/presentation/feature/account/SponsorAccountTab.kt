@@ -77,7 +77,7 @@ object SponsorAccountTab : Tab {
                     .statusBarsPadding()
                     .padding(horizontal = horizontalScreenPadding)
             ) {
-                WalletCard(wallet = null, modifier = Modifier.fillMaxWidth())
+                WalletCard(amount = null, modifier = Modifier.fillMaxWidth())
 
                 Spacer(Modifier.height(100.dp))
                 Column(

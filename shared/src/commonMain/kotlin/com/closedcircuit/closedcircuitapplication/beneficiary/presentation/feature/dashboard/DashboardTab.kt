@@ -149,7 +149,7 @@ internal object DashboardTab : Tab, KoinComponent {
                     .padding(vertical = verticalScreenPadding)
             ) {
                 WalletCard(
-                    wallet = null,
+                    amount = state.getTotalFundsRaised,
                     modifier = Modifier.padding(horizontal = horizontalScreenPadding)
                 )
 
