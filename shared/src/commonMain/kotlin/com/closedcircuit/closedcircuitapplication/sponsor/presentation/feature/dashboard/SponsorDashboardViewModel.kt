@@ -24,15 +24,15 @@ class SponsorDashboardViewModel(
 
     private fun fetchDashboardPlans() {
         screenModelScope.launch {
-            val userFirstName = userRepository.userFlow.value?.firstName?.value ?: "Richard"
+            val user = userRepository.userFlow.value
             planRepository.fetchFundedPlans().onSuccess {
                 val plans = it.toImmutableList()
                 state = SponsorDashboardUiState.Content(
-                    userFirstName = userFirstName,
+                    userFirstName = user?.firstName?.value.orEmpty(),
+                    walletBalance = user?.walletBalance?.getFormattedValue(),
                     plans = plans
                 )
             }.onError { _, message ->
-                println("######ERROR:::: $message")
                 state = SponsorDashboardUiState.Error(message)
             }
         }

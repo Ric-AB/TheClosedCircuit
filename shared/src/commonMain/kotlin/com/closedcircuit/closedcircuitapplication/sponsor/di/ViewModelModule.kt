@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.di
 
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.account.SponsorAccountTabViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.dashboard.SponsorDashboardViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.approval.StepApprovalViewModel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.FundedPlanDetailsViewModel
@@ -10,6 +11,7 @@ import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.m
 import org.koin.dsl.module
 
 val viewModelModule = module {
+    factory { SponsorAccountTabViewModel(get()) }
     factory { MakeOfferViewModel(get(), get()) }
     factory { SponsorDashboardViewModel(get(), get()) }
     factory { parameters -> LoansViewModel(parameters.get(), get()) }

@@ -14,7 +14,7 @@ sealed interface DashboardUiState {
         val firstName: String,
         val hasVerifiedEmail: Boolean,
         val showAnalytics: Boolean,
-        val totalFundsRaised: String,
+        val walletBalance: String,
         val completedPlansCount: Int,
         val ongoingPlansCount: Int,
         val notStartedPlansCount: Int,
@@ -23,6 +23,6 @@ sealed interface DashboardUiState {
         val recentPlans: Plans
     ) : DashboardUiState
 
-    val getTotalFundsRaised: String?
-        get() = (this as? Content)?.totalFundsRaised
+    val getWalletBalance: String?
+        get() = (this as? Content)?.walletBalance
 }

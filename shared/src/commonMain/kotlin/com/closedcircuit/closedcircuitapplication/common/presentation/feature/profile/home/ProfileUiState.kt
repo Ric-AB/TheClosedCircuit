@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
+import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 
 data class ProfileUIState(

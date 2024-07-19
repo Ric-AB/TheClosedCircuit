@@ -25,6 +25,7 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.preview.LoansPreviewScreen
@@ -56,14 +58,21 @@ internal class LoansDashboard : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = getScreenModel<LoansDashboardViewModel>()
+        val walletBalance = viewModel.walletBalance.collectAsState().value
         ScreenContent(
+            walletBalance = walletBalance,
             goBack = navigator::pop,
             navigateToLoansPreview = { navigator.push(LoansPreviewScreen(it)) }
         )
     }
 
     @Composable
-    private fun ScreenContent(goBack: () -> Unit, navigateToLoansPreview: (LoanStatus) -> Unit) {
+    private fun ScreenContent(
+        walletBalance: String?,
+        goBack: () -> Unit,
+        navigateToLoansPreview: (LoanStatus) -> Unit
+    ) {
         BaseScaffold(
             topBar = {
                 DefaultAppBar(
@@ -80,7 +89,7 @@ internal class LoansDashboard : Screen, KoinComponent {
             ) {
                 val commonModifier = remember { Modifier.fillMaxWidth() }
 
-                WalletCard(null, commonModifier)
+                WalletCard(walletBalance, commonModifier)
 
                 Spacer(Modifier.height(80.dp))
                 Sections(modifier = commonModifier, navigateToLoansPreview = navigateToLoansPreview)

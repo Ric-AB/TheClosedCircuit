@@ -23,18 +23,21 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.kyc.KycNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.LoansDashboard
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
@@ -66,7 +69,10 @@ internal object AccountTab : Tab {
     @Composable
     override fun Content() {
         val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
+        val viewModel = getScreenModel<AccountTabViewModel>()
+        val walletBalance = viewModel.walletBalance.collectAsState().value
         ScreenContent(
+            walletBalance = walletBalance,
             navigateToKycScreen = { navigator.push(KycNavigator()) },
             navigateToLoansDashboard = { navigator.push(LoansDashboard()) }
         )
@@ -74,6 +80,7 @@ internal object AccountTab : Tab {
 
     @Composable
     private fun ScreenContent(
+        walletBalance: String?,
         navigateToKycScreen: () -> Unit,
         navigateToLoansDashboard: () -> Unit
     ) {
@@ -83,7 +90,7 @@ internal object AccountTab : Tab {
                     .statusBarsPadding()
                     .padding(horizontal = horizontalScreenPadding)
             ) {
-                WalletCard(amount = null, modifier = Modifier.fillMaxWidth())
+                WalletCard(amount = walletBalance, modifier = Modifier.fillMaxWidth())
 
                 Spacer(Modifier.height(100.dp))
                 AccountSections(
@@ -175,7 +182,10 @@ internal object AccountTab : Tab {
                     modifier = Modifier.weight(1f)
                 )
 
-                Icon(imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = null)
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                    contentDescription = null
+                )
             }
 
             if (showDivider) {

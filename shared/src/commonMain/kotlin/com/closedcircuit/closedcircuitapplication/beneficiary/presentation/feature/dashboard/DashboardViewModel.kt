@@ -55,7 +55,7 @@ class DashboardViewModel(
         DashboardUiState.Content(
             firstName = user?.firstName?.value.orEmpty(),
             hasVerifiedEmail = user?.isVerified.orFalse(),
-            totalFundsRaised = userDashboard?.totalFundsRaised?.getFormattedValue().orEmpty(),
+            walletBalance = user?.walletBalance?.getFormattedValue().orEmpty(),
             recentPlans = recentPlans,
             topSponsors = userDashboard?.topSponsors?.toImmutableList(),
             recentDonation = donations,

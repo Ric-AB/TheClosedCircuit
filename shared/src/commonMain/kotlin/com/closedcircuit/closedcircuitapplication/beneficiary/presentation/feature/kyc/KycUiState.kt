@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AccountType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
+import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 @Stable

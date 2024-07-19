@@ -9,6 +9,10 @@ sealed interface SponsorDashboardUiState {
     data class Error(val message: String) : SponsorDashboardUiState
     data class Content(
         val userFirstName: String,
+        val walletBalance: String?,
         val plans: ImmutableList<FundedPlanPreview>
     ) : SponsorDashboardUiState
+
+    val getWalletBalance: String?
+        get() = (this as? Content)?.walletBalance
 }

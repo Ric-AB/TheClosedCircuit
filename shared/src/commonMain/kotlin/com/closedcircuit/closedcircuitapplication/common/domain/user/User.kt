@@ -1,6 +1,7 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.user
+package com.closedcircuit.closedcircuitapplication.common.domain.user
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AccountType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
@@ -28,10 +29,15 @@ data class User(
     val isCardTokenized: Boolean,
     val createdAt: Date,
     val updatedAt: Date,
+    val walletBalance: Amount? = null,
 ) {
     val firstName = Name(fullName.value.split(Regex("\\s")).first())
     val lastName = Name(fullName.value.split(Regex("\\s")).last())
     val hasAttemptedKyc get() = kycStatus != KycStatus.NOT_STARTED
     val accountType get() = AccountType.getByText(country.value)
 
+
+    fun copyWithWalletBalance(amount: Amount): User {
+        return copy(walletBalance = amount)
+    }
 }

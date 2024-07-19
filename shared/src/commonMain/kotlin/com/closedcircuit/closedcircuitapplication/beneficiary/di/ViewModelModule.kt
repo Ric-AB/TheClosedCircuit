@@ -1,7 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.di
 
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.account.AccountTabViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.kyc.KycViewModel
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.LoansDashboardViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.details.LoanDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.loanlist.LoansViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.preview.LoansPreviewViewModel
@@ -21,6 +23,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     factory { DashboardViewModel(get(), get(), get()) }
+    factory { AccountTabViewModel(get()) }
 
     // plan management
     factory { PlanListViewModel(get()) }
@@ -50,6 +53,7 @@ val viewModelModule = module {
     factory { KycViewModel(get()) }
 
     // loan
+    factory { LoansDashboardViewModel(get()) }
     factory { LoansPreviewViewModel(get()) }
     factory { LoansViewModel(get()) }
     factory { parameters -> LoanDetailsViewModel(parameters.get(), get()) }

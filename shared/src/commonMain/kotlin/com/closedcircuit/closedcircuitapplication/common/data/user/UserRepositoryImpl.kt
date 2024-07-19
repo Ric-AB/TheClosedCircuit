@@ -12,17 +12,22 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
+import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserDashboard
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.util.Zero
 import io.github.xxfast.kstore.KStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -31,13 +36,15 @@ class UserRepositoryImpl(
     userStore: KStore<User>,
     private val ioDispatcher: CoroutineDispatcher
 ) : UserRepository {
+    private val walletBalance = MutableStateFlow(Amount(Double.Zero))
 
-    override val userFlow = userStore.updates
-        .stateIn(
-            scope = CoroutineScope(ioDispatcher),
-            started = SharingStarted.Eagerly,
-            initialValue = null
-        )
+    override val userFlow = combine(userStore.updates, walletBalance) { user, amount ->
+        user?.copyWithWalletBalance(amount)
+    }.stateIn(
+        scope = CoroutineScope(ioDispatcher),
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    )
 
     override suspend fun fetchUser(userId: String): ApiResponse<User> {
         return withContext(ioDispatcher + NonCancellable) {
@@ -74,7 +81,7 @@ class UserRepositoryImpl(
     override suspend fun getUserDashboard(): ApiResponse<UserDashboard> {
         return withContext(ioDispatcher) {
             userService.getUserDashboard().mapOnSuccess { response ->
-                UserDashboard(
+                val userDashboard = UserDashboard(
                     completedPlansCount = response.planStatus.planAnalytics.completed,
                     ongoingPlansCount = response.planStatus.planAnalytics.onGoing,
                     notStartedPlansCount = response.planStatus.planAnalytics.notStarted,
@@ -87,6 +94,8 @@ class UserRepositoryImpl(
                         )
                     }
                 )
+                walletBalance.update { userDashboard.totalFundsRaised }
+                userDashboard
             }
         }
     }

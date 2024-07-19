@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.user
 
 import com.closedcircuit.closedcircuitapplication.common.data.user.dto.SponsorResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.ApiUser
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.user.User
+import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email

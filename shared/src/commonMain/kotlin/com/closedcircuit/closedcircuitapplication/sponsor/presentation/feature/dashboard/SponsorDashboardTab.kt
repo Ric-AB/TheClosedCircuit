@@ -82,7 +82,8 @@ object SponsorDashboardTab : Tab, KoinComponent {
 
     @Composable
     private fun ScreenContent(
-        messageBarState: MessageBarState, state: SponsorDashboardUiState,
+        messageBarState: MessageBarState,
+        state: SponsorDashboardUiState,
         navigateToPlanListScreen: () -> Unit,
         navigateToFundedPlanDetails: (FundedPlanPreview) -> Unit
     ) {
@@ -94,7 +95,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
                     .padding(vertical = verticalScreenPadding)
             ) {
                 WalletCard(
-                    amount = null,
+                    amount = state.getWalletBalance,
                     modifier = Modifier.padding(horizontal = horizontalScreenPadding)
                 )
 
