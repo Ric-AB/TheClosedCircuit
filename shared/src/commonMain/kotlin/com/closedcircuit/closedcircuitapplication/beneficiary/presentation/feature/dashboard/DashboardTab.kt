@@ -75,6 +75,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TaskLinearProgress
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent1
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent2
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent3
@@ -112,7 +113,7 @@ internal object DashboardTab : Tab, KoinComponent {
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
         val messageBarState = rememberMessageBarState()
         val viewModel = navigator.getNavigatorScreenModel<DashboardViewModel>()
         val state = viewModel.uiState()
@@ -157,7 +158,7 @@ internal object DashboardTab : Tab, KoinComponent {
                         LoadedDashboard(
                             modifier = Modifier.fillMaxWidth(),
                             state = state,
-                            navigateToPlanList = navigateToPlanListOrEmailVerification
+                            navigateToPlanListOrEmailVerification = navigateToPlanListOrEmailVerification
                         )
                     }
 
@@ -181,7 +182,7 @@ internal object DashboardTab : Tab, KoinComponent {
     private fun LoadedDashboard(
         modifier: Modifier,
         state: DashboardUiState.Content,
-        navigateToPlanList: () -> Unit
+        navigateToPlanListOrEmailVerification: () -> Unit
     ) {
         Column(modifier = modifier) {
             val topSponsors = state.topSponsors
@@ -217,7 +218,7 @@ internal object DashboardTab : Tab, KoinComponent {
                 RecentPlans(
                     recentPlans = recentPlans,
                     modifier = Modifier.fillMaxWidth(),
-                    navigateToPlanList = navigateToPlanList
+                    navigateToPlanListOrEmailVerification = navigateToPlanListOrEmailVerification
                 )
             }
 
@@ -237,7 +238,7 @@ internal object DashboardTab : Tab, KoinComponent {
     private fun RecentPlans(
         modifier: Modifier,
         recentPlans: ImmutableList<Plan>,
-        navigateToPlanList: () -> Unit
+        navigateToPlanListOrEmailVerification: () -> Unit
     ) {
         Column(modifier = modifier) {
             SectionHeader(
@@ -246,7 +247,7 @@ internal object DashboardTab : Tab, KoinComponent {
                 bottomPadding = 0.dp
             ) {
                 TextButton(
-                    onClick = navigateToPlanList,
+                    onClick = navigateToPlanListOrEmailVerification,
                     colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.secondary)
                 ) {
                     Text(

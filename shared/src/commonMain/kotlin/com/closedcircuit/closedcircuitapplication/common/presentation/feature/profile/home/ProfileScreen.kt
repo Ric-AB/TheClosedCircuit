@@ -256,8 +256,6 @@ private fun PersonalData(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -277,7 +275,7 @@ private fun SectionHeader(modifier: Modifier, text: String, onEditClick: () -> U
             Icon(
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = "edit profile",
-                modifier = Modifier.size(18.dp),
+                modifier = Modifier.size(20.dp),
                 tint = Color.Gray
             )
         }

@@ -149,7 +149,6 @@ private fun ScreenContent(
                         modifier = Modifier.clickable { resendOtp() }
                     )
                 }
-
             }
         }
     }

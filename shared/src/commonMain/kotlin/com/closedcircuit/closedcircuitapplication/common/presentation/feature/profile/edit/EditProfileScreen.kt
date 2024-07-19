@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -76,10 +77,6 @@ internal class EditProfileScreen :
             }
         }
 
-        LaunchedEffect(state.isLoading) {
-            println("##### IAM LOADING ${state.isLoading}")
-        }
-
         ScreenContent(
             goBack = navigator::pop,
             messageBarState = messageBarState,
@@ -118,12 +115,10 @@ private fun ScreenContent(
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = horizontalScreenPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = verticalScreenPadding)
+                .padding(horizontal = horizontalScreenPadding)
         ) {
             DefaultOutlinedTextField(
                 inputField = firstNameField,
