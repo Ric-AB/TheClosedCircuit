@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -25,7 +24,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopAppBarTitle
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.table.Table
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
@@ -89,7 +88,7 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
             ) {
                 var showDonatePromptDialog by remember { mutableStateOf(false) }
                 var showDonateDialog by remember { mutableStateOf(false) }
-                TopAppBarTitle(stringResource(SharedRes.strings.payment_summary_label))
+                TitleText(stringResource(SharedRes.strings.payment_summary_label))
 
                 Spacer(Modifier.height(24.dp))
                 Table(

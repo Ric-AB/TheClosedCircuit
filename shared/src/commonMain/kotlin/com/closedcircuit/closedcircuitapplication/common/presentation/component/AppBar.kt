@@ -25,6 +25,6 @@ fun DefaultAppBar(
                 }
             }
         },
-        title = { TopAppBarTitle(text = title) }
+        title = { TitleText(text = title) }
     )
 }

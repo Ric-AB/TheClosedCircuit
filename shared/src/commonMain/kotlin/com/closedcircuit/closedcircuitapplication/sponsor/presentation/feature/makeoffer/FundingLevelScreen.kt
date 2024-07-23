@@ -18,7 +18,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldDialogMenu
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopAppBarTitle
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
@@ -53,7 +53,7 @@ internal class FundingLevelScreen : Screen, KoinComponent {
                     .padding(innerPadding)
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
-                TopAppBarTitle(stringResource(SharedRes.strings.how_would_you_like_to_sponsor_label))
+                TitleText(stringResource(SharedRes.strings.how_would_you_like_to_sponsor_label))
 
                 Spacer(Modifier.height(24.dp))
                 TextFieldDialogMenu(

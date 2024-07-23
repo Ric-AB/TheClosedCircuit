@@ -22,7 +22,7 @@ internal class MakeOfferNavigator(private val planID: ID, private val isLoggedIn
 
     @Composable
     private fun ScreenContent(goBack: () -> Unit) {
-        Navigator(PlanSummaryScreen(planID)) {
+        Navigator(PlanSummaryScreen(planID, isLoggedIn)) {
             ScreenBasedTransition(navigator = it, modifier = Modifier.fillMaxSize())
         }
     }

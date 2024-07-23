@@ -10,6 +10,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
 import com.closedcircuit.closedcircuitapplication.common.util.round
 import com.closedcircuit.closedcircuitapplication.core.network.onError
@@ -82,7 +83,8 @@ class MakeOfferViewModel(
                         }.toImmutableMap()
 
                     planSummaryState = PlanSummaryUiState.Content(
-                        businessSector = sponsorPlan.sector,
+                        ownerFullName = sponsorPlan.beneficiaryFullName.value,
+                        businessSector = sponsorPlan.sector.capitalizeFirstChar(),
                         planDuration = sponsorPlan.duration.value.toString(),
                         estimatedCostPrice = estimatedCostPrice.getFormattedValue(),
                         estimatedSellingPrice = estimatedSellingPrice.getFormattedValue(),

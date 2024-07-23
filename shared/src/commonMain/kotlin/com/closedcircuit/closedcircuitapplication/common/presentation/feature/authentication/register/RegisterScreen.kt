@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
@@ -49,17 +49,19 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayReplaceAll
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.PlanSummaryScreen
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal class RegisterScreen : Screen, KoinComponent,
+internal class RegisterScreen(private val planID: ID? = null) : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
     private val viewModel: RegisterViewModel by inject()
 
@@ -76,8 +78,12 @@ internal class RegisterScreen : Screen, KoinComponent,
                     messageBarState.addError(it.message)
                 }
 
-                RegisterResult.Success -> {
-                    navigator.delayReplaceAll(DashboardTab)
+                is RegisterResult.Success -> {
+                    if (planID != null) {
+                        navigator.delayReplaceAll(PlanSummaryScreen(planID, true))
+                    } else {
+                        navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
+                    }
                 }
             }
         }

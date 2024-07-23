@@ -39,7 +39,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopAppBarTitle
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -79,7 +79,7 @@ internal class FundingItemsScreen : Screen, KoinComponent {
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
-                TopAppBarTitle(stringResource(SharedRes.strings.how_would_you_like_to_sponsor_label))
+                TitleText(stringResource(SharedRes.strings.how_would_you_like_to_sponsor_label))
                 BodyText(stringResource(SharedRes.strings.select_budgets_you_wish_to_fund_label))
 
                 Spacer(Modifier.height(24.dp))

@@ -20,21 +20,21 @@ fun TitleText(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun BodyText(text: String, color: Color = Color.Gray, modifier: Modifier = Modifier) {
+fun SubTitleText(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
-        color = color,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
         modifier = modifier
     )
 }
 
 @Composable
-fun TopAppBarTitle(text: String, modifier: Modifier = Modifier) {
+fun BodyText(text: String, color: Color = Color.Gray, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.titleLarge,
-        fontWeight = FontWeight.SemiBold,
+        style = MaterialTheme.typography.bodyMedium,
+        color = color,
         modifier = modifier
     )
 }

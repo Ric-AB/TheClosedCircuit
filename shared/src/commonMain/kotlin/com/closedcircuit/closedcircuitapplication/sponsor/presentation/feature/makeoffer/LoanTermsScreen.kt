@@ -2,14 +2,14 @@ package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -19,7 +19,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopAppBarTitle
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
@@ -51,7 +51,7 @@ internal class LoanTermsScreen : Screen, KoinComponent {
                     .padding(innerPadding)
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
-                TopAppBarTitle(stringResource(SharedRes.strings.loan_terms_label))
+                TitleText(stringResource(SharedRes.strings.loan_terms_label))
                 BodyText(stringResource(SharedRes.strings.review_loan_terms_message_label))
 
                 Spacer(Modifier.height(24.dp))

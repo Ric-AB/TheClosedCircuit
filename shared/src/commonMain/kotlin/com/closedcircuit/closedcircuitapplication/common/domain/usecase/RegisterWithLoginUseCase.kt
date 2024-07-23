@@ -1,13 +1,12 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase
+package com.closedcircuit.closedcircuitapplication.common.domain.usecase
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiErrorResponse
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
-import com.closedcircuit.closedcircuitapplication.common.domain.usecase.LoginUseCase
 
-class RegisterUseCase(
+class RegisterWithLoginUseCase(
     private val authRepository: AuthenticationRepository,
     private val loginUseCase: LoginUseCase
 ) {

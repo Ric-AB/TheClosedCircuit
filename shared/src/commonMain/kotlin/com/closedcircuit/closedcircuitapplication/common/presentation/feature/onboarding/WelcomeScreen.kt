@@ -29,7 +29,7 @@ import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 
 
-internal object WelcomeScreen : Screen {
+internal class WelcomeScreen : Screen {
 
     @Composable
     override fun Content() {

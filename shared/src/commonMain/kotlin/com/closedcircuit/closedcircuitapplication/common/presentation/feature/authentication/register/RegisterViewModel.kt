@@ -5,16 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.RegisterUseCase
+import com.closedcircuit.closedcircuitapplication.common.domain.usecase.RegisterWithLoginUseCase
 import com.closedcircuit.closedcircuitapplication.common.util.trimDuplicateSpace
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val registerUseCase: RegisterUseCase
+    private val registerWithLoginUseCase: RegisterWithLoginUseCase,
+    private val appSettingsRepository: AppSettingsRepository
 ) : ScreenModel {
 
     var state by mutableStateOf(RegisterUIState())
@@ -55,7 +57,7 @@ class RegisterViewModel(
 
             state = state.copy(isLoading = true)
             screenModelScope.launch {
-                registerUseCase(
+                registerWithLoginUseCase(
                     fullName,
                     email,
                     "Beneficiary",
@@ -63,8 +65,9 @@ class RegisterViewModel(
                     password,
                     confirmPassword
                 ).onSuccess {
+                    val activeProfile = appSettingsRepository.getActiveProfile()
                     state = state.copy(isLoading = false)
-                    _registerResultChannel.send(RegisterResult.Success)
+                    _registerResultChannel.send(RegisterResult.Success(activeProfile))
                 }.onError { _, message ->
                     state = state.copy(isLoading = false)
                     _registerResultChannel.send(RegisterResult.Failure(message))

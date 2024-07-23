@@ -166,7 +166,6 @@ internal class FundedPlanDetailsScreen(private val fundedPlanPreview: FundedPlan
             Spacer(Modifier.height(20.dp))
             PlanImage(
                 imageUrl = planImageUrl,
-                shape = Shapes().small,
                 modifier = Modifier.fillMaxWidth()
                     .height(150.dp)
             )

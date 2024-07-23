@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
@@ -47,13 +48,14 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.hori
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.PlanSummaryScreen
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal class LoginScreen : Screen, KoinComponent {
+internal class LoginScreen(private val planID: ID? = null) : Screen, KoinComponent {
     private val viewModel: LoginViewModel by inject()
 
     @Composable
@@ -69,7 +71,11 @@ internal class LoginScreen : Screen, KoinComponent {
                 }
 
                 is LoginResult.Success -> {
-                    navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
+                    if (planID != null) {
+                        navigator.delayReplaceAll(PlanSummaryScreen(planID, true))
+                    } else {
+                        navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
+                    }
                 }
             }
         }
@@ -78,8 +84,8 @@ internal class LoginScreen : Screen, KoinComponent {
             messageBarState = messageBarState,
             state = state,
             onEvent = viewModel::onEvent,
-            navigateToWelcomeScreen = { navigator.replaceAll(WelcomeScreen) },
-            navigateToCreateAccount = { navigator.push(RegisterScreen()) },
+            navigateToWelcomeScreen = { navigator.replaceAll(WelcomeScreen()) },
+            navigateToCreateAccount = { navigator.push(RegisterScreen(planID)) },
             navigateToRecoverPassword = { navigator.push(ResetPasswordEmailScreen()) }
         )
     }

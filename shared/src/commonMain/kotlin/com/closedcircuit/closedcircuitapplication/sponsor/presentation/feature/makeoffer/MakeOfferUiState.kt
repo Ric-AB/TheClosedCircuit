@@ -19,6 +19,7 @@ sealed interface PlanSummaryUiState {
     object Loading : PlanSummaryUiState
 
     data class Content(
+        val ownerFullName: String,
         val businessSector: String,
         val planDuration: String,
         val estimatedCostPrice: String,

@@ -261,6 +261,9 @@
     <string name="donations_label">Donations</string>
 
     <!--    Sponsor plan-->
+    <string name="x_needs_your_help_in_starting_a_business">%s needs your help in starting a
+        business
+    </string>
     <string name="how_can_you_help_label">How can you help?</string>
     <string name="how_can_you_help_message_label">You can support by funding part, single or
         multiple budgets through loans or donations.
@@ -410,5 +413,13 @@
         and I would like you to be a part of it with your funds. The Closed Circuit App allows you
         to see how I use the funds and to keep me accountable
         Click the link.\n\n%s
+    </string>
+    <string name="accept_label">Accept</string>
+    <string name="decline_label">Decline</string>
+    <string name="what_is_the_closed_circuit_label">What is The Closed Circuit?</string>
+    <string name="the_closed_circuit_description_label">The Closed Circuit is an integrated business
+        and project incubator in the palm of the hands, which allows anyone to start a business or
+        project sponsored by their social trust networks (family, friends, loved ones, communities,
+        neighbours, societies etc.) or as a collective.
     </string>
 </resources>

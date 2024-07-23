@@ -191,7 +191,6 @@ internal class StepApprovalScreen(
                     PlanImage(
                         modifier = Modifier.size(200.dp, 152.dp),
                         imageUrl = it,
-                        shape = Shapes().small
                     )
                 }
             }

@@ -16,9 +16,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.center
@@ -37,9 +37,11 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlanDetailsGrid
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.SubTitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopAppBarTitle
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary2
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary3
@@ -52,7 +54,10 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
 
-internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent {
+internal class PlanSummaryScreen(
+    private val planID: ID,
+    private val isLoggedIn: Boolean
+) : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -60,26 +65,54 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
         { parametersOf(planID) }
 
         ScreenContent(
+            isLoggedIn = isLoggedIn,
             state = viewModel.planSummaryState,
             goBack = navigator::pop,
-            navigateToSelectFundingLevel = { navigator.push(FundingLevelScreen()) }
+            navigateToSelectFundingLevel = { navigator.push(FundingLevelScreen()) },
+            navigateToLoginScreen = { navigator.push(LoginScreen(planID)) }
         )
     }
 
     @Composable
     private fun ScreenContent(
+        isLoggedIn: Boolean,
         state: PlanSummaryUiState,
         goBack: () -> Unit,
-        navigateToSelectFundingLevel: () -> Unit
+        navigateToSelectFundingLevel: () -> Unit,
+        navigateToLoginScreen: () -> Unit
     ) {
         BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
             Box(
                 modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)
-                    .verticalScroll(rememberScrollState())
             ) {
                 when (state) {
-                    is PlanSummaryUiState.Content -> Content(state, navigateToSelectFundingLevel)
+                    is PlanSummaryUiState.Content -> {
+                        val scrollState = rememberScrollState()
+                        val modifier = remember {
+                            Modifier.fillMaxSize()
+                                .verticalScroll(scrollState)
+                                .padding(
+                                    horizontal = horizontalScreenPadding,
+                                    vertical = verticalScreenPadding
+                                )
+                        }
+
+                        if (isLoggedIn) {
+                            LoggedInContent(
+                                state = state,
+                                modifier = modifier,
+                                navigateToSelectFundingLevel = navigateToSelectFundingLevel,
+                            )
+                        } else {
+                            LoggedOutContent(
+                                state = state,
+                                modifier = modifier,
+                                navigateToWelcomeScreen = navigateToLoginScreen
+                            )
+                        }
+                    }
+
                     is PlanSummaryUiState.Error -> Text(state.message)
                     PlanSummaryUiState.Loading -> BackgroundLoader()
                 }
@@ -88,14 +121,12 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
     }
 
     @Composable
-    private fun Content(
+    private fun LoggedInContent(
+        modifier: Modifier,
         state: PlanSummaryUiState.Content,
         navigateToSelectFundingLevel: () -> Unit
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
-        ) {
+        Column(modifier = modifier) {
             TitleText(stringResource(SharedRes.strings.how_can_you_help_label))
             BodyText(stringResource(SharedRes.strings.how_can_you_help_message_label))
 
@@ -116,13 +147,12 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
             Spacer(Modifier.height(16.dp))
             PlanImage(
                 imageUrl = state.planImage,
-                shape = Shapes().small,
                 modifier = Modifier.fillMaxWidth()
                     .height(150.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            TopAppBarTitle(text = stringResource(SharedRes.strings.plan_description_label))
+            TitleText(text = stringResource(SharedRes.strings.plan_description_label))
             BodyText(text = state.planDescription)
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -141,6 +171,58 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
             DefaultButton(onClick = navigateToSelectFundingLevel) {
                 Text(stringResource(SharedRes.strings.proceed))
             }
+        }
+    }
+
+    @Composable
+    private fun LoggedOutContent(
+        modifier: Modifier,
+        state: PlanSummaryUiState.Content,
+        navigateToWelcomeScreen: () -> Unit
+    ) {
+        Column(modifier = modifier) {
+            Text(
+                text = stringResource(
+                    SharedRes.strings.x_needs_your_help_in_starting_a_business,
+                    state.ownerFullName
+                ),
+                style = MaterialTheme.typography.titleSmall
+            )
+
+            Spacer(Modifier.height(24.dp))
+            PlanImage(
+                imageUrl = state.planImage,
+                modifier = Modifier.fillMaxWidth()
+                    .height(150.dp)
+            )
+
+            Spacer(Modifier.height(20.dp))
+            SubTitleText(stringResource(SharedRes.strings.business_sector))
+
+            Spacer(Modifier.height(4.dp))
+            BodyText(text = state.businessSector)
+
+            Spacer(Modifier.height(16.dp))
+            SubTitleText(stringResource(SharedRes.strings.plan_description_label))
+
+            Spacer(Modifier.height(4.dp))
+            BodyText(text = state.planDescription)
+
+            Spacer(Modifier.height(40.dp))
+            DefaultButton(onClick = navigateToWelcomeScreen) {
+                Text(stringResource(SharedRes.strings.accept_label))
+            }
+
+            Spacer(Modifier.height(20.dp))
+            DefaultOutlinedButton(onClick = { }) {
+                Text(stringResource(SharedRes.strings.decline_label))
+            }
+
+            Spacer(Modifier.height(20.dp))
+            SubTitleText(stringResource(SharedRes.strings.what_is_the_closed_circuit_label))
+
+            Spacer(Modifier.height(4.dp))
+            BodyText(stringResource(SharedRes.strings.the_closed_circuit_description_label))
         }
     }
 

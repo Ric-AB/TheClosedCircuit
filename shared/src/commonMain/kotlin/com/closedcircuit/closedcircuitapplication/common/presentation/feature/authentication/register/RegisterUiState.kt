@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.register
 
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.EmailValidator
 import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.NameValidator
 import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PasswordValidator
@@ -36,6 +37,6 @@ data class RegisterUIState(
 }
 
 sealed interface RegisterResult {
-    object Success : RegisterResult
+    data class Success(val activeProfile: ProfileType) : RegisterResult
     data class Failure(val message: String) : RegisterResult
 }
