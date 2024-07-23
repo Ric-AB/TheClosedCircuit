@@ -31,6 +31,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
@@ -48,13 +49,16 @@ import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepsWithBudgetTable
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 
 
-internal class PlanSummaryScreen : Screen, KoinComponent {
+internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+        val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>
+        { parametersOf(planID) }
+
         ScreenContent(
             state = viewModel.planSummaryState,
             goBack = navigator::pop,

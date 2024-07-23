@@ -12,14 +12,16 @@ import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.OnboardingScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferNavigator
 import org.koin.core.component.KoinComponent
 import kotlin.random.Random
 
-class SplashScreen : Screen, KoinComponent {
+class SplashScreen(private val planId: String?) : Screen, KoinComponent {
     override val key: ScreenKey =
         super.key + "${Random.nextDouble(Double.MIN_VALUE, Double.MAX_VALUE)}"
 
@@ -30,12 +32,24 @@ class SplashScreen : Screen, KoinComponent {
         val rootState = viewModel.state.collectAsState().value
 
         LaunchedEffect(rootState) {
-            println("###:: $rootState")
             if (rootState != null) {
-                when (rootState.authState) {
-                    AuthenticationState.LOGGED_IN -> navigator.replace(ProtectedNavigator(rootState.activeProfile))
-                    AuthenticationState.LOGGED_OUT -> navigator.replace(LoginScreen())
-                    AuthenticationState.FIRST_TIME -> navigator.replace(OnboardingScreen)
+                val isLoggedIn = rootState.authState == AuthenticationState.LOGGED_IN
+                when {
+                    planId != null -> {
+                        navigator.replace(
+                            MakeOfferNavigator(
+                                planID = ID(planId),
+                                isLoggedIn = isLoggedIn
+                            )
+                        )
+                    }
+
+                    isLoggedIn -> navigator.replace(ProtectedNavigator(rootState.activeProfile))
+                    rootState.authState == AuthenticationState.LOGGED_OUT ->
+                        navigator.replace(LoginScreen())
+
+                    rootState.authState == AuthenticationState.FIRST_TIME ->
+                        navigator.replace(OnboardingScreen)
                 }
             }
         }

@@ -26,6 +26,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
 class MakeOfferViewModel(
+    private val planID: ID,
     private val planRepository: PlanRepository,
     private val offerRepository: OfferRepository
 ) : ScreenModel {
@@ -59,7 +60,7 @@ class MakeOfferViewModel(
 
     private fun fetchPlanByFundRequestId() {
         screenModelScope.launch {
-            planRepository.fetchPlanByFundRequestId(ID("5cbdf235-51e7-45d4-b68e-4e408050cd2c"))
+            planRepository.fetchPlanByFundRequestId(planID)
                 .onSuccess { sponsorPlan ->
                     initialize(sponsorPlan)
 
