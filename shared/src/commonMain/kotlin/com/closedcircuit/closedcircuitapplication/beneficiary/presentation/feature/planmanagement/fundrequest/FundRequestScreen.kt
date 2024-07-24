@@ -35,10 +35,11 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.LocalCurrencyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldDialogMenu
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PromptDialog
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldTrailingText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldAffix
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
@@ -148,7 +149,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number
                             ),
-                            trailingIcon = { TextFieldTrailingText("NGN") },
+                            trailingIcon = { LocalCurrencyText() },
                             visualTransformation = NumberCommaTransformation(),
                             modifier = commonModifier.onFocusChanged {}
                         )
@@ -162,7 +163,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number
                             ),
-                            trailingIcon = { TextFieldTrailingText("NGN") },
+                            trailingIcon = { LocalCurrencyText() },
                             visualTransformation = NumberCommaTransformation(),
                             modifier = commonModifier.onFocusChanged {}
                         )
@@ -209,7 +210,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                                 imeAction = ImeAction.Next,
                                 keyboardType = KeyboardType.Number
                             ),
-                            trailingIcon = { TextFieldTrailingText("%") },
+                            trailingIcon = { TextFieldAffix("%") },
                             modifier = commonModifier.onFocusChanged {}
                         )
                     }

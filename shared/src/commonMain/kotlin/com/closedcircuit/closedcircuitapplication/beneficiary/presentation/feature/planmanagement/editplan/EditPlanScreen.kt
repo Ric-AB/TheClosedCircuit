@@ -31,9 +31,10 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navig
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.LocalCurrencyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldDialogMenu
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldTrailingText
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldAffix
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
@@ -166,7 +167,7 @@ private fun ScreenContent(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
-                trailingIcon = { TextFieldTrailingText(text = stringResource(SharedRes.strings.months)) },
+                trailingIcon = { TextFieldAffix(text = stringResource(SharedRes.strings.months)) },
                 modifier = commonModifier.onFocusChanged {
                     handleFocusChange(it.isFocused, durationField.name)
                 }
@@ -182,7 +183,7 @@ private fun ScreenContent(
                     imeAction = ImeAction.Next
                 ),
                 visualTransformation = NumberCommaTransformation(),
-                trailingIcon = { TextFieldTrailingText(text = "NGN") },
+                trailingIcon = { LocalCurrencyText() },
                 modifier = commonModifier.onFocusChanged {
                     handleFocusChange(it.isFocused, estimatedSellingPriceField.name)
                 }
@@ -198,7 +199,7 @@ private fun ScreenContent(
                     imeAction = ImeAction.Done
                 ),
                 visualTransformation = NumberCommaTransformation(),
-                trailingIcon = { TextFieldTrailingText(text = "NGN") },
+                trailingIcon = { LocalCurrencyText() },
                 modifier = commonModifier.onFocusChanged {
                     handleFocusChange(it.isFocused, estimatedCostPriceField.name)
                 }

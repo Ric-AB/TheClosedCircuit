@@ -6,8 +6,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.closedcircuit.closedcircuitapplication.common.presentation.LocalCurrency
 
 @Composable
 fun TitleText(text: String, modifier: Modifier = Modifier) {
@@ -40,12 +42,26 @@ fun BodyText(text: String, color: Color = Color.Gray, modifier: Modifier = Modif
 }
 
 @Composable
-fun TextFieldTrailingText(text: String) {
+fun TextFieldAffix(text: String, color: Color = Color.Gray) {
     Text(
         text = text,
         style = MaterialTheme.typography.labelLarge,
-        color = Color.Gray,
-        modifier = Modifier.padding(horizontal = 8.dp)
+        color = color,
+        modifier = Modifier.padding(horizontal = 12.dp)
+    )
+}
+
+@Composable
+fun LocalCurrencyText(
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.labelLarge,
+    color: Color = Color.Gray
+) {
+    Text(
+        text = LocalCurrency.current.value,
+        style = style,
+        color = color,
+        modifier = modifier.padding(horizontal = 12.dp)
     )
 }
 

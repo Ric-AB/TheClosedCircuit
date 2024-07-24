@@ -4,7 +4,9 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.orDefault
 import com.closedcircuit.closedcircuitapplication.common.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,7 +32,8 @@ class RootViewModel(
             authState = authState,
             activeProfile = activeProfile,
             fullName = user?.fullName?.value.orEmpty(),
-            profileUrl = user?.avatar?.value.orEmpty()
+            profileUrl = user?.avatar?.value.orEmpty(),
+            currency = user?.currency.orDefault()
         )
     }.stateIn(
         scope = screenModelScope,
@@ -43,5 +46,6 @@ data class RootState(
     val authState: AuthenticationState,
     val activeProfile: ProfileType,
     val fullName: String,
-    val profileUrl: String
+    val profileUrl: String,
+    val currency: Currency
 )

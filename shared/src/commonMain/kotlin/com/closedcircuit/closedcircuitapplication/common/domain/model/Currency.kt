@@ -10,3 +10,5 @@ value class Currency(val value: String) {
         require(value.isNotBlank()) { "Invalid currency- $value" }
     }
 }
+
+fun Currency?.orDefault() = this ?: Currency("USD")
