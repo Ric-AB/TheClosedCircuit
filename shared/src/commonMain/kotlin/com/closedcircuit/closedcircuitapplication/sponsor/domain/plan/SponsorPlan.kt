@@ -8,6 +8,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,6 +27,7 @@ data class SponsorPlan(
     val tasksCompleted: Double,
     val targetAmount: Amount,
     val totalFundsRaised: Amount,
+    val currency: Currency,
     val analytics: String,
     val userID: ID,
     val beneficiaryFullName: Name,

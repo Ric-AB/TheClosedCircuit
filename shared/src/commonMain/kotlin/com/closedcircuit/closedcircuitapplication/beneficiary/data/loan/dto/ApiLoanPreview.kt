@@ -13,6 +13,7 @@ data class ApiLoanPreview(
     val totalAmountOffered: String,
     @SerialName("plan_id")
     val planId: String,
+    val currency: String,
     @SerialName("sponsor_avatars")
     val sponsorAvatars: List<String>
 )

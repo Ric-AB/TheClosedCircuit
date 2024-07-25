@@ -25,70 +25,80 @@ import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.FundingLevel
 
-fun ApiPlan.asSponsorPlan() = SponsorPlan(
-    id = ID(id),
-    avatar = ImageUrl(avatar),
-    category = category,
-    sector = sector,
-    type = type,
-    name = name,
-    description = description,
-    duration = TaskDuration(duration),
-    estimatedSellingPrice = Amount(estimatedSellingPrice.toDouble()),
-    estimatedCostPrice = Amount(estimatedCostPrice.toDouble()),
-    fundsRaised = fundsRaised.orZero(),
-    tasksCompleted = tasksCompleted.orZero(),
-    targetAmount = Amount(targetAmount.toDouble()),
-    totalFundsRaised = Amount(totalFundsRaised?.toDouble().orZero()),
-    analytics = analytics,
-    userID = ID(user),
-    hasRequestedFund = hasRequestedFund.orFalse(),
-    isSponsored = isSponsored.orFalse(),
-    fundRequest = fundRequest.toFundRequest(),
-    beneficiaryFullName = Name(beneficiaryFullName.orEmpty()),
-    beneficiaryId = beneficiaryId?.let { ID(it) },
-    steps = steps.asStepEntities().asSteps(),
-    budgets = budgets.asBudgetEntities().asBudgets()
-)
+fun ApiPlan.asSponsorPlan(): SponsorPlan {
+    val currency = Currency(currency)
+    return SponsorPlan(
+        id = ID(id),
+        avatar = ImageUrl(avatar),
+        category = category,
+        sector = sector,
+        type = type,
+        name = name,
+        description = description,
+        duration = TaskDuration(duration),
+        currency = currency,
+        estimatedSellingPrice = Amount(estimatedSellingPrice.toDouble(), currency),
+        estimatedCostPrice = Amount(estimatedCostPrice.toDouble(), currency),
+        fundsRaised = fundsRaised.orZero(),
+        tasksCompleted = tasksCompleted.orZero(),
+        targetAmount = Amount(targetAmount.toDouble(), currency),
+        totalFundsRaised = Amount(totalFundsRaised?.toDouble().orZero(), currency),
+        analytics = analytics,
+        userID = ID(user),
+        hasRequestedFund = hasRequestedFund.orFalse(),
+        isSponsored = isSponsored.orFalse(),
+        fundRequest = fundRequest.toFundRequest(),
+        beneficiaryFullName = Name(beneficiaryFullName.orEmpty()),
+        beneficiaryId = beneficiaryId?.let { ID(it) },
+        steps = steps.asStepEntities().asSteps(),
+        budgets = budgets.asBudgetEntities().asBudgets()
+    )
+}
 
-fun FundedPlanPreviewDto.toDashboardPlan() = FundedPlanPreview(
-    id = ID(id),
-    avatar = ImageUrl(avatar),
-    sector = sector,
-    beneficiaryFullName = Name(beneficiaryFullName),
-    beneficiaryId = beneficiaryId?.let { ID(it) },
-    currency = currency?.let { Currency(it) },
-    amountFunded = Amount(amountFunded.toDouble()),
-    fundingType = FundType.fromText(fundingType),
-    fundingLevel = FundingLevel.fromText(fundingLevel),
-    fundingDate = Date(fundingDate),
-    fundsRaisedPercent = fundsRaisedPercent,
-    tasksCompletedPercent = tasksCompletedPercent
-)
+fun FundedPlanPreviewDto.toDashboardPlan(): FundedPlanPreview {
+    val currency = currency?.let { Currency(it) }
+    return FundedPlanPreview(
+        id = ID(id),
+        avatar = ImageUrl(avatar),
+        sector = sector,
+        beneficiaryFullName = Name(beneficiaryFullName),
+        beneficiaryId = beneficiaryId?.let { ID(it) },
+        currency = currency,
+        amountFunded = Amount(amountFunded.toDouble(), currency),
+        fundingType = FundType.fromText(fundingType),
+        fundingLevel = FundingLevel.fromText(fundingLevel),
+        fundingDate = Date(fundingDate),
+        fundsRaisedPercent = fundsRaisedPercent,
+        tasksCompletedPercent = tasksCompletedPercent
+    )
+}
 
-fun FundedPlanDto.toFundedPlan() = FundedPlan(
-    id = ID(id),
-    avatar = ImageUrl(avatar),
-    name = name,
-    description = description,
-    category = category,
-    sector = sector,
-    type = type,
-    duration = PositiveInt(duration),
-    estimatedSellingPrice = Amount(estimatedSellingPrice),
-    estimatedCostPrice = Amount(estimatedCostPrice),
-    targetAmount = Amount(targetAmount),
-    analytics = analytics,
-    userID = ID(userId),
-    beneficiaryId = ID(beneficiaryId),
-    fundRequestID = ID(fundRequestId),
-    currency = Currency(currency),
-    hasRequestedFunds = hasRequestedFund,
-    isSponsored = isSponsored,
-    steps = steps.toFundedSteps(),
-    accountabilityPartnerIds = accountabilityPartnerIds.map { ID(it) },
-    createdAt = Date(createdAt),
-    updatedAt = Date(updatedAt)
-)
+fun FundedPlanDto.toFundedPlan(): FundedPlan {
+    val currency = Currency(currency)
+    return FundedPlan(
+        id = ID(id),
+        avatar = ImageUrl(avatar),
+        name = name,
+        description = description,
+        category = category,
+        sector = sector,
+        type = type,
+        duration = PositiveInt(duration),
+        estimatedSellingPrice = Amount(estimatedSellingPrice, currency),
+        estimatedCostPrice = Amount(estimatedCostPrice, currency),
+        targetAmount = Amount(targetAmount, currency),
+        analytics = analytics,
+        userID = ID(userId),
+        beneficiaryId = ID(beneficiaryId),
+        fundRequestID = ID(fundRequestId),
+        currency = currency,
+        hasRequestedFunds = hasRequestedFund,
+        isSponsored = isSponsored,
+        steps = steps.toFundedSteps(),
+        accountabilityPartnerIds = accountabilityPartnerIds.map { ID(it) },
+        createdAt = Date(createdAt),
+        updatedAt = Date(updatedAt)
+    )
+}
 
 fun List<FundedPlanPreviewDto>.toDashboardPlans() = map { it.toDashboardPlan() }

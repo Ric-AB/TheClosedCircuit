@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.notification.dto
+package com.closedcircuit.closedcircuitapplication.common.data.notification.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,6 +22,7 @@ data class ApiNotification(
     val businessName: String,
     @SerialName("amount_offered")
     val amountOffered: Double,
+    val currency: String,
     @SerialName("user")
     val userID: String
 )

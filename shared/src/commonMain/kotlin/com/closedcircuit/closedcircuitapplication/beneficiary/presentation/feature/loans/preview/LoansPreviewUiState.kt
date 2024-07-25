@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.preview
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanPreview
+import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanPreview
 import kotlinx.collections.immutable.ImmutableList
 
 

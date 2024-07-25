@@ -10,6 +10,7 @@ data class ApiLoan(
     val sponsorFullName: String,
     @SerialName("loan_amount")
     val loanAmount: String,
+    val currency: String,
     @SerialName("grace_period")
     val gracePeriod: Int,
     @SerialName("interest_rate")

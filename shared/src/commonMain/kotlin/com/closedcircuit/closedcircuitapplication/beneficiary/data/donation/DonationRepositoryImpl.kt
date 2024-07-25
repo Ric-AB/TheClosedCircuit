@@ -9,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -22,12 +23,14 @@ class DonationRepositoryImpl(
         return withContext(ioDispatcher) {
             donationService.fetchRecentDonations().mapOnSuccess { response ->
                 response.donations.map {
+                    val currency = Currency(it.currency)
                     Donation(
                         id = ID(it.donationId),
                         sponsorAvatar = ImageUrl(it.sponsorAvatar),
                         sponsorFullName = Name(it.sponsorFullName),
                         planName = it.planName,
-                        amount = Amount(it.amount.toDouble())
+                        amount = Amount(it.amount.toDouble(), currency),
+                        currency = currency
                     )
                 }.toImmutableList()
             }

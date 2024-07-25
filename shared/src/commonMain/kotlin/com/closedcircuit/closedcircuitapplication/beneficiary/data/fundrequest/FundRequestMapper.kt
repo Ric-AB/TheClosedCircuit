@@ -6,12 +6,14 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 
 fun FundRequest.toApiFundRequest(): ApiFundRequest {
     return if (fundType == FundType.DONATION) {
         ApiFundRequest(
             planId = planId?.value,
             meansOfSupport = fundType.requestValue,
+            currency = null,
             minimumLoanRange = null,
             maximumLoanRange = null,
             maxLenders = null,
@@ -33,6 +35,7 @@ fun FundRequest.toApiFundRequest(): ApiFundRequest {
             repaymentDuration = repaymentDuration,
             interestRate = interestRate,
             planId = planId?.value,
+            currency = null,
             id = null,
             beneficiaryId = null,
             createdAt = null,
@@ -42,13 +45,15 @@ fun FundRequest.toApiFundRequest(): ApiFundRequest {
 }
 
 fun ApiFundRequest.toFundRequest(): FundRequest {
+    val currency = currency?.let { Currency(it) }
     return FundRequest(
         id = ID(id.orEmpty()),
         planId = planId?.let { ID(it) },
         beneficiaryId = beneficiaryId?.let { ID(it) },
         fundType = FundType.fromText(meansOfSupport),
-        minimumLoanRange = minimumLoanRange?.toDouble()?.let { Amount(it) },
-        maximumLoanRange = maximumLoanRange?.toDouble()?.let { Amount(it) },
+        minimumLoanRange = minimumLoanRange?.toDouble()?.let { Amount(it, currency) },
+        maximumLoanRange = maximumLoanRange?.toDouble()?.let { Amount(it, currency) },
+        currency = currency,
         maxLenders = maxLenders,
         graceDuration = graceDuration,
         repaymentDuration = repaymentDuration,

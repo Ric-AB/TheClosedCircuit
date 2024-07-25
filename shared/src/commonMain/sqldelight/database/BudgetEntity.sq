@@ -8,6 +8,7 @@ CREATE TABLE BudgetEntity (
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     cost REAL NOT NULL,
+    currency TEXT NOT NULL ,
     isSponsored INTEGER AS Boolean NOT NULL DEFAULT 0,
     fundsRaised REAL NOT NULL,
     isCompleted INTEGER AS Boolean NOT NULL DEFAULT 0,

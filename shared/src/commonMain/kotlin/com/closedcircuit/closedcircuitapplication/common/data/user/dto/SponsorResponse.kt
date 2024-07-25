@@ -10,5 +10,6 @@ data class SponsorResponse(
     @SerialName("sponsor_fullname")
     val sponsorFullName: String,
     @SerialName("loan_amount")
-    val loanAmount: Double
+    val loanAmount: Double,
+    val currency: String,
 )

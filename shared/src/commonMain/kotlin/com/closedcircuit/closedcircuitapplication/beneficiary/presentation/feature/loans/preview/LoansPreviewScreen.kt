@@ -28,7 +28,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanPreview
+import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar

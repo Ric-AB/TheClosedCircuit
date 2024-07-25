@@ -16,6 +16,7 @@ data class ApiLoanDetails(
     val loanSchedule: List<ApiLoanSchedule>?,
     @SerialName("grace_period")
     val gracePeriod: Int?,
+    val currency: String,
     @SerialName("sponsor_fullname")
     val sponsorFullName: String,
     @SerialName("avatar")

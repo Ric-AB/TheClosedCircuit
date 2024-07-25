@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.LoanPreview
+import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel

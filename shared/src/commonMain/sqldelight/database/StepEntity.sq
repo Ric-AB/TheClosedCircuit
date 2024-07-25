@@ -7,6 +7,7 @@ CREATE TABLE StepEntity (
     duration INTEGER NOT NULL,
     targetFunds REAL NOT NULL,
     totalFundsRaised REAL NOT NULL,
+    currency TEXT NOT NULL ,
     planID TEXT NOT NULL,
     userID TEXT NOT NULL,
     isSponsored INTEGER AS Boolean NOT NULL DEFAULT 0,

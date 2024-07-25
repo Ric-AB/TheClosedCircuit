@@ -12,6 +12,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserDashboard
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
@@ -81,16 +82,19 @@ class UserRepositoryImpl(
     override suspend fun getUserDashboard(): ApiResponse<UserDashboard> {
         return withContext(ioDispatcher) {
             userService.getUserDashboard().mapOnSuccess { response ->
+                val currency = Currency(response.currency)
                 val userDashboard = UserDashboard(
                     completedPlansCount = response.planStatus.planAnalytics.completed,
                     ongoingPlansCount = response.planStatus.planAnalytics.onGoing,
                     notStartedPlansCount = response.planStatus.planAnalytics.notStarted,
-                    totalFundsRaised = Amount(response.totalFundsRaised.toDouble()),
+                    totalFundsRaised = Amount(response.totalFundsRaised.toDouble(), currency),
+                    currency = currency,
                     topSponsors = response.topSponsors.map {
+                        val sponsorCurrency = Currency(it.currency)
                         Sponsor(
                             avatar = ImageUrl(it.sponsorAvatar),
                             fullName = Name(it.sponsorFullName),
-                            loanAmount = Amount(it.loanAmount)
+                            loanAmount = Amount(it.loanAmount, sponsorCurrency)
                         )
                     }
                 )

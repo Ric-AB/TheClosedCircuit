@@ -16,6 +16,7 @@ data class ApiStep(
     @SerialName("step_description")
     val description: String,
     val duration: Int,
+    val currency: String,
     @SerialName("target_funds")
     val targetFunds: String,
     @SerialName("total_funds_raised")

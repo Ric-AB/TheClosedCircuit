@@ -38,6 +38,7 @@ data class ApiPlan(
     val analytics: String,
     val wallet: String,
     val user: String,
+    val currency: String,
     @SerialName("has_requested_fund")
     val hasRequestedFund: Boolean?,
     @SerialName("is_sponsored")

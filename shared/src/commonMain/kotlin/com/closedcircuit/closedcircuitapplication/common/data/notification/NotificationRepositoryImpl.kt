@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.notification
+package com.closedcircuit.closedcircuitapplication.common.data.notification
 
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess

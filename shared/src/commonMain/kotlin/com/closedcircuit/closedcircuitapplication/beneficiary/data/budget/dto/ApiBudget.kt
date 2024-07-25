@@ -19,6 +19,7 @@ data class ApiBudget(
     val description: String,
     @SerialName("budget_cost")
     val cost: String,
+    val currency: String,
     @SerialName("is_sponsored")
     val isSponsored: Boolean,
     @SerialName("funds_raised")

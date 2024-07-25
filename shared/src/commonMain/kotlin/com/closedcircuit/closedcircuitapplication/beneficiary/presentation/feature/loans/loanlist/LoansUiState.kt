@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.loanlist
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.loan.Loan
+import com.closedcircuit.closedcircuitapplication.common.domain.loan.Loan
 import kotlinx.collections.immutable.ImmutableList
 
 sealed interface LoansUiState {

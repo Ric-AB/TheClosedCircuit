@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.common.presentation.feature.n
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.notification.Notification
+import com.closedcircuit.closedcircuitapplication.common.domain.notification.Notification
 
 
 sealed interface NotificationUIState {

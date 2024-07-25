@@ -18,5 +18,6 @@ data class LoanOfferDto(
     @SerialName("loan_amount")
     val loanAmount: String?,
     @SerialName("created_at")
-    val createdAt: String?
+    val createdAt: String?,
+    val currency: String
 )

@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.budget
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.File
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
@@ -17,6 +18,7 @@ data class Budget(
     val cost: Amount,
     val isSponsored: Boolean,
     val fundsRaised: Amount,
+    val currency: Currency,
     val isCompleted: Boolean,
     val proofs: List<File>,
     val approvers: List<ID>,
@@ -39,6 +41,7 @@ data class Budget(
             name: String = "",
             description: String = "",
             cost: Amount = Amount(0.0),
+            currency: Currency = Currency("USD"),
             isSponsored: Boolean = false,
             fundsRaised: Amount = Amount(0.0),
             isCompleted: Boolean = false,
@@ -57,6 +60,7 @@ data class Budget(
                 cost = cost,
                 isSponsored = isSponsored,
                 fundsRaised = fundsRaised,
+                currency = currency,
                 isCompleted = isCompleted,
                 proofs = proofs,
                 approvers = approvers,

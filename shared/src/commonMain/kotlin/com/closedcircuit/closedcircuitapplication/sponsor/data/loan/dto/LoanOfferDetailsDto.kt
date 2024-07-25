@@ -12,6 +12,7 @@ data class LoanOfferDetailsDto(
     val loanAmount: String,
     @SerialName("repayment_amount")
     val repaymentAmount: String,
+    val currency: String,
     @SerialName("grace_period")
     val gracePeriod: Int,
     @SerialName("sponsor_fullname")

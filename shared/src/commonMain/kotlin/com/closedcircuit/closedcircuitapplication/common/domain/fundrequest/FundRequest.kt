@@ -4,6 +4,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,6 +15,7 @@ data class FundRequest(
     val fundType: FundType,
     val minimumLoanRange: Amount?,
     val maximumLoanRange: Amount?,
+    val currency: Currency?,
     val maxLenders: Int?,
     val graceDuration: Int?,
     val repaymentDuration: Int?,
@@ -29,6 +31,7 @@ data class FundRequest(
             fundType: FundType,
             minimumLoanRange: Amount? = null,
             maximumLoanRange: Amount? = null,
+            currency: Currency? = null,
             maxLenders: Int? = null,
             graceDuration: Int? = null,
             repaymentDuration: Int? = null,
@@ -43,6 +46,7 @@ data class FundRequest(
                 fundType = fundType,
                 minimumLoanRange = minimumLoanRange,
                 maximumLoanRange = maximumLoanRange,
+                currency = currency,
                 maxLenders = maxLenders,
                 graceDuration = graceDuration,
                 repaymentDuration = repaymentDuration,

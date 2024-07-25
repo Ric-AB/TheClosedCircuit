@@ -18,6 +18,7 @@ data class ApiFundRequest(
     val maximumLoanRange: String?,
     @SerialName("maximum_number_of_lenders")
     val maxLenders: Int?,
+    val currency: String?,
     @SerialName("grace_duration")
     val graceDuration: Int?,
     @SerialName("repayment_duration")

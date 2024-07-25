@@ -4,11 +4,13 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 
 class Donation(
     val id: ID,
     val sponsorAvatar: ImageUrl,
     val sponsorFullName: Name,
     val planName: String,
-    val amount: Amount
+    val amount: Amount,
+    val currency: Currency
 )

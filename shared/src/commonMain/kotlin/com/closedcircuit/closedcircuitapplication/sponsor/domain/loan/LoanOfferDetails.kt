@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.domain.loan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
@@ -25,6 +26,7 @@ data class LoanOfferDetails(
     val updatedAt: Date,
     val fundingLevel: FundingLevel?,
     val otherAmount: Amount?,
+    val currency: Currency?,
     val status: LoanStatus?,
     val fundRequestId: ID,
     val sponsorId: ID,

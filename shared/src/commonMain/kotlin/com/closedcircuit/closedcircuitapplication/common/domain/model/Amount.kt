@@ -2,31 +2,29 @@ package com.closedcircuit.closedcircuitapplication.common.domain.model
 
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.formatNumberToCurrency
 import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
 
 @Serializable
-@JvmInline
-value class Amount(val value: Double) : Comparable<Amount> {
+data class Amount(val value: Double, val currency: Currency? = null) : Comparable<Amount> {
 
     init {
         require(value >= 0.toDouble()) { "Price ($value) cannot be less than 0.0" }
     }
 
     fun getFormattedValue(): String {
-        return formatNumberToCurrency(value, "NGN")
+        return formatNumberToCurrency(value, currency?.value.orEmpty())
     }
 
     operator fun minus(other: Amount): Amount {
-        return Amount(value - other.value)
+        return Amount(value - other.value, currency)
     }
 
     operator fun div(other: Amount): Amount {
-        return if (other.value <= 0.0) Amount(0.0)
-        else Amount(value / other.value)
+        return if (other.value <= 0.0) Amount(0.0, currency)
+        else Amount(value / other.value, currency)
     }
 
     operator fun plus(other: Amount): Amount {
-        return Amount(value + other.value)
+        return Amount(value + other.value, currency)
     }
 
     override fun compareTo(other: Amount): Int {

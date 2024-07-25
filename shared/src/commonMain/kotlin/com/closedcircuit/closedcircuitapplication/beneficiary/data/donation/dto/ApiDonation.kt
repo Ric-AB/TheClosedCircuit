@@ -13,5 +13,6 @@ data class ApiDonation(
     val sponsorFullName: String,
     @SerialName("plan_name")
     val planName: String,
-    val amount: String
+    val amount: String,
+    val currency: String,
 )

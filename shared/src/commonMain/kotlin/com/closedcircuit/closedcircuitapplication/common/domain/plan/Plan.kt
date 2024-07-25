@@ -1,8 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.plan
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
 import kotlinx.serialization.Serializable
@@ -23,6 +24,7 @@ data class Plan(
     val tasksCompleted: Double,
     val targetAmount: Amount,
     val totalFundsRaised: Amount,
+    val currency: Currency,
     val analytics: String,
     val userID: ID,
     val hasRequestedFund: Boolean,
@@ -49,6 +51,7 @@ data class Plan(
             tasksCompleted: Double = 0.0,
             targetAmount: Amount = Amount(0.0),
             totalFundsRaised: Amount = Amount(0.0),
+            currency: Currency = Currency("USD"),
             planAnalytics: String = String.Empty,
             userID: ID = ID.generateRandomUUID(),
             hasRequestedFund: Boolean = false,
@@ -69,6 +72,7 @@ data class Plan(
                 fundsRaised = fundsRaised,
                 tasksCompleted = tasksCompleted,
                 targetAmount = targetAmount,
+                currency = currency,
                 totalFundsRaised = totalFundsRaised,
                 analytics = planAnalytics,
                 userID = userID,
