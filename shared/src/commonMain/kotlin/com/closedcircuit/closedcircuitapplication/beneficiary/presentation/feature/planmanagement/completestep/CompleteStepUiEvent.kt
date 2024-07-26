@@ -2,4 +2,5 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 
 sealed interface CompleteStepUiEvent {
     object CompleteStep : CompleteStepUiEvent
+    object Refresh : CompleteStepUiEvent
 }

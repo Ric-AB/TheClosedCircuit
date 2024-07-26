@@ -29,6 +29,7 @@ class CompleteStepViewModel(
     fun onEvent(event: CompleteStepUiEvent) {
         when (event) {
             CompleteStepUiEvent.CompleteStep -> completeStep()
+            CompleteStepUiEvent.Refresh -> fetchPlan()
         }
     }
 

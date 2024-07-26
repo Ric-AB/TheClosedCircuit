@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +34,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
@@ -48,15 +48,27 @@ internal class CompleteStepScreen(
     private val planID: ID,
     private val stepID: ID
 ) : Screen, KoinComponent {
+    private var shouldRefresh = false
+
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<CompleteStepViewModel> { parametersOf(planID, stepID) }
         val state = viewModel.state.value
+
+        LaunchedEffect(Unit) {
+            if (shouldRefresh) {
+                viewModel.onEvent(CompleteStepUiEvent.Refresh)
+            }
+        }
+
         ScreenContent(
             state = state,
             goBack = navigator::pop,
-            navigateToUploadScreen = { navigator.push(UploadProofScreen(it)) }
+            navigateToUploadScreen = {
+                shouldRefresh = true
+                navigator.push(UploadProofScreen(it))
+            }
         )
     }
 
@@ -102,11 +114,6 @@ internal class CompleteStepScreen(
             state.budgetItems.forEach {
                 BudgetItem(budget = it, onClick = { navigateToUploadScreen(it.id) })
                 Spacer(Modifier.height(20.dp))
-            }
-
-            Spacer(Modifier.height(40.dp))
-            DefaultButton(onClick = {}) {
-                Text(stringResource(SharedRes.strings.complete_step_label))
             }
         }
     }
