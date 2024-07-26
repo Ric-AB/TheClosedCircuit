@@ -82,7 +82,7 @@ class UserRepositoryImpl(
     override suspend fun getUserDashboard(): ApiResponse<UserDashboard> {
         return withContext(ioDispatcher) {
             userService.getUserDashboard().mapOnSuccess { response ->
-                val currency = Currency(response.currency)
+                val currency = response.currency?.let { Currency(it) }
                 val userDashboard = UserDashboard(
                     completedPlansCount = response.planStatus.planAnalytics.completed,
                     ongoingPlansCount = response.planStatus.planAnalytics.onGoing,
@@ -90,11 +90,10 @@ class UserRepositoryImpl(
                     totalFundsRaised = Amount(response.totalFundsRaised.toDouble(), currency),
                     currency = currency,
                     topSponsors = response.topSponsors.map {
-                        val sponsorCurrency = Currency(it.currency)
                         Sponsor(
                             avatar = ImageUrl(it.sponsorAvatar),
                             fullName = Name(it.sponsorFullName),
-                            loanAmount = Amount(it.loanAmount, sponsorCurrency)
+                            loanAmount = Amount(it.loanAmount, currency)
                         )
                     }
                 )

@@ -202,6 +202,7 @@ private fun FundedPlanTab(
 private fun getAnnotatedString(label: String, value: String): AnnotatedString {
     return buildAnnotatedString {
         append(label)
+        append(" ")
         withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
             append(value)
         }

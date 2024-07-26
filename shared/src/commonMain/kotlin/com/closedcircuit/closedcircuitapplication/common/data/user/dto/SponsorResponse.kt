@@ -11,5 +11,4 @@ data class SponsorResponse(
     val sponsorFullName: String,
     @SerialName("loan_amount")
     val loanAmount: Double,
-    val currency: String,
 )

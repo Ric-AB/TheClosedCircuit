@@ -9,6 +9,6 @@ data class UserDashboard(
     val ongoingPlansCount: Int,
     val notStartedPlansCount: Int,
     val totalFundsRaised: Amount,
-    val currency: Currency,
+    val currency: Currency?,
     val topSponsors: List<Sponsor>
 )

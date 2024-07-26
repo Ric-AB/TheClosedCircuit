@@ -281,20 +281,20 @@ internal object DashboardTab : Tab, KoinComponent {
                             Spacer(modifier = Modifier.height(12.dp))
                             TaskLinearProgress(
                                 modifier = Modifier.fillMaxWidth(),
-                                progress = it.fundsRaised.toFloat(),
+                                progress = it.fundsRaisedPercent.toFloat(),
                                 label = stringResource(
                                     SharedRes.strings.x_percent_funds_raised_label,
-                                    it.fundsRaisedAsPercentage
+                                    it.fundsRaisedPercent
                                 )
                             )
 
                             Spacer(modifier = Modifier.height(12.dp))
                             TaskLinearProgress(
                                 modifier = Modifier.fillMaxWidth(),
-                                progress = it.tasksCompleted.toFloat(),
+                                progress = it.tasksCompletedPercent.toFloat(),
                                 label = stringResource(
                                     SharedRes.strings.x_percent_tasks_completed_label,
-                                    it.tasksCompletedAsPercentage
+                                    it.tasksCompletedPercent
                                 )
                             )
                         }

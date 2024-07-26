@@ -40,7 +40,8 @@ fun StepsWithBudgetTable(
     modifier: Modifier = Modifier,
     items: ImmutableMap<StepItem, ImmutableList<BudgetItem>>,
     total: String,
-    showFundingStatus: Boolean = false
+    showFundingStatus: Boolean = false,
+    showCostLabel: Boolean = false
 ) {
     Column(modifier) {
         val boldFontStyle =
@@ -48,13 +49,17 @@ fun StepsWithBudgetTable(
         items.entries.forEachIndexed { stepIndex, entry ->
             val step = entry.key
             val stepNumber = stepIndex + 1
+            val amount = if (showCostLabel) {
+                stringResource(
+                    SharedRes.strings.cost_x_label,
+                    step.formattedCost
+                )
+            } else step.formattedCost
+
             ListItem(
                 label = stringResource(SharedRes.strings.step_x_colon_label, stepNumber),
                 title = step.name,
-                amount = stringResource(
-                    SharedRes.strings.cost_x_label,
-                    step.formattedCost
-                ),
+                amount = amount,
                 backgroundColor = primary5,
                 textStyle = boldFontStyle
             )

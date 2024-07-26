@@ -165,7 +165,11 @@ internal class PlanSummaryScreen(
             TitleText(stringResource(SharedRes.strings.plan_steps_and_budgets_label))
 
             Spacer(modifier = Modifier.height(16.dp))
-            StepsWithBudgetTable(items = state.stepsWithBudgets, total = state.total)
+            StepsWithBudgetTable(
+                items = state.stepsWithBudgets,
+                total = state.total,
+                showCostLabel = true
+            )
 
             Spacer(Modifier.height(40.dp))
             DefaultButton(onClick = navigateToSelectFundingLevel) {

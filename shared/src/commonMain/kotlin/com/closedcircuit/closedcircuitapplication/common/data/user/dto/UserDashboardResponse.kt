@@ -12,5 +12,5 @@ data class UserDashboardResponse(
     val planStatus: PlanStatusResponse,
     @SerialName("top_sponsors")
     val topSponsors: List<SponsorResponse>,
-    val currency: String,
+    val currency: String? = null,
 )

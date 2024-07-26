@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TaskLinearProgress
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 
@@ -78,23 +80,26 @@ fun FundedPlanItem(
             }
 
             Spacer(Modifier.height(20.dp))
+            println("FUND RAISED PERCENT $fundsRaisedPercent")
             TaskLinearProgress(
                 modifier = Modifier.fillMaxWidth(),
                 progress = fundsRaisedPercent.div(100).toFloat(),
                 label = stringResource(
                     SharedRes.strings.x_percent_funds_raised_label,
                     fundsRaisedPercent.toString()
-                )
+                ),
+                trackColor = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level2)
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(12.dp))
             TaskLinearProgress(
                 modifier = Modifier.fillMaxWidth(),
                 progress = taskCompletedPercent.div(100).toFloat(),
                 label = stringResource(
                     SharedRes.strings.x_percent_tasks_completed_label,
                     taskCompletedPercent.toString()
-                )
+                ),
+                trackColor = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level2)
             )
         }
     }

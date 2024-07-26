@@ -23,7 +23,7 @@ fun ApiBudget.asBudgetEntity() = BudgetEntity(
     currency = currency,
     isSponsored = isSponsored,
     isCompleted = isCompleted.orFalse(),
-    fundsRaised = fundsRaised.toDouble(),
+    fundsRaisedPercent = fundsRaised.toDouble(),
     createdAt = createdAt,
     updatedAt = updatedAt
 )
@@ -39,7 +39,7 @@ fun ApiBudget.asBudget(): Budget {
         description = description,
         cost = Amount(cost.toDouble(), currency),
         isSponsored = isSponsored,
-        fundsRaised = Amount(fundsRaised.toDouble(), currency),
+        fundsRaisedPercent = fundsRaised.toDouble(),
         currency = currency,
         isCompleted = isCompleted.orFalse(),
         proofs = proof.orEmpty().map { it.toFile() },
@@ -58,9 +58,9 @@ fun BudgetEntity.asBudget(): Budget {
         userID = ID(userID),
         name = name,
         description = description,
-        cost = Amount(cost),
+        cost = Amount(cost, currency),
         isSponsored = isSponsored,
-        fundsRaised = Amount(fundsRaised, currency),
+        fundsRaisedPercent = fundsRaisedPercent,
         currency = currency,
         isCompleted = isCompleted,
         proofs = emptyList(),
@@ -89,7 +89,7 @@ fun Budget.asEntity() = BudgetEntity(
     currency = currency.value,
     isSponsored = isSponsored,
     isCompleted = isCompleted,
-    fundsRaised = fundsRaised.value,
+    fundsRaisedPercent = fundsRaisedPercent,
     createdAt = createdAt.value,
     updatedAt = updatedAt.value
 )

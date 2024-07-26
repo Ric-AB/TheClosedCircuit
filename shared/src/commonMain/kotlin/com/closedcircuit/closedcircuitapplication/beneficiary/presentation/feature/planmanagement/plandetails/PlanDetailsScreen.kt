@@ -417,8 +417,9 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                 BudgetItem(
                     modifier = itemModifier,
                     name = it.name,
-                    targetAmount = it.cost,
-                    amountRaised = it.fundsRaised
+                    targetAmount = it.cost.getFormattedValue(),
+                    amountRaised = it.fundsRaised.getFormattedValue(),
+                    amountRaisedPercent = it.fundsRaisedPercent.toFloat()
                 )
             }
         }

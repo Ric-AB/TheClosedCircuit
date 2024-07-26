@@ -143,8 +143,9 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
                         BudgetItem(
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                             name = it.name,
-                            targetAmount = it.cost,
-                            amountRaised = it.fundsRaised
+                            targetAmount = it.cost.getFormattedValue(),
+                            amountRaised = it.fundsRaised.getFormattedValue(),
+                            amountRaisedPercent = it.fundsRaisedPercent.toFloat()
                         )
                     }
                 }

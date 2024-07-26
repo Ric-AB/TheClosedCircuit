@@ -5,6 +5,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.File
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.util.Zero
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,7 +18,7 @@ data class Budget(
     val description: String,
     val cost: Amount,
     val isSponsored: Boolean,
-    val fundsRaised: Amount,
+    val fundsRaisedPercent: Double,
     val currency: Currency,
     val isCompleted: Boolean,
     val proofs: List<File>,
@@ -25,6 +26,11 @@ data class Budget(
     val createdAt: Date,
     val updatedAt: Date
 ) {
+
+    val fundsRaised: Amount
+        get() {
+            return Amount((fundsRaisedPercent.div(100)) * cost.value, currency)
+        }
 
     val hasUploadedProof: Boolean get() = proofs.isNotEmpty()
 
@@ -40,10 +46,10 @@ data class Budget(
             userID: ID = ID.generateRandomUUID(),
             name: String = "",
             description: String = "",
-            cost: Amount = Amount(0.0),
+            cost: Amount = Amount(Double.Zero),
             currency: Currency = Currency("USD"),
             isSponsored: Boolean = false,
-            fundsRaised: Amount = Amount(0.0),
+            fundsRaised: Double = Double.Zero,
             isCompleted: Boolean = false,
             proofs: List<File> = emptyList(),
             approvers: List<ID> = emptyList(),
@@ -59,7 +65,7 @@ data class Budget(
                 description = description,
                 cost = cost,
                 isSponsored = isSponsored,
-                fundsRaised = fundsRaised,
+                fundsRaisedPercent = fundsRaised,
                 currency = currency,
                 isCompleted = isCompleted,
                 proofs = proofs,

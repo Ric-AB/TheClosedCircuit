@@ -20,8 +20,8 @@ data class Plan(
     val duration: TaskDuration,
     val estimatedSellingPrice: Amount,
     val estimatedCostPrice: Amount,
-    val fundsRaised: Double,
-    val tasksCompleted: Double,
+    val fundsRaisedPercent: Double,
+    val tasksCompletedPercent: Double,
     val targetAmount: Amount,
     val totalFundsRaised: Amount,
     val currency: Currency,
@@ -31,9 +31,6 @@ data class Plan(
     val isSponsored: Boolean,
     val accountabilityPartners: List<ID>,
 ) {
-
-    val fundsRaisedAsPercentage = fundsRaised.times(100)
-    val tasksCompletedAsPercentage = tasksCompleted.times(100)
 
     companion object {
         fun buildPlan(
@@ -69,8 +66,8 @@ data class Plan(
                 duration = duration,
                 estimatedSellingPrice = estimatedSellingPrice,
                 estimatedCostPrice = estimatedCostPrice,
-                fundsRaised = fundsRaised,
-                tasksCompleted = tasksCompleted,
+                fundsRaisedPercent = fundsRaised,
+                tasksCompletedPercent = tasksCompleted,
                 targetAmount = targetAmount,
                 currency = currency,
                 totalFundsRaised = totalFundsRaised,

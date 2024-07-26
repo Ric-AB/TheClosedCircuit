@@ -93,11 +93,7 @@ private fun ScreenContent(
 
 @Composable
 private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> Unit) {
-    val fundsRaised = remember {
-        val value = (plan.totalFundsRaised / plan.targetAmount).value.toFloat()
-        val percentage = value * 100
-        Pair(value, "$percentage")
-    }
+
     OutlinedCard(modifier = modifier, onClick = onClick) {
         Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
             Avatar(
@@ -117,20 +113,20 @@ private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> U
 
             Spacer(modifier = Modifier.height(16.dp))
             TaskLinearProgress(
-                progress = fundsRaised.first,
+                progress = plan.fundsRaisedPercent.toFloat(),
                 label = stringResource(
                     SharedRes.strings.x_percent_funds_raised_label,
-                    fundsRaised.second
+                    plan.fundsRaisedPercent
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
             TaskLinearProgress(
                 modifier = Modifier.fillMaxWidth(),
-                progress = plan.tasksCompleted.toFloat(),
+                progress = plan.tasksCompletedPercent.toFloat(),
                 label = stringResource(
                     SharedRes.strings.x_percent_tasks_completed_label,
-                    plan.tasksCompletedAsPercentage
+                    plan.tasksCompletedPercent
                 )
             )
         }

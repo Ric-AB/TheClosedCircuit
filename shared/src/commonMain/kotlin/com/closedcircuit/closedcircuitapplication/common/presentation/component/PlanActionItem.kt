@@ -20,15 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun BudgetItem(
     modifier: Modifier,
     name: String,
-    targetAmount: Amount,
-    amountRaised: Amount
+    targetAmount: String,
+    amountRaised: String,
+    amountRaisedPercent: Float
 ) {
     Card(
         shape = Shapes().large,
@@ -45,24 +47,28 @@ fun BudgetItem(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = targetAmount.getFormattedValue())
+            Text(text = targetAmount)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Funds raised progress", style = MaterialTheme.typography.labelSmall)
                 Text(
-                    text = amountRaised.getFormattedValue(),
+                    text = stringResource(SharedRes.strings.funds_raised_progress),
+                    style = MaterialTheme.typography.labelSmall
+                )
+
+                Text(
+                    text = amountRaised,
                     style = MaterialTheme.typography.labelSmall
                 )
             }
 
             Spacer(Modifier.height(4.dp))
             LinearProgressIndicator(
-                progress = { 0.7F },
+                progress = { amountRaisedPercent },
                 modifier = Modifier.fillMaxWidth(),
                 strokeCap = StrokeCap.Round,
             )

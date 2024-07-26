@@ -10,7 +10,7 @@ CREATE TABLE BudgetEntity (
     cost REAL NOT NULL,
     currency TEXT NOT NULL ,
     isSponsored INTEGER AS Boolean NOT NULL DEFAULT 0,
-    fundsRaised REAL NOT NULL,
+    fundsRaisedPercent REAL NOT NULL,
     isCompleted INTEGER AS Boolean NOT NULL DEFAULT 0,
     createdAt TEXT NOT NULL,
     updatedAt TEXT NOT NULL
