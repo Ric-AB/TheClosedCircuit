@@ -1,16 +1,16 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.data.plan
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.asBudgetEntities
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.asBudgets
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.toBudgetEntities
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.toBudgets
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest.toFundRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.asStepEntities
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.asSteps
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.toStepEntities
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.toSteps
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PositiveInt
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
@@ -50,8 +50,8 @@ fun ApiPlan.asSponsorPlan(): SponsorPlan {
         fundRequest = fundRequest.toFundRequest(),
         beneficiaryFullName = Name(beneficiaryFullName.orEmpty()),
         beneficiaryId = beneficiaryId?.let { ID(it) },
-        steps = steps.asStepEntities().asSteps(),
-        budgets = budgets.asBudgetEntities().asBudgets()
+        steps = steps.toStepEntities().toSteps(),
+        budgets = budgets.toBudgetEntities().toBudgets()
     )
 }
 

@@ -7,8 +7,8 @@ androidx-composeCompiler = "1.5.13"
 atomicfu = "0.17.3"
 buildConfig = "3.1.0"
 compose = "1.6.1"
+compose-m3 = "1.3.0-beta03"
 compose-uitooling = "1.5.1"
-composeImageLoader = "1.4.1"
 googleServices = "4.4.2"
 koin = "3.4.2"
 koin-compose = "3.4.5"
@@ -36,8 +36,8 @@ webview = "1.9.7"
 
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+compose-m3 = {module = "androidx.compose.material3:material3", version.ref = "compose-m3"}
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
-composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "composeImageLoader" }
 firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "kotlin-firebase-sdk" }
 firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "kotlin-firebase-sdk" }
 firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "kotlin-firebase-sdk" }

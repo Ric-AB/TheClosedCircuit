@@ -10,7 +10,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import database.BudgetEntity
-import kotlinx.collections.immutable.toImmutableList
+import kotlin.jvm.JvmName
 
 fun ApiBudget.asBudgetEntity() = BudgetEntity(
     id = id,
@@ -94,8 +94,9 @@ fun Budget.asEntity() = BudgetEntity(
     updatedAt = updatedAt.value
 )
 
+@JvmName("apiBudgetToDomain")
 fun List<ApiBudget>.toBudgets() = this.map { it.asBudgetEntity().asBudget() }
 
-fun List<ApiBudget>.asBudgetEntities() = this.map { it.asBudgetEntity() }
+fun List<ApiBudget>.toBudgetEntities() = this.map { it.asBudgetEntity() }
 
-fun List<BudgetEntity>.asBudgets() = this.map { it.asBudget() }.toImmutableList()
+fun List<BudgetEntity>.toBudgets() = this.map { it.asBudget() }

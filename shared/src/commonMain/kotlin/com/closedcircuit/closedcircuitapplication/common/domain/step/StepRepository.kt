@@ -2,18 +2,15 @@ package com.closedcircuit.closedcircuitapplication.common.domain.step
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
-typealias Steps = ImmutableList<Step>
+typealias Steps = List<Step>
 
 interface StepRepository {
 
     suspend fun fetchSteps(): ApiResponse<Steps>
 
-    fun saveLocally(step: Step)
-
-    fun saveLocally(steps: List<Step>)
+    fun saveStepLocally(steps: List<Step>)
 
     suspend fun createStep(step: Step): ApiResponse<Step>
 
@@ -23,7 +20,9 @@ interface StepRepository {
 
     fun getStepsForPlanAsFlow(planID: ID): Flow<Steps>
 
-    fun getStepByIDAsFlow(id: ID): Flow<Step>
+    fun getStepByIDAsFlow(id: ID): Flow<Step?>
+
+    fun getPrecedingStepAsFlowFor(stepID: ID, planID: ID): Flow<Step?>
 
     suspend fun fetchStepByID(id: ID): ApiResponse<Step>
 }

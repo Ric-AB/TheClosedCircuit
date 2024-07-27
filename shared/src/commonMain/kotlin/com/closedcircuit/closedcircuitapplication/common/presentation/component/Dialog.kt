@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,11 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.stringResource
 
 @Composable
 fun PromptDialog(
@@ -72,6 +78,49 @@ fun PromptDialog(
                     }
                 ) {
                     Text(text = buttonText)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AppAlertDialog(
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+    onConfirm: () -> Unit,
+    modifier: Modifier = Modifier,
+    title: String,
+    text: String,
+    confirmTitle: String,
+    properties: DialogProperties = DialogProperties()
+) {
+    if (visible) {
+        Dialog(onDismissRequest = onDismissRequest, properties = properties) {
+            Card(
+                shape = MaterialTheme.shapes.medium,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+                modifier = modifier
+            ) {
+                Column(modifier = Modifier.padding(24.dp)) {
+                    TitleText(title)
+
+                    Spacer(Modifier.height(16.dp))
+                    BodyText(text)
+
+                    Spacer(Modifier.height(24.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(onClick = onDismissRequest) {
+                            Text(stringResource(SharedRes.strings.cancel_label))
+                        }
+
+                        TextButton(onClick = { onDismissRequest(); onConfirm() }) {
+                            Text(confirmTitle)
+                        }
+                    }
                 }
             }
         }

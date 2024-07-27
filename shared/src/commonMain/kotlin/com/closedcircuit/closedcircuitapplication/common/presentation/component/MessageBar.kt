@@ -108,8 +108,8 @@ fun ContentWithMessageBar(
     errorMaxLines: Int = 1,
     successMaxLines: Int = 1,
     contentBackgroundColor: Color = MaterialTheme.colorScheme.surface,
-    successContainerColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    successContentColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    successContainerColor: Color = MaterialTheme.colorScheme.primary,
+    successContentColor: Color = MaterialTheme.colorScheme.onPrimary,
     errorContainerColor: Color = MaterialTheme.colorScheme.errorContainer,
     errorContentColor: Color = MaterialTheme.colorScheme.onErrorContainer,
     enterAnimation: EnterTransition = expandVertically(

@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.step
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import app.cash.sqldelight.coroutines.mapToOne
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.step.StepRepository
@@ -10,6 +10,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
+import database.StepEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -28,26 +29,17 @@ class StepRepositoryImpl(
     override suspend fun fetchSteps(): ApiResponse<Steps> {
         return withContext(ioDispatcher + NonCancellable) {
             stepService.fetchSteps().mapOnSuccess { response ->
-                val stepEntities = response.steps.asStepEntities()
-                queries.transaction {
-                    stepEntities.forEach { stepEntity ->
-                        queries.upsertStepEntity(stepEntity)
-                    }
-                }
-
-                stepEntities.asSteps()
+                val stepEntities = response.steps.toStepEntities()
+                saveLocally(stepEntities)
+                stepEntities.toSteps()
             }
         }
     }
 
-    override fun saveLocally(step: Step) {
-        queries.upsertStepEntity(step.asEntity())
-    }
-
-    override fun saveLocally(steps: List<Step>) {
+    override fun saveStepLocally(steps: List<Step>) {
         queries.transaction {
             steps.forEach {
-                queries.upsertStepEntity(it.asEntity())
+                saveLocally(it.asEntity())
             }
         }
     }
@@ -56,7 +48,7 @@ class StepRepositoryImpl(
         return withContext(ioDispatcher + NonCancellable) {
             stepService.createStep(step.asRequest()).mapOnSuccess { apiStep ->
                 val stepEntity = apiStep.asStepEntity()
-                queries.upsertStepEntity(stepEntity)
+                saveLocally(stepEntity)
                 stepEntity.asStep()
             }
         }
@@ -66,7 +58,7 @@ class StepRepositoryImpl(
         return withContext(ioDispatcher + NonCancellable) {
             stepService.updateStep(id = step.id.value, step.asRequest()).mapOnSuccess { apiStep ->
                 val stepEntity = apiStep.asStepEntity()
-                queries.upsertStepEntity(stepEntity)
+                saveLocally(stepEntity)
                 stepEntity.asStep()
             }
         }
@@ -87,19 +79,37 @@ class StepRepositoryImpl(
         return queries.getStepEntitiesForPlan(planID.value)
             .asFlow()
             .mapToList(defaultDispatcher)
-            .map { it.asSteps() }
+            .map { it.toSteps() }
     }
 
-    override fun getStepByIDAsFlow(id: ID): Flow<Step> {
+    override fun getStepByIDAsFlow(id: ID): Flow<Step?> {
         return queries.getStepEntityByID(id.value)
             .asFlow()
-            .mapToOne(defaultDispatcher)
-            .map { it.asStep() }
+            .mapToOneOrNull(defaultDispatcher)
+            .map { it?.asStep() }
+    }
+
+    override fun getPrecedingStepAsFlowFor(stepID: ID, planID: ID): Flow<Step?> {
+        return queries.getPrecedingStepFor(stepID.value, planID.value)
+            .asFlow()
+            .mapToOneOrNull(defaultDispatcher)
+            .map { it?.asStep() }
+
     }
 
     override suspend fun fetchStepByID(id: ID): ApiResponse<Step> {
         return stepService.fetchStepById(id.value).mapOnSuccess {
             it.asStep()
+        }
+    }
+
+    private fun saveLocally(stepEntity: StepEntity) {
+        queries.upsertStepEntity(stepEntity)
+    }
+
+    private fun saveLocally(stepEntities: List<StepEntity>) {
+        queries.transaction {
+            stepEntities.forEach { saveLocally(it) }
         }
     }
 }

@@ -36,6 +36,17 @@ SELECT *
 FROM StepEntity
 WHERE planID = :planID;
 
+getPrecedingStepFor:
+SELECT *
+FROM StepEntity
+WHERE createdAt < (
+    SELECT createdAt
+    FROM StepEntity
+    WHERE id = ? AND planID = ?
+)
+ORDER BY createdAt DESC
+LIMIT 1;
+
 deleteStepEntity:
 DELETE FROM StepEntity
 WHERE id = :id;

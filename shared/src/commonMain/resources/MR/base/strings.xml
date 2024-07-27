@@ -130,6 +130,8 @@
     <string name="target_funds_label">Target funds</string>
     <string name="total_funds_raised">Total funds raised</string>
     <string name="delete_step_label">Delete step</string>
+    <string name="delete_step_prompt_label">Are you sure you want to permanently delete this step?
+    </string>
     <string name="plan_duration">Plan duration</string>
     <string name="step_name">Step name</string>
     <string name="step_description">Step description</string>
@@ -216,6 +218,7 @@
     <string name="verification_inprogess_prompt">Your information is still being verified and the
         verification status will be updated shortly
     </string>
+    <string name="confirm_label">Confirm</string>
 
     <!-- Account -->
     <string name="loans_label">Loans</string>

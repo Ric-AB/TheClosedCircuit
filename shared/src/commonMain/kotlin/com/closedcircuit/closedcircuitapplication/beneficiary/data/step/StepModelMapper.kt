@@ -7,10 +7,11 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.StepStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import database.StepEntity
-import kotlinx.collections.immutable.toImmutableList
+import kotlin.jvm.JvmName
 
 fun StepEntity.asStep(): Step {
     val currency = Currency(currency)
@@ -25,7 +26,7 @@ fun StepEntity.asStep(): Step {
         totalFundsRaised = Amount(totalFundsRaised, currency),
         currency = currency,
         isSponsored = isSponsored,
-        status = status,
+        status = StepStatus.fromText(status),
         createdAt = Date(createdAt),
         updatedAt = Date(updatedAt)
     )
@@ -61,7 +62,7 @@ fun ApiStep.asStep(): Step {
         currency = currency,
         budgets = budgets.map { it.asBudget() },
         isSponsored = isSponsored,
-        status = status,
+        status = StepStatus.fromText(status),
         createdAt = Date(createdAt),
         updatedAt = Date(updatedAt)
     )
@@ -87,13 +88,15 @@ fun Step.asEntity() = StepEntity(
     totalFundsRaised = totalFundsRaised.value,
     currency = currency.value,
     isSponsored = isSponsored,
-    status = status,
+    status = status.requestValue,
     createdAt = createdAt.value,
     updatedAt = updatedAt.value
 )
 
-fun List<ApiStep>.toSteps() = this.map { it.asStepEntity().asStep() }.toImmutableList()
+@JvmName("apiStepToDomain")
 
-fun List<ApiStep>.asStepEntities() = this.map { it.asStepEntity() }
+fun List<ApiStep>.toSteps() = this.map { it.asStepEntity().asStep() }
 
-fun List<StepEntity>.asSteps() = this.map { it.asStep() }.toImmutableList()
+fun List<ApiStep>.toStepEntities() = this.map { it.asStepEntity() }
+
+fun List<StepEntity>.toSteps() = this.map { it.asStep() }

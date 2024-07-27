@@ -1,11 +1,10 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.plan
 
-import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import kotlinx.collections.immutable.ImmutableList
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import kotlinx.coroutines.flow.Flow
 
-typealias Plans = ImmutableList<Plan>
+typealias Plans = List<Plan>
 
 interface PlanRepository {
 

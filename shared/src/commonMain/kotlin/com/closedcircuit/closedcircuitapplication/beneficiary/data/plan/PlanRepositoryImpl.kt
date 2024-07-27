@@ -14,6 +14,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.step.StepReposit
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
+import database.PlanEntity
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
@@ -34,17 +35,18 @@ class PlanRepositoryImpl(
     override val plansFlow: Flow<Plans> = queries.getPlanEntities()
         .asFlow()
         .mapToList(defaultDispatcher)
-        .map { plans -> plans.asPlans() }
+        .map { plans -> plans.toPlans() }
 
+    // todo create use case for this?
     override suspend fun fetchPlans(): ApiResponse<Plans> {
         return withContext(ioDispatcher + NonCancellable) {
             planService.getPlans().mapOnSuccess { response ->
                 val apiPlans = response.plans
                 queries.transaction {
                     apiPlans.forEach { apiPlan ->
-                        queries.upsertPlanEntity(apiPlan.asPlanEntity())
-                        stepRepository.saveLocally(apiPlan.steps.toSteps())
-                        budgetRepository.saveLocally(apiPlan.budgets.toBudgets())
+                        saveLocally(apiPlan.asPlanEntity())
+                        stepRepository.saveStepLocally(apiPlan.steps.toSteps())
+                        budgetRepository.saveBudgetLocally(apiPlan.budgets.toBudgets())
                     }
                 }
 
@@ -57,7 +59,7 @@ class PlanRepositoryImpl(
         return withContext(ioDispatcher + NonCancellable) {
             planService.createPlan(plan.asRequest()).mapOnSuccess { apiPlan ->
                 val planEntity = apiPlan.asPlanEntity()
-                queries.upsertPlanEntity(planEntity)
+                saveLocally(planEntity)
                 planEntity.asPlan()
             }
         }
@@ -68,7 +70,7 @@ class PlanRepositoryImpl(
             planService.updateUserPlan(planId = plan.id.value, request = plan.asRequest())
                 .mapOnSuccess { apiPlan ->
                     val planEntity = apiPlan.asPlanEntity()
-                    queries.upsertPlanEntity(planEntity)
+                    saveLocally(planEntity)
                     planEntity.asPlan()
                 }
         }
@@ -98,5 +100,9 @@ class PlanRepositoryImpl(
 
     override suspend fun fetchPlanByID(id: ID): ApiResponse<Plan> {
         return planService.fetchPlanById(id.value).mapOnSuccess { it.asPlan() }
+    }
+
+    private fun saveLocally(planEntity: PlanEntity) {
+        queries.upsertPlanEntity(planEntity)
     }
 }

@@ -216,7 +216,7 @@ internal object DashboardTab : Tab, KoinComponent {
             if (recentPlans.isNotEmpty()) {
                 Spacer(Modifier.height(32.dp))
                 RecentPlans(
-                    recentPlans = recentPlans,
+                    recentPlans = recentPlans.toImmutableList(),
                     modifier = Modifier.fillMaxWidth(),
                     navigateToPlanListOrEmailVerification = navigateToPlanListOrEmailVerification
                 )

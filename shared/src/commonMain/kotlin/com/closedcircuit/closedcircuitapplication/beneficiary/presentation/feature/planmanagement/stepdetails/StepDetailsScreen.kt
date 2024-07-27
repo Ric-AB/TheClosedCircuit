@@ -48,14 +48,19 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.AppAlertDialog
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BudgetItem
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.icon.rememberTask
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
@@ -65,10 +70,27 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<StepDetailsViewModel> { parametersOf(step) }
+        val messageBarState = rememberMessageBarState()
         val uiState by viewModel.state.collectAsState()
+        var showDeleteDialog by remember { mutableStateOf(false) }
+
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
+            when (it) {
+                is StepDetailsResult.DeleteError -> messageBarState.addError(it.message)
+                StepDetailsResult.DeleteSuccess ->
+                    messageBarState.addSuccess("Deleted successfully.") {
+                        navigator.pop()
+                    }
+            }
+        }
+
         ScreenContent(
             uiState = uiState,
+            messageBarState = messageBarState,
+            showDeleteDialog = showDeleteDialog,
             goBack = navigator::pop,
+            toggleDeleteDialog = { showDeleteDialog = it },
+            onEvent = viewModel::onEvent,
             navigateToSaveStep = {
                 val step = uiState.step
                 navigator.push(
@@ -89,18 +111,27 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
     @Composable
     private fun ScreenContent(
         uiState: StepDetailsUiState,
+        messageBarState: MessageBarState,
+        showDeleteDialog: Boolean,
+        toggleDeleteDialog: (Boolean) -> Unit,
         goBack: () -> Unit,
+        onEvent: (StepDetailsUiEvent) -> Unit,
         navigateToSaveStep: () -> Unit,
         navigateToCompleteStep: (Step) -> Unit
     ) {
         BaseScaffold(
             topBar = {
                 StepDetailsAppBar(
+                    canCompleteStep = uiState.canCompleteStep,
+                    canDeleteStep = uiState.canDeleteStep,
                     goBack = goBack,
+                    toggleDeleteDialog = { toggleDeleteDialog(true) },
                     navigateToSaveStep = navigateToSaveStep,
                     navigateToCompleteStep = { navigateToCompleteStep(uiState.step) }
                 )
-            }
+            },
+            showLoadingDialog = uiState.isLoading,
+            messageBarState = messageBarState
         ) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -150,6 +181,15 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
                     }
                 }
             }
+
+            AppAlertDialog(
+                visible = showDeleteDialog,
+                onDismissRequest = { toggleDeleteDialog(false) },
+                onConfirm = { onEvent(StepDetailsUiEvent.Delete) },
+                confirmTitle = stringResource(SharedRes.strings.confirm_label),
+                title = stringResource(SharedRes.strings.delete_step_label),
+                text = stringResource(SharedRes.strings.delete_step_prompt_label)
+            )
         }
     }
 
@@ -170,6 +210,7 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
                     contentDescription = contentDescription
                 )
 
+                Spacer(Modifier.height(8.dp))
                 Text(text = text, style = MaterialTheme.typography.labelLarge)
             }
         }
@@ -203,7 +244,10 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
 
     @Composable
     private fun StepDetailsAppBar(
+        canCompleteStep: Boolean,
+        canDeleteStep: Boolean,
         goBack: () -> Unit,
+        toggleDeleteDialog: () -> Unit,
         navigateToSaveStep: () -> Unit,
         navigateToCompleteStep: () -> Unit
     ) {
@@ -219,7 +263,9 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
             title = { },
             actions = {
                 StepDetailsAppBarActions(
-                    onDeleteIconClick = {},
+                    canCompleteStep = canCompleteStep,
+                    canDeleteStep = canDeleteStep,
+                    onDeleteIconClick = toggleDeleteDialog,
                     onEditIconClick = navigateToSaveStep,
                     onCompleteIconClick = navigateToCompleteStep
                 )
@@ -229,6 +275,8 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
 
     @Composable
     private fun StepDetailsAppBarActions(
+        canCompleteStep: Boolean,
+        canDeleteStep: Boolean,
         onDeleteIconClick: () -> Unit,
         onEditIconClick: () -> Unit,
         onCompleteIconClick: () -> Unit
@@ -237,15 +285,19 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
             Icon(imageVector = Icons.Outlined.Edit, contentDescription = "edit step")
         }
 
-        IconButton(onClick = onCompleteIconClick) {
-            Icon(imageVector = rememberTask(), contentDescription = "complete step")
+        if (canCompleteStep) {
+            IconButton(onClick = onCompleteIconClick) {
+                Icon(imageVector = rememberTask(), contentDescription = "complete step")
+            }
         }
 
-        DropDownMenu()
+        if (canDeleteStep) {
+            DropDownMenu(onDeleteIconClick)
+        }
     }
 
     @Composable
-    private fun DropDownMenu() {
+    private fun DropDownMenu(onDeleteIconClick: () -> Unit) {
         var expanded by remember { mutableStateOf(false) }
 
         Box(
@@ -264,7 +316,10 @@ internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
             ) {
                 DropdownMenuItem(
                     text = { Text(stringResource(SharedRes.strings.delete_step_label)) },
-                    onClick = { }
+                    onClick = {
+                        expanded = false
+                        onDeleteIconClick()
+                    }
                 )
             }
         }

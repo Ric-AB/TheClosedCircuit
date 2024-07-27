@@ -5,12 +5,26 @@ import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import kotlinx.collections.immutable.persistentListOf
 
 data class StepDetailsUiState(
+    val isLoading: Boolean,
     val step: Step,
-    val budgets: Budgets = persistentListOf()
+    val canCompleteStep: Boolean,
+    val canDeleteStep: Boolean,
+    val budgets: Budgets
 ) {
     companion object {
         fun init(step: Step): StepDetailsUiState {
-            return StepDetailsUiState(step = step)
+            return StepDetailsUiState(
+                isLoading = false,
+                step = step,
+                canCompleteStep = false,
+                canDeleteStep = false,
+                budgets = persistentListOf()
+            )
         }
     }
+}
+
+sealed interface StepDetailsResult {
+    object DeleteSuccess : StepDetailsResult
+    data class DeleteError(val message: String) : StepDetailsResult
 }

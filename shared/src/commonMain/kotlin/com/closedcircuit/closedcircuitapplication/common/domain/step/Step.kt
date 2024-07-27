@@ -5,8 +5,10 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.StepStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
+import com.closedcircuit.closedcircuitapplication.common.util.Zero
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,10 +24,14 @@ data class Step(
     val currency: Currency,
     val budgets: List<Budget> = emptyList(),
     val isSponsored: Boolean,
-    val status: String,
+    val status: StepStatus,
     val createdAt: Date,
     val updatedAt: Date
 ) {
+
+    val isComplete: Boolean get() = status == StepStatus.COMPLETED
+    val hasReceivedFunds: Boolean get() = totalFundsRaised.value > Double.Zero
+
     companion object {
         fun buildStep(
             id: ID = ID.generateRandomUUID(),
@@ -38,7 +44,7 @@ data class Step(
             planID: ID = ID.generateRandomUUID(),
             userID: ID = ID.generateRandomUUID(),
             isSponsored: Boolean = false,
-            status: String = String.Empty,
+            status: StepStatus = StepStatus.NOT_COMPLETED,
             createdAt: Date = Date.now(),
             updatedAt: Date = Date.now()
         ): Step {

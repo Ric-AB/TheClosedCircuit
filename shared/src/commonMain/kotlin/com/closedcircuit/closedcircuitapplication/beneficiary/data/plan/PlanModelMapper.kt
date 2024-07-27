@@ -4,15 +4,15 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.ApiP
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.SavePlanPayload
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import database.PlanEntity
-import kotlinx.collections.immutable.toImmutableList
+import kotlin.jvm.JvmName
 
 fun PlanEntity.asPlan(): Plan {
     val currency = Currency(currency)
@@ -126,8 +126,9 @@ fun Plan.asEntity() = PlanEntity(
     updatedAt = Date.now().value
 )
 
-fun List<ApiPlan>.toPlans() = this.map { it.asPlanEntity().asPlan() }.toImmutableList()
+@JvmName("apiPlanToDomain")
+fun List<ApiPlan>.toPlans() = this.map { it.asPlanEntity().asPlan() }
 
-fun List<ApiPlan>.asPlanEntities() = this.map { it.asPlanEntity() }
+fun List<ApiPlan>.toPlanEntities() = this.map { it.asPlanEntity() }
 
-fun List<PlanEntity>.asPlans() = this.map { it.asPlan() }.toImmutableList()
+fun List<PlanEntity>.toPlans() = this.map { it.asPlan() }
