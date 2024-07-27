@@ -69,9 +69,15 @@ class StepRepositoryImpl(
         return withContext(ioDispatcher + NonCancellable) {
             stepService.deleteStep(idValue).mapOnSuccess {
                 val stepEntity = queries.getStepEntityByID(idValue).executeAsOne()
-                queries.deleteStepEntity(idValue)
+                deleteLocally(idValue)
                 stepEntity.asStep()
             }
+        }
+    }
+
+    override fun deleteStepsLocally(steps: Steps) {
+        queries.transaction {
+            steps.forEach { deleteLocally(it.id.value) }
         }
     }
 
@@ -101,6 +107,10 @@ class StepRepositoryImpl(
         return stepService.fetchStepById(id.value).mapOnSuccess {
             it.asStep()
         }
+    }
+
+    private fun deleteLocally(id: String) {
+        queries.deleteStepEntity(id)
     }
 
     private fun saveLocally(stepEntity: StepEntity) {

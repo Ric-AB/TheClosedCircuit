@@ -82,15 +82,20 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDurati
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Steps
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.AppAlertDialog
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BudgetItem
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
@@ -100,11 +105,28 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val messageBarState = rememberMessageBarState()
         val viewModel = getScreenModel<PlanDetailsViewModel> { parametersOf(plan) }
         val uiState by viewModel.state.collectAsState()
+        var showDeleteDialog by remember { mutableStateOf(false) }
+
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
+            when (it) {
+                is PlanDetailsResult.DeleteError -> messageBarState.addError(it.message)
+                PlanDetailsResult.DeleteSuccess ->
+                    messageBarState.addSuccess("Plan deleted successfully.") {
+                        navigator.pop()
+                    }
+            }
+        }
+
         ScreenContent(
             uiState = uiState,
+            messageBarState = messageBarState,
+            showDeleteDialog = showDeleteDialog,
+            toggleDeleteDialog = { showDeleteDialog = it },
             goBack = navigator::pop,
+            onEvent = viewModel::onEvent,
             navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
             navigateToFundRequest = { navigator.push(FundRequestScreen(plan, uiState.steps)) },
             navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) },
@@ -115,7 +137,11 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
     @Composable
     private fun ScreenContent(
         uiState: PlanDetailsUiState,
+        messageBarState: MessageBarState,
+        showDeleteDialog: Boolean,
+        toggleDeleteDialog: (Boolean) -> Unit,
         goBack: () -> Unit,
+        onEvent: (PlanDetailsUiEvent) -> Unit,
         navigateToStepDetails: (Step) -> Unit,
         navigateToFundRequest: () -> Unit,
         navigateToEditPlan: () -> Unit,
@@ -125,11 +151,14 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
             topBar = {
                 PlanDetailsAppBar(
                     onNavClick = goBack,
+                    toggleDeleteDialog = { toggleDeleteDialog(true) },
                     navigateToFundRequest = navigateToFundRequest,
                     navigateToEditPlan = navigateToEditPlan
                 )
             },
-            floatingActionButton = { PlanDetailsExtendedFab(navigateToSaveStep) }
+            floatingActionButton = { PlanDetailsExtendedFab(navigateToSaveStep) },
+            messageBarState = messageBarState,
+            showLoadingDialog = uiState.isLoading
         ) { innerPadding ->
             BoxWithConstraints(modifier = Modifier.padding(innerPadding)) {
                 val screenHeight = maxHeight
@@ -153,6 +182,15 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                     )
                 }
             }
+
+            AppAlertDialog(
+                visible = showDeleteDialog,
+                onDismissRequest = { toggleDeleteDialog(false) },
+                onConfirm = { onEvent(PlanDetailsUiEvent.Delete) },
+                confirmTitle = stringResource(SharedRes.strings.confirm_label),
+                title = stringResource(SharedRes.strings.delete_plan),
+                text = stringResource(SharedRes.strings.delete_plan_prompt_label)
+            )
         }
     }
 
@@ -451,10 +489,12 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
 
     @Composable
     private fun DropDownMenu(
+        toggleDeleteDialog: () -> Unit,
         navigateToFundRequest: () -> Unit,
         navigateToEditPlan: () -> Unit
     ) {
         var expanded by remember { mutableStateOf(false) }
+        val dismissMenu = { expanded = false }
 
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -470,21 +510,21 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
             DropdownMenu(
                 modifier = Modifier.width(IntrinsicSize.Max),
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = dismissMenu
             ) {
                 DropdownMenuItem(
                     text = { Text(text = stringResource(SharedRes.strings.edit_plan)) },
-                    onClick = navigateToEditPlan
+                    onClick = { dismissMenu(); navigateToEditPlan() }
                 )
 
                 DropdownMenuItem(
                     text = { Text(text = stringResource(SharedRes.strings.delete_plan)) },
-                    onClick = { }
+                    onClick = { dismissMenu(); toggleDeleteDialog() }
                 )
 
                 DropdownMenuItem(
                     text = { Text(text = stringResource(SharedRes.strings.request_funds)) },
-                    onClick = navigateToFundRequest
+                    onClick = { dismissMenu(); navigateToFundRequest() }
                 )
             }
         }
@@ -502,6 +542,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
     @Composable
     private fun PlanDetailsAppBar(
         onNavClick: () -> Unit,
+        toggleDeleteDialog: () -> Unit,
         navigateToFundRequest: () -> Unit,
         navigateToEditPlan: () -> Unit
     ) {
@@ -517,6 +558,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
             title = {},
             actions = {
                 DropDownMenu(
+                    toggleDeleteDialog = toggleDeleteDialog,
                     navigateToFundRequest = navigateToFundRequest,
                     navigateToEditPlan = navigateToEditPlan
                 )

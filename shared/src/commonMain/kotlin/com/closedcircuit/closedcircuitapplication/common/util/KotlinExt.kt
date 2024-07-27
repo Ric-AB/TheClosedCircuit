@@ -1,7 +1,5 @@
 package com.closedcircuit.closedcircuitapplication.common.util
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
-
 expect fun String.Companion.format(format: String, vararg args: Any?): String
 
 expect fun randomUUID(): String
@@ -33,10 +31,11 @@ fun Double.round(decimals: Int): Double {
 
 fun Boolean?.orFalse() = this ?: false
 
-fun <T> SnapshotStateList<T>.replaceAll(items: Collection<T>) {
+fun <T> MutableList<T>.replaceAll(items: Collection<T>) {
     clear()
     addAll(items)
 }
+
 
 //inline fun <reified T : Any> extractMembers(instance: T): List<Pair<String, String>> {
 //    val members = mutableListOf<Pair<String, String>>()

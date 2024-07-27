@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.budget.BudgetRep
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.step.StepRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
+import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import kotlinx.collections.immutable.toImmutableList
@@ -21,7 +22,7 @@ class StepDetailsViewModel(
     private val budgetRepository: BudgetRepository
 ) : BaseScreenModel<StepDetailsUiState, StepDetailsResult>() {
 
-    private val budgetsCache = mutableListOf<Budget>()
+    private val budgetsCopy = mutableListOf<Budget>()
     private val isLoadingFlow = MutableStateFlow(false)
     private val stepID = step.id
     val state = combine(
@@ -32,8 +33,7 @@ class StepDetailsViewModel(
     ) { step, precedingStep, budgets, isLoading ->
         val nonNullStep = step ?: this.step
         if (budgets.isNotEmpty()) {
-            budgetsCache.clear()
-            budgetsCache.addAll(budgets)
+            budgetsCopy.replaceAll(budgets)
         }
 
         StepDetailsUiState(
@@ -41,7 +41,7 @@ class StepDetailsViewModel(
             step = nonNullStep,
             canCompleteStep = precedingStep?.isComplete ?: true,
             canDeleteStep = !nonNullStep.hasReceivedFunds,
-            budgets = budgetsCache.toImmutableList()
+            budgets = budgetsCopy.toImmutableList()
         )
     }.stateIn(
         scope = screenModelScope,

@@ -119,6 +119,8 @@
     <string name="budgets">Budgets</string>
     <string name="edit_plan">Edit Plan</string>
     <string name="delete_plan">Delete Plan</string>
+    <string name="delete_plan_prompt_label">Are you sure you want to permanently delete this plan?
+    </string>
     <string name="request_funds">Request Funds</string>
     <string name="edit_step">Edit Step</string>
     <string name="create_step">Create Step</string>

@@ -71,7 +71,7 @@ class BudgetRepositoryImpl(
         return withContext(ioDispatcher + NonCancellable) {
             budgetService.deleteBudget(id = id.value).mapOnSuccess {
                 val budgetEntity = queries.getBudgetEntityByID(id = id.value).executeAsOne()
-                queries.deleteBudgetEntity(id.value)
+                deleteLocally(budgetEntity.id)
                 budgetEntity.asBudget()
             }
         }
@@ -79,7 +79,7 @@ class BudgetRepositoryImpl(
 
     override fun deleteBudgetsLocally(budgets: Budgets) {
         queries.transaction {
-            budgets.forEach { deleteLocally(it) }
+            budgets.forEach { deleteLocally(it.id.value) }
         }
     }
 
@@ -116,8 +116,8 @@ class BudgetRepositoryImpl(
         return budgetService.uploadProof(id = budgetID.value, request = request)
     }
 
-    private fun deleteLocally(budget: Budget) {
-        queries.deleteBudgetEntity(budget.id.value)
+    private fun deleteLocally(id: String) {
+        queries.deleteBudgetEntity(id)
     }
 
     private fun saveLocally(budgetEntity: BudgetEntity) {

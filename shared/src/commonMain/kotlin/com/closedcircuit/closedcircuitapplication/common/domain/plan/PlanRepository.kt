@@ -18,7 +18,7 @@ interface PlanRepository {
 
     suspend fun deletePlan(id: ID): ApiResponse<Plan>
 
-    fun getPlanByIDAsFlow(id: ID): Flow<Plan>
+    fun getPlanByIDAsFlow(id: ID): Flow<Plan?>
 
     fun getRecentPlans(limit: Int = 3): Flow<Plans>
 

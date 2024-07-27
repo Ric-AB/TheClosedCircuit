@@ -18,6 +18,8 @@ interface StepRepository {
 
     suspend fun deleteStep(id: ID): ApiResponse<Step>
 
+    fun deleteStepsLocally(steps: Steps)
+
     fun getStepsForPlanAsFlow(planID: ID): Flow<Steps>
 
     fun getStepByIDAsFlow(id: ID): Flow<Step?>

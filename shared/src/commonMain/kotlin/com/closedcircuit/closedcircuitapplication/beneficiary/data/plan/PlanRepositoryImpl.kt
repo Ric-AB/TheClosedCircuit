@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.plan
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import app.cash.sqldelight.coroutines.mapToOne
+import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.toBudgets
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.toSteps
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.BudgetRepository
@@ -91,11 +91,11 @@ class PlanRepositoryImpl(
         return plansFlow.map { it.take(limit).toImmutableList() }
     }
 
-    override fun getPlanByIDAsFlow(id: ID): Flow<Plan> {
+    override fun getPlanByIDAsFlow(id: ID): Flow<Plan?> {
         return queries.getPlanEntityByID(id.value)
             .asFlow()
-            .mapToOne(ioDispatcher)
-            .map { it.asPlan() }
+            .mapToOneOrNull(ioDispatcher)
+            .map { it?.asPlan() }
     }
 
     override suspend fun fetchPlanByID(id: ID): ApiResponse<Plan> {
