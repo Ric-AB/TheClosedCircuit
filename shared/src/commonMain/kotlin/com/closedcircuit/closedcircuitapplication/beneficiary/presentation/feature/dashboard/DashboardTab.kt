@@ -141,10 +141,9 @@ internal object DashboardTab : Tab, KoinComponent {
         navigateToCreatePlanOrEmailVerification: () -> Unit,
         navigateToPlanListOrEmailVerification: () -> Unit,
     ) {
-        BaseScaffold(messageBarState = messageBarState) { innerPadding ->
+        BaseScaffold(messageBarState = messageBarState) { _ ->
             Column(
                 modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
                     .padding(vertical = verticalScreenPadding)
             ) {
