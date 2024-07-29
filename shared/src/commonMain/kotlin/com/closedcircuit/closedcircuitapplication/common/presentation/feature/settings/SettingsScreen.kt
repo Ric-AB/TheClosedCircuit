@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,6 +54,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileTyp
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.changepassword.ChangePasswordScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
@@ -87,7 +89,8 @@ internal class SettingsScreen : Screen, KoinComponent {
         ScreenContent(
             state = viewModel.state.collectAsState().value,
             onEvent = viewModel::onEvent,
-            goBack = navigator::pop
+            goBack = navigator::pop,
+            navigateToChangePassword = { navigator.push(ChangePasswordScreen()) }
         )
     }
 
@@ -95,7 +98,8 @@ internal class SettingsScreen : Screen, KoinComponent {
     private fun ScreenContent(
         state: SettingsUiState,
         onEvent: (SettingsUiEvent) -> Unit,
-        goBack: () -> Unit
+        goBack: () -> Unit,
+        navigateToChangePassword: () -> Unit
     ) {
         BaseScaffold(
             topBar = {
@@ -109,7 +113,8 @@ internal class SettingsScreen : Screen, KoinComponent {
                 is SettingsUiState.Content -> Body(
                     innerPadding = innerPadding,
                     state = state,
-                    onEvent = onEvent
+                    onEvent = onEvent,
+                    navigateToChangePassword = navigateToChangePassword
                 )
 
                 SettingsUiState.Loading -> BackgroundLoader()
@@ -121,7 +126,8 @@ internal class SettingsScreen : Screen, KoinComponent {
     private fun Body(
         innerPadding: PaddingValues,
         state: SettingsUiState.Content,
-        onEvent: (SettingsUiEvent) -> Unit
+        onEvent: (SettingsUiEvent) -> Unit,
+        navigateToChangePassword: () -> Unit
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -132,7 +138,7 @@ internal class SettingsScreen : Screen, KoinComponent {
                     vertical = verticalScreenPadding
                 )
         ) {
-            SecuritySection()
+            SecuritySection(navigateToChangePassword)
 
             Spacer(Modifier.height(40.dp))
             NotificationsSection()
@@ -150,7 +156,7 @@ internal class SettingsScreen : Screen, KoinComponent {
     }
 
     @Composable
-    private fun SecuritySection() {
+    private fun SecuritySection(navigateToChangePassword: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -192,7 +198,8 @@ internal class SettingsScreen : Screen, KoinComponent {
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null
                     )
-                }
+                },
+                modifier = Modifier.clickable(onClick = navigateToChangePassword)
             )
         }
     }

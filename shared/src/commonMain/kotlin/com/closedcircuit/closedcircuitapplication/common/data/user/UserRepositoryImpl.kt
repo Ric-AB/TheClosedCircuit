@@ -12,6 +12,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
+import com.closedcircuit.closedcircuitapplication.common.data.user.dto.ChangePasswordRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserDashboard
@@ -23,7 +24,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -113,6 +113,23 @@ class UserRepositoryImpl(
                 idNumber = documentNumber
             )
             userService.verifyKyc(requestBody)
+        }
+    }
+
+    override suspend fun changePassword(
+        oldPassword: String,
+        newPassword: String,
+        confirmPassword: String
+    ): ApiResponse<Unit> {
+        return withContext(ioDispatcher) {
+            val userId = userFlow.value?.id?.value.orEmpty()
+            val request = ChangePasswordRequest(
+                oldPassword = oldPassword,
+                newPassword = newPassword,
+                confirmPassword = confirmPassword,
+            )
+
+            userService.changePassword(request, userId)
         }
     }
 

@@ -135,7 +135,7 @@ fun PasswordOutlinedTextField(
             placeholder = placeholder,
             supportingText = {
                 if (showCriteria) {
-                    Column {
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         PasswordValidator.criteriaMessage.values.map { criteria ->
                             Text(
                                 text = criteria,

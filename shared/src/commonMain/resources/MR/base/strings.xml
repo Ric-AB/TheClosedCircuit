@@ -159,6 +159,8 @@
     <string name="tokenize_card_prompt">We are about to charge a small fee to tokenize your card
     </string>
     <string name="okay_label">Okay</string>
+    <string name="old_password_label">Old password</string>
+    <string name="new_password_label">New password</string>
 
     <!--    Notifications-->
     <string name="notifications">Notifications</string>

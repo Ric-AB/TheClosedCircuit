@@ -15,4 +15,10 @@ interface UserRepository {
         documentType: KycDocumentType,
         documentNumber: String
     ): ApiResponse<Unit>
+
+    suspend fun changePassword(
+        oldPassword: String,
+        newPassword: String,
+        confirmPassword: String
+    ): ApiResponse<Unit>
 }

@@ -7,6 +7,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.au
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.OnboardingViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.payment.PaymentViewModel
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.changepassword.ChangePasswordViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationViewModel
@@ -30,6 +31,7 @@ val viewModelModule = module {
     factory { ProfileViewModel(get(), get()) }
     factory { EditProfileViewModel(get()) }
     factory { parameters -> ProfileVerificationViewModel(parameters.get(), get()) }
+    factory { ChangePasswordViewModel(get()) }
 
     // notification
     factory { NotificationViewModel(get()) }
