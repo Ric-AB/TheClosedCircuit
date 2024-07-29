@@ -4,7 +4,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.Gene
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.GenerateOtpResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.LoginRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.LoginResponse
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.RegisterRequest
+import com.closedcircuit.closedcircuitapplication.common.data.auth.dto.RegisterRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.RegisterResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.ResetPasswordRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.ResetPasswordResponse

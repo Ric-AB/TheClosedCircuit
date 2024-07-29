@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto
+package com.closedcircuit.closedcircuitapplication.common.data.auth.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RegisterRequest(
     val email: String,
-    @SerialName("full_name")
+    @SerialName("fullname")
     val fullName: String,
     val roles: String?,
     @SerialName("phone_number")

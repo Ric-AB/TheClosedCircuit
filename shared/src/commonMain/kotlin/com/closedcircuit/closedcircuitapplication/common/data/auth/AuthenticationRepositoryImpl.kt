@@ -5,7 +5,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.GenerateOtpRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.LoginRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.LoginResponse
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.RegisterRequest
+import com.closedcircuit.closedcircuitapplication.common.data.auth.dto.RegisterRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.ResetPasswordRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.VerifyOtpRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
