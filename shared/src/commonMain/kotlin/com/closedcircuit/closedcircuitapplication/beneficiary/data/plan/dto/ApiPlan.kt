@@ -44,7 +44,7 @@ data class ApiPlan(
     @SerialName("is_sponsored")
     val isSponsored: Boolean?,
     @SerialName("fund_request")
-    val fundRequest: List<ApiFundRequest>,
+    val fundRequests: List<ApiFundRequest>,
     @SerialName("accountability_partners")
     val accountabilityPartners: List<String>,
     @SerialName("beneficiary_id")

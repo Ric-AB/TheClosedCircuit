@@ -5,11 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiFundRequest(
-    val id: String?,
+    val id: String,
     @SerialName("plan")
-    val planId: String? = null,
+    val planId: String,
     @SerialName("beneficiary")
-    val beneficiaryId: String? = null,
+    val beneficiaryId: String,
     @SerialName("means_of_support")
     val meansOfSupport: String?,
     @SerialName("minimum_loan_range")

@@ -58,7 +58,12 @@ val dataModule = module {
         )
     }
 
-    single<FundRequestRepository> { FundRequestRepositoryImpl(service = get()) }
+    single<FundRequestRepository> {
+        FundRequestRepositoryImpl(
+            service = get(),
+            theClosedCircuitDatabase = get()
+        )
+    }
     single<LoanRepository> {
         LoanRepositoryImpl(
             loanService = get(),

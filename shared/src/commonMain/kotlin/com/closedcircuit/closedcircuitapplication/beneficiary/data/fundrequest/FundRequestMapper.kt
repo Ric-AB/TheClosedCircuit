@@ -2,16 +2,17 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest
 
 import com.closedcircuit.closedcircuitapplication.common.data.fundrequest.dto.ApiFundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
+import database.FundRequestEntity
 
 fun FundRequest.toApiFundRequest(): ApiFundRequest {
     return if (fundType == FundType.DONATION) {
         ApiFundRequest(
-            planId = planId?.value,
+            planId = planId.value,
             meansOfSupport = fundType.requestValue,
             currency = null,
             minimumLoanRange = null,
@@ -20,8 +21,8 @@ fun FundRequest.toApiFundRequest(): ApiFundRequest {
             graceDuration = null,
             repaymentDuration = null,
             interestRate = null,
-            id = null,
-            beneficiaryId = null,
+            id = id.value,
+            beneficiaryId = beneficiaryId.value,
             createdAt = null,
             updatedAt = null
         )
@@ -34,10 +35,10 @@ fun FundRequest.toApiFundRequest(): ApiFundRequest {
             graceDuration = graceDuration,
             repaymentDuration = repaymentDuration,
             interestRate = interestRate,
-            planId = planId?.value,
+            planId = planId.value,
+            id = id.value,
+            beneficiaryId = beneficiaryId.value,
             currency = null,
-            id = null,
-            beneficiaryId = null,
             createdAt = null,
             updatedAt = null
         )
@@ -47,9 +48,9 @@ fun FundRequest.toApiFundRequest(): ApiFundRequest {
 fun ApiFundRequest.toFundRequest(): FundRequest {
     val currency = currency?.let { Currency(it) }
     return FundRequest(
-        id = ID(id.orEmpty()),
-        planId = planId?.let { ID(it) },
-        beneficiaryId = beneficiaryId?.let { ID(it) },
+        id = ID(id),
+        planId = ID(planId),
+        beneficiaryId = ID(beneficiaryId),
         fundType = FundType.fromText(meansOfSupport),
         minimumLoanRange = minimumLoanRange?.toDouble()?.let { Amount(it, currency) },
         maximumLoanRange = maximumLoanRange?.toDouble()?.let { Amount(it, currency) },
@@ -62,3 +63,42 @@ fun ApiFundRequest.toFundRequest(): FundRequest {
         updatedAt = Date(updatedAt.orEmpty())
     )
 }
+
+fun FundRequest.toFundRequestEntity(): FundRequestEntity {
+    return FundRequestEntity(
+        meansOfSupport = fundType.requestValue,
+        minimumLoanRange = minimumLoanRange?.value,
+        maximumLoanRange = maximumLoanRange?.value,
+        maxLenders = maxLenders?.toLong(),
+        graceDuration = graceDuration?.toLong(),
+        repaymentDuration = repaymentDuration?.toLong(),
+        interestRate = interestRate?.toLong(),
+        planId = planId.value,
+        currency = null,
+        id = id.value,
+        beneficiaryId = beneficiaryId.value,
+        createdAt = createdAt.value,
+        updatedAt = updatedAt.value
+    )
+}
+
+fun FundRequestEntity.toFundRequest(): FundRequest {
+    val currency = currency?.let { Currency(it) }
+    return FundRequest(
+        id = ID(id),
+        planId = ID(planId),
+        beneficiaryId = ID(beneficiaryId),
+        fundType = FundType.fromText(meansOfSupport),
+        minimumLoanRange = minimumLoanRange?.let { Amount(it, currency) },
+        maximumLoanRange = maximumLoanRange?.let { Amount(it, currency) },
+        currency = currency,
+        maxLenders = maxLenders?.toInt(),
+        graceDuration = graceDuration?.toInt(),
+        repaymentDuration = repaymentDuration?.toInt(),
+        interestRate = interestRate?.toInt(),
+        createdAt = Date(createdAt),
+        updatedAt = Date(updatedAt)
+    )
+}
+
+fun List<ApiFundRequest>.toFundRequests() = map { it.toFundRequest() }

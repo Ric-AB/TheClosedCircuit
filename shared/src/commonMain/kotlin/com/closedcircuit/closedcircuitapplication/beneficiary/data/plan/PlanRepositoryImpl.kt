@@ -4,8 +4,10 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.toBudgets
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest.toFundRequests
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.toSteps
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.BudgetRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequestRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanRepository
@@ -27,6 +29,7 @@ class PlanRepositoryImpl(
     private val planService: PlanService,
     private val stepRepository: StepRepository,
     private val budgetRepository: BudgetRepository,
+    private val fundRequestRepository: FundRequestRepository,
     private val ioDispatcher: CoroutineDispatcher,
     defaultDispatcher: CoroutineDispatcher
 ) : PlanRepository {
@@ -47,6 +50,7 @@ class PlanRepositoryImpl(
                         saveLocally(apiPlan.asPlanEntity())
                         stepRepository.saveStepLocally(apiPlan.steps.toSteps())
                         budgetRepository.saveBudgetLocally(apiPlan.budgets.toBudgets())
+                        fundRequestRepository.saveFundRequestLocally(apiPlan.fundRequests.toFundRequests())
                     }
                 }
 

@@ -10,8 +10,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FundRequest(
     val id: ID,
-    val beneficiaryId: ID?,
-    val planId: ID?,
+    val beneficiaryId: ID,
+    val planId: ID,
     val fundType: FundType,
     val minimumLoanRange: Amount?,
     val maximumLoanRange: Amount?,

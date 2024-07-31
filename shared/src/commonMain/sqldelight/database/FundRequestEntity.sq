@@ -1,0 +1,32 @@
+CREATE TABLE FundRequestEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    planId TEXT NOT NULL ,
+    beneficiaryId TEXT NOT NULL,
+    meansOfSupport TEXT NOT NULL,
+    minimumLoanRange REAL,
+    maximumLoanRange REAL,
+    maxLenders INTEGER,
+    currency TEXT,
+    graceDuration INTEGER,
+    repaymentDuration INTEGER,
+    interestRate INTEGER,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL
+);
+
+upsertFundRequestEntity:
+INSERT OR REPLACE
+INTO FundRequestEntity
+VALUES ?;
+
+getAllFundRequests:
+SELECT *
+FROM FundRequestEntity
+ORDER BY createdAt DESC;
+
+getLastFundRequestForPlan:
+SELECT *
+FROM FundRequestEntity
+WHERE planId = :planID
+ORDER BY createdAt DESC
+LIMIT 1;
