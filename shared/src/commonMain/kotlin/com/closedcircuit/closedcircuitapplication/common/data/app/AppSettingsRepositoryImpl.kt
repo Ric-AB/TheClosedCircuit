@@ -4,7 +4,6 @@ import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettings
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import io.github.xxfast.kstore.KStore
-import io.github.xxfast.kstore.extensions.cached
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 

@@ -49,6 +49,7 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ScreenM
             val lastName = lastNameField.value.trim()
             val fullName = "$firstName $nickName $lastName".trimDuplicateSpace()
             val email = emailField.value.lowercase().trim()
+            val dialCode = phoneNumberState.country.dialCode
             val phoneNumber = phoneNumberState.getPhoneNumberWithCode().trim()
 
             screenModelScope.launch {
@@ -56,7 +57,7 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ScreenM
                 val updatedUser = currentUser.copy(
                     fullName = Name(fullName),
                     email = Email(email),
-                    phoneNumber = PhoneNumber(phoneNumber)
+                    phoneNumber = PhoneNumber(dialCode, phoneNumber)
                 )
 
                 userRepository.updateUser(updatedUser)

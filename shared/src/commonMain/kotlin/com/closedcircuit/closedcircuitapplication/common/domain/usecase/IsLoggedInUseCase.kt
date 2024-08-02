@@ -16,6 +16,7 @@ class IsLoggedInUseCase(
         val currentSession = sessionRepository.get()
         return when {
             !hasOnboarded -> AuthenticationState.FIRST_TIME
+            hasOnboarded && currentSession == null -> AuthenticationState.LOGGED_OUT
             currentSession != null -> {
                 if (currentSession.hasExpired(firebaseAuth.currentUser)) AuthenticationState.LOGGED_OUT
                 else AuthenticationState.LOGGED_IN

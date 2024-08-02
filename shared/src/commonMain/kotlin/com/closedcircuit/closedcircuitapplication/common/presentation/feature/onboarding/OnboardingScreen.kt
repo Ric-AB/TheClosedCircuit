@@ -30,7 +30,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -157,7 +157,7 @@ private fun ActionButtons(
 
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
-                    Icons.Rounded.ArrowForward,
+                    Icons.AutoMirrored.Rounded.ArrowForward,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
@@ -177,7 +177,7 @@ private fun ActionButtons(
 
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
-                        Icons.Rounded.ArrowForward,
+                        Icons.AutoMirrored.Rounded.ArrowForward,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp)
                     )
