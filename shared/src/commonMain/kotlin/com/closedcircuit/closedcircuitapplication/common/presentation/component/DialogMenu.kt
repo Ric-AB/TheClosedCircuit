@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -59,7 +58,6 @@ fun <T> TextFieldDialogMenu(
     },
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedIndex by remember { mutableStateOf(-1) }
 
     Column {
         Text(text = label, style = MaterialTheme.typography.labelMedium)
@@ -91,9 +89,40 @@ fun <T> TextFieldDialogMenu(
         }
     }
 
-    if (expanded) {
-        Dialog(onDismissRequest = { expanded = false }) {
-            Surface(shape = RoundedCornerShape(12.dp)) {
+    DialogMenu(
+        visible = expanded,
+        selectedItem = selectedItem,
+        notSetLabel = notSetLabel,
+        items = items,
+        drawItem = drawItem,
+        onItemSelected = onItemSelected,
+        onDismissRequest = { expanded = false }
+    )
+}
+
+@Composable
+fun <T> DialogMenu(
+    modifier: Modifier = Modifier,
+    visible: Boolean,
+    selectedItem: T?,
+    notSetLabel: String? = null,
+    items: ImmutableList<T>,
+    itemToString: (T) -> String = { it.toString() },
+    drawItem:  @Composable (T, Boolean, Boolean, () -> Unit) -> Unit = { item, selected, itemEnabled, onClick ->
+        TextFieldDialogMenuItem(
+            text = itemToString(item),
+            selected = selected,
+            enabled = itemEnabled,
+            onClick = onClick,
+        )
+    },
+    onItemSelected: (index: Int, item: T) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    var selectedIndex by remember(selectedItem) { mutableStateOf(items.indexOf(selectedItem)) }
+    if (visible) {
+        Dialog(onDismissRequest = onDismissRequest) {
+            Surface(shape = MaterialTheme.shapes.medium, modifier = modifier) {
                 val listState = rememberLazyListState()
                 if (selectedIndex > -1) {
                     LaunchedEffect("ScrollToSelected") {
@@ -121,7 +150,7 @@ fun <T> TextFieldDialogMenu(
                         ) {
                             selectedIndex = index
                             onItemSelected(index, item)
-                            expanded = false
+                            onDismissRequest()
                         }
 
                         if (index < items.lastIndex) {

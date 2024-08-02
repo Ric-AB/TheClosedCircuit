@@ -10,18 +10,36 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.Pay
 import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.data.app.AppSettingsRepositoryImpl
+import com.closedcircuit.closedcircuitapplication.common.data.country.CountryRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.data.session.SessionRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.country.CountryRepository
 import com.closedcircuit.closedcircuitapplication.core.storage.appSettingsStore
 import com.closedcircuit.closedcircuitapplication.core.storage.sessionStore
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
+import com.closedcircuit.closedcircuitapplication.common.data.country.countryJsonString
+import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val dataModule = module {
     single<AppSettingsRepository> { AppSettingsRepositoryImpl(appSettingsStore) }
     single<SessionRepository> { SessionRepositoryImpl(sessionStore) }
-    single<UserRepository> { UserRepositoryImpl(get(), userStore, get(named(namedIODispatcher))) }
+    single<CountryRepository> {
+        CountryRepositoryImpl(
+            countryData = Json.decodeFromString(countryJsonString)
+        )
+    }
+
+    single<UserRepository> {
+        UserRepositoryImpl(
+            userStore = userStore,
+            userService = get(),
+            countryRepository = get(),
+            ioDispatcher = get(named(namedIODispatcher))
+        )
+    }
+
     single<AuthenticationRepository> { AuthenticationRepositoryImpl(get()) }
     single<NotificationRepository> {
         NotificationRepositoryImpl(

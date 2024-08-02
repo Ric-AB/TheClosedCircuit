@@ -4,7 +4,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileTyp
 import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.EmailValidator
 import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.NameValidator
 import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PasswordValidator
-import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PhoneNumberValidator
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.PhoneNumberState
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 
 data class RegisterUIState(
@@ -12,11 +12,7 @@ data class RegisterUIState(
     val nickNameField: InputField = InputField(name = "nickName"),
     val lastNameField: InputField = InputField(name = "lastName", validator = NameValidator()),
     val emailField: InputField = InputField(name = "email", validator = EmailValidator()),
-    val phoneNumberField: InputField = InputField(
-        name = "phoneNumber",
-        validator = PhoneNumberValidator()
-    ),
-
+    val phoneNumberState: PhoneNumberState,
     val passwordField: InputField = InputField(
         name = "password",
         validateOnChange = true,
@@ -30,7 +26,7 @@ data class RegisterUIState(
         firstNameField,
         lastNameField,
         emailField,
-        phoneNumberField,
+        phoneNumberState.inputField,
         passwordField,
         confirmPasswordField
     )

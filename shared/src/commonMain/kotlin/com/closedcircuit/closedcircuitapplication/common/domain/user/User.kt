@@ -2,7 +2,7 @@ package com.closedcircuit.closedcircuitapplication.common.domain.user
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.AccountType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
+import com.closedcircuit.closedcircuitapplication.common.domain.country.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
@@ -34,7 +34,7 @@ data class User(
     val firstName = Name(fullName.value.split(Regex("\\s")).first())
     val lastName = Name(fullName.value.split(Regex("\\s")).last())
     val hasAttemptedKyc get() = kycStatus != KycStatus.NOT_STARTED
-    val accountType get() = AccountType.getByText(country.value)
+    val accountType get() = AccountType.getByText(country.name)
 
 
     fun copyWithWalletBalance(amount: Amount): User {

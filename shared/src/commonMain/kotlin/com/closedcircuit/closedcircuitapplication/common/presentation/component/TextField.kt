@@ -171,6 +171,61 @@ fun PasswordOutlinedTextField(
 }
 
 @Composable
+fun PhoneOutlinedTextField(
+    phoneNumberState: PhoneNumberState,
+    onValueChange: (PhoneNumberState) -> Unit,
+    onCountrySelect: ((PhoneNumberState) -> Unit)? = null,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    label: String? = null,
+    textStyle: TextStyle = LocalTextStyle.current,
+    placeholder: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = { Text(text = phoneNumberState.inputField.error) },
+    isError: Boolean = phoneNumberState.inputField.isError,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape = Shapes().medium,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
+        unfocusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+        focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+        errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+    )
+) {
+    DefaultOutlinedTextField(
+        inputField = phoneNumberState.inputField,
+        onValueChange = { onValueChange(phoneNumberState.updatePhone(it)) },
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readOnly,
+        textStyle = textStyle,
+        label = label,
+        placeholder = placeholder,
+        leadingIcon = {
+            CountryPicker(
+                data = phoneNumberState.country,
+                options = phoneNumberState.countryOptions,
+                onCountrySelected = { onCountrySelect?.invoke(phoneNumberState.updateCountry(it)) }
+            )
+        },
+        trailingIcon = trailingIcon,
+        supportingText = supportingText,
+        isError = isError,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = true,
+        maxLines = 1,
+        interactionSource = interactionSource,
+        shape = shape,
+        colors = colors
+    )
+}
+
+@Composable
 fun TopLabeledTextField(
     inputField: InputField,
     onValueChange: (String) -> Unit,

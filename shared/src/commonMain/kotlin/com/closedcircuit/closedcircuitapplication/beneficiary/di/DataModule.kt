@@ -28,6 +28,7 @@ val dataModule = module {
             planService = get(),
             stepRepository = get(),
             budgetRepository = get(),
+            fundRequestRepository = get(),
             ioDispatcher = get(named(namedDefaultDispatcher)),
             defaultDispatcher = get(named(namedDefaultDispatcher))
         )

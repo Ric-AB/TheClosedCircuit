@@ -1,23 +1,22 @@
 package com.closedcircuit.closedcircuitapplication.common.data.user
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.asApiUser
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.asUser
-import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
-import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
-import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycRequest
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
+import com.closedcircuit.closedcircuitapplication.common.data.user.dto.ChangePasswordRequest
 import com.closedcircuit.closedcircuitapplication.common.data.user.dto.UpdateUserRequest
+import com.closedcircuit.closedcircuitapplication.common.domain.country.CountryRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
-import com.closedcircuit.closedcircuitapplication.common.data.user.dto.ChangePasswordRequest
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserDashboard
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
+import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
+import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import io.github.xxfast.kstore.KStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -33,8 +32,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserRepositoryImpl(
-    private val userService: UserService,
     userStore: KStore<User>,
+    private val userService: UserService,
+    private val countryRepository: CountryRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) : UserRepository {
     private val walletBalance = MutableStateFlow(Amount(Double.Zero))
@@ -50,7 +50,8 @@ class UserRepositoryImpl(
     override suspend fun fetchUser(userId: String): ApiResponse<User> {
         return withContext(ioDispatcher + NonCancellable) {
             userService.getUserDetails(userId).mapOnSuccess { apiUser ->
-                val user = apiUser.asUser()
+                val userCountry = countryRepository.findByName(apiUser.country)
+                val user = apiUser.toUser(userCountry)
                 saveLocally(user)
                 user
             }
@@ -63,7 +64,7 @@ class UserRepositoryImpl(
 
     override suspend fun updateUser(user: User): ApiResponse<User> {
         return withContext(ioDispatcher + NonCancellable) {
-            val apiUser = user.asApiUser()
+            val apiUser = user.toApiUser()
             val request = UpdateUserRequest(
                 fullName = apiUser.fullName,
                 email = apiUser.email,
@@ -72,7 +73,8 @@ class UserRepositoryImpl(
             )
 
             userService.updateUser(request, apiUser.id).mapOnSuccess { apiUserFromServer ->
-                val updatedUser = apiUserFromServer.asUser()
+                val userCountry = countryRepository.findByName(apiUserFromServer.country)
+                val updatedUser = apiUserFromServer.toUser(userCountry)
                 saveLocally(updatedUser)
                 updatedUser
             }

@@ -24,7 +24,7 @@ data class ProfileUIState(
                 fullName = user.fullName.value,
                 email = user.email.value,
                 phoneNumber = user.phoneNumber.value,
-                country = user.country.value,
+                country = user.country.name,
                 isEmailVerified = user.isVerified,
                 phoneNumberStatus = user.phoneNumberStatus,
                 kycStatus = user.kycStatus,

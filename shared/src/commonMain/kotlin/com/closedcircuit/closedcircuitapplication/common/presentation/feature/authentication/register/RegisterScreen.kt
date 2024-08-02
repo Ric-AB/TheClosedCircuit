@@ -47,6 +47,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PasswordOutlinedTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.PhoneOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
@@ -90,7 +91,7 @@ internal class RegisterScreen(private val planID: ID? = null) : Screen, KoinComp
 
         ScreenContent(
             messageBarState = messageBarState,
-            state = state,
+            state = state.value,
             onEvent = viewModel::onEvent,
             navigateToLogin = { navigator.pop() }
         )
@@ -112,7 +113,7 @@ private fun ScreenContent(
 
         var showPassword by rememberSaveable { mutableStateOf(false) }
         var showConfirmPassword by rememberSaveable { mutableStateOf(false) }
-        val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField, passwordField, confirmPasswordField, _) = state
+        val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberState, passwordField, confirmPasswordField, _) = state
         val inputFieldCommonModifier = Modifier.fillMaxWidth()
         val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
             if (isFocused) onEvent(RegisterUiEvent.InputFieldFocusReceived(fieldName))
@@ -212,9 +213,10 @@ private fun ScreenContent(
                     }
                 )
 
-                DefaultOutlinedTextField(
-                    inputField = phoneNumberField,
-                    onValueChange = { onEvent(RegisterUiEvent.PhoneNumberChange(it)) },
+                PhoneOutlinedTextField(
+                    phoneNumberState = phoneNumberState,
+                    onValueChange = { onEvent(RegisterUiEvent.PhoneStateChange(it)) },
+                    onCountrySelect = { onEvent(RegisterUiEvent.PhoneStateChange(it)) },
                     label = stringResource(SharedRes.strings.phone_number),
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
@@ -222,7 +224,7 @@ private fun ScreenContent(
                         imeAction = ImeAction.Next
                     ),
                     modifier = inputFieldCommonModifier.onFocusChanged {
-                        handleFocusChange(it.isFocused, phoneNumberField.name)
+                        handleFocusChange(it.isFocused, phoneNumberState.inputField.name)
                     }
                 )
 

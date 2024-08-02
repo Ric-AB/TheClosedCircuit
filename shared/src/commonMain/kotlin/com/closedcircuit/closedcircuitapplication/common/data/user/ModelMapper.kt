@@ -1,21 +1,18 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.user
+package com.closedcircuit.closedcircuitapplication.common.data.user
 
-import com.closedcircuit.closedcircuitapplication.common.data.user.dto.SponsorResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.ApiUser
-import com.closedcircuit.closedcircuitapplication.common.domain.user.User
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Country
+import com.closedcircuit.closedcircuitapplication.common.domain.country.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
+import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
+import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 
-fun ApiUser.asUser() = User(
+fun ApiUser.toUser(country: Country) = User(
     id = ID(id),
     email = Email(email),
     fullName = Name(fullName),
@@ -23,7 +20,7 @@ fun ApiUser.asUser() = User(
     avatar = ImageUrl(avatar),
     isVerified = isVerified,
     phoneNumber = PhoneNumber(phoneNumber),
-    country = Country(country),
+    country = country,
     kycStatus = KycStatus.valueOf(kycStatus),
     phoneNumberStatus = KycStatus.valueOf(phoneNumberVerified),
     currency = currency?.let { Currency(it) },
@@ -32,13 +29,13 @@ fun ApiUser.asUser() = User(
     updatedAt = Date(updatedAt)
 )
 
-fun User.asApiUser() = ApiUser(
+fun User.toApiUser() = ApiUser(
     id = id.value,
     email = email.value,
     fullName = fullName.value,
     preferredName = preferredName?.value,
     avatar = avatar.value,
-    country = country.value,
+    country = country.name,
     isVerified = isVerified,
     phoneNumber = phoneNumber.value,
     kycStatus = kycStatus.toString(),
@@ -47,10 +44,4 @@ fun User.asApiUser() = ApiUser(
     currency = currency?.value,
     createdAt = createdAt.value,
     updatedAt = updatedAt.value
-)
-
-fun SponsorResponse.toSponsor() = Sponsor(
-    avatar = ImageUrl(sponsorAvatar),
-    fullName = Name(sponsorFullName),
-    loanAmount = Amount(loanAmount.toDouble())
 )
