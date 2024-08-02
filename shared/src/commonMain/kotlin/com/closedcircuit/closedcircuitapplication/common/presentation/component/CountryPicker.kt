@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,25 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.common.domain.country.Country
-import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.conditional
 import kotlinx.collections.immutable.ImmutableList
 
-@Stable
-data class PhoneNumberState(
-    val inputField: InputField,
-    val country: Country,
-    val countryOptions: ImmutableList<Country>
-) {
-    fun updatePhone(phone: String): PhoneNumberState {
-        inputField.onValueChange(phone)
-        return this
-    }
-
-    fun updateCountry(country: Country): PhoneNumberState {
-        return copy(country = country)
-    }
-}
 
 @Composable
 fun CountryPicker(

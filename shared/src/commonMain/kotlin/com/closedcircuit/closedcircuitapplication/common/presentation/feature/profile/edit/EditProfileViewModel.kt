@@ -9,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.PhoneNumberState
 import com.closedcircuit.closedcircuitapplication.common.util.trimDuplicateSpace
 import com.closedcircuit.closedcircuitapplication.core.network.onComplete
 import com.closedcircuit.closedcircuitapplication.core.network.onError
@@ -33,7 +34,7 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ScreenM
             is EditProfileUiEvent.FirstNameChange -> updateFirstName(event.firstName)
             is EditProfileUiEvent.LastNameChange -> updateLastName(event.lastName)
             is EditProfileUiEvent.NickNameChange -> updateNickName(event.nickName)
-            is EditProfileUiEvent.PhoneNumberChange -> updatePhoneNumber(event.phoneNumber)
+            is EditProfileUiEvent.PhoneStateChange -> updatePhoneState(event.phoneState)
             is EditProfileUiEvent.InputFieldFocusReceived -> updateLastFocusedField(event.fieldName)
             EditProfileUiEvent.InputFieldFocusLost -> validateLastFocusedField()
             EditProfileUiEvent.OnSubmit -> attemptProfileEdit()
@@ -42,13 +43,13 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ScreenM
 
     private fun attemptProfileEdit() {
         if (areFieldsValid()) {
-            val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField) = state
+            val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberState) = state
             val firstName = firstNameField.value.trim()
             val nickName = nickNameField.value.trim()
             val lastName = lastNameField.value.trim()
             val fullName = "$firstName $nickName $lastName".trimDuplicateSpace()
             val email = emailField.value.lowercase().trim()
-            val phoneNumber = phoneNumberField.value.trim()
+            val phoneNumber = phoneNumberState.getPhoneNumberWithCode().trim()
 
             screenModelScope.launch {
                 state = state.copy(isLoading = true)
@@ -86,8 +87,8 @@ class EditProfileViewModel(private val userRepository: UserRepository) : ScreenM
         state.emailField.onValueChange(email)
     }
 
-    private fun updatePhoneNumber(phoneNumber: String) {
-        state.phoneNumberField.onValueChange(phoneNumber)
+    private fun updatePhoneState(phoneState: PhoneNumberState) {
+        state = state.copy(phoneNumberState = phoneState)
     }
 
     private fun updateLastFocusedField(fieldName: String) {

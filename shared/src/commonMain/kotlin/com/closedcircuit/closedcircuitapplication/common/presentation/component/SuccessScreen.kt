@@ -21,14 +21,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideUpTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 
 internal data class SuccessScreen(
     val title: String,
     val message: String = "",
     val primaryAction: () -> Unit
-) : Screen, CustomScreenTransition by SlideUpTransition {
+) : Screen, CustomScreenTransition by SlideUpTransition() {
     @Composable
     override fun Content() {
         ScreenContent(title, message, primaryAction)

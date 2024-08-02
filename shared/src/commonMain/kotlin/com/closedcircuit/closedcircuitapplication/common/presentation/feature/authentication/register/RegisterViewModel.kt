@@ -6,13 +6,13 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.country.CountryRepository
-import com.closedcircuit.closedcircuitapplication.core.network.onError
-import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.common.domain.usecase.RegisterWithLoginUseCase
 import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PhoneNumberValidator
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PhoneNumberState
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.trimDuplicateSpace
+import com.closedcircuit.closedcircuitapplication.core.network.onError
+import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -70,11 +70,7 @@ class RegisterViewModel(
             val nickName = nickNameField.value.trim()
             val lastName = lastNameField.value.trim()
             val fullName = "$firstName $nickName $lastName".trimDuplicateSpace()
-
-            val countryCode = phoneNumberState.country.dialCode
-            val phoneNumber = phoneNumberState.inputField.value.trim()
-            val fullPhoneNumber = countryCode + phoneNumber
-
+            val phoneNumber = phoneNumberState.getPhoneNumberWithCode().trim()
             val password = passwordField.value
             val confirmPassword = confirmPasswordField.value
 
@@ -84,7 +80,7 @@ class RegisterViewModel(
                     fullName = fullName,
                     email = email,
                     roles = "Beneficiary",
-                    phoneNumber = fullPhoneNumber,
+                    phoneNumber = phoneNumber,
                     password = password,
                     confirmPassword = confirmPassword
                 ).onSuccess {

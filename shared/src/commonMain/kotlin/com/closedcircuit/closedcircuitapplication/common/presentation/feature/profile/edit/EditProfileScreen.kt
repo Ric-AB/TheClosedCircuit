@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -36,15 +34,15 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideUpTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.PhoneOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
@@ -54,7 +52,7 @@ import org.koin.core.component.KoinComponent
 internal class EditProfileScreen :
     Screen,
     KoinComponent,
-    CustomScreenTransition by SlideUpTransition {
+    CustomScreenTransition by SlideUpTransition() {
 
     @Composable
     override fun Content() {
@@ -106,7 +104,7 @@ private fun ScreenContent(
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
 
-        val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberField) = state
+        val (firstNameField, nickNameField, lastNameField, emailField, phoneNumberState) = state
         val inputFieldCommonModifier = Modifier.fillMaxWidth()
         val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
             if (isFocused) onEvent(EditProfileUiEvent.InputFieldFocusReceived(fieldName))
@@ -191,9 +189,9 @@ private fun ScreenContent(
                 }
             )
 
-            DefaultOutlinedTextField(
-                inputField = phoneNumberField,
-                onValueChange = { onEvent(EditProfileUiEvent.PhoneNumberChange(it)) },
+            PhoneOutlinedTextField(
+                phoneNumberState = phoneNumberState,
+                onValueChange = { onEvent(EditProfileUiEvent.PhoneStateChange(it)) },
                 label = stringResource(SharedRes.strings.phone_number),
                 keyboardOptions = KeyboardOptions(
                     autoCorrect = false,
@@ -201,7 +199,7 @@ private fun ScreenContent(
                     imeAction = ImeAction.Next
                 ),
                 modifier = inputFieldCommonModifier.onFocusChanged {
-                    handleFocusChange(it.isFocused, phoneNumberField.name)
+                    handleFocusChange(it.isFocused, phoneNumberState.inputField.name)
                 }
             )
 

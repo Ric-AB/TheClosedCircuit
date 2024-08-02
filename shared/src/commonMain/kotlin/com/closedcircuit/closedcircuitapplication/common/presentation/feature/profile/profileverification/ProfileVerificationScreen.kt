@@ -37,7 +37,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideUpTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPush
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -49,7 +49,7 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 internal class ProfileVerificationScreen(val email: Email) : Screen, KoinComponent,
-    CustomScreenTransition by SlideUpTransition {
+    CustomScreenTransition by SlideUpTransition() {
     private val viewModel: ProfileVerificationViewModel by inject { parametersOf(email) }
 
     @Composable

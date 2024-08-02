@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,14 +45,34 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.closedcircuit.closedcircuitapplication.common.domain.country.Country
+import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PasswordValidator
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.icon.rememberVisibility
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.icon.rememberVisibilityOff
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
-import com.closedcircuit.closedcircuitapplication.common.domain.util.validation.PasswordValidator
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+@Stable
+data class PhoneNumberState(
+    val inputField: InputField,
+    val country: Country,
+    val countryOptions: ImmutableList<Country>
+) {
+    fun updatePhone(phone: String): PhoneNumberState {
+        inputField.onValueChange(phone)
+        return this
+    }
+
+    fun updateCountry(country: Country): PhoneNumberState {
+        return copy(country = country)
+    }
+
+    fun getPhoneNumberWithCode() = "${country.dialCode}${inputField.value}"
+}
 
 @Composable
 fun DefaultOutlinedTextField(
