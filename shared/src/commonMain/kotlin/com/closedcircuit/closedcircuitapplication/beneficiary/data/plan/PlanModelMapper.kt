@@ -1,7 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.plan
 
+import com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest.toFundRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.plan.dto.SavePlanPayload
+import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
@@ -14,7 +16,7 @@ import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import database.PlanEntity
 import kotlin.jvm.JvmName
 
-fun PlanEntity.asPlan(): Plan {
+fun PlanEntity.asPlan(lastFundRequest: FundRequest? = null): Plan {
     val currency = Currency(currency)
     return Plan(
         id = ID(id),
@@ -32,6 +34,7 @@ fun PlanEntity.asPlan(): Plan {
         tasksCompletedPercent = tasksCompletedPercent,
         targetAmount = Amount(targetAmount, currency),
         totalFundsRaised = Amount(totalFundsRaised, currency),
+        lastFundRequest = lastFundRequest,
         analytics = analytics.orEmpty(),
         userID = ID(userID),
         hasRequestedFund = hasRequestedFund,
@@ -81,6 +84,8 @@ fun ApiPlan.asPlan(): Plan {
         tasksCompletedPercent = tasksCompleted.orZero(),
         targetAmount = Amount(targetAmount.toDouble(), currency),
         totalFundsRaised = Amount(totalFundsRaised?.toDouble().orZero(), currency),
+        lastFundRequest = fundRequests.sortedByDescending { it.createdAt }.firstOrNull()
+            ?.toFundRequest(),
         currency = currency,
         analytics = analytics,
         userID = ID(user),
@@ -131,4 +136,9 @@ fun List<ApiPlan>.toPlans() = this.map { it.asPlanEntity().asPlan() }
 
 fun List<ApiPlan>.toPlanEntities() = this.map { it.asPlanEntity() }
 
-fun List<PlanEntity>.toPlans() = this.map { it.asPlan() }
+fun List<PlanEntity>.toPlans(fundRequests: List<FundRequest>): List<Plan> {
+    val map = fundRequests.associateBy { it.planId.value }
+    return this.map {
+        it.asPlan(map[it.id])
+    }
+}

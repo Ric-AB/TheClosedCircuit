@@ -1,5 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
@@ -7,10 +9,14 @@ import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.Fund
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.database.TheClosedCircuitDatabase
 import database.FundRequestEntity
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class FundRequestRepositoryImpl(
     theClosedCircuitDatabase: TheClosedCircuitDatabase,
-    private val service: FundRequestService
+    private val service: FundRequestService,
+    private val defaultDispatcher: CoroutineDispatcher
 ) : FundRequestRepository {
     private val queries = theClosedCircuitDatabase.fundRequestEntityQueries
 
@@ -28,6 +34,12 @@ class FundRequestRepositoryImpl(
     override suspend fun getLastFundRequestForPlan(planID: ID): FundRequest? {
         return queries.getLastFundRequestForPlan(planID.value).executeAsOneOrNull()
             ?.toFundRequest()
+    }
+
+    override fun getAllFundRequestsAscendingAsFlow(): Flow<List<FundRequest>> {
+        return queries.getAllFundRequestsAscending().asFlow()
+            .mapToList(defaultDispatcher)
+            .map { it.toFundRequests() }
     }
 
     private fun saveLocally(fundRequestEntity: FundRequestEntity) {

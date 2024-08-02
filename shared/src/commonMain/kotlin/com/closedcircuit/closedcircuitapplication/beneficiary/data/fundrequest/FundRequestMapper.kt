@@ -8,6 +8,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import database.FundRequestEntity
+import kotlin.jvm.JvmName
 
 fun FundRequest.toApiFundRequest(): ApiFundRequest {
     return if (fundType == FundType.DONATION) {
@@ -101,4 +102,7 @@ fun FundRequestEntity.toFundRequest(): FundRequest {
     )
 }
 
+@JvmName("apiFundRequestToDomain")
 fun List<ApiFundRequest>.toFundRequests() = map { it.toFundRequest() }
+
+fun List<FundRequestEntity>.toFundRequests() = map { it.toFundRequest() }

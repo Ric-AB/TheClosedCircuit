@@ -21,6 +21,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
@@ -31,14 +32,19 @@ class PlanRepositoryImpl(
     private val budgetRepository: BudgetRepository,
     private val fundRequestRepository: FundRequestRepository,
     private val ioDispatcher: CoroutineDispatcher,
-    defaultDispatcher: CoroutineDispatcher
+    private val defaultDispatcher: CoroutineDispatcher
 ) : PlanRepository {
     private val queries = database.planEntityQueries
 
-    override val plansFlow: Flow<Plans> = queries.getPlanEntities()
-        .asFlow()
-        .mapToList(defaultDispatcher)
-        .map { plans -> plans.toPlans() }
+
+    override fun getPlansAsFlow(): Flow<Plans> {
+        return queries.getPlanEntities()
+            .asFlow()
+            .mapToList(defaultDispatcher)
+            .combine(fundRequestRepository.getAllFundRequestsAscendingAsFlow()) { plans, fundRequests ->
+                plans.toPlans(fundRequests)
+            }
+    }
 
     // todo create use case for this?
     override suspend fun fetchPlans(): ApiResponse<Plans> {
@@ -92,7 +98,7 @@ class PlanRepositoryImpl(
     }
 
     override fun getRecentPlans(limit: Int): Flow<Plans> {
-        return plansFlow.map { it.take(limit).toImmutableList() }
+        return getPlansAsFlow().map { it.take(limit).toImmutableList() }
     }
 
     override fun getPlanByIDAsFlow(id: ID): Flow<Plan?> {

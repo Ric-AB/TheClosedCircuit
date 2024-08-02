@@ -2,6 +2,7 @@ package com.closedcircuit.closedcircuitapplication.common.domain.fundrequest
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
+import kotlinx.coroutines.flow.Flow
 
 interface FundRequestRepository {
 
@@ -10,4 +11,6 @@ interface FundRequestRepository {
     fun saveFundRequestLocally(fundRequests: List<FundRequest>)
 
     suspend fun getLastFundRequestForPlan(planID: ID): FundRequest?
+
+    fun getAllFundRequestsAscendingAsFlow(): Flow<List<FundRequest>>
 }

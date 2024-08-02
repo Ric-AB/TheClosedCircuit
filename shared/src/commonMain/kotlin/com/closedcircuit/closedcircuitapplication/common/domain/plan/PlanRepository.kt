@@ -8,7 +8,7 @@ typealias Plans = List<Plan>
 
 interface PlanRepository {
 
-    val plansFlow: Flow<Plans>
+    fun getPlansAsFlow(): Flow<Plans>
 
     suspend fun fetchPlans(): ApiResponse<Plans>
 

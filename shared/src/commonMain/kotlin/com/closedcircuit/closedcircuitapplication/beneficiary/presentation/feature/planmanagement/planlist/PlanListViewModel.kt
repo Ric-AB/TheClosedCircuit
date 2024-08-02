@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.stateIn
 
 class PlanListViewModel(planRepository: PlanRepository) : ScreenModel {
 
-    val stateFlow = planRepository.plansFlow
+    val stateFlow = planRepository.getPlansAsFlow()
         .map { PlanListUiState(it) }
         .stateIn(
             screenModelScope,

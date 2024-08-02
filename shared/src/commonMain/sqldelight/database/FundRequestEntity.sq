@@ -24,6 +24,11 @@ SELECT *
 FROM FundRequestEntity
 ORDER BY createdAt DESC;
 
+getAllFundRequestsAscending:
+SELECT *
+FROM FundRequestEntity
+ORDER BY createdAt ASC;
+
 getLastFundRequestForPlan:
 SELECT *
 FROM FundRequestEntity

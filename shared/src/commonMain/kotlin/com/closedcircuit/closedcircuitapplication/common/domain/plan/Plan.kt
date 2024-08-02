@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.plan
 
+import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
@@ -25,6 +26,7 @@ data class Plan(
     val targetAmount: Amount,
     val totalFundsRaised: Amount,
     val currency: Currency,
+    val lastFundRequest: FundRequest?,
     val analytics: String,
     val userID: ID,
     val hasRequestedFund: Boolean,
@@ -70,6 +72,7 @@ data class Plan(
                 tasksCompletedPercent = tasksCompleted,
                 targetAmount = targetAmount,
                 currency = currency,
+                lastFundRequest = null,
                 totalFundsRaised = totalFundsRaised,
                 analytics = planAnalytics,
                 userID = userID,
