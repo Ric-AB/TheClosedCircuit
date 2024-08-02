@@ -161,6 +161,7 @@
     <string name="okay_label">Okay</string>
     <string name="old_password_label">Old password</string>
     <string name="new_password_label">New password</string>
+    <string name="copy_link_label">Copy link</string>
 
     <!--    Notifications-->
     <string name="notifications">Notifications</string>
