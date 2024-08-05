@@ -4,6 +4,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.session.Session
 import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Token
+import com.closedcircuit.closedcircuitapplication.core.storage.sessionStore
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.extensions.cached
 import io.github.xxfast.kstore.utils.ExperimentalKStoreApi
@@ -32,4 +33,8 @@ class SessionRepositoryImpl(
 
     @OptIn(ExperimentalKStoreApi::class)
     override fun getToken(): String = appSettingsStore.cached?.token?.value ?: ""
+
+    override suspend fun clear() {
+        sessionStore.reset()
+    }
 }

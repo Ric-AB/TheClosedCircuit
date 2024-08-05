@@ -12,4 +12,6 @@ interface SessionRepository {
     )
 
     fun getToken(): String
+
+    suspend fun clear()
 }

@@ -135,6 +135,10 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun clear() {
+        userStore.reset()
+    }
+
     private fun saveLocally(user: User) {
         CoroutineScope(ioDispatcher).launch {
             userStore.set(user)

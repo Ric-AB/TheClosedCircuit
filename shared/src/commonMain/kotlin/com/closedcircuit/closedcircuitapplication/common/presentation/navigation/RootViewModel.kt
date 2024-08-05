@@ -17,18 +17,16 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 
 class RootViewModel(
-    private val appSettingsRepository: AppSettingsRepository,
+    appSettingsRepository: AppSettingsRepository,
     private val isLoggedInUseCase: IsLoggedInUseCase,
     userRepository: UserRepository
 ) : ScreenModel {
 
     private val authStateFlow = flow { emit(isLoggedInUseCase()) }
-    private val activeProfileFlow = flow { emit(appSettingsRepository.getActiveProfile()) }
-    private val userFlow = userRepository.userFlow
     val state = combine(
         authStateFlow,
-        activeProfileFlow,
-        userFlow
+        appSettingsRepository.getActiveProfileAsFlow(),
+        userRepository.userFlow
     ) { authState, activeProfile, user ->
         RootState(
             authState = authState,

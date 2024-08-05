@@ -9,5 +9,6 @@ interface AppSettingsRepository {
     suspend fun hasOnboarded(): Boolean
     suspend fun setActiveProfile(profileType: ProfileType)
     suspend fun getActiveProfile(): ProfileType
+    fun getActiveProfileAsFlow(): Flow<ProfileType>
     fun getAppSettings(): Flow<AppSettings>
 }

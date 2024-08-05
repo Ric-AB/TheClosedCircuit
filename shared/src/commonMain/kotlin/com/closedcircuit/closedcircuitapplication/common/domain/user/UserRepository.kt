@@ -21,4 +21,6 @@ interface UserRepository {
         newPassword: String,
         confirmPassword: String
     ): ApiResponse<Unit>
+
+    suspend fun clear()
 }

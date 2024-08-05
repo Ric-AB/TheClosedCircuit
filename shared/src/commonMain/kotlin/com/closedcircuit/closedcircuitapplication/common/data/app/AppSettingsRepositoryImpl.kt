@@ -31,6 +31,10 @@ class AppSettingsRepositoryImpl(
         return appSettingsStore.get()?.activeProfile ?: ProfileType.BENEFICIARY
     }
 
+    override fun getActiveProfileAsFlow(): Flow<ProfileType> {
+        return appSettingsStore.updates.mapNotNull { it?.activeProfile }
+    }
+
     override fun getAppSettings(): Flow<AppSettings> {
         return appSettingsStore.updates.mapNotNull { it }
     }
