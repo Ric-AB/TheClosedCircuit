@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -37,12 +36,16 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.kyc.KycNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.LoansDashboard
-import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKey
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.StringResource
@@ -68,10 +71,14 @@ internal object AccountTab : Tab {
 
     @Composable
     override fun Content() {
-        val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
+        val navigator =
+            findNavigator(ScreenKey.PROTECTED_NAVIGATOR_SCREEN, LocalNavigator.currentOrThrow)
+        val messageBarState = rememberMessageBarState()
         val viewModel = getScreenModel<AccountTabViewModel>()
         val walletBalance = viewModel.walletBalance.collectAsState().value
+
         ScreenContent(
+            messageBarState = messageBarState,
             walletBalance = walletBalance,
             navigateToKycScreen = { navigator.push(KycNavigator()) },
             navigateToLoansDashboard = { navigator.push(LoansDashboard()) }
@@ -80,15 +87,17 @@ internal object AccountTab : Tab {
 
     @Composable
     private fun ScreenContent(
+        messageBarState: MessageBarState,
         walletBalance: String?,
         navigateToKycScreen: () -> Unit,
         navigateToLoansDashboard: () -> Unit
     ) {
-        BaseScaffold { innerPadding ->
+        BaseScaffold(
+            messageBarState = messageBarState,
+            topBar = { DefaultAppBar(mainIcon = null) }) { innerPadding ->
             Column(
                 modifier = Modifier.padding(innerPadding)
-                    .statusBarsPadding()
-                    .padding(horizontal = horizontalScreenPadding)
+                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
                 WalletCard(amount = walletBalance, modifier = Modifier.fillMaxWidth())
 

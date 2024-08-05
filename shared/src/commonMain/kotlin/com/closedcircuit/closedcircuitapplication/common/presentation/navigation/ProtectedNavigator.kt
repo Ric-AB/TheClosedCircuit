@@ -41,7 +41,7 @@ internal class ProtectedNavigator(private val activeProfile: ProfileType) : Scre
         val currency = remember(rootState?.currency) { rootState?.currency.orDefault() }
 
         CompositionLocalProvider(LocalCurrency provides currency) {
-            Navigator(initialScreen) { navigator ->
+            Navigator(initialScreen, key = PROTECTED_NAVIGATOR_SCREEN) { navigator ->
                 ScreenBasedTransition(navigator)
             }
         }

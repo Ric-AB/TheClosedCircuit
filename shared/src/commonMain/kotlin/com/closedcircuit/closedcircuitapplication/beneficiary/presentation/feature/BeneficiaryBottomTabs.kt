@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -9,12 +10,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -28,7 +31,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.ProfileNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
@@ -63,6 +66,7 @@ internal class BeneficiaryBottomTabs : Screen {
         ) {
             TabNavigator(tab = DashboardTab) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
                     topBar = {
                         BeneficiaryTopAppBar(
                             navigationIconClick = { scope.launch { drawerState.open() } },
@@ -77,7 +81,7 @@ internal class BeneficiaryBottomTabs : Screen {
                     bottomBar = {
                         NavigationBar {
                             TabNavigationItem(DashboardTab)
-                            TabNavigationItem(ProfileNavigator)
+                            TabNavigationItem(ProfileTab)
                             BottomNavFab(
                                 imageResource = SharedRes.images.ic_four_squares,
                                 onClick = {

@@ -77,7 +77,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKey
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent1
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent2
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent3
@@ -115,7 +116,8 @@ internal object DashboardTab : Tab, KoinComponent {
 
     @Composable
     override fun Content() {
-        val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
+        val navigator =
+            findNavigator(ScreenKey.PROTECTED_NAVIGATOR_SCREEN, LocalNavigator.currentOrThrow)
         val messageBarState = rememberMessageBarState()
         val viewModel = navigator.getNavigatorScreenModel<DashboardViewModel>()
         val state = viewModel.uiState()

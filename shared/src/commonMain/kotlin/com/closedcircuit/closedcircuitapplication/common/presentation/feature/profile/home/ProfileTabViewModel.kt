@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-class ProfileViewModel(
+class ProfileTabViewModel(
     userRepository: UserRepository,
     planRepository: PlanRepository
 ) : ScreenModel {

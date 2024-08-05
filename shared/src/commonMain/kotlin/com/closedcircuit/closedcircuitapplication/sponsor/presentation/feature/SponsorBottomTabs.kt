@@ -24,7 +24,7 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.ProfileNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
@@ -75,7 +75,7 @@ class SponsorBottomTabs : Screen {
                     bottomBar = {
                         NavigationBar {
                             TabNavigationItem(SponsorDashboardTab)
-                            TabNavigationItem(ProfileNavigator)
+                            TabNavigationItem(ProfileTab)
                             BottomNavFab(
                                 imageResource = SharedRes.images.ic_funds,
                                 onClick = { navigator.push(FundedPlanListScreen()) }

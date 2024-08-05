@@ -35,7 +35,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.SuccessScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.transition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPush
@@ -77,7 +76,7 @@ internal class ProfileVerificationScreen(val email: Email) : Screen, KoinCompone
                         SuccessScreen(
                             title = "Email verification successful",
                             message = "",
-                            primaryAction = { navigator.popUntil { screen -> screen is ProfileScreen } }
+                            primaryAction = navigator::popUntilRoot
                         )
                     )
                 }
