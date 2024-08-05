@@ -105,7 +105,9 @@ class PlanRepositoryImpl(
         return queries.getPlanEntityByID(id.value)
             .asFlow()
             .mapToOneOrNull(ioDispatcher)
-            .map { it?.asPlan() }
+            .combine(fundRequestRepository.getLastFundRequestForPlanAsFlow(id)) { plan, fundRequest ->
+                plan?.asPlan(fundRequest)
+            }
     }
 
     override suspend fun fetchPlanByID(id: ID): ApiResponse<Plan> {

@@ -10,7 +10,7 @@ interface FundRequestRepository {
 
     fun saveFundRequestLocally(fundRequests: List<FundRequest>)
 
-    suspend fun getLastFundRequestForPlan(planID: ID): FundRequest?
+    fun getLastFundRequestForPlanAsFlow(planID: ID): Flow<FundRequest?>
 
     fun getAllFundRequestsAscendingAsFlow(): Flow<List<FundRequest>>
 }
