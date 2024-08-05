@@ -66,6 +66,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan.CreatePlanNavigator
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.plandetails.PlanDetailsScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
@@ -75,6 +76,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TaskLinearProgress
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent1
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent2
@@ -122,15 +124,16 @@ internal object DashboardTab : Tab, KoinComponent {
             messageBarState = messageBarState,
             state = state,
             navigateToCreatePlanOrEmailVerification = {
-                if (state is DashboardUiState.Content && state.hasVerifiedEmail) {
-                    navigator.push(CreatePlanNavigator)
+                if (state is DashboardUiState.Empty) {
+                    if (state.hasVerifiedEmail) {
+                        navigator.push(CreatePlanNavigator)
+                    } else {
+                        navigator.push(ProfileVerificationScreen(state.email))
+                    }
                 }
             },
-            navigateToPlanListOrEmailVerification = {
-                if (state is DashboardUiState.Content && state.hasVerifiedEmail) {
-                    navigator.push(PlanListScreen())
-                }
-            },
+            navigateToPlanListOrEmailVerification = { navigator.push(PlanListScreen()) },
+            navigateToPlanDetails = { navigator.push(PlanDetailsScreen(it)) }
         )
     }
 
@@ -140,6 +143,7 @@ internal object DashboardTab : Tab, KoinComponent {
         state: DashboardUiState,
         navigateToCreatePlanOrEmailVerification: () -> Unit,
         navigateToPlanListOrEmailVerification: () -> Unit,
+        navigateToPlanDetails: (Plan) -> Unit,
     ) {
         BaseScaffold(messageBarState = messageBarState) { _ ->
             Column(
@@ -157,17 +161,20 @@ internal object DashboardTab : Tab, KoinComponent {
                         LoadedDashboard(
                             modifier = Modifier.fillMaxWidth(),
                             state = state,
-                            navigateToPlanListOrEmailVerification = navigateToPlanListOrEmailVerification
+                            navigateToPlanListOrEmailVerification = navigateToPlanListOrEmailVerification,
+                            navigateToPlanDetails = navigateToPlanDetails
                         )
                     }
 
-                    DashboardUiState.Empty -> {
+                    is DashboardUiState.Empty -> {
                         EmptyDashboard(
                             onClick = navigateToCreatePlanOrEmailVerification,
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = horizontalScreenPadding),
                         )
                     }
+
+                    is DashboardUiState.Error -> {}
 
                     DashboardUiState.Loading -> {
                         BackgroundLoader(Modifier.fillMaxWidth().weight(1f))
@@ -181,7 +188,8 @@ internal object DashboardTab : Tab, KoinComponent {
     private fun LoadedDashboard(
         modifier: Modifier,
         state: DashboardUiState.Content,
-        navigateToPlanListOrEmailVerification: () -> Unit
+        navigateToPlanListOrEmailVerification: () -> Unit,
+        navigateToPlanDetails: (Plan) -> Unit
     ) {
         Column(modifier = modifier) {
             val topSponsors = state.topSponsors
@@ -217,7 +225,8 @@ internal object DashboardTab : Tab, KoinComponent {
                 RecentPlans(
                     recentPlans = recentPlans.toImmutableList(),
                     modifier = Modifier.fillMaxWidth(),
-                    navigateToPlanListOrEmailVerification = navigateToPlanListOrEmailVerification
+                    navigateToPlanListOrEmailVerification = navigateToPlanListOrEmailVerification,
+                    navigateToPlanDetails = navigateToPlanDetails
                 )
             }
 
@@ -237,7 +246,8 @@ internal object DashboardTab : Tab, KoinComponent {
     private fun RecentPlans(
         modifier: Modifier,
         recentPlans: ImmutableList<Plan>,
-        navigateToPlanListOrEmailVerification: () -> Unit
+        navigateToPlanListOrEmailVerification: () -> Unit,
+        navigateToPlanDetails: (Plan) -> Unit
     ) {
         Column(modifier = modifier) {
             SectionHeader(
@@ -268,7 +278,10 @@ internal object DashboardTab : Tab, KoinComponent {
                 contentPadding = PaddingValues(horizontal = horizontalScreenPadding)
             ) {
                 items(items = recentPlans, key = { it.id.value }) {
-                    ScreenCard(modifier = Modifier.width(250.dp)) {
+                    ScreenCard(
+                        modifier = Modifier.width(250.dp),
+                        onClick = { navigateToPlanDetails(it) }
+                    ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Avatar(imageUrl = it.avatar.value, size = DpSize(40.dp, 40.dp))
@@ -528,12 +541,25 @@ internal object DashboardTab : Tab, KoinComponent {
     }
 
     @Composable
-    private fun ScreenCard(modifier: Modifier, content: @Composable ColumnScope.() -> Unit) {
-        OutlinedCard(
-            modifier = modifier,
-            border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
-            content = content
-        )
+    private fun ScreenCard(
+        modifier: Modifier,
+        onClick: (() -> Unit)? = null,
+        content: @Composable ColumnScope.() -> Unit
+    ) {
+        if (onClick != null) {
+            OutlinedCard(
+                modifier = modifier,
+                border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
+                content = content,
+                onClick = onClick
+            )
+        } else {
+            OutlinedCard(
+                modifier = modifier,
+                border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
+                content = content,
+            )
+        }
     }
 
     @Composable

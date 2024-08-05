@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto
+package com.closedcircuit.closedcircuitapplication.common.data.auth.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

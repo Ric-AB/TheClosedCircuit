@@ -36,7 +36,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlanDetailsGrid
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
-import com.closedcircuit.closedcircuitapplication.common.presentation.util.Constants
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
@@ -52,7 +51,7 @@ internal class FundRequestSummaryScreen(
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val shareHandler = LocalShareHandler.current
-        val link = "${Constants.PLAN_LINK_BASE_URL}${fundRequestID.value}"
+        val link = shareHandler.buildPlanLink(fundRequestID.value)
         val text = stringResource(SharedRes.strings.share_plan_link_message_label, link)
         ScreenContent(
             goBack = navigator::pop,

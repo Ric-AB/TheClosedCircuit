@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class PlanDetailsUiState(
     val isLoading: Boolean,
+    val canEditPlan: Boolean,
     val plan: Plan,
     val steps: Steps,
     val budgets: Budgets
@@ -15,6 +16,7 @@ data class PlanDetailsUiState(
         fun init(plan: Plan): PlanDetailsUiState {
             return PlanDetailsUiState(
                 isLoading = false,
+                canEditPlan = !plan.hasReceivedFunds(),
                 plan = plan,
                 steps = persistentListOf(),
                 budgets = persistentListOf()

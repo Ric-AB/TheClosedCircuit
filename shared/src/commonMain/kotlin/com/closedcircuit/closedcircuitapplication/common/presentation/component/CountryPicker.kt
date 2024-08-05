@@ -31,9 +31,9 @@ fun CountryPicker(
     modifier: Modifier = Modifier,
     data: Country,
     options: ImmutableList<Country>,
-    onCountrySelected: ((Country) -> Unit)?
+    onCountrySelect: ((Country) -> Unit)?
 ) {
-    val enabled = remember { onCountrySelected != null }
+    val enabled = remember { onCountrySelect != null }
     var expanded by remember { mutableStateOf(false) }
 
     Row(
@@ -55,8 +55,8 @@ fun CountryPicker(
             fontWeight = FontWeight.Medium,
         )
 
+        Spacer(Modifier.width(4.dp))
         if (enabled) {
-            Spacer(Modifier.width(4.dp))
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
@@ -69,7 +69,7 @@ fun CountryPicker(
         visible = expanded,
         selectedItem = data,
         items = options,
-        onItemSelected = { _, country -> onCountrySelected?.invoke(country) },
+        onItemSelected = { _, country -> onCountrySelect?.invoke(country) },
         onDismissRequest = { expanded = false }
     )
 }

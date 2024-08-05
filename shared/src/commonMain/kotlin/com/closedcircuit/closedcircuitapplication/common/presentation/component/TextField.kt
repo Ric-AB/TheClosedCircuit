@@ -216,6 +216,12 @@ fun PhoneOutlinedTextField(
         errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface
     )
 ) {
+    val onCountrySelectLambda: ((Country) -> Unit)? = remember {
+        if (onCountrySelect != null) {
+            { onCountrySelect.invoke(phoneNumberState.updateCountry(it)) }
+        } else null
+    }
+
     DefaultOutlinedTextField(
         inputField = phoneNumberState.inputField,
         onValueChange = { onValueChange(phoneNumberState.updatePhone(it)) },
@@ -229,7 +235,7 @@ fun PhoneOutlinedTextField(
             CountryPicker(
                 data = phoneNumberState.country,
                 options = phoneNumberState.countryOptions,
-                onCountrySelected = { onCountrySelect?.invoke(phoneNumberState.updateCountry(it)) }
+                onCountrySelect = onCountrySelectLambda
             )
         },
         trailingIcon = trailingIcon,

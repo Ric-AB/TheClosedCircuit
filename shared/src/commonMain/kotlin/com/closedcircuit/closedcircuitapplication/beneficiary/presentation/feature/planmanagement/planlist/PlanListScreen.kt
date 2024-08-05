@@ -23,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -33,11 +35,14 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan.CreatePlanNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.plandetails.PlanDetailsScreen
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.presentation.LocalShareHandler
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TaskLinearProgress
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -53,6 +58,7 @@ internal class PlanListScreen : Screen, KoinComponent {
         val viewModel = getScreenModel<PlanListViewModel>()
         val state = viewModel.stateFlow.collectAsState()
         ScreenContent(
+            messageBarState = rememberMessageBarState(),
             state = state.value,
             goBack = navigator::pop,
             navigateToCreatePlanScreen = { navigator.push(CreatePlanNavigator) },
@@ -62,6 +68,7 @@ internal class PlanListScreen : Screen, KoinComponent {
 
     @Composable
     private fun ScreenContent(
+        messageBarState: MessageBarState,
         state: PlanListUiState,
         goBack: () -> Unit,
         navigateToCreatePlanScreen: () -> Unit,
@@ -74,7 +81,8 @@ internal class PlanListScreen : Screen, KoinComponent {
                     mainAction = goBack
                 )
             },
-            floatingActionButton = { PlansExtendedFab(onClick = navigateToCreatePlanScreen) }
+            floatingActionButton = { PlansExtendedFab(onClick = navigateToCreatePlanScreen) },
+            messageBarState = messageBarState
         ) { innerPadding ->
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -86,6 +94,7 @@ internal class PlanListScreen : Screen, KoinComponent {
                 items(state.plans) { plan ->
                     PlanCard(
                         modifier = Modifier.fillMaxWidth(),
+                        messageBarState = messageBarState,
                         plan = plan,
                         onClick = { navigateToPlanDetailsScreen(plan) }
                     )
@@ -95,7 +104,12 @@ internal class PlanListScreen : Screen, KoinComponent {
     }
 
     @Composable
-    private fun PlanCard(modifier: Modifier = Modifier, plan: Plan, onClick: () -> Unit) {
+    private fun PlanCard(
+        modifier: Modifier = Modifier,
+        messageBarState: MessageBarState,
+        plan: Plan,
+        onClick: () -> Unit
+    ) {
         OutlinedCard(modifier = modifier, onClick = onClick) {
             Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
                 Avatar(
@@ -133,17 +147,32 @@ internal class PlanListScreen : Screen, KoinComponent {
                 )
 
                 if (plan.lastFundRequest != null) {
-                    CopyButton(modifier = Modifier.align(Alignment.End), onClick = {})
+                    CopyButton(
+                        modifier = Modifier.align(Alignment.End),
+                        fundRequestId = plan.lastFundRequest.id.value,
+                        messageBarState = messageBarState
+                    )
                 }
             }
         }
     }
 
     @Composable
-    private fun CopyButton(modifier: Modifier, onClick: () -> Unit) {
+    private fun CopyButton(
+        modifier: Modifier,
+        fundRequestId: String,
+        messageBarState: MessageBarState
+    ) {
+        val clipboardManager = LocalClipboardManager.current
+        val shareHandler = LocalShareHandler.current
+
         Spacer(Modifier.height(12.dp))
         TextButton(
-            onClick = onClick,
+            onClick = {
+                val link = shareHandler.buildPlanLink(fundRequestId)
+                clipboardManager.setText(AnnotatedString(link))
+                messageBarState.addSuccess("Plan link copied!")
+            },
             modifier = modifier,
             colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)
         ) {

@@ -2,17 +2,17 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plans
 import kotlinx.collections.immutable.ImmutableList
 
 sealed interface DashboardUiState {
     object Loading : DashboardUiState
 
-    object Empty : DashboardUiState
+    data class Empty(val hasVerifiedEmail: Boolean, val email: Email) : DashboardUiState
 
     data class Content(
         val firstName: String,
-        val hasVerifiedEmail: Boolean,
         val showAnalytics: Boolean,
         val walletBalance: String,
         val completedPlansCount: Int,
@@ -22,6 +22,8 @@ sealed interface DashboardUiState {
         val recentDonation: Donations,
         val recentPlans: Plans
     ) : DashboardUiState
+
+    data class Error(val message: String) : DashboardUiState
 
     val getWalletBalance: String?
         get() = (this as? Content)?.walletBalance

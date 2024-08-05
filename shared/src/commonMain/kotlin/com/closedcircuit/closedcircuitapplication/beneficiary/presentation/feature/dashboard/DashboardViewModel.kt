@@ -8,7 +8,6 @@ import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanReposit
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
-import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import com.closedcircuit.closedcircuitapplication.core.network.getOrNull
 import kotlinx.collections.immutable.toImmutableList
@@ -48,14 +47,17 @@ class DashboardViewModel(
         val showAnalytics = listOf(completedPlanCount, ongoingPlanCount, notStartedPlanCount)
             .any { it > Int.Zero }
 
+        if (user == null) {
+            return@combine DashboardUiState.Error("User does not exist.")
+        }
+
         if (recentPlans.isEmpty()) {
-            return@combine DashboardUiState.Empty
+            return@combine DashboardUiState.Empty(user.isVerified, user.email)
         }
 
         DashboardUiState.Content(
-            firstName = user?.firstName?.value.orEmpty(),
-            hasVerifiedEmail = user?.isVerified.orFalse(),
-            walletBalance = user?.walletBalance?.getFormattedValue().orEmpty(),
+            firstName = user.firstName.value,
+            walletBalance = user.walletBalance?.getFormattedValue().orEmpty(),
             recentPlans = recentPlans,
             topSponsors = userDashboard?.topSponsors?.toImmutableList(),
             recentDonation = donations,

@@ -40,6 +40,7 @@ class PlanDetailsViewModel(
 
         PlanDetailsUiState(
             isLoading = isLoading,
+            canEditPlan = !nonNullPlan.hasReceivedFunds(),
             plan = nonNullPlan,
             steps = stepsCopy,
             budgets = budgetsCopy

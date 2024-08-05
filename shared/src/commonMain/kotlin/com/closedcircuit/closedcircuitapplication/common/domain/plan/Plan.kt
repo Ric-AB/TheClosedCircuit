@@ -7,6 +7,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
+import com.closedcircuit.closedcircuitapplication.common.util.Zero
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -33,6 +34,10 @@ data class Plan(
     val isSponsored: Boolean,
     val accountabilityPartners: List<ID>,
 ) {
+
+    fun hasReceivedFunds(): Boolean {
+        return totalFundsRaised.value > Double.Zero
+    }
 
     companion object {
         fun buildPlan(

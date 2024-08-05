@@ -29,6 +29,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.au
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.ProfileNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
@@ -79,7 +80,15 @@ internal class BeneficiaryBottomTabs : Screen {
                             TabNavigationItem(ProfileNavigator)
                             BottomNavFab(
                                 imageResource = SharedRes.images.ic_four_squares,
-                                onClick = { navigator.push(PlanListScreen()) }
+                                onClick = {
+                                    if (rootState?.isEmailVerified == true) {
+                                        navigator.push(PlanListScreen())
+                                    } else {
+                                        rootState?.email?.let {
+                                            navigator.push(ProfileVerificationScreen(it))
+                                        }
+                                    }
+                                }
                             )
                             TabNavigationItem(MessageTab)
                             TabNavigationItem(AccountTab)
