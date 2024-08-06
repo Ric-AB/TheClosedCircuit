@@ -157,7 +157,9 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                         Spacer(modifier = Modifier.height(12.dp))
                         DefaultOutlinedTextField(
                             inputField = state.maximumLoanRange,
-                            onValueChange = { onEvent(FundRequestUiEvent.MaxRangeChange(it)) },
+                            onValueChange = { },
+                            readOnly = true,
+                            enabled = false,
                             placeholder = { Text(stringResource(SharedRes.strings.maximum_amount_label)) },
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,

@@ -14,6 +14,8 @@ data class Amount(val value: Double, val currency: Currency? = null) : Comparabl
         return formatNumberToCurrency(value, currency?.value.orEmpty())
     }
 
+    fun intValue(): Int = value.toInt()
+
     operator fun minus(other: Amount): Amount {
         return Amount(value - other.value, currency)
     }

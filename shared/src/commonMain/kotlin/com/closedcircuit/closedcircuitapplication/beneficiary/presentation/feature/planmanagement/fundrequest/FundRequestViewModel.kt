@@ -52,6 +52,10 @@ class FundRequestViewModel(
         )
     }
 
+    init {
+        initState()
+    }
+
     fun onEvent(event: FundRequestUiEvent) {
         when (event) {
             is FundRequestUiEvent.FundTypeChange -> updateFundType(event.fundType)
@@ -63,6 +67,19 @@ class FundRequestViewModel(
             is FundRequestUiEvent.RepaymentDurationChange -> updateRepaymentDuration(event.duration)
             FundRequestUiEvent.SubmitFundRequest -> createFundRequest()
             FundRequestUiEvent.TokenizeCard -> generateTokenizationLink()
+        }
+    }
+
+    private fun initState() {
+        val lastFundRequest = plan.lastFundRequest ?: return
+        selectedFundType.value = lastFundRequest.fundType
+        maximumLoanRange.onValueChange(plan.targetAmount.intValue().toString()) // non-editable
+        if (lastFundRequest.fundType != FundType.DONATION) {
+            minimumLoanRange.onValueChange(lastFundRequest.minimumLoanRange?.intValue().toString())
+            numberOfLenders.value = lastFundRequest.maxLenders
+            graceDuration.value = lastFundRequest.graceDuration
+            repaymentDuration.value = lastFundRequest.repaymentDuration
+            interestRate.onValueChange(lastFundRequest.interestRate?.toString().orEmpty())
         }
     }
 
