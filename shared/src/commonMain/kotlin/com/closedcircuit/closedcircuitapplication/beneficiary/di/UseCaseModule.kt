@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     single { LoginUseCase(get(), get(), get()) }
-    single { LogoutUseCase(get(), get(), get(), get()) }
+    single { LogoutUseCase(get(), get(), get(), get(), get(), get()) }
     single { RegisterWithLoginUseCase(get(), get()) }
     single {
         IsLoggedInUseCase(

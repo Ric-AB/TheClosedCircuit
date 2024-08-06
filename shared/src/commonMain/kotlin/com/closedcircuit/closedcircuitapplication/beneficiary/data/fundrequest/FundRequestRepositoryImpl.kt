@@ -44,6 +44,10 @@ class FundRequestRepositoryImpl(
             .map { it.toFundRequests() }
     }
 
+    override suspend fun clear() {
+        queries.deleteAll()
+    }
+
     private fun saveLocally(fundRequestEntity: FundRequestEntity) {
         queries.upsertFundRequestEntity(fundRequestEntity)
     }

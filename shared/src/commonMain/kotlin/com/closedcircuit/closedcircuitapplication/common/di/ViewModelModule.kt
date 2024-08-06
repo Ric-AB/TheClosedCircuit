@@ -16,7 +16,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    factory { RootViewModel(get(), get(), get()) }
+    factory { RootViewModel(get(), get(), get(), get()) }
 
     // onboarding
     factory { OnboardingViewModel(get()) }

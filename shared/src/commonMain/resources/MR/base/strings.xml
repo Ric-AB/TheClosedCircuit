@@ -25,7 +25,7 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
-    <string name="login">Login</string>
+    <string name="login_label">Login</string>
     <string name="create_account">Create Account</string>
     <string name="welcome_to_the_closed_circuit">Welcome to The Closed Circuit!</string>
     <string name="welcome_quote">To run fast, run alone. To run far, run together. Together we can
@@ -159,6 +159,7 @@
     <string name="tokenize_card_prompt">We are about to charge a small fee to tokenize your card
     </string>
     <string name="okay_label">Okay</string>
+    <string name="yes_label">Yes</string>
     <string name="old_password_label">Old password</string>
     <string name="new_password_label">New password</string>
     <string name="copy_link_label">Copy link</string>
@@ -368,6 +369,7 @@
     <string name="support_label">Support</string>
     <string name="about_us_label">About us</string>
     <string name="logout_label">Logout</string>
+    <string name="logout_prompt_label">Are you sure you want to logout?</string>
     <string name="security_label">Security</string>
     <string name="enable_touch_id_to_sign_in_label">Enable touch ID to sign in</string>
     <string name="enable_auto_lock_security_label">Enable auto lock security</string>

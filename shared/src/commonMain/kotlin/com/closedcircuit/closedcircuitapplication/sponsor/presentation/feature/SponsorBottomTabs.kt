@@ -28,13 +28,18 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.pr
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootEvent
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootResult
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.TabNavigationItem
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
+import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.account.SponsorAccountTab
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.dashboard.SponsorDashboardTab
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.list.FundedPlanListScreen
 import dev.icerock.moko.resources.compose.painterResource
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,10 +47,18 @@ class SponsorBottomTabs : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val rootNavigator = findRootNavigator(navigator)
         val viewModel = navigator.getNavigatorScreenModel<RootViewModel>()
         val rootState = viewModel.state.collectAsState().value
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
+
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
+            when (it) {
+                RootResult.LogoutSuccess -> rootNavigator.replaceAll(LoginScreen())
+            }
+        }
+
         NavigationDrawer(
             drawerState = drawerState,
             profileUrl = rootState?.profileUrl ?: "",
@@ -57,7 +70,12 @@ class SponsorBottomTabs : Screen {
                     navigator.push(SettingsScreen())
                 }
             },
-            logout = { navigator.replaceAll(LoginScreen()) }
+            logout = {
+                scope.launch {
+                    drawerState.close()
+                    viewModel.onEvent(RootEvent.Logout)
+                }
+            }
         ) {
             TabNavigator(tab = SponsorDashboardTab) {
                 Scaffold(

@@ -49,3 +49,6 @@ getPlanEntityByID:
 SELECT *
 FROM PlanEntity
 WHERE id = :id;
+
+deleteAll:
+DELETE FROM PlanEntity;

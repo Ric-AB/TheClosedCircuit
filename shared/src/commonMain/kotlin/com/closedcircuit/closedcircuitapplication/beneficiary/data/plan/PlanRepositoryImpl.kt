@@ -114,6 +114,10 @@ class PlanRepositoryImpl(
         return planService.fetchPlanById(id.value).mapOnSuccess { it.asPlan() }
     }
 
+    override suspend fun clear() {
+        queries.deleteAll()
+    }
+
     private fun saveLocally(planEntity: PlanEntity) {
         queries.upsertPlanEntity(planEntity)
     }

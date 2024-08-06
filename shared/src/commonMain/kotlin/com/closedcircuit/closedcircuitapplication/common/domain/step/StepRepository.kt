@@ -27,4 +27,6 @@ interface StepRepository {
     fun getPrecedingStepAsFlowFor(stepID: ID, planID: ID): Flow<Step?>
 
     suspend fun fetchStepByID(id: ID): ApiResponse<Step>
+
+    suspend fun clear()
 }

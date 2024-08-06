@@ -35,3 +35,6 @@ FROM FundRequestEntity
 WHERE planId = :planID
 ORDER BY createdAt DESC
 LIMIT 1;
+
+deleteAll:
+DELETE FROM FundRequestEntity;

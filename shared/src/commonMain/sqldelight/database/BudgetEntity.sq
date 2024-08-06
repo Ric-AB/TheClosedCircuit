@@ -46,3 +46,6 @@ ORDER BY createdAt DESC;
 deleteBudgetEntity:
 DELETE FROM BudgetEntity
 WHERE id = :id;
+
+deleteAll:
+DELETE FROM BudgetEntity;

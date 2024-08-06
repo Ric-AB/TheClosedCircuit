@@ -109,6 +109,10 @@ class StepRepositoryImpl(
         }
     }
 
+    override suspend fun clear() {
+        queries.deleteAll()
+    }
+
     private fun deleteLocally(id: String) {
         queries.deleteStepEntity(id)
     }

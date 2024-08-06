@@ -116,6 +116,10 @@ class BudgetRepositoryImpl(
         return budgetService.uploadProof(id = budgetID.value, request = request)
     }
 
+    override suspend fun clear() {
+        queries.deleteAll()
+    }
+
     private fun deleteLocally(id: String) {
         queries.deleteBudgetEntity(id)
     }

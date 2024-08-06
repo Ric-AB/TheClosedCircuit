@@ -13,4 +13,6 @@ interface FundRequestRepository {
     fun getLastFundRequestForPlanAsFlow(planID: ID): Flow<FundRequest?>
 
     fun getAllFundRequestsAscendingAsFlow(): Flow<List<FundRequest>>
+
+    suspend fun clear()
 }
