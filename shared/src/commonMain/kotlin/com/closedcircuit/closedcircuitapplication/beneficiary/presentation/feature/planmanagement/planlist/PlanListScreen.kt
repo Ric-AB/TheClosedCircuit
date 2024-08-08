@@ -2,6 +2,7 @@ package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -86,10 +87,11 @@ internal class PlanListScreen : Screen, KoinComponent {
         ) { innerPadding ->
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(vertical = verticalScreenPadding),
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
+                    .padding(horizontal = horizontalScreenPadding)
             ) {
                 items(state.plans) { plan ->
                     PlanCard(

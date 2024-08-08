@@ -18,10 +18,13 @@ import com.closedcircuit.closedcircuitapplication.core.storage.appSettingsStore
 import com.closedcircuit.closedcircuitapplication.core.storage.sessionStore
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.common.data.country.countryJsonString
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.storage.storage
 import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+const val namedImageStorageReference = "firebaseImageReference"
 val dataModule = module {
     single<AppSettingsRepository> { AppSettingsRepositoryImpl(appSettingsStore) }
     single<SessionRepository> { SessionRepositoryImpl(sessionStore) }
@@ -54,4 +57,6 @@ val dataModule = module {
             ioDispatcher = get(named(namedIODispatcher))
         )
     }
+
+    single(named(namedImageStorageReference)) { Firebase.storage.reference.child("images") }
 }

@@ -8,16 +8,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalCurrency
 
 @Composable
-fun TitleText(text: String, modifier: Modifier = Modifier) {
+fun TitleText(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Start
+) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.SemiBold,
-        modifier = modifier
+        modifier = modifier,
+        textAlign = textAlign
     )
 }
 
@@ -32,12 +38,18 @@ fun SubTitleText(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun BodyText(text: String, color: Color = Color.Gray, modifier: Modifier = Modifier) {
+fun BodyText(
+    text: String,
+    color: Color = Color.Gray,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Start
+) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
         color = color,
-        modifier = modifier
+        modifier = modifier,
+        textAlign = textAlign
     )
 }
 

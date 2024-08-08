@@ -8,6 +8,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.loanlist.LoansViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.preview.LoansPreviewViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.completestep.CompleteStepViewModel
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.createplan.CreatePlanViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.editplan.EditPlanViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.fundrequest.FundRequestViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.plandetails.PlanDetailsViewModel
@@ -16,8 +17,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.stepdetails.StepDetailsViewModel
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.uploadproof.UploadProofViewModel
 import com.closedcircuit.closedcircuitapplication.common.di.namedIODispatcher
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.storage.storage
+import com.closedcircuit.closedcircuitapplication.common.di.namedImageStorageReference
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -26,6 +26,14 @@ val viewModelModule = module {
     factory { AccountTabViewModel(get()) }
 
     // plan management
+    factory {
+        CreatePlanViewModel(
+            createPlanUseCase = get(),
+            imageStorageReference = get(named(namedImageStorageReference)),
+            ioDispatcher = get(named(namedIODispatcher))
+        )
+    }
+
     factory { PlanListViewModel(get()) }
     factory { parameters -> SaveStepViewModel(parameters[0], parameters[1], get(), get()) }
     factory { parameters -> PlanDetailsViewModel(parameters.get(), get(), get(), get()) }
@@ -44,7 +52,7 @@ val viewModelModule = module {
         UploadProofViewModel(
             budgetID = parameters.get(),
             budgetRepository = get(),
-            imageStorageReference = Firebase.storage.reference.child("images"),
+            imageStorageReference = get(named(namedImageStorageReference)),
             ioDispatcher = get(named(namedIODispatcher))
         )
     }

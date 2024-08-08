@@ -11,6 +11,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.Constants
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
 import database.PlanEntity
@@ -97,6 +98,7 @@ fun ApiPlan.asPlan(): Plan {
 
 fun Plan.asRequest() = SavePlanPayload(
     // todo change default avatar
+    avatar = avatar.value.ifBlank { Constants.DEFAULT_PLAN_IMAGE_URL },
     category = category,
     sector = sector,
     type = type.orEmpty(),

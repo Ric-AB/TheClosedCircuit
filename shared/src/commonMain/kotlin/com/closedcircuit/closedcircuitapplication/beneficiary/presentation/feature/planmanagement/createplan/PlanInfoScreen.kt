@@ -14,31 +14,28 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.CreatePlanUseCase
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldAffix
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.LocalCurrencyText
-import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldAffix
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.NumberCommaTransformation
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 internal class PlanInfoScreen : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
-    private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
     override fun Content() {
-        val viewModel =
-            CreatePlanNavigator.rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
-
-
+        val navigator = LocalNavigator.currentOrThrow
+        val viewModel = navigator.getNavigatorScreenModel<CreatePlanViewModel>()
         ScreenContent(
             uiState = viewModel.state,
             onEvent = viewModel::onEvent
@@ -48,7 +45,7 @@ internal class PlanInfoScreen : Screen, KoinComponent,
 
 @Composable
 private fun ScreenContent(uiState: CreatePlanUIState, onEvent: (CreatePlanUiEvent) -> Unit) {
-    val (_, _, _, _, nameField, descriptionField, durationField, estimatedSellingPriceField, estimatedCostPriceField, _, _, _) = uiState
+    val (_, _, _, _, _, nameField, descriptionField, durationField, estimatedSellingPriceField, estimatedCostPriceField, _, _, _) = uiState
     val commonModifier = Modifier.fillMaxWidth()
     val handleFocusChange: (Boolean, String) -> Unit = { isFocused, fieldName ->
         if (isFocused) onEvent(CreatePlanUiEvent.InputFieldFocusReceived(fieldName))

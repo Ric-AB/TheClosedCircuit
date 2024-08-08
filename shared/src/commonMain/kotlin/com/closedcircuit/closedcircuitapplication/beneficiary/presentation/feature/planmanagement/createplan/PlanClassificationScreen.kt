@@ -5,16 +5,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.EditableAvatar
@@ -22,17 +22,13 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 internal class PlanClassificationScreen : Screen, KoinComponent {
-    private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
     override fun Content() {
-        val viewModel =
-            CreatePlanNavigator.rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
-
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = navigator.getNavigatorScreenModel<CreatePlanViewModel>()
         ScreenContent(
             uiState = viewModel.state,
             onEvent = viewModel::onEvent,
@@ -49,15 +45,14 @@ private fun ScreenContent(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         val imagePicker = LocalImagePicker.current
-        imagePicker.registerPicker {
-
-        }
+        imagePicker.registerPicker { onEvent(CreatePlanUiEvent.PlanImageChange(it)) }
 
         Column(modifier = Modifier.fillMaxWidth().weight(1f)) {
             EditableAvatar(
-                bytes = null,
+                bytes = uiState.planImageBytes,
                 size = DpSize(70.dp, 70.dp),
-                onClick = { imagePicker.pickImage() }
+                onClick = { imagePicker.pickImage() },
+                shape = MaterialTheme.shapes.medium
             )
 
             Spacer(modifier = Modifier.height(24.dp))

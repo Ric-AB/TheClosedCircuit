@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -15,11 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
@@ -79,6 +82,7 @@ class SponsorBottomTabs : Screen {
         ) {
             TabNavigator(tab = SponsorDashboardTab) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
                     topBar = {
                         DashboardTopAppBar(
                             navigationIconClick = { scope.launch { drawerState.open() } },
@@ -112,24 +116,26 @@ class SponsorBottomTabs : Screen {
         navigationIconClick: () -> Unit,
         navigateToNotificationScreen: () -> Unit
     ) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = navigationIconClick) {
-                    Icon(
-                        painter = painterResource(SharedRes.images.ic_hamburger),
-                        contentDescription = "hamburger menu"
-                    )
+        if (LocalTabNavigator.current.current == SponsorDashboardTab) {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = navigationIconClick) {
+                        Icon(
+                            painter = painterResource(SharedRes.images.ic_hamburger),
+                            contentDescription = "hamburger menu"
+                        )
+                    }
+                },
+                title = { },
+                actions = {
+                    IconButton(onClick = navigateToNotificationScreen) {
+                        Icon(
+                            painter = painterResource(SharedRes.images.ic_notification),
+                            contentDescription = "notifications"
+                        )
+                    }
                 }
-            },
-            title = { },
-            actions = {
-                IconButton(onClick = navigateToNotificationScreen) {
-                    Icon(
-                        painter = painterResource(SharedRes.images.ic_notification),
-                        contentDescription = "notifications"
-                    )
-                }
-            }
-        )
+            )
+        }
     }
 }

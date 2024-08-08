@@ -12,18 +12,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.CreatePlanUseCase
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
@@ -34,29 +34,29 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 internal object CreatePlanNavigator : Screen, KoinComponent {
-    private val createPlanUseCase: CreatePlanUseCase by inject()
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = rememberScreenModel { CreatePlanViewModel(createPlanUseCase) }
+        var innerNavigator: Navigator? by remember { mutableStateOf(null) }
+        val viewModel = innerNavigator?.getNavigatorScreenModel<CreatePlanViewModel>()
         val messageBarState = rememberMessageBarState()
 
-        viewModel.createPlanResultChannel.receiveAsFlow().observeWithScreen {
+        viewModel?.createPlanResultChannel?.receiveAsFlow()?.observeWithScreen {
             when (it) {
                 is CreatePlanResult.Failure -> messageBarState.addError(it.message)
                 CreatePlanResult.Success -> {
                     navigator.push(
                         SuccessScreen(
-                            title = "",
-                            message = "",
+                            title = "Plan created successfully.",
+                            message = "Now that you've created your plan, complete the details of your action steps and budget required to bring your plan idea to life. See info on what steps and budgets are.",
                             primaryAction = { navigator.popUntil { screen -> screen is PlanListScreen } }
                         )
                     )
@@ -66,8 +66,13 @@ internal object CreatePlanNavigator : Screen, KoinComponent {
 
         ScreenContent(
             messageBarState = messageBarState,
-            uiState = viewModel.state,
-            goBack = navigator::pop
+            uiState = viewModel?.state,
+            innerNavigator = innerNavigator,
+            onLaunch = { innerNavigator = it },
+            goBack = {
+                if (innerNavigator?.canPop == true) innerNavigator?.pop()
+                else navigator.pop()
+            }
         )
     }
 }
@@ -75,28 +80,29 @@ internal object CreatePlanNavigator : Screen, KoinComponent {
 @Composable
 private fun ScreenContent(
     messageBarState: MessageBarState,
-    uiState: CreatePlanUIState,
+    uiState: CreatePlanUIState?,
+    innerNavigator: Navigator?,
+    onLaunch: (Navigator) -> Unit,
     goBack: () -> Unit
 ) {
-    var innerNavigator: Navigator? by remember { mutableStateOf(null) }
 
     BaseScaffold(
         messageBarState = messageBarState,
-        showLoadingDialog = uiState.isLoading,
+        showLoadingDialog = uiState?.isLoading.orFalse(),
         topBar = {
             CreatePlanAppBar(
                 progress = innerNavigator?.size?.div(2F) ?: 0.5F,
-                onNavIconClick = {
-                    if (innerNavigator?.canPop == true) innerNavigator?.pop()
-                    else goBack()
-                }
+                onNavIconClick = goBack
             )
         },
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         Column {
             Navigator(PlanClassificationScreen()) {
-                innerNavigator = it
+                LaunchedEffect(it) {
+                    onLaunch(it)
+                }
+
                 ScreenBasedTransition(
                     navigator = it,
                     modifier = Modifier.fillMaxSize()

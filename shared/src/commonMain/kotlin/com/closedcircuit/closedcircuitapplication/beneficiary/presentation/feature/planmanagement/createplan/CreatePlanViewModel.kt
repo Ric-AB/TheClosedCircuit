@@ -12,11 +12,21 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDurati
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.domain.plan.PlanOption
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.usecase.CreatePlanUseCase
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
+import com.closedcircuit.closedcircuitapplication.common.domain.util.getFirebaseDataObj
+import dev.gitlive.firebase.storage.StorageReference
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
-class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : ScreenModel {
+class CreatePlanViewModel(
+    private val createPlanUseCase: CreatePlanUseCase,
+    private val imageStorageReference: StorageReference,
+    private val ioDispatcher: CoroutineDispatcher
+) : ScreenModel {
 
     var state by mutableStateOf(CreatePlanUIState())
 
@@ -27,6 +37,7 @@ class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : Sc
 
     fun onEvent(event: CreatePlanUiEvent) {
         when (event) {
+            is CreatePlanUiEvent.PlanImageChange -> updatePlanImage(event.bytes)
             is CreatePlanUiEvent.BusinessType -> updateBusinessType(event.businessType)
             is CreatePlanUiEvent.CategoryChange -> updateCategory(event.category)
             is CreatePlanUiEvent.CostPriceChange -> updateCostPrice(event.price)
@@ -45,7 +56,16 @@ class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : Sc
         if (areFieldsValid()) {
             state = state.copy(isLoading = true)
             screenModelScope.launch {
-                createPlanUseCase(buildPlan())
+                val planImageUrl = state.planImageBytes?.let {
+                    async(ioDispatcher) {
+                        val fileName = "${ID.generateRandomUUID().value}.jpg"
+                        val storage = imageStorageReference.child(fileName)
+                        storage.putData(getFirebaseDataObj(it))
+                        storage.getDownloadUrl()
+                    }.await()
+                }
+
+                createPlanUseCase(buildPlan(planImageUrl))
                     .onSuccess {
                         state = state.copy(isLoading = false)
                         _createPlanResultChannel.send(CreatePlanResult.Success)
@@ -57,9 +77,10 @@ class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : Sc
         }
     }
 
-    private fun buildPlan(): Plan {
+    private fun buildPlan(planImageUrl: String?): Plan {
         val defaultSectorAndType = "others"
         return Plan.buildPlan(
+            avatar = ImageUrl(planImageUrl.orEmpty()),
             category = state.category?.id.orEmpty(),
             sector = state.sector?.id ?: defaultSectorAndType,
             type = state.businessType?.id ?: defaultSectorAndType,
@@ -69,6 +90,10 @@ class CreatePlanViewModel(private val createPlanUseCase: CreatePlanUseCase) : Sc
             estimatedSellingPrice = Amount(state.estimatedSellingPriceField.value.toDouble()),
             estimatedCostPrice = Amount(state.estimatedCostPriceField.value.toDouble())
         )
+    }
+
+    private fun updatePlanImage(bytes: ByteArray) {
+        state = state.copy(planImageBytes = bytes)
     }
 
     private fun updateBusinessType(businessType: PlanOption) {
