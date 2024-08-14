@@ -25,9 +25,17 @@ kotlin {
             .flatMap { it.binaries }
             .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            export(libs.rinku)
+            baseName = "shared"
+        }
+    }
 
     cocoapods {
         name = "shared"
@@ -76,6 +84,10 @@ kotlin {
                 implementation(libs.ktor.client.logging)
 
                 api(libs.napier)
+
+                // deeplink
+                api(libs.rinku)
+                implementation(libs.rinku.compose.ext)
 
                 implementation(libs.kotlinx.collections)
                 implementation(libs.kotlinx.coroutines.core)
