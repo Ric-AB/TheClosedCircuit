@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.closedcircuit.closedcircuitapplication</string>
+	<string>com.theclosedcircuitapp</string>
 	<key>PROJECT_ID</key>
 	<string>the-closed-circuit-85591</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:854787412759:ios:6abb4840296c8419b59d52</string>
+	<string>1:854787412759:ios:b78a0106070ebe7bb59d52</string>
 </dict>
 </plist>
