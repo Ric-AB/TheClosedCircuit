@@ -1,7 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.android
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +16,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.util.Image
 import com.closedcircuit.closedcircuitapplication.core.storage.storageDir
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
+import dev.theolm.rinku.compose.ext.Rinku
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,19 +28,20 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
-        val appLinkIntent: Intent = intent
-        val appLinkData: Uri? = appLinkIntent.data
-        val planId = appLinkData?.lastPathSegment
+//        val appLinkIntent: Intent = intent
+//        val appLinkData: Uri? = appLinkIntent.data
+//        val planId = appLinkData?.lastPathSegment
         setContent {
-            CompositionLocalProvider(
-                LocalImagePicker provides ImagePickerFactory().createPicker(),
-                LocalShareHandler provides AndroidShareHandler(LocalContext.current as ComponentActivity)
-            ) {
-                EntryPoint(
-                    useDarkTheme = isSystemInDarkTheme(),
-                    dynamicColors = false,
-                    planId = planId
-                )
+            Rinku {
+                CompositionLocalProvider(
+                    LocalImagePicker provides ImagePickerFactory().createPicker(),
+                    LocalShareHandler provides AndroidShareHandler(LocalContext.current as ComponentActivity)
+                ) {
+                    EntryPoint(
+                        useDarkTheme = isSystemInDarkTheme(),
+                        dynamicColors = false,
+                    )
+                }
             }
         }
     }

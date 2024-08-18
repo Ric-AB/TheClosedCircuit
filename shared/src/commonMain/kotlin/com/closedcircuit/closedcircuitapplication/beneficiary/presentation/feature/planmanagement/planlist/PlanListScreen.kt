@@ -82,7 +82,7 @@ internal class PlanListScreen : Screen, KoinComponent {
                     mainAction = goBack
                 )
             },
-            floatingActionButton = { PlansExtendedFab(onClick = navigateToCreatePlanScreen) },
+            floatingActionButton = { NewPlanFab(onClick = navigateToCreatePlanScreen) },
             messageBarState = messageBarState
         ) { innerPadding ->
             LazyColumn(
@@ -193,7 +193,7 @@ internal class PlanListScreen : Screen, KoinComponent {
     }
 
     @Composable
-    private fun PlansExtendedFab(onClick: () -> Unit) {
+    private fun NewPlanFab(onClick: () -> Unit) {
         ExtendedFloatingActionButton(
             onClick = onClick,
             text = { Text(text = stringResource(SharedRes.strings.new_plan)) },

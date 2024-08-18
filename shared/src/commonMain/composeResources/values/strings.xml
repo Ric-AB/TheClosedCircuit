@@ -23,8 +23,6 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="get_started">Get Started</string>
-    <string name="login">Login</string>
-    <string name="create_account">Create Account</string>
     <string name="welcome_to_the_closed_circuit">Welcome to The Closed Circuit!</string>
     <string name="welcome_quote">To run fast, run alone. To run far, run together. Together we can
         achieve greater things
@@ -142,7 +140,6 @@
     </string>
     <string name="plan_description_label">Plan description</string>
     <string name="mode_of_support_label">Mode of support</string>
-    <string name="plan_summary_label">Plan Summary</string>
     <string name="estimated_cost_price_per_unit_label">Estimated cost price per unit</string>
     <string name="estimated_selling_price_per_unit_label">Estimated selling price per unit</string>
     <string name="share_plan_link_label">Share Plan Link</string>
@@ -163,7 +160,6 @@
 
     <!--    Kyc-->
     <string name="kyc_label">KYC</string>
-    <string name="document_verification">Document Verification</string>
     <string name="input_verification_details">Input Verification Details</string>
     <string name="document_details_label">Document Details</string>
     <string name="id_number">ID number</string>
@@ -285,8 +281,6 @@
     </string>
     <string name="plan_summary_label">Plan summary</string>
     <string name="cost_label">Cost</string>
-    <string name="donate_x_label">Donate %1$s</string>
-    <string name="loan_x_label">Loan %1$s</string>
     <string name="loan_terms_label">Loan terms</string>
     <string name="review_loan_terms_message_label">Please review the loan terms and proceed to view
         loan schedule.

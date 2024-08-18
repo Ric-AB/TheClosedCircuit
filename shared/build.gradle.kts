@@ -79,7 +79,7 @@ kotlin {
                 // network
                 implementation(libs.ktorfit)
                 implementation(libs.ktor.serialization)
-                implementation(libs.ktor.json)
+                implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.ktor.content.negotiation)
                 implementation(libs.ktor.client.logging)
 
@@ -89,11 +89,16 @@ kotlin {
                 api(libs.rinku)
                 implementation(libs.rinku.compose.ext)
 
+                // kotlin ext
                 implementation(libs.kotlinx.collections)
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.datetime)
+
+                // koin
                 implementation(libs.koin.core)
+
+                // kstore
                 implementation(libs.kstore)
                 implementation(libs.kstore.file)
 
@@ -124,8 +129,8 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.kstore.file)
                 implementation(libs.sqldelight.androidDriver)
+                implementation(libs.ktor.client.android)
 //                implementation(libs.kotlinx.coroutines.android)
-//                implementation(libs.ktor.client.okhttp)
             }
         }
 
@@ -148,10 +153,13 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation(libs.ktor.ios)
+                implementation(libs.ktor.client.darwin)
                 implementation(libs.sqldelight.nativeDriver)
             }
         }
     }
+
+    task("testClasses")
 }
 
 android {

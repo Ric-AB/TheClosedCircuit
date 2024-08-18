@@ -21,8 +21,8 @@ import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
 
 @Composable
-internal fun AppNavigation(planId: String?) {
-    Navigator(SplashScreen(planId)) {
+internal fun AppNavigation() {
+    Navigator(SplashScreen()) {
         ScreenBasedTransition(it)
     }
 }

@@ -5,9 +5,9 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.AppTheme
 
 @Composable
-fun EntryPoint(useDarkTheme: Boolean, dynamicColors: Boolean, planId: String? = null) {
+fun EntryPoint(useDarkTheme: Boolean, dynamicColors: Boolean) {
     AppTheme(useDarkTheme = useDarkTheme, dynamicColor = dynamicColors) {
-        AppNavigation(planId)
+        AppNavigation()
     }
 }
 

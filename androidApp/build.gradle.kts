@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
 
+    implementation(libs.rinku.compose.ext)
     implementation(project(":shared"))
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-common:21.0.0")

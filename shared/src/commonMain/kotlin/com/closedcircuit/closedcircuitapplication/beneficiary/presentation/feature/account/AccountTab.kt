@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.CardDefaults
@@ -97,6 +99,7 @@ internal object AccountTab : Tab {
             topBar = { DefaultAppBar(mainIcon = null) }) { innerPadding ->
             Column(
                 modifier = Modifier.padding(innerPadding)
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {
                 WalletCard(amount = walletBalance, modifier = Modifier.fillMaxWidth())
