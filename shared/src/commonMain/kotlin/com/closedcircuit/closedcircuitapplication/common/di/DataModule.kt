@@ -10,6 +10,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.Pay
 import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.data.app.AppSettingsRepositoryImpl
+import com.closedcircuit.closedcircuitapplication.common.data.chat.ChatRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.data.country.CountryRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.data.session.SessionRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
@@ -18,6 +19,7 @@ import com.closedcircuit.closedcircuitapplication.core.storage.appSettingsStore
 import com.closedcircuit.closedcircuitapplication.core.storage.sessionStore
 import com.closedcircuit.closedcircuitapplication.core.storage.userStore
 import com.closedcircuit.closedcircuitapplication.common.data.country.countryJsonString
+import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.storage.storage
 import kotlinx.serialization.json.Json
@@ -57,6 +59,8 @@ val dataModule = module {
             ioDispatcher = get(named(namedIODispatcher))
         )
     }
+
+    single<ChatRepository> { ChatRepositoryImpl(get()) }
 
     single(named(namedImageStorageReference)) { Firebase.storage.reference.child("images") }
 }

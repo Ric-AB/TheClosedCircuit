@@ -1,7 +1,6 @@
-package com.closedcircuit.closedcircuitapplication.common.presentation.feature.message
+package com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -9,8 +8,10 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -19,15 +20,17 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.conversationpartners.ConversationPartnersScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversationpartners.ConversationPartnersScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKey
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 
-internal object MessageTab : Tab {
+internal object ChatTab : Tab {
     override val options: TabOptions
         @Composable
         get() {
@@ -47,12 +50,13 @@ internal object MessageTab : Tab {
     override fun Content() {
         val navigator =
             findNavigator(ScreenKey.PROTECTED_NAVIGATOR_SCREEN, LocalNavigator.currentOrThrow)
-
+        val rootViewModel = findRootNavigator(navigator).getNavigatorScreenModel<RootViewModel>()
         val messageBarState = rememberMessageBarState()
+        val activeProfile = rootViewModel.state.collectAsState().value?.activeProfile
 
         ScreenContent(
             messageBarState = messageBarState,
-            navigateToConversationPartners = { navigator.push(ConversationPartnersScreen()) }
+            navigateToConversationPartners = { navigator.push(ConversationPartnersScreen(activeProfile!!)) }
         )
     }
 

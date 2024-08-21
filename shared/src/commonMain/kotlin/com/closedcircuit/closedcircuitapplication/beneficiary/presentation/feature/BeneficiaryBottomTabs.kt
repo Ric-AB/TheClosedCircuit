@@ -28,7 +28,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.featu
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.ChatTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
@@ -111,7 +111,7 @@ internal class BeneficiaryBottomTabs : Screen {
                                     }
                                 }
                             )
-                            TabNavigationItem(MessageTab)
+                            TabNavigationItem(ChatTab)
                             TabNavigationItem(AccountTab)
                         }
                     }

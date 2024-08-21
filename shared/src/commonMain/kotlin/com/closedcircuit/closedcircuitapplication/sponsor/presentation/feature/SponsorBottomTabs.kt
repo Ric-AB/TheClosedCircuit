@@ -25,7 +25,7 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.message.MessageTab
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.ChatTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
@@ -102,7 +102,7 @@ class SponsorBottomTabs : Screen {
                                 imageResource = SharedRes.images.ic_funds,
                                 onClick = { navigator.push(FundedPlanListScreen()) }
                             )
-                            TabNavigationItem(MessageTab)
+                            TabNavigationItem(ChatTab)
                             TabNavigationItem(SponsorAccountTab)
                         }
                     }
