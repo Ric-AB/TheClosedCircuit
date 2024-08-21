@@ -5,10 +5,12 @@ import com.closedcircuit.closedcircuitapplication.core.logger.CustomLogger
 import com.closedcircuit.closedcircuitapplication.core.network.DefaultResponseConverter
 import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.HttpSendPipeline
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -17,9 +19,11 @@ import org.koin.dsl.module
 
 val noAuthQualifier = named("noAuth")
 val authQualifier = named("auth")
+val webSocketQualifier = named("websocket")
 val networkModule = module {
     single(authQualifier) { createHttpClient(get()) }
     single(noAuthQualifier) { createHttpClient() }
+    single(webSocketQualifier) { createHttpClient(get(), get()) }
     single(authQualifier) { createKtorfit(get(authQualifier)) }
     single(noAuthQualifier) { createNoAuthKtorfit(get(noAuthQualifier)) }
 }
@@ -77,16 +81,56 @@ private fun createHttpClient(sessionRepository: SessionRepository): HttpClient {
                 },
             )
         }
+
         install(Logging) {
             logger = CustomLogger()
             level = LogLevel.ALL
         }
+
         install(HttpTimeout) {
             val timeout = 30_000L
             requestTimeoutMillis = timeout
             connectTimeoutMillis = timeout
             socketTimeoutMillis = timeout
         }
+
+        install(WebSockets)
+    }
+
+    client.sendPipeline.intercept(HttpSendPipeline.State) {
+        context.headers.append("Authorization", "Bearer ${sessionRepository.getToken()}")
+    }
+    return client
+}
+
+private fun createHttpClient(
+    httpClientEngine: HttpClientEngine,
+    sessionRepository: SessionRepository
+): HttpClient {
+    val client = HttpClient(httpClientEngine) {
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                },
+            )
+        }
+
+        install(Logging) {
+            logger = CustomLogger()
+            level = LogLevel.ALL
+        }
+
+        install(HttpTimeout) {
+            val timeout = 30_000L
+            requestTimeoutMillis = timeout
+            connectTimeoutMillis = timeout
+            socketTimeoutMillis = timeout
+        }
+
+        install(WebSockets)
     }
 
     client.sendPipeline.intercept(HttpSendPipeline.State) {

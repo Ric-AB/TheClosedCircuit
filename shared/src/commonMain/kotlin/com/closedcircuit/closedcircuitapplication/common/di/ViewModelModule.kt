@@ -4,6 +4,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.au
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.passwordrecovery.ResetPasswordKoinContainer
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.passwordrecovery.ResetPasswordViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.register.RegisterViewModel
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation.ConversationViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversationpartners.ConversationPartnersViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.OnboardingViewModel
@@ -45,4 +46,5 @@ val viewModelModule = module {
 
     // chat
     factory { parameters -> ConversationPartnersViewModel(parameters.get(), get()) }
+    factory { parameters -> ConversationViewModel(parameters.get(), get(), get()) }
 }

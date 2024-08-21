@@ -65,8 +65,10 @@ object ClosedCircuitApiEndpoints {
     const val APPROVE_STEP = "user/steps/{id}/approve/"
     const val CHARGE = "v1/transactions/charge"
 
-    //messaging
+    //chat
     const val GET_CONVERSATION_PARTNERS = "user/manage-user/"
+    const val GET_CONVERSATIONS = "v1/chat/conversations/"
+    const val GET_CONVERSATION_MESSAGES = "v1/chat/users/{id}/conversations"
 
     //payment
     const val TOKENIZE_CARD = "v1/transactions/tokenize-charge"

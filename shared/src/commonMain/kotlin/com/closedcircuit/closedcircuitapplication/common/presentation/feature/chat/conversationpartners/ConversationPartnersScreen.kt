@@ -32,6 +32,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation.ConversationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import org.koin.core.component.KoinComponent
@@ -46,11 +47,19 @@ internal class ConversationPartnersScreen(private val activeProfile: ProfileType
         val viewModel =
             getScreenModel<ConversationPartnersViewModel> { parametersOf(activeProfile) }
 
-        ScreenContent(state = viewModel.state.value, goBack = navigator::pop)
+        ScreenContent(
+            state = viewModel.state.value,
+            goBack = navigator::pop,
+            navigateToConversationScreen = { navigator.replace(ConversationScreen(it)) }
+        )
     }
 
     @Composable
-    private fun ScreenContent(state: ConversationPartnersUiState, goBack: () -> Unit) {
+    private fun ScreenContent(
+        state: ConversationPartnersUiState,
+        goBack: () -> Unit,
+        navigateToConversationScreen: (ChatUser) -> Unit
+    ) {
         BaseScaffold(
             topBar = { DefaultAppBar(title = getHeader(), mainAction = goBack) }
         ) { innerPadding ->
@@ -59,7 +68,11 @@ internal class ConversationPartnersScreen(private val activeProfile: ProfileType
                     .padding(innerPadding)
             ) {
                 when (state) {
-                    is ConversationPartnersUiState.Content -> Content(state)
+                    is ConversationPartnersUiState.Content -> Content(
+                        state = state,
+                        navigateToConversationScreen = navigateToConversationScreen
+                    )
+
                     is ConversationPartnersUiState.Error -> {}
                     ConversationPartnersUiState.Loading -> BackgroundLoader()
                 }
@@ -68,13 +81,20 @@ internal class ConversationPartnersScreen(private val activeProfile: ProfileType
     }
 
     @Composable
-    private fun Content(state: ConversationPartnersUiState.Content) {
+    private fun Content(
+        state: ConversationPartnersUiState.Content,
+        navigateToConversationScreen: (ChatUser) -> Unit
+    ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(top = 4.dp, bottom = verticalScreenPadding)
         ) {
             items(items = state.partners, key = { it.id.value }) { chatUser ->
-                ChatUserItem(modifier = Modifier.fillMaxWidth().clickable { }, chatUser = chatUser)
+                ChatUserItem(
+                    chatUser = chatUser,
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable { navigateToConversationScreen(chatUser) }
+                )
             }
         }
     }

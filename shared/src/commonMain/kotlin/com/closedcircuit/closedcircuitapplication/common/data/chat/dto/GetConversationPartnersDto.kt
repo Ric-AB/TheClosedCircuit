@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetConversationPartnersDto(
     @SerialName("users")
-    val chatUsers: List<ChatUserDto>
+    val chatUsers: List<ApiChatUser>
 )

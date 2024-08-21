@@ -129,7 +129,7 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.kstore.file)
                 implementation(libs.sqldelight.androidDriver)
-                implementation(libs.ktor.client.android)
+                implementation(libs.ktor.client.okhttp)
 //                implementation(libs.kotlinx.coroutines.android)
             }
         }

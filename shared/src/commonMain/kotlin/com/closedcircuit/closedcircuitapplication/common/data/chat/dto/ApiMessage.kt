@@ -4,11 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatUserDto(
+data class ApiMessage(
     val id: String,
-    val avatar: String?,
-    @SerialName("fullname")
-    val fullName: String,
-    @SerialName("registration_token")
-    val registrationToken: String?
+    val sender: String,
+    val content: String,
+    @SerialName("created_at")
+    val createdAt: String,
+    @SerialName("updated_at")
+    val updatedAt: String
 )
