@@ -6,7 +6,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
-import com.closedcircuit.closedcircuitapplication.common.util.Empty
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import kotlinx.collections.immutable.persistentListOf
@@ -43,12 +43,12 @@ class ConversationViewModel(
         return ConversationUiState(
             loading = false,
             currentUserId = user.value!!.id,
-            newMessage = String.Empty,
+            newMessageField = InputField(),
             messages = persistentListOf()
         )
     }
 
     private fun updateNewMessage(message: String) {
-        state.value = state.value.copy(newMessage = message)
+        state.value.newMessageField.onValueChange(message)
     }
 }

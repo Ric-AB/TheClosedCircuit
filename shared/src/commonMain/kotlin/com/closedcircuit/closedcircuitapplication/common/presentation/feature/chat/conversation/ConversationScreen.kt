@@ -2,7 +2,6 @@ package com.closedcircuit.closedcircuitapplication.common.presentation.feature.c
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -31,15 +29,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -47,6 +41,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
@@ -106,7 +102,7 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
                 }
 
                 NewMessage(
-                    message = state.newMessage,
+                    messageField = state.newMessageField,
                     onMessageChange = { onEvent(ConversationUiEvent.MessageChange(it)) },
                     onSendMessage = { onEvent(ConversationUiEvent.SendMessage) }
                 )
@@ -116,7 +112,7 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
 
     @Composable
     private fun NewMessage(
-        message: String,
+        messageField: InputField,
         onMessageChange: (String) -> Unit,
         onSendMessage: () -> Unit
     ) {
@@ -125,7 +121,7 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
             modifier = Modifier.fillMaxWidth().height(40.dp)
         ) {
             MessageTextField(
-                value = message,
+                inputField = messageField,
                 onValueChange = onMessageChange,
                 maxLines = 6,
                 modifier = Modifier.weight(1f).fillMaxHeight(),
@@ -144,53 +140,6 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
                     modifier = Modifier.size(20.dp)
                 )
             }
-        }
-    }
-
-    @Composable
-    private fun MessageTextField(
-        value: String,
-        onValueChange: (String) -> Unit,
-        modifier: Modifier = Modifier,
-        visualTransformation: VisualTransformation = VisualTransformation.None,
-        enabled: Boolean = true,
-        singleLine: Boolean = true,
-        maxLines: Int,
-        shape: Shape = TextFieldDefaults.shape,
-        trailingIcon: @Composable (() -> Unit)? = null,
-        leadingIcon: @Composable (() -> Unit)? = null,
-        placeHolder: @Composable (() -> Unit)? = null,
-    ) {
-        val interactionSource = remember {
-            MutableInteractionSource()
-        }
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = modifier,
-            interactionSource = interactionSource,
-            visualTransformation = visualTransformation,
-            maxLines = maxLines,
-            enabled = enabled,
-            singleLine = singleLine,
-        ) { innerTextField ->
-            TextFieldDefaults.DecorationBox(
-                value = value,
-                visualTransformation = visualTransformation,
-                innerTextField = innerTextField,
-                singleLine = singleLine,
-                enabled = enabled,
-                interactionSource = interactionSource,
-                contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
-                trailingIcon = trailingIcon,
-                placeholder = placeHolder,
-                leadingIcon = leadingIcon,
-                shape = shape,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -302,6 +304,53 @@ fun TopLabeledTextField(
             interactionSource = interactionSource,
             shape = shape,
             colors = colors
+        )
+    }
+}
+
+@Composable
+fun MessageTextField(
+    inputField: InputField,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    enabled: Boolean = true,
+    singleLine: Boolean = true,
+    maxLines: Int,
+    shape: Shape = TextFieldDefaults.shape,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    placeHolder: @Composable (() -> Unit)? = null,
+) {
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+    BasicTextField(
+        value = inputField.value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        interactionSource = interactionSource,
+        visualTransformation = visualTransformation,
+        maxLines = maxLines,
+        enabled = enabled,
+        singleLine = singleLine,
+    ) { innerTextField ->
+        TextFieldDefaults.DecorationBox(
+            value = inputField.value,
+            visualTransformation = visualTransformation,
+            innerTextField = innerTextField,
+            singleLine = singleLine,
+            enabled = enabled,
+            interactionSource = interactionSource,
+            contentPadding = PaddingValues(vertical = 0.dp, horizontal = 16.dp),
+            trailingIcon = trailingIcon,
+            placeholder = placeHolder,
+            leadingIcon = leadingIcon,
+            shape = shape,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            )
         )
     }
 }
