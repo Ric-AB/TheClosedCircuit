@@ -72,8 +72,10 @@ import com.closedcircuit.closedcircuitapplication.common.domain.plan.Plan
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TaskLinearProgress
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
@@ -170,6 +172,7 @@ internal object DashboardTab : Tab, KoinComponent {
 
                     is DashboardUiState.Empty -> {
                         EmptyDashboard(
+                            userFirstName = state.firstName,
                             onClick = navigateToCreatePlanOrEmailVerification,
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = horizontalScreenPadding),
@@ -438,8 +441,29 @@ internal object DashboardTab : Tab, KoinComponent {
     }
 
     @Composable
-    private fun EmptyDashboard(modifier: Modifier, onClick: () -> Unit) {
+    private fun EmptyDashboard(modifier: Modifier, userFirstName: String, onClick: () -> Unit) {
         Column(modifier = modifier.padding(top = 80.dp)) {
+            TitleText(
+                text = stringResource(SharedRes.strings.welcome_x_label, userFirstName),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(Modifier.height(12.dp))
+            BodyText(
+                text = stringResource(SharedRes.strings.new_user_dashboard_prompt),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(Modifier.height(20.dp))
+            Text(
+                text = stringResource(SharedRes.strings.here_are_suggestions_you_can_start_message),
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black
+            )
+
+            Spacer(Modifier.height(16.dp))
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

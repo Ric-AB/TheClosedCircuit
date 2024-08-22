@@ -433,4 +433,11 @@
         neighbours, societies etc.) or as a collective.
     </string>
     <string name="message_dots_label">Message...</string>
+    <string name="welcome_x_label">Welcome %s 👋</string>
+    <string name="new_user_dashboard_prompt">We are happy to have you on board. To start raising funds for
+        your business or project, you need to create a plan.
+    </string>
+    <string name="here_are_suggestions_you_can_start_message">Here are a few suggestions of what you
+        can start. Click on the words to begin
+    </string>
 </resources>

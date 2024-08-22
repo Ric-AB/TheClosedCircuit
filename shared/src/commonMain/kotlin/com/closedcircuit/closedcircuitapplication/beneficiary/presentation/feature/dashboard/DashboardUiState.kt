@@ -9,7 +9,11 @@ import kotlinx.collections.immutable.ImmutableList
 sealed interface DashboardUiState {
     object Loading : DashboardUiState
 
-    data class Empty(val hasVerifiedEmail: Boolean, val email: Email) : DashboardUiState
+    data class Empty(
+        val hasVerifiedEmail: Boolean,
+        val email: Email,
+        val firstName: String
+    ) : DashboardUiState
 
     data class Content(
         val firstName: String,

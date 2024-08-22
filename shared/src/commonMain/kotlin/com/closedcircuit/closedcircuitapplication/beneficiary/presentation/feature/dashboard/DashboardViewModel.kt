@@ -52,7 +52,7 @@ class DashboardViewModel(
         }
 
         if (recentPlans.isEmpty()) {
-            return@combine DashboardUiState.Empty(user.isVerified, user.email)
+            return@combine DashboardUiState.Empty(user.isVerified, user.email, user.firstName.value)
         }
 
         DashboardUiState.Content(
