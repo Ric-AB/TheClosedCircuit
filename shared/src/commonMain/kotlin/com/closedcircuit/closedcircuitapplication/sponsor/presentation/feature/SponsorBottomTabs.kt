@@ -55,7 +55,12 @@ class SponsorBottomTabs : Screen {
         val rootState = viewModel.state.collectAsState().value
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
-        val navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
+        val navigateToNotificationScreen: () -> Unit = {
+            scope.launch {
+                drawerState.close()
+                navigator.push(NotificationScreen())
+            }
+        }
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
