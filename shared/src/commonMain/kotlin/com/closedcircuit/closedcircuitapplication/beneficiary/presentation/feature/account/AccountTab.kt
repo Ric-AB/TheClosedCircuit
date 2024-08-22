@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -96,9 +97,16 @@ internal object AccountTab : Tab {
     ) {
         BaseScaffold(
             messageBarState = messageBarState,
-            topBar = { DefaultAppBar(mainIcon = null) }) { innerPadding ->
+            topBar = {
+                DefaultAppBar(
+                    title = stringResource(SharedRes.strings.account_label),
+                    mainIcon = null
+                )
+            }
+        ) { innerPadding ->
             Column(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.fillMaxSize()
+                    .padding(top = innerPadding.calculateTopPadding())
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
             ) {

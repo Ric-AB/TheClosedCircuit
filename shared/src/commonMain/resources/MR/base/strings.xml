@@ -434,10 +434,28 @@
     </string>
     <string name="message_dots_label">Message...</string>
     <string name="welcome_x_label">Welcome %s 👋</string>
-    <string name="new_user_dashboard_prompt">We are happy to have you on board. To start raising funds for
+    <string name="new_user_dashboard_prompt">We are happy to have you on board. To start raising
+        funds for
         your business or project, you need to create a plan.
     </string>
     <string name="here_are_suggestions_you_can_start_message">Here are a few suggestions of what you
         can start. Click on the words to begin
     </string>
+    <string name="oops_label">Oops!</string>
+    <string name="no_active_loans_label">No active loans</string>
+    <string name="no_active_loans_message">You have no active loans for your plan yet. You
+        can share your plan link to sponsors to get loans
+    </string>
+    <string name="no_declined_loans_label">No declined loans</string>
+    <string name="no_declined_loans_message">You have no loans that have been declined
+    </string>
+    <string name="no_pending_loans_label">No pending loans</string>
+    <string name="no_pending_loans_message">You have no pending loans</string>
+    <string name="no_accepted_loans_label">No accepted loans</string>
+    <string name="no_accepted_loans_message">You have no accepted loans</string>
+    <string name="no_cancelled_loans_label">No cancelled loans</string>
+    <string name="no_cancelled_loans_message">You have no cancelled loans</string>
+    <string name="no_plans_label">No plans</string>
+    <string name="no_plans_message">You have not started any plan yet. Please start a plan to view plans.</string>
+    <string name="account_label">Account</string>
 </resources>

@@ -18,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +29,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.loanlist.LoansScreen
 import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanPreview
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
@@ -35,10 +37,11 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.loanlist.LoansScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.core.component.KoinComponent
@@ -84,13 +87,29 @@ internal class LoansPreviewScreen(private val loanStatus: LoanStatus) : Screen, 
                     .padding(innerPadding)
             ) {
                 when (state) {
-                    is LoansPreviewUiState.Content -> LoanPreviews(
-                        modifier = Modifier.fillMaxWidth(),
-                        items = state.items,
-                        navigateToLoansList = navigateToLoansList
-                    )
+                    is LoansPreviewUiState.Content -> {
+                        LoanPreviews(
+                            modifier = Modifier.fillMaxWidth(),
+                            items = state.items,
+                            navigateToLoansList = navigateToLoansList
+                        )
+                    }
 
-                    is LoansPreviewUiState.Error -> {}
+                    is LoansPreviewUiState.Error -> {
+                        EmptyScreen(
+                            title = stringResource(SharedRes.strings.oops_label),
+                            message = state.message
+                        )
+                    }
+
+                    LoansPreviewUiState.Empty -> {
+                        val (titleRes, messageRes) = getEmptyStateText()
+                        EmptyScreen(
+                            title = stringResource(titleRes),
+                            message = stringResource(messageRes)
+                        )
+                    }
+
                     LoansPreviewUiState.Loading -> BackgroundLoader()
                 }
             }
@@ -173,6 +192,48 @@ internal class LoansPreviewScreen(private val loanStatus: LoanStatus) : Screen, 
                             )
                         }
                     }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun getEmptyStateText(): Pair<StringResource, StringResource> {
+        return remember {
+            when (loanStatus) {
+                LoanStatus.PENDING -> {
+                    Pair(
+                        SharedRes.strings.no_pending_loans_label,
+                        SharedRes.strings.no_pending_loans_message
+                    )
+                }
+
+                LoanStatus.ACCEPTED -> {
+                    Pair(
+                        SharedRes.strings.no_accepted_loans_label,
+                        SharedRes.strings.no_accepted_loans_message
+                    )
+                }
+
+                LoanStatus.PAID -> {
+                    Pair(
+                        SharedRes.strings.no_active_loans_label,
+                        SharedRes.strings.no_active_loans_message
+                    )
+                }
+
+                LoanStatus.DECLINED -> {
+                    Pair(
+                        SharedRes.strings.no_declined_loans_label,
+                        SharedRes.strings.no_declined_loans_message
+                    )
+                }
+
+                LoanStatus.CANCELLED -> {
+                    Pair(
+                        SharedRes.strings.no_cancelled_loans_label,
+                        SharedRes.strings.no_cancelled_loans_message
+                    )
                 }
             }
         }
