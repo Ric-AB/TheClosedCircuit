@@ -56,6 +56,7 @@ internal class BeneficiaryBottomTabs : Screen {
         val rootState = viewModel.state.collectAsState().value
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
+        val navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
@@ -68,6 +69,7 @@ internal class BeneficiaryBottomTabs : Screen {
             profileUrl = rootState?.profileUrl ?: "",
             fullName = rootState?.fullName ?: "__",
             activeProfile = rootState?.activeProfile?.displayText ?: "",
+            navigateToNotifications = navigateToNotificationScreen,
             navigateToSettings = {
                 scope.launch {
                     drawerState.close()
@@ -86,8 +88,8 @@ internal class BeneficiaryBottomTabs : Screen {
                     contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
                     topBar = {
                         BeneficiaryTopAppBar(
-                            navigationIconClick = { scope.launch { drawerState.open() } },
-                            navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
+                            openDrawer = { scope.launch { drawerState.open() } },
+                            navigateToNotificationScreen = navigateToNotificationScreen
                         )
                     },
                     content = { padding ->
@@ -122,13 +124,13 @@ internal class BeneficiaryBottomTabs : Screen {
 
     @Composable
     private fun BeneficiaryTopAppBar(
-        navigationIconClick: () -> Unit,
+        openDrawer: () -> Unit,
         navigateToNotificationScreen: () -> Unit
     ) {
         if (LocalTabNavigator.current.current == DashboardTab)
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = navigationIconClick) {
+                    IconButton(onClick = openDrawer) {
                         Icon(
                             painter = painterResource(SharedRes.images.ic_hamburger),
                             contentDescription = "hamburger menu"

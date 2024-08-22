@@ -165,11 +165,17 @@ internal class SettingsScreen : Screen, KoinComponent {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            var touchIdEnable by remember { mutableStateOf(false) }
             SectionTitle(stringResource(SharedRes.strings.security_label))
             SectionItem(
                 icon = painterResource(SharedRes.images.ic_fingerprint),
                 text = stringResource(SharedRes.strings.enable_touch_id_to_sign_in_label),
-                trailingIcon = { Switch(checked = false, onCheckedChange = {}) }
+                trailingIcon = {
+                    Switch(
+                        checked = touchIdEnable,
+                        onCheckedChange = { touchIdEnable = it }
+                    )
+                }
             )
 
             SectionItem(
@@ -214,17 +220,30 @@ internal class SettingsScreen : Screen, KoinComponent {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            var pushNotificationEnabled by remember { mutableStateOf(false) }
+            var emailNotificationEnabled by remember { mutableStateOf(false) }
+
             SectionTitle(stringResource(SharedRes.strings.notifications))
             SectionItem(
                 icon = painterResource(SharedRes.images.ic_notification),
                 text = stringResource(SharedRes.strings.allow_notification_label),
-                trailingIcon = { Switch(checked = false, onCheckedChange = {}) }
+                trailingIcon = {
+                    Switch(
+                        checked = pushNotificationEnabled,
+                        onCheckedChange = { pushNotificationEnabled = it }
+                    )
+                }
             )
 
             SectionItem(
                 icon = rememberVectorPainter(Icons.Outlined.Email),
                 text = stringResource(SharedRes.strings.email_notifications_label),
-                trailingIcon = { Switch(checked = false, onCheckedChange = {}) }
+                trailingIcon = {
+                    Switch(
+                        checked = emailNotificationEnabled,
+                        onCheckedChange = { emailNotificationEnabled = it }
+                    )
+                }
             )
         }
     }
@@ -235,6 +254,7 @@ internal class SettingsScreen : Screen, KoinComponent {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            var promptEnabled by remember { mutableStateOf(false) }
             SectionTitle(stringResource(SharedRes.strings.display_label))
             SectionItem(
                 icon = painterResource(SharedRes.images.ic_currency),
@@ -250,7 +270,12 @@ internal class SettingsScreen : Screen, KoinComponent {
             SectionItem(
                 icon = rememberVectorPainter(Icons.Outlined.Email),
                 text = stringResource(SharedRes.strings.enable_prompts_label),
-                trailingIcon = { Switch(checked = false, onCheckedChange = {}) }
+                trailingIcon = {
+                    Switch(
+                        checked = promptEnabled,
+                        onCheckedChange = { promptEnabled = it }
+                    )
+                }
             )
         }
     }

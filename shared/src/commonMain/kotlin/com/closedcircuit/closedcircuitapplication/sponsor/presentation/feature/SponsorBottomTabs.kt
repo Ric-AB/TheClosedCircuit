@@ -55,6 +55,7 @@ class SponsorBottomTabs : Screen {
         val rootState = viewModel.state.collectAsState().value
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
+        val navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
@@ -67,6 +68,7 @@ class SponsorBottomTabs : Screen {
             profileUrl = rootState?.profileUrl ?: "",
             fullName = rootState?.fullName ?: "__",
             activeProfile = rootState?.activeProfile?.displayText ?: "",
+            navigateToNotifications = navigateToNotificationScreen,
             navigateToSettings = {
                 scope.launch {
                     drawerState.close()
@@ -86,7 +88,7 @@ class SponsorBottomTabs : Screen {
                     topBar = {
                         DashboardTopAppBar(
                             navigationIconClick = { scope.launch { drawerState.open() } },
-                            navigateToNotificationScreen = { navigator.push(NotificationScreen()) }
+                            navigateToNotificationScreen = navigateToNotificationScreen
                         )
                     },
                     content = { padding ->

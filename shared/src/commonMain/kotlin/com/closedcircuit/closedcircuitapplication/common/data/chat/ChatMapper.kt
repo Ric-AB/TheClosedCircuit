@@ -20,14 +20,24 @@ fun ApiChatUser.toChatUser(profileType: ProfileType) = ChatUser(
     registrationToken = registrationToken
 )
 
-fun ApiConversation.toConversation() = Conversation(
-    id = ID(id),
-    name = name,
-    participants = participants.map { ID(it) },
-    lastMessage = messages.last().toMessage(),
-    createdAt = Date(createdAt),
-    updateAt = Date(updatedAt)
-)
+fun ApiConversation.toConversation(): Conversation {
+    val chatUser = ChatUser(
+        ID.generateRandomUUID(), avatar = null,
+        fullName = Name(value = "eum"),
+        profile = ProfileType.SPONSOR,
+        registrationToken = null
+    )
+
+    return Conversation(
+        id = ID(id),
+        name = name,
+        chatUser = chatUser,
+        participants = participants.map { ID(it) },
+        lastMessage = messages.last().toMessage(),
+        createdAt = Date(createdAt),
+        updateAt = Date(updatedAt)
+    )
+}
 
 fun ApiMessage.toMessage() = Message(
     id = ID(id),

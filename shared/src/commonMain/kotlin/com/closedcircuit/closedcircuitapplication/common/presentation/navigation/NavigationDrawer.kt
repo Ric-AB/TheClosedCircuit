@@ -38,6 +38,7 @@ fun NavigationDrawer(
     profileUrl: String,
     fullName: String,
     activeProfile: String,
+    navigateToNotifications: () -> Unit,
     navigateToSettings: () -> Unit,
     logout: () -> Unit,
     content: @Composable () -> Unit
@@ -98,7 +99,7 @@ fun NavigationDrawer(
                         },
                         label = { Text(stringResource(SharedRes.strings.notifications)) },
                         selected = false,
-                        onClick = {}
+                        onClick = navigateToNotifications
                     )
 
                     NavigationDrawerItem(
