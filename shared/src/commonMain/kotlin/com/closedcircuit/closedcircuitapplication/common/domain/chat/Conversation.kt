@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 data class Conversation(
     val id: ID,
     val name: String,
+    val chatUser: ChatUser,
     val participants: List<ID>,
     val lastMessage: Message,
     val createdAt: Date,
