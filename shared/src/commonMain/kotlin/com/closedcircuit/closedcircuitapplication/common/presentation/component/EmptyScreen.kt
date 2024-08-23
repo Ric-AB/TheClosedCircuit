@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -21,10 +22,11 @@ import dev.icerock.moko.resources.compose.painterResource
 
 @Composable
 fun EmptyScreen(
-    modifier: Modifier = Modifier.fillMaxHeight(0.7F).fillMaxWidth(),
-    image: Painter = painterResource(SharedRes.images.ic_red_caution),
     title: String,
     message: String,
+    imageSize: Dp = 100.dp,
+    modifier: Modifier = Modifier.fillMaxHeight(0.7F).fillMaxWidth(),
+    image: Painter = painterResource(SharedRes.images.ic_red_caution),
     action: @Composable (() -> Unit)? = null
 ) {
     Column(
@@ -35,7 +37,7 @@ fun EmptyScreen(
         Image(
             painter = image,
             contentDescription = null,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier.size(imageSize)
         )
 
         Spacer(Modifier.height(16.dp))

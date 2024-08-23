@@ -154,6 +154,7 @@ internal class NotificationScreen : Screen, KoinComponent {
 
                     NotificationUIState.Empty -> {
                         EmptyScreen(
+                            imageSize = 200.dp,
                             image = painterResource(SharedRes.images.no_notification_illustration),
                             title = stringResource(SharedRes.strings.no_notifications),
                             message = stringResource(SharedRes.strings.no_notifications_prompt)

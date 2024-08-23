@@ -92,6 +92,7 @@ internal class LoansScreen(private val loanStatus: LoanStatus) : Screen, KoinCom
                     LoansUiState.Empty -> {
                         val (titleRes, messageRes) = getEmptyStateText(loanStatus)
                         EmptyScreen(
+                            imageSize = 200.dp,
                             image = painterResource(SharedRes.images.empty_loans_illurstration),
                             title = stringResource(titleRes),
                             message = stringResource(messageRes)
