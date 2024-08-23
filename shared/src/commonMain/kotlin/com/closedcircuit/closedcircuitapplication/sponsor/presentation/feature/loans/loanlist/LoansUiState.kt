@@ -6,6 +6,8 @@ import kotlinx.collections.immutable.ImmutableList
 sealed interface LoansUiState {
     object Loading : LoansUiState
 
+    object Empty: LoansUiState
+
     data class Content(val items: ImmutableList<LoanOffer>) : LoansUiState
 
     data class Error(val message: String) : LoansUiState

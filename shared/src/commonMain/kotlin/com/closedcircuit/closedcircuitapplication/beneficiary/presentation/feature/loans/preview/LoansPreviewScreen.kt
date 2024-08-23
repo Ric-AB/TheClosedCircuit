@@ -40,8 +40,10 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.getEmptyStateText
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.core.component.KoinComponent
@@ -103,8 +105,9 @@ internal class LoansPreviewScreen(private val loanStatus: LoanStatus) : Screen, 
                     }
 
                     LoansPreviewUiState.Empty -> {
-                        val (titleRes, messageRes) = getEmptyStateText()
+                        val (titleRes, messageRes) = getEmptyStateText(loanStatus)
                         EmptyScreen(
+                            image = painterResource(SharedRes.images.empty_loans_illurstration),
                             title = stringResource(titleRes),
                             message = stringResource(messageRes)
                         )
@@ -192,48 +195,6 @@ internal class LoansPreviewScreen(private val loanStatus: LoanStatus) : Screen, 
                             )
                         }
                     }
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun getEmptyStateText(): Pair<StringResource, StringResource> {
-        return remember {
-            when (loanStatus) {
-                LoanStatus.PENDING -> {
-                    Pair(
-                        SharedRes.strings.no_pending_loans_label,
-                        SharedRes.strings.no_pending_loans_message
-                    )
-                }
-
-                LoanStatus.ACCEPTED -> {
-                    Pair(
-                        SharedRes.strings.no_accepted_loans_label,
-                        SharedRes.strings.no_accepted_loans_message
-                    )
-                }
-
-                LoanStatus.PAID -> {
-                    Pair(
-                        SharedRes.strings.no_active_loans_label,
-                        SharedRes.strings.no_active_loans_message
-                    )
-                }
-
-                LoanStatus.DECLINED -> {
-                    Pair(
-                        SharedRes.strings.no_declined_loans_label,
-                        SharedRes.strings.no_declined_loans_message
-                    )
-                }
-
-                LoanStatus.CANCELLED -> {
-                    Pair(
-                        SharedRes.strings.no_cancelled_loans_label,
-                        SharedRes.strings.no_cancelled_loans_message
-                    )
                 }
             }
         }

@@ -26,7 +26,8 @@ class LoansViewModel(
     private fun fetchLoanOffers() {
         screenModelScope.launch {
             loanRepository.fetchLoanOffers(loanStatus).onSuccess {
-                state = LoansUiState.Content(it.toImmutableList())
+                state = if (it.isEmpty()) LoansUiState.Empty
+                else LoansUiState.Content(it.toImmutableList())
             }.onError { _, message ->
                 state = LoansUiState.Error(message)
             }

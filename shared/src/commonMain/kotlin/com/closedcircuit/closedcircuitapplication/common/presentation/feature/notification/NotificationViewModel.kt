@@ -35,8 +35,9 @@ class NotificationViewModel(
             snapshotFlow { notificationItems }
         ) { initialLoading, errorLoadingMessage, isLoading, notifications ->
             when {
-                initialLoading -> NotificationUIState.InitialLoading
+                initialLoading -> NotificationUIState.Loading
                 errorLoadingMessage != null -> NotificationUIState.Error(errorLoadingMessage)
+                notifications.isEmpty() -> NotificationUIState.Empty
                 else -> {
                     NotificationUIState.Content(
                         isLoading = isLoading,
@@ -47,7 +48,7 @@ class NotificationViewModel(
         }.stateIn(
             scope = screenModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = NotificationUIState.InitialLoading
+            initialValue = NotificationUIState.Loading
         )
 
     init {

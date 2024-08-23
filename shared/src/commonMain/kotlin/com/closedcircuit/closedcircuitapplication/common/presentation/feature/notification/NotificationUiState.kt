@@ -6,7 +6,10 @@ import com.closedcircuit.closedcircuitapplication.common.domain.notification.Not
 
 
 sealed interface NotificationUIState {
-    object InitialLoading : NotificationUIState
+    object Loading : NotificationUIState
+
+    object Empty : NotificationUIState
+
     data class Content(
         val isLoading: Boolean = false,
         val notificationItems: SnapshotStateList<NotificationItem> = mutableStateListOf()

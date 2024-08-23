@@ -34,6 +34,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.loans.details.LoanDetailsScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -85,7 +86,13 @@ internal class LoansScreen(private val planID: ID, private val loanStatus: LoanS
                         navigateToLoanDetails = navigateToLoanDetails
                     )
 
-                    is LoansUiState.Error -> {}
+                    is LoansUiState.Error -> {
+                        EmptyScreen(
+                            title = stringResource(SharedRes.strings.oops_label),
+                            message = state.message
+                        )
+                    }
+
                     LoansUiState.Loading -> BackgroundLoader()
                 }
             }

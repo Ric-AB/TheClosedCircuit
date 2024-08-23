@@ -31,11 +31,14 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.getEmptyStateText
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.loan.LoanOffer
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loandetails.LoanDetailsScreen
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.core.component.KoinComponent
@@ -79,7 +82,22 @@ internal class LoansScreen(private val loanStatus: LoanStatus) : Screen, KoinCom
                         navigateToLoanDetails = navigateToLoanDetails
                     )
 
-                    is LoansUiState.Error -> {}
+                    is LoansUiState.Error -> {
+                        EmptyScreen(
+                            title = stringResource(SharedRes.strings.oops_label),
+                            message = state.message
+                        )
+                    }
+
+                    LoansUiState.Empty -> {
+                        val (titleRes, messageRes) = getEmptyStateText(loanStatus)
+                        EmptyScreen(
+                            image = painterResource(SharedRes.images.empty_loans_illurstration),
+                            title = stringResource(titleRes),
+                            message = stringResource(messageRes)
+                        )
+                    }
+
                     LoansUiState.Loading -> BackgroundLoader()
                 }
             }

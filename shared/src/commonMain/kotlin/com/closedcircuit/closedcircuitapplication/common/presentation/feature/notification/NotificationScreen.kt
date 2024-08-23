@@ -8,7 +8,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,7 +48,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -60,6 +57,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.CircularIndicator
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.conditional
@@ -79,7 +77,7 @@ internal class NotificationScreen : Screen, KoinComponent {
         val onEvent = viewModel::onEvent
 
         ScreenContent(
-            uiState = uiState,
+            state = uiState,
             goBack = navigator::pop,
             toggleSelection = { onEvent(NotificationUiEvent.ToggleSelection(it)) },
             resetSelection = { onEvent(NotificationUiEvent.ResetSelection) },
@@ -91,101 +89,106 @@ internal class NotificationScreen : Screen, KoinComponent {
         )
 
     }
-}
 
-@Composable
-private fun ScreenContent(
-    uiState: NotificationUIState,
-    goBack: () -> Unit,
-    toggleSelection: (Int) -> Unit,
-    resetSelection: () -> Unit,
-    markAllAsRead: () -> Unit,
-    deleteNotification: (Int, ID) -> Unit,
-    deleteMultipleNotifications: () -> Unit
-) {
-    var anyUnreadNotification by remember { mutableStateOf(false) }
-    var isInSelectionMode by remember { mutableStateOf(false) }
-    var numberOfSelectedItems by remember { mutableStateOf(0) }
-    var isLoading by remember { mutableStateOf(false) }
+    @Composable
+    private fun ScreenContent(
+        state: NotificationUIState,
+        goBack: () -> Unit,
+        toggleSelection: (Int) -> Unit,
+        resetSelection: () -> Unit,
+        markAllAsRead: () -> Unit,
+        deleteNotification: (Int, ID) -> Unit,
+        deleteMultipleNotifications: () -> Unit
+    ) {
+        var anyUnreadNotification by remember { mutableStateOf(false) }
+        var isInSelectionMode by remember { mutableStateOf(false) }
+        var numberOfSelectedItems by remember { mutableStateOf(0) }
+        var isLoading by remember { mutableStateOf(false) }
 
-    BaseScaffold(
-        showLoadingDialog = isLoading,
-        topBar = {
-            if (isInSelectionMode) {
-                SelectionModeTopAppBar(
-                    numberOfSelectedItems = numberOfSelectedItems,
-                    onCloseIconClick = resetSelection,
-                    onDeleteIconClick = deleteMultipleNotifications
-                )
-            } else {
-                NotificationTopAppBar(
-                    anyUnreadNotification = anyUnreadNotification,
-                    onNavigationIconClick = goBack,
-                    onMarkAsReadMenuClick = markAllAsRead
-                )
+        BaseScaffold(
+            showLoadingDialog = isLoading,
+            topBar = {
+                if (isInSelectionMode) {
+                    SelectionModeTopAppBar(
+                        numberOfSelectedItems = numberOfSelectedItems,
+                        onCloseIconClick = resetSelection,
+                        onDeleteIconClick = deleteMultipleNotifications
+                    )
+                } else {
+                    NotificationTopAppBar(
+                        anyUnreadNotification = anyUnreadNotification,
+                        onNavigationIconClick = goBack,
+                        onMarkAsReadMenuClick = markAllAsRead
+                    )
+                }
             }
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier.fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            when (uiState) {
-                is NotificationUIState.Content -> {
-                    LaunchedEffect(uiState.isLoading) {
-                        isLoading = uiState.isLoading
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                when (state) {
+                    is NotificationUIState.Content -> {
+                        LaunchedEffect(state.isLoading) {
+                            isLoading = state.isLoading
+                        }
+
+                        NotificationBody(
+                            uiState = state,
+                            toggleSelection = toggleSelection,
+                            deleteNotification = deleteNotification,
+                            updateSelectionState = { anyUnread, anySelected, numberOfSelected ->
+                                anyUnreadNotification = anyUnread
+                                isInSelectionMode = anySelected
+                                numberOfSelectedItems = numberOfSelected
+                            }
+                        )
                     }
 
-                    NotificationBody(
-                        uiState = uiState,
-                        toggleSelection = toggleSelection,
-                        deleteNotification = deleteNotification,
-                        updateSelectionState = { anyUnread, anySelected, numberOfSelected ->
-                            anyUnreadNotification = anyUnread
-                            isInSelectionMode = anySelected
-                            numberOfSelectedItems = numberOfSelected
-                        }
-                    )
-                }
+                    is NotificationUIState.Error -> {
+                        EmptyScreen(
+                            title = stringResource(SharedRes.strings.oops_label),
+                            message = state.message
+                        )
+                    }
 
-                is NotificationUIState.Error -> {
-                    Text(
-                        text = "ERROR-${uiState.message}",
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
+                    NotificationUIState.Empty -> {
+                        EmptyScreen(
+                            image = painterResource(SharedRes.images.no_notification_illustration),
+                            title = stringResource(SharedRes.strings.no_notifications),
+                            message = stringResource(SharedRes.strings.no_notifications_prompt)
+                        )
+                    }
 
-                NotificationUIState.InitialLoading -> {
-                    CircularIndicator(size = 50.dp, modifier = Modifier.align(Alignment.Center))
+                    NotificationUIState.Loading -> {
+                        CircularIndicator(size = 50.dp, modifier = Modifier.align(Alignment.Center))
+                    }
                 }
             }
         }
     }
-}
 
-@Composable
-private fun NotificationBody(
-    uiState: NotificationUIState.Content,
-    toggleSelection: (Int) -> Unit,
-    deleteNotification: (Int, ID) -> Unit,
-    updateSelectionState: (Boolean, Boolean, Int) -> Unit
-) {
-    val visibleState = remember {
-        MutableTransitionState(false).apply {
-            targetState = true
-        }
-    }
-
-    AnimatedVisibility(
-        visibleState = visibleState,
-        enter = fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-                scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
-
+    @Composable
+    private fun NotificationBody(
+        uiState: NotificationUIState.Content,
+        toggleSelection: (Int) -> Unit,
+        deleteNotification: (Int, ID) -> Unit,
+        updateSelectionState: (Boolean, Boolean, Int) -> Unit
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            if (uiState.notificationItems.isEmpty()) {
-                EmptyNotification(modifier = Modifier.align(Alignment.BottomCenter))
-            } else {
+        val visibleState = remember {
+            MutableTransitionState(false).apply {
+                targetState = true
+            }
+        }
+
+        AnimatedVisibility(
+            visibleState = visibleState,
+            enter = fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                    scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
+
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+
                 LaunchedEffect(uiState.notificationItems.toList()) {
                     var anyUnread = false
                     var anySelected = false
@@ -210,185 +213,165 @@ private fun NotificationBody(
                             modifier = Modifier.fillMaxWidth().animateItemPlacement(),
                             notificationItem = item,
                             toggleSelection = { toggleSelection(index) },
-                            deleteNotification = { deleteNotification(index, item.notification.id) }
+                            deleteNotification = {
+                                deleteNotification(
+                                    index,
+                                    item.notification.id
+                                )
+                            }
                         )
                     }
                 }
             }
         }
     }
-}
 
-@Composable
-private fun NotificationItem(
-    modifier: Modifier = Modifier,
-    notificationItem: NotificationItem,
-    toggleSelection: () -> Unit,
-    deleteNotification: () -> Unit
-) {
-    val notification = notificationItem.notification
-    Row(
-        modifier = modifier
-            .conditional(
-                condition = notificationItem.isSelected,
-                ifTrue = {
-                    padding(horizontal = 10.dp)
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level2),
-                            shape = Shapes().medium
-                        )
-                        .padding(horizontal = 6.dp, vertical = 12.dp)
-                },
-                ifFalse = {
-                    background(color = MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                }
-            ).clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                enabled = true,
-                onClick = toggleSelection
-            )
+    @Composable
+    private fun NotificationItem(
+        modifier: Modifier = Modifier,
+        notificationItem: NotificationItem,
+        toggleSelection: () -> Unit,
+        deleteNotification: () -> Unit
     ) {
-        Avatar(
-            imageUrl = "",
-            size = DpSize(50.dp, 50.dp)
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = notification.message,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = notification.createdAt.value,
-                style = MaterialTheme.typography.labelMedium
-            )
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-        NotificationItemDropDownMenu(onDeleteMenuClick = deleteNotification)
-    }
-}
-
-@Composable
-private fun EmptyNotification(modifier: Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxHeight(0.7f)
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(SharedRes.images.no_notification_illustration),
-            contentDescription = ""
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
-        Text(
-            text = stringResource(SharedRes.strings.no_notifications),
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        Text(
-            text = stringResource(SharedRes.strings.no_notifications_prompt),
-            style = MaterialTheme.typography.bodySmall,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-private fun NotificationItemDropDownMenu(onDeleteMenuClick: () -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier.wrapContentSize(Alignment.TopEnd)
-    ) {
-        IconButton(onClick = { expanded = !expanded }) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = "more"
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
+        val notification = notificationItem.notification
+        Row(
+            modifier = modifier
+                .conditional(
+                    condition = notificationItem.isSelected,
+                    ifTrue = {
+                        padding(horizontal = 10.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.surfaceColorAtElevation(Elevation.Level2),
+                                shape = Shapes().medium
+                            )
+                            .padding(horizontal = 6.dp, vertical = 12.dp)
+                    },
+                    ifFalse = {
+                        background(color = MaterialTheme.colorScheme.surface)
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                    }
+                ).clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    enabled = true,
+                    onClick = toggleSelection
+                )
         ) {
-            DropdownMenuItem(
-                text = { Text("Delete") },
-                onClick = { expanded = false; onDeleteMenuClick() }
+            Avatar(
+                imageUrl = "",
+                size = DpSize(50.dp, 50.dp)
             )
+
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = notification.message,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = notification.createdAt.value,
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+            NotificationItemDropDownMenu(onDeleteMenuClick = deleteNotification)
         }
     }
-}
 
-@Composable
-private fun SelectionModeTopAppBar(
-    numberOfSelectedItems: Int,
-    onCloseIconClick: () -> Unit,
-    onDeleteIconClick: () -> Unit
-) {
-    TopAppBar(
-        title = {
-            Text(text = stringResource(SharedRes.strings.x_selected, numberOfSelectedItems))
-        },
-        navigationIcon = {
-            IconButton(onClick = onCloseIconClick) {
-                Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
+    @Composable
+    private fun NotificationItemDropDownMenu(onDeleteMenuClick: () -> Unit) {
+        var expanded by remember { mutableStateOf(false) }
+
+        Box(
+            modifier = Modifier.wrapContentSize(Alignment.TopEnd)
+        ) {
+            IconButton(onClick = { expanded = !expanded }) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "more"
+                )
             }
-        },
-        actions = {
-            IconButton(onClick = onDeleteIconClick) {
-                Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text("Delete") },
+                    onClick = { expanded = false; onDeleteMenuClick() }
+                )
             }
         }
-    )
-}
+    }
 
-@Composable
-private fun NotificationTopAppBar(
-    anyUnreadNotification: Boolean,
-    onNavigationIconClick: () -> Unit,
-    onMarkAsReadMenuClick: () -> Unit
-) {
-    TopAppBar(
-        title = { TitleText(text = stringResource(SharedRes.strings.notifications)) },
-        navigationIcon = {
-            IconButton(onClick = onNavigationIconClick) {
-                Icon(imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null)
+    @Composable
+    private fun SelectionModeTopAppBar(
+        numberOfSelectedItems: Int,
+        onCloseIconClick: () -> Unit,
+        onDeleteIconClick: () -> Unit
+    ) {
+        TopAppBar(
+            title = {
+                Text(text = stringResource(SharedRes.strings.x_selected, numberOfSelectedItems))
+            },
+            navigationIcon = {
+                IconButton(onClick = onCloseIconClick) {
+                    Icon(imageVector = Icons.Rounded.Close, contentDescription = null)
+                }
+            },
+            actions = {
+                IconButton(onClick = onDeleteIconClick) {
+                    Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
+                }
             }
-        },
-        actions = {
-            if (anyUnreadNotification) {
-                var expanded by remember { mutableStateOf(false) }
+        )
+    }
 
-                Box(
-                    modifier = Modifier.wrapContentSize(Alignment.TopEnd)
-                ) {
-                    IconButton(onClick = { expanded = !expanded }) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "more"
-                        )
-                    }
+    @Composable
+    private fun NotificationTopAppBar(
+        anyUnreadNotification: Boolean,
+        onNavigationIconClick: () -> Unit,
+        onMarkAsReadMenuClick: () -> Unit
+    ) {
+        TopAppBar(
+            title = { TitleText(text = stringResource(SharedRes.strings.notifications)) },
+            navigationIcon = {
+                IconButton(onClick = onNavigationIconClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                        contentDescription = null
+                    )
+                }
+            },
+            actions = {
+                if (anyUnreadNotification) {
+                    var expanded by remember { mutableStateOf(false) }
 
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                    Box(
+                        modifier = Modifier.wrapContentSize(Alignment.TopEnd)
                     ) {
-                        DropdownMenuItem(
-                            text = { Text(text = stringResource(SharedRes.strings.mark_all_as_read)) },
-                            onClick = { expanded = false; onMarkAsReadMenuClick() }
-                        )
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "more"
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(text = stringResource(SharedRes.strings.mark_all_as_read)) },
+                                onClick = { expanded = false; onMarkAsReadMenuClick() }
+                            )
+                        }
                     }
                 }
             }
-        }
-    )
+        )
+    }
 }
