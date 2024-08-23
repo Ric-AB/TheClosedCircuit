@@ -22,7 +22,7 @@ class ConversationViewModel(
 
     init {
         screenModelScope.launch {
-            chatRepository.initSession(state.value.currentUserId, otherParticipantID)
+            chatRepository.initSession(state.value.currentUserId)
                 .onSuccess { println("#####SUCCESS") }
                 .onError { _, message -> println("#####ERROR:: $message") }
         }

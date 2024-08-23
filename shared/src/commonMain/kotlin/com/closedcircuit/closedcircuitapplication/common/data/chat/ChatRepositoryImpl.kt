@@ -30,12 +30,12 @@ class ChatRepositoryImpl(
     private val webSocketHttpClient: HttpClient
 ) : ChatRepository {
 
-    private val socket: WebSocketSession? = null
-    override suspend fun initSession(userID: ID, otherParticipantID: ID): ApiResponse<Unit> {
+    private var socket: WebSocketSession? = null
+    override suspend fun initSession(userID: ID): ApiResponse<Unit> {
         return try {
-            val ids = listOf(userID.value, otherParticipantID.value).joinToString(",")
-            webSocketHttpClient.webSocketSession {
-                url("wss://theclosedcircuit-staging.herokuapp.com/ws/chat/?participants=$ids")
+            val id = userID.value
+            socket = webSocketHttpClient.webSocketSession {
+                url("wss://theclosedcircuit-staging.herokuapp.com/ws/chat/?user_id=$id")
             }
 
             if (socket != null) {

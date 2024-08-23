@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
 
-    suspend fun initSession(userID: ID, otherParticipantID: ID): ApiResponse<Unit>
+    suspend fun initSession(userID: ID): ApiResponse<Unit>
 
     suspend fun sendMessage(message: String)
 
