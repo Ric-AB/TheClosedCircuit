@@ -12,5 +12,4 @@ data class ChatUser(
     val avatar: ImageUrl?,
     val fullName: Name,
     val profile: ProfileType,
-    val registrationToken: String?
 )

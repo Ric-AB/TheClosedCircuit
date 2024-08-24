@@ -7,7 +7,8 @@ import kotlinx.serialization.Serializable
 data class ApiConversation(
     val id: String,
     val name: String,
-    val participants: List<String>,
+    @SerialName("receiver")
+    val participant: ApiChatUser,
     val messages: List<ApiMessage>,
     @SerialName("created_at")
     val createdAt: String,

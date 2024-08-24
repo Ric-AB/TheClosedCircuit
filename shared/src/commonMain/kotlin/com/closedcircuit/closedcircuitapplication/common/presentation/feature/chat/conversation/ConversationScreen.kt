@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
@@ -201,13 +202,18 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
             },
             title = {
                 Column {
-                    val textColor = Color.White
                     Text(
                         text = otherParticipantName,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = textColor
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.bodySmall
                     )
-                    Text(text = otherParticipantProfile, color = textColor)
+
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        text = otherParticipantProfile,
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
             }
         )

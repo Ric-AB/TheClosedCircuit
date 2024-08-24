@@ -18,7 +18,7 @@ class ConversationListViewModel(
     val state = mutableStateOf<ConversationListUiState>(ConversationListUiState.Loading)
 
     init {
-        initSession()
+//        initSession()
         getConversations()
     }
 
@@ -26,8 +26,6 @@ class ConversationListViewModel(
         screenModelScope.launch {
             val userId = userRepository.nonNullUser().id
             chatRepository.initSession(userID = userId)
-                .onSuccess { println("#####SUCCESS") }
-                .onError { _, message -> println("#####ERROR:: $message") }
         }
     }
 

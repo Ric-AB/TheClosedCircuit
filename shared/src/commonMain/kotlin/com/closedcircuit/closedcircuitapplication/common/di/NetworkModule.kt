@@ -12,10 +12,12 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.HttpSendPipeline
+import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import kotlin.time.Duration
 
 val noAuthQualifier = named("noAuth")
 val authQualifier = named("auth")
@@ -130,11 +132,14 @@ private fun createHttpClient(
             socketTimeoutMillis = timeout
         }
 
-        install(WebSockets)
+        install(WebSockets) {
+            contentConverter = KotlinxWebsocketSerializationConverter(Json)
+            maxFrameSize = Long.MAX_VALUE
+        }
     }
 
-    client.sendPipeline.intercept(HttpSendPipeline.State) {
-        context.headers.append("Authorization", "Bearer ${sessionRepository.getToken()}")
-    }
+//    client.sendPipeline.intercept(HttpSendPipeline.State) {
+//        context.headers.append("Authorization", "Bearer ${sessionRepository.getToken()}")
+//    }
     return client
 }

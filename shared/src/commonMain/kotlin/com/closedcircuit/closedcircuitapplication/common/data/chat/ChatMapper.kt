@@ -17,23 +17,14 @@ fun ApiChatUser.toChatUser(profileType: ProfileType) = ChatUser(
     avatar = avatar?.let { ImageUrl(it) },
     fullName = Name(fullName),
     profile = profileType,
-    registrationToken = registrationToken
 )
 
 fun ApiConversation.toConversation(): Conversation {
-    val chatUser = ChatUser(
-        ID.generateRandomUUID(), avatar = null,
-        fullName = Name(value = "eum"),
-        profile = ProfileType.SPONSOR,
-        registrationToken = null
-    )
-
     return Conversation(
         id = ID(id),
         name = name,
-        chatUser = chatUser,
-        participants = participants.map { ID(it) },
-        lastMessage = messages.last().toMessage(),
+        participant = participant.toChatUser(ProfileType.SPONSOR),
+        lastMessage = messages.lastOrNull()?.toMessage(),
         createdAt = Date(createdAt),
         updateAt = Date(updatedAt)
     )

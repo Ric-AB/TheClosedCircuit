@@ -9,6 +9,4 @@ data class ApiChatUser(
     val avatar: String?,
     @SerialName("fullname")
     val fullName: String,
-    @SerialName("registration_token")
-    val registrationToken: String?
 )

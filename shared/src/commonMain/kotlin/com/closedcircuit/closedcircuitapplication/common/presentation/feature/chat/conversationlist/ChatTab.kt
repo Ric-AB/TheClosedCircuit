@@ -38,6 +38,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation.ConversationScreen
@@ -109,10 +110,7 @@ internal object ChatTab : Tab {
             },
             floatingActionButton = { NewConversationFab(onClick = navigateToConversationPartners) }
         ) { innerPadding ->
-            Column(
-                modifier = Modifier.padding(innerPadding)
-                    .padding(horizontal = horizontalScreenPadding)
-            ) {
+            Column(modifier = Modifier.padding(innerPadding)) {
                 when (state) {
                     is ConversationListUiState.Content -> {
                         Content(
@@ -121,7 +119,13 @@ internal object ChatTab : Tab {
                         )
                     }
 
-                    is ConversationListUiState.Error -> {}
+                    is ConversationListUiState.Error -> {
+                        EmptyScreen(
+                            title = stringResource(SharedRes.strings.oops_label),
+                            message = state.message
+                        )
+                    }
+
                     ConversationListUiState.Loading -> BackgroundLoader()
                 }
             }
@@ -138,7 +142,7 @@ internal object ChatTab : Tab {
             contentPadding = PaddingValues(top = 4.dp, bottom = verticalScreenPadding)
         ) {
             items(items = state.conversations, key = { it.id.value }) { conversation ->
-                val chatUser = conversation.chatUser
+                val chatUser = conversation.participant
                 ConversationItem(
                     conversation = conversation,
                     chatUser = chatUser,
@@ -170,8 +174,10 @@ internal object ChatTab : Tab {
                     color = Color.Black
                 )
 
-                Spacer(Modifier.height(4.dp))
-                Text(conversation.lastMessage.content)
+                conversation.lastMessage?.content?.let {
+                    Spacer(Modifier.height(4.dp))
+                    Text(text = it, style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
     }

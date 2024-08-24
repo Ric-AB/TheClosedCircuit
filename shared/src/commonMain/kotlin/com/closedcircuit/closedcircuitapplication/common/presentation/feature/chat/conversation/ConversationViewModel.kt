@@ -7,25 +7,27 @@ import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatReposit
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
-import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class ConversationViewModel(
     private val otherParticipantID: ID,
     private val chatRepository: ChatRepository,
     userRepository: UserRepository
 ) : ScreenModel {
-    private val user = userRepository.userFlow
+    private val userID = userRepository.userFlow.value?.id!!
+    private val conversationName = createConversationName()
     val state = mutableStateOf(produceState())
 
     init {
-        screenModelScope.launch {
-            chatRepository.initSession(state.value.currentUserId)
-                .onSuccess { println("#####SUCCESS") }
-                .onError { _, message -> println("#####ERROR:: $message") }
-        }
+        initSession()
+        getMessages()
     }
 
     fun onEvent(event: ConversationUiEvent) {
@@ -35,14 +37,55 @@ class ConversationViewModel(
         }
     }
 
-    private fun sendMessage() {
+    private fun initSession() {
+        screenModelScope.launch {
+            chatRepository.initSession(state.value.currentUserId)
+                .onSuccess { listenToMessageEvents() }
+        }
+    }
 
+    private fun getMessages() {
+        screenModelScope.launch {
+            chatRepository.getMessagesForConversation(
+                userID = userID,
+                conversationName = conversationName
+            ).onSuccess {
+                state.value = state.value.copy(messages = it.toImmutableList())
+            }
+        }
+    }
+
+    private fun listenToMessageEvents() {
+//        chatRepository.getMessagesForConversationAsFlow()
+//            .debounce(1.seconds)
+//            .onEach {
+//                println("MESSAGE RECEIVED $it")
+//                getMessages()
+//            }
+//            .launchIn(screenModelScope)
+    }
+
+    private fun sendMessage() {
+        val stateValue = state.value
+        val message = stateValue.newMessageField.value
+        val senderId = stateValue.currentUserId
+        val receiverId = otherParticipantID
+
+        screenModelScope.launch {
+            chatRepository.sendMessage(
+                message = message,
+                receiverID = receiverId,
+                senderID = senderId
+            )
+
+            stateValue.newMessageField.clear()
+        }
     }
 
     private fun produceState(): ConversationUiState {
         return ConversationUiState(
             loading = false,
-            currentUserId = user.value!!.id,
+            currentUserId = userID,
             newMessageField = InputField(),
             messages = persistentListOf()
         )
@@ -50,5 +93,17 @@ class ConversationViewModel(
 
     private fun updateNewMessage(message: String) {
         state.value.newMessageField.onValueChange(message)
+    }
+
+    private fun createConversationName(): String {
+        val minId = minOf(userID.value, otherParticipantID.value)
+        val maxId = maxOf(userID.value, otherParticipantID.value)
+        return "conv_${minId}_${maxId}"
+    }
+
+    override fun onDispose() {
+        println("DISPOSINGGGGG")
+        chatRepository.closeSession()
+        super.onDispose()
     }
 }

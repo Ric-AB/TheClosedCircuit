@@ -41,4 +41,8 @@ data class InputField(
         else validationResult.validationError
 
     }
+
+    fun clear() {
+        inputValue.value = String.Empty
+    }
 }
