@@ -10,11 +10,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.util.Input
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 class ConversationViewModel(
     private val otherParticipantID: ID,
@@ -33,7 +29,7 @@ class ConversationViewModel(
     fun onEvent(event: ConversationUiEvent) {
         when (event) {
             is ConversationUiEvent.MessageChange -> updateNewMessage(event.message)
-            ConversationUiEvent.SendMessage -> sendMessage()
+            ConversationUiEvent.SendMessage -> sendNewMessage()
         }
     }
 
@@ -65,7 +61,7 @@ class ConversationViewModel(
 //            .launchIn(screenModelScope)
     }
 
-    private fun sendMessage() {
+    private fun sendNewMessage() {
         val stateValue = state.value
         val message = stateValue.newMessageField.value
         val senderId = stateValue.currentUserId
@@ -102,7 +98,6 @@ class ConversationViewModel(
     }
 
     override fun onDispose() {
-        println("DISPOSINGGGGG")
         chatRepository.closeSession()
         super.onDispose()
     }

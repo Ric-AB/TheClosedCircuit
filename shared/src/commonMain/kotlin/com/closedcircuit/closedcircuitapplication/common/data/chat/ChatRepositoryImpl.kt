@@ -45,11 +45,11 @@ class ChatRepositoryImpl(
                 url("${Constants.CHAT_SOCKET_BASE_URL}ws/chat/?user_id=$id")
             }
 
-            if (socket?.isActive == true) {
-                ApiSuccessResponse(Unit)
-            } else {
-                ApiErrorResponse("Couldn't establish connection", -1)
-            }
+            if (socket?.isActive == true) ApiSuccessResponse(Unit)
+            else ApiErrorResponse(
+                errorMessage = "Couldn't establish connection",
+                httpStatusCode = -1
+            )
         } catch (e: Exception) {
             ApiResponse.create(Throwable(e.message ?: "Something went wrong"))
         }
@@ -75,8 +75,6 @@ class ChatRepositoryImpl(
             socket?.incoming?.receiveAsFlow()
                 ?.filter { it is Frame.Text }
                 ?.map {
-                    println("MESSAGE RECEIVED REPO $it")
-
                     val json = (it as Frame.Text).readText()
                     val message = Json.decodeFromString<TransmissionMessage>(json)
                     message
