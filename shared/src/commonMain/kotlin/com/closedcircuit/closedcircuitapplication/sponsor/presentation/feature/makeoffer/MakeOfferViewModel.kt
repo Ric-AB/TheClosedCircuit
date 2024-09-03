@@ -6,16 +6,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.PaymentRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.app.AppSettingsRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.budget.Budget
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.AuthenticationState
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
+import com.closedcircuit.closedcircuitapplication.common.domain.usecase.IsLoggedInUseCase
 import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
 import com.closedcircuit.closedcircuitapplication.common.util.round
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.sponsor.data.offer.dto.OfferPayload
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.offer.OfferRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.PlanRepository
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
@@ -29,7 +36,10 @@ import kotlinx.coroutines.launch
 class MakeOfferViewModel(
     private val planID: ID,
     private val planRepository: PlanRepository,
-    private val offerRepository: OfferRepository
+    private val offerRepository: OfferRepository,
+    private val settingsRepository: AppSettingsRepository,
+    private val paymentRepository: PaymentRepository,
+    private val isLoggedInUseCase: IsLoggedInUseCase
 ) : ScreenModel {
 
     private lateinit var sponsoringPlan: SponsorPlan
@@ -45,11 +55,11 @@ class MakeOfferViewModel(
 
     init {
         fetchPlanByFundRequestId()
+        updateActiveProfile()
     }
 
     fun onEvent(event: MakeOfferEvent) {
         when (event) {
-            MakeOfferEvent.FetchPlan -> fetchPlanByFundRequestId()
             is MakeOfferEvent.FundingLevelChange -> updateFundingLevel(event.fundingLevel)
             is MakeOfferEvent.FundTypeChange -> updateFundType(event.fundType)
             MakeOfferEvent.ToggleAllFundingItems -> toggleAllFundingItems()
@@ -65,6 +75,7 @@ class MakeOfferViewModel(
                 .onSuccess { sponsorPlan ->
                     initialize(sponsorPlan)
 
+                    val isLoggedIn = isLoggedInUseCase() == AuthenticationState.LOGGED_IN
                     val estimatedCostPrice = sponsorPlan.estimatedCostPrice
                     val estimatedSellingPrice = sponsorPlan.estimatedSellingPrice
                     val estimatedProfitFraction = estimatedSellingPrice.minus(estimatedCostPrice)
@@ -83,7 +94,8 @@ class MakeOfferViewModel(
                         }.toImmutableMap()
 
                     planSummaryState = PlanSummaryUiState.Content(
-                        ownerFullName = sponsorPlan.beneficiaryFullName.value,
+                        isLoggedIn = isLoggedIn,
+                        planOwnerFullName = sponsorPlan.beneficiaryFullName.value,
                         businessSector = sponsorPlan.sector.capitalizeFirstChar(),
                         planDuration = sponsorPlan.duration.value.toString(),
                         estimatedCostPrice = estimatedCostPrice.getFormattedValue(),
@@ -104,20 +116,36 @@ class MakeOfferViewModel(
     private fun submitOffer() {
         val payload = getOfferPayload()
         screenModelScope.launch {
-            offerRepository.sendOffer(payload).onSuccess { response ->
-                if (fundType == FundType.LOAN) {
-                    _makeOfferResultChannel.send(MakeOfferResult.Success)
-                } else {
-                    chargeAmount(response.id)
+            offerRepository.sendOffer(payload)
+                .onSuccess { response ->
+                    if (fundType == FundType.LOAN) {
+                        _makeOfferResultChannel.send(MakeOfferResult.LoanOfferSuccess)
+                    } else {
+                        generatePaymentLink(response.id)
+                    }
+                }.onError { _, message ->
+                    _makeOfferResultChannel.send(MakeOfferResult.Error(message))
                 }
-            }.onError { _, message ->
-                _makeOfferResultChannel.send(MakeOfferResult.Error(message))
-            }
         }
     }
 
-    private fun chargeAmount(loanID: String) {
+    private suspend fun generatePaymentLink(loanID: String) {
+        paymentRepository.generatePaymentLink(
+            loanID = ID(loanID),
+            amount = Amount(getTotalAmount())
+        ).onSuccess { paymentLink ->
+            _makeOfferResultChannel.send(MakeOfferResult.DonationOfferSuccess(paymentLink))
+        }.onError { _, message ->
+            _makeOfferResultChannel.send(MakeOfferResult.Error(message))
+        }
+    }
 
+    private fun getTotalAmount(): Double {
+        return if (fundingLevelState.fundingLevel == FundingLevel.OTHER) {
+            fundingItemsState.value.enteredAmount.value.toDouble()
+        } else {
+            fundingItemsState.value.selectedItems.sumOf { it.cost }
+        }
     }
 
     private fun getOfferPayload(): OfferPayload {
@@ -198,6 +226,10 @@ class MakeOfferViewModel(
                     availableItems[i] = fundingItem.copy(isSelected = false)
                 }
         }
+    }
+
+    private fun updateActiveProfile() {
+        screenModelScope.launch { settingsRepository.setActiveProfile(ProfileType.SPONSOR) }
     }
 
     private fun SponsorPlan.toSelectableItem(): SelectableFundingItem {

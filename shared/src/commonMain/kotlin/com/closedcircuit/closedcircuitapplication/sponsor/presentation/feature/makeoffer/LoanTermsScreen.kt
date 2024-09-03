@@ -14,9 +14,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
@@ -33,52 +31,49 @@ internal class LoanTermsScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+
         ScreenContent(
             state = viewModel.loanTermsState.value,
-            goBack = navigator::pop,
-            navigateToLoanSchedule = { navigator.push(LoanScheduleScreen()) })
+            navigateToLoanSchedule = { navigator.push(LoanScheduleScreen()) }
+        )
     }
 
     @Composable
     private fun ScreenContent(
         state: LoanTermsUiState,
-        goBack: () -> Unit,
         navigateToLoanSchedule: () -> Unit
     ) {
-        BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
-            Column(
-                modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
-            ) {
-                TitleText(stringResource(SharedRes.strings.loan_terms_label))
-                BodyText(stringResource(SharedRes.strings.review_loan_terms_message_label))
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
+        ) {
+            TitleText(stringResource(SharedRes.strings.loan_terms_label))
+            BodyText(stringResource(SharedRes.strings.review_loan_terms_message_label))
 
-                Spacer(Modifier.height(24.dp))
-                ScreenTextField(
-                    text = stringResource(SharedRes.strings.x_months, state.graceDuration),
-                    label = stringResource(SharedRes.strings.grace_duration_label)
-                )
+            Spacer(Modifier.height(24.dp))
+            ScreenTextField(
+                text = stringResource(SharedRes.strings.x_months, state.graceDuration),
+                label = stringResource(SharedRes.strings.grace_duration_label)
+            )
 
-                Spacer(Modifier.height(8.dp))
-                ScreenTextField(
-                    text = stringResource(SharedRes.strings.x_months, state.repaymentDuration),
-                    label = stringResource(SharedRes.strings.repayment_duration_label)
-                )
+            Spacer(Modifier.height(8.dp))
+            ScreenTextField(
+                text = stringResource(SharedRes.strings.x_months, state.repaymentDuration),
+                label = stringResource(SharedRes.strings.repayment_duration_label)
+            )
 
-                Spacer(Modifier.height(8.dp))
-                ScreenTextField(
-                    text = stringResource(
-                        SharedRes.strings.x_percent_interest_rate_label,
-                        state.interestRate
-                    ),
-                    label = stringResource(SharedRes.strings.loan_interest_rate_label)
-                )
+            Spacer(Modifier.height(8.dp))
+            ScreenTextField(
+                text = stringResource(
+                    SharedRes.strings.x_percent_interest_rate_label,
+                    state.interestRate
+                ),
+                label = stringResource(SharedRes.strings.loan_interest_rate_label)
+            )
 
-                Spacer(Modifier.height(40.dp))
-                DefaultButton(onClick = navigateToLoanSchedule) {
-                    Text(stringResource(SharedRes.strings.proceed))
-                }
+            Spacer(Modifier.height(40.dp))
+            DefaultButton(onClick = navigateToLoanSchedule) {
+                Text(stringResource(SharedRes.strings.proceed))
             }
         }
     }

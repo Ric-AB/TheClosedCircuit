@@ -33,11 +33,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlanDetailsGrid
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.SubTitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
@@ -54,10 +53,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
 
-internal class PlanSummaryScreen(
-    private val planID: ID,
-    private val isLoggedIn: Boolean
-) : Screen, KoinComponent {
+internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -65,9 +61,7 @@ internal class PlanSummaryScreen(
         { parametersOf(planID) }
 
         ScreenContent(
-            isLoggedIn = isLoggedIn,
             state = viewModel.planSummaryState,
-            goBack = navigator::pop,
             navigateToSelectFundingLevel = { navigator.push(FundingLevelScreen()) },
             navigateToLoginScreen = { navigator.push(LoginScreen(planID)) }
         )
@@ -75,47 +69,46 @@ internal class PlanSummaryScreen(
 
     @Composable
     private fun ScreenContent(
-        isLoggedIn: Boolean,
         state: PlanSummaryUiState,
-        goBack: () -> Unit,
         navigateToSelectFundingLevel: () -> Unit,
         navigateToLoginScreen: () -> Unit
     ) {
-        BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                when (state) {
-                    is PlanSummaryUiState.Content -> {
-                        val scrollState = rememberScrollState()
-                        val modifier = remember {
-                            Modifier.fillMaxSize()
-                                .verticalScroll(scrollState)
-                                .padding(
-                                    horizontal = horizontalScreenPadding,
-                                    vertical = verticalScreenPadding
-                                )
-                        }
-
-                        if (isLoggedIn) {
-                            LoggedInContent(
-                                state = state,
-                                modifier = modifier,
-                                navigateToSelectFundingLevel = navigateToSelectFundingLevel,
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (state) {
+                is PlanSummaryUiState.Content -> {
+                    val scrollState = rememberScrollState()
+                    val modifier = remember {
+                        Modifier.fillMaxSize()
+                            .verticalScroll(scrollState)
+                            .padding(
+                                horizontal = horizontalScreenPadding,
+                                vertical = verticalScreenPadding
                             )
-                        } else {
-                            LoggedOutContent(
-                                state = state,
-                                modifier = modifier,
-                                navigateToWelcomeScreen = navigateToLoginScreen
-                            )
-                        }
                     }
 
-                    is PlanSummaryUiState.Error -> Text(state.message)
-                    PlanSummaryUiState.Loading -> BackgroundLoader()
+                    if (state.isLoggedIn) {
+                        LoggedInContent(
+                            state = state,
+                            modifier = modifier,
+                            navigateToSelectFundingLevel = navigateToSelectFundingLevel,
+                        )
+                    } else {
+                        LoggedOutContent(
+                            state = state,
+                            modifier = modifier,
+                            navigateToWelcomeScreen = navigateToLoginScreen
+                        )
+                    }
                 }
+
+                is PlanSummaryUiState.Error -> {
+                    EmptyScreen(
+                        title = stringResource(SharedRes.strings.oops_label),
+                        message = state.message
+                    )
+                }
+
+                PlanSummaryUiState.Loading -> BackgroundLoader()
             }
         }
     }
@@ -188,7 +181,7 @@ internal class PlanSummaryScreen(
             Text(
                 text = stringResource(
                     SharedRes.strings.x_needs_your_help_in_starting_a_business,
-                    state.ownerFullName
+                    state.planOwnerFullName
                 ),
                 style = MaterialTheme.typography.titleSmall
             )

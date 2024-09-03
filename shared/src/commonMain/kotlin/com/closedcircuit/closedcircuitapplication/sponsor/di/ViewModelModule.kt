@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     factory { SponsorAccountTabViewModel(get()) }
-    factory { parameters -> MakeOfferViewModel(parameters.get(), get(), get()) }
+    factory { parameters -> MakeOfferViewModel(parameters.get(), get(), get(), get(), get(), get()) }
     factory { SponsorDashboardViewModel(get(), get()) }
     factory { parameters -> LoansViewModel(parameters.get(), get()) }
     factory { parameters -> LoanDetailsViewModel(parameters.get(), get()) }

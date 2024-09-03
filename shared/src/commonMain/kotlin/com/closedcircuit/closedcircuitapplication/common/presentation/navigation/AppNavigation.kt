@@ -9,6 +9,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -16,14 +20,28 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.SplashScreen
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferNavigator
 import dev.icerock.moko.resources.ImageResource
 import dev.icerock.moko.resources.compose.painterResource
+import dev.theolm.rinku.compose.ext.DeepLinkListener
 
 @Composable
 internal fun AppNavigation() {
+    var planId by remember { mutableStateOf<String?>(null) }
+    DeepLinkListener {
+        planId = it.data.substringAfterLast("/")
+    }
+
     Navigator(SplashScreen()) {
         ScreenBasedTransition(it)
+
+        remember(planId) {
+            if (planId != null) {
+                it.replace(MakeOfferNavigator(planID = ID(planId!!)))
+            }
+        }
     }
 }
 

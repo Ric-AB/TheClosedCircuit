@@ -8,7 +8,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.LoanStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PositiveInt
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.FundingLevel
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 import kotlinx.serialization.Serializable
 
 @Serializable

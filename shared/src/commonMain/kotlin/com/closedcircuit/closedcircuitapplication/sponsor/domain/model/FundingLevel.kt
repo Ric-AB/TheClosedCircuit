@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer
+package com.closedcircuit.closedcircuitapplication.sponsor.domain.model
 
 enum class FundingLevel(val label: String, val requestValue: String) {
     PLAN(label = "Plan", requestValue = "plan"),

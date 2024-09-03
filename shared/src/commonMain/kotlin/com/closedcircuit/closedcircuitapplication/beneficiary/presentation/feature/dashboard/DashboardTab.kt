@@ -130,7 +130,7 @@ internal object DashboardTab : Tab, KoinComponent {
             navigateToCreatePlanOrEmailVerification = {
                 if (state is DashboardUiState.Empty) {
                     if (state.hasVerifiedEmail) {
-                        navigator.push(CreatePlanNavigator)
+                        navigator.push(CreatePlanNavigator())
                     } else {
                         navigator.push(ProfileVerificationScreen(state.email))
                     }

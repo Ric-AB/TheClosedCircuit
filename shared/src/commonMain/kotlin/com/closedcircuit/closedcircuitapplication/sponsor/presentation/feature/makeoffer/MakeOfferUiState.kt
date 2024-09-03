@@ -7,6 +7,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepItem
 import kotlinx.collections.immutable.ImmutableList
@@ -19,7 +20,8 @@ sealed interface PlanSummaryUiState {
     object Loading : PlanSummaryUiState
 
     data class Content(
-        val ownerFullName: String,
+        val isLoggedIn: Boolean,
+        val planOwnerFullName: String,
         val businessSector: String,
         val planDuration: String,
         val estimatedCostPrice: String,
@@ -152,6 +154,9 @@ data class RepaymentItem(
 }
 
 sealed interface MakeOfferResult {
-    object Success : MakeOfferResult
+    object LoanOfferSuccess : MakeOfferResult
+
+    data class DonationOfferSuccess(val paymentLink: String) : MakeOfferResult
+
     data class Error(val message: String) : MakeOfferResult
 }

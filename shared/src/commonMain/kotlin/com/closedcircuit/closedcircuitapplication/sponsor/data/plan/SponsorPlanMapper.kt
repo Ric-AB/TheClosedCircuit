@@ -23,7 +23,7 @@ import com.closedcircuit.closedcircuitapplication.sponsor.data.step.toFundedStep
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.FundingLevel
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 
 fun ApiPlan.asSponsorPlan(): SponsorPlan {
     val currency = Currency(currency)

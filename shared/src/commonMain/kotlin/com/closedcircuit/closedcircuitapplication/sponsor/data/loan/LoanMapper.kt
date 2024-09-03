@@ -12,7 +12,7 @@ import com.closedcircuit.closedcircuitapplication.sponsor.data.loan.dto.LoanOffe
 import com.closedcircuit.closedcircuitapplication.sponsor.data.loan.dto.LoanOfferDto
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.loan.LoanOffer
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.loan.LoanOfferDetails
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.FundingLevel
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 
 fun LoanOfferDto.toLoanOffer(): LoanOffer {
     val currency = Currency(currency)

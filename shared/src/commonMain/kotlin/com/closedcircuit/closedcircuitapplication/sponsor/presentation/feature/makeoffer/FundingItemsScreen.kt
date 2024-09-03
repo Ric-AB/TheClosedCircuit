@@ -35,14 +35,13 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
@@ -55,7 +54,6 @@ internal class FundingItemsScreen : Screen, KoinComponent {
         ScreenContent(
             state = viewModel.fundingItemsState.value,
             selectedFundingLevel = viewModel.fundingLevelState.fundingLevel!!,
-            goBack = navigator::pop,
             onEvent = viewModel::onEvent,
             navigateToPaymentSummary = {
                 viewModel.onEvent(MakeOfferEvent.CreateSchedule)
@@ -68,32 +66,28 @@ internal class FundingItemsScreen : Screen, KoinComponent {
     private fun ScreenContent(
         state: FundingItemsUiState,
         selectedFundingLevel: FundingLevel,
-        goBack: () -> Unit,
         onEvent: (MakeOfferEvent) -> Unit,
         navigateToPaymentSummary: () -> Unit
     ) {
-        BaseScaffold(topBar = { DefaultAppBar(mainAction = goBack) }) { innerPadding ->
-            Column(
-                modifier = Modifier.fillMaxSize()
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
-            ) {
-                TitleText(stringResource(SharedRes.strings.how_would_you_like_to_sponsor_label))
-                BodyText(stringResource(SharedRes.strings.select_budgets_you_wish_to_fund_label))
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
+        ) {
+            TitleText(stringResource(SharedRes.strings.how_would_you_like_to_sponsor_label))
+            BodyText(stringResource(SharedRes.strings.select_budgets_you_wish_to_fund_label))
 
-                Spacer(Modifier.height(24.dp))
-                SelectItemTable(
-                    fundingLevelLabel = selectedFundingLevel.label,
-                    isAllSelected = state.allItemsSelected,
-                    items = state.availableItems,
-                    onEvent = onEvent
-                )
+            Spacer(Modifier.height(24.dp))
+            SelectItemTable(
+                fundingLevelLabel = selectedFundingLevel.label,
+                isAllSelected = state.allItemsSelected,
+                items = state.availableItems,
+                onEvent = onEvent
+            )
 
-                Spacer(Modifier.height(40.dp))
-                DefaultButton(onClick = navigateToPaymentSummary, enabled = state.canProceed) {
-                    Text(stringResource(SharedRes.strings.proceed))
-                }
+            Spacer(Modifier.height(40.dp))
+            DefaultButton(onClick = navigateToPaymentSummary, enabled = state.canProceed) {
+                Text(stringResource(SharedRes.strings.proceed))
             }
         }
     }

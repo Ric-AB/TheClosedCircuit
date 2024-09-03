@@ -16,9 +16,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileTyp
 import com.closedcircuit.closedcircuitapplication.common.domain.model.orDefault
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalCurrency
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKey.PROTECTED_NAVIGATOR_SCREEN
-import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
-import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import kotlin.random.Random
 

@@ -62,7 +62,7 @@ internal class PlanListScreen : Screen, KoinComponent {
             messageBarState = rememberMessageBarState(),
             state = state.value,
             goBack = navigator::pop,
-            navigateToCreatePlanScreen = { navigator.push(CreatePlanNavigator) },
+            navigateToCreatePlanScreen = { navigator.push(CreatePlanNavigator()) },
             navigateToPlanDetailsScreen = { plan -> navigator.push(PlanDetailsScreen(plan)) }
         )
     }

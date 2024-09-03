@@ -40,7 +40,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 
-internal object CreatePlanNavigator : Screen, KoinComponent {
+internal class CreatePlanNavigator : Screen, KoinComponent {
 
     @Composable
     override fun Content() {
