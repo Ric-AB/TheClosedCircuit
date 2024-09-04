@@ -259,7 +259,7 @@ internal class NotificationScreen : Screen, KoinComponent {
                 )
         ) {
             Avatar(
-                imageUrl = "",
+                imageUrl = notification.avatar.value,
                 size = DpSize(50.dp, 50.dp)
             )
 

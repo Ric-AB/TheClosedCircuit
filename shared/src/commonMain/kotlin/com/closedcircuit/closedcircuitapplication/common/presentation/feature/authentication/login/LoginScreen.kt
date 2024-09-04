@@ -72,7 +72,7 @@ internal class LoginScreen(private val planID: ID? = null) : Screen, KoinCompone
 
                 is LoginResult.Success -> {
                     if (planID != null) {
-                        navigator.delayReplaceAll(PlanSummaryScreen(planID, true))
+                        navigator.delayReplaceAll(PlanSummaryScreen(planID))
                     } else {
                         navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
                     }

@@ -81,7 +81,7 @@ internal class RegisterScreen(private val planID: ID? = null) : Screen, KoinComp
 
                 is RegisterResult.Success -> {
                     if (planID != null) {
-                        navigator.delayReplaceAll(PlanSummaryScreen(planID, true))
+                        navigator.delayReplaceAll(PlanSummaryScreen(planID))
                     } else {
                         navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
                     }
