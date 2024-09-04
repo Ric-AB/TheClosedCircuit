@@ -14,7 +14,7 @@ interface ChatRepository {
 
     fun getMessagesForConversationAsFlow(): Flow<TransmissionMessage>
 
-    suspend fun getConversationPartners(activeProfileType: ProfileType): ApiResponse<List<ChatUser>>
+    suspend fun getConversationPartners(activeProfileType: ProfileType, currentUserId: ID): ApiResponse<List<ChatUser>>
 
     suspend fun getConversations(): ApiResponse<List<Conversation>>
 

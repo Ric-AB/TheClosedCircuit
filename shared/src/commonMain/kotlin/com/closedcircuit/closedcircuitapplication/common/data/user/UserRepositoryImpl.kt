@@ -58,7 +58,7 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun nonNullUser(): User {
+    override suspend fun getCurrentUser(): User {
         return userFlow.filterNotNull().first()
     }
 

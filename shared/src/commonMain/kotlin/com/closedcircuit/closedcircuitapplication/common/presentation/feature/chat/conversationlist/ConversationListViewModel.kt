@@ -24,7 +24,7 @@ class ConversationListViewModel(
 
     private fun initSession() {
         screenModelScope.launch {
-            val userId = userRepository.nonNullUser().id
+            val userId = userRepository.getCurrentUser().id
             chatRepository.initSession(userID = userId)
         }
     }

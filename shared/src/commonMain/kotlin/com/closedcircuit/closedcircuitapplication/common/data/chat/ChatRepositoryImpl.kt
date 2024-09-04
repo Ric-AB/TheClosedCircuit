@@ -84,9 +84,14 @@ class ChatRepositoryImpl(
         }
     }
 
-    override suspend fun getConversationPartners(activeProfileType: ProfileType): ApiResponse<List<ChatUser>> {
+    override suspend fun getConversationPartners(
+        activeProfileType: ProfileType,
+        currentUserId: ID
+    ): ApiResponse<List<ChatUser>> {
         return chatService.getConversationPartners(activeProfileType.value).mapOnSuccess {
-            it.chatUsers.toChatUsers()
+            it.chatUsers.filterNot { chatUser ->
+                chatUser.id == currentUserId.value
+            }.toChatUsers()
         }
     }
 

@@ -46,7 +46,7 @@ val viewModelModule = module {
     factory { PaymentViewModel() }
 
     // chat
-    factory { parameters -> ConversationPartnersViewModel(parameters.get(), get()) }
+    factory { parameters -> ConversationPartnersViewModel(parameters.get(), get(), get()) }
     factory { parameters -> ConversationViewModel(parameters.get(), get(), get()) }
     factory { ConversationListViewModel(get(), get()) }
 }

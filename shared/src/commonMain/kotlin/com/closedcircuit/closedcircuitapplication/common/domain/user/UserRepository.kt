@@ -9,7 +9,7 @@ interface UserRepository {
 
     suspend fun fetchUser(userId: String): ApiResponse<User>
 
-    suspend fun nonNullUser(): User
+    suspend fun getCurrentUser(): User
 
     suspend fun updateUser(user: User): ApiResponse<User>
 
