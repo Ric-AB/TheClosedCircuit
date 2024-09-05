@@ -81,7 +81,7 @@ class FundedPlanDetailsViewModel(
             planID = planID,
             id = id,
             name = name,
-            status = status.displayText,
+            status = status,
             isApprovedByUser = approverIds.any { it == userId },
             budgets = budgets.map { it.toFundedBudgetItem() }.toImmutableList()
         )

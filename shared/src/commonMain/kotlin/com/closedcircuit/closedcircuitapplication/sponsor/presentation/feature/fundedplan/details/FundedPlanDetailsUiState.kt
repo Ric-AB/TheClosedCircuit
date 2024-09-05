@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details
 
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.StepStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepItem
@@ -35,12 +36,12 @@ data class FundedStepItem(
     val planID: ID,
     val id: ID,
     val name: String,
-    val status: String,
+    val status: StepStatus,
     val isApprovedByUser: Boolean,
     val budgets: ImmutableList<FundedBudgetItem>
 ) : TypeWithStringProperties {
     override val properties: List<String>
-        get() = listOf(name, status)
+        get() = listOf(name, status.displayText)
 }
 
 data class FundedBudgetItem(val name: String)

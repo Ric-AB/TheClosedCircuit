@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.StepStatus
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.table.Table
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.details.FundedStepItem
@@ -53,7 +53,7 @@ fun PlanProgressTab(
                 )
 
                 Spacer(Modifier.height(20.dp))
-                stepItemsWithProofs.forEach {
+                stepItemsWithProofs.firstOrNull { it.status == StepStatus.AWAITING_APPROVAL }?.let {
                     StepApprovalCard(it, navigateToStepApproval)
                     Spacer(Modifier.height(20.dp))
                 }
@@ -63,7 +63,10 @@ fun PlanProgressTab(
 }
 
 @Composable
-private fun StepApprovalCard(step: FundedStepItem, navigateToStepApproval: (FundedStepItem) -> Unit) {
+private fun StepApprovalCard(
+    step: FundedStepItem,
+    navigateToStepApproval: (FundedStepItem) -> Unit
+) {
     OutlinedCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 12.dp),
@@ -81,7 +84,7 @@ private fun StepApprovalCard(step: FundedStepItem, navigateToStepApproval: (Fund
 
                 Spacer(Modifier.width(12.dp))
                 Text(
-                    text = step.status,
+                    text = step.status.displayText,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )

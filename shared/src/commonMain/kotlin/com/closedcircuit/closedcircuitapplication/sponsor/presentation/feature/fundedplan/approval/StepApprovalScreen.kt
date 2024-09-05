@@ -1,7 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.approval
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,11 +25,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -39,6 +45,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.ZoomableImage
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary6
@@ -125,6 +132,8 @@ internal class StepApprovalScreen(
 
     @Composable
     private fun Body(state: StepApprovalUiState.Content, onEvent: (StepApprovalUiEvent) -> Unit) {
+        var selectedImage by remember { mutableStateOf<String?>(null) }
+
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(40.dp),
@@ -135,7 +144,8 @@ internal class StepApprovalScreen(
                     modifier = Modifier.fillMaxWidth(),
                     item = it,
                     canApproveBudget = state.canApproveBudget,
-                    approveBudget = { onEvent(StepApprovalUiEvent.ApproveBudget(it.id)) }
+                    approveBudget = { onEvent(StepApprovalUiEvent.ApproveBudget(it.id)) },
+                    onImageSelect = { url -> selectedImage = url }
                 )
             }
 
@@ -152,6 +162,19 @@ internal class StepApprovalScreen(
                 }
             }
         }
+
+        AnimatedVisibility(visible = selectedImage != null) {
+            val closeImage: () -> Unit = { selectedImage = null }
+
+            Dialog(onDismissRequest = closeImage) {
+                if (selectedImage != null) {
+                    ZoomableImage(
+                        image = selectedImage!!,
+                        onCloseClick = closeImage,
+                    )
+                }
+            }
+        }
     }
 
     @Composable
@@ -159,7 +182,8 @@ internal class StepApprovalScreen(
         modifier: Modifier,
         item: ProofItem,
         canApproveBudget: Boolean,
-        approveBudget: () -> Unit
+        approveBudget: () -> Unit,
+        onImageSelect: (String) -> Unit
     ) {
         Column(modifier) {
             val commonModifier = remember { Modifier.padding(horizontal = horizontalScreenPadding) }
@@ -189,7 +213,7 @@ internal class StepApprovalScreen(
             ) {
                 item.images.forEach {
                     PlanImage(
-                        modifier = Modifier.size(200.dp, 152.dp),
+                        modifier = Modifier.size(200.dp, 152.dp).clickable { onImageSelect(it) },
                         imageUrl = it,
                     )
                 }
