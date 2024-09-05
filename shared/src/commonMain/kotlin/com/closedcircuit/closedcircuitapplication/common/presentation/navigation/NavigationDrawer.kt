@@ -40,6 +40,7 @@ fun NavigationDrawer(
     activeProfile: String,
     navigateToNotifications: () -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToAboutUs: () -> Unit,
     logout: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -138,7 +139,7 @@ fun NavigationDrawer(
                         },
                         label = { Text(stringResource(SharedRes.strings.about_us_label)) },
                         selected = false,
-                        onClick = {}
+                        onClick = navigateToAboutUs
                     )
 
                     Row(modifier = Modifier.weight(1f)) {

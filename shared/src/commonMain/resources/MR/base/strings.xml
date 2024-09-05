@@ -456,6 +456,17 @@
     <string name="no_cancelled_loans_label">No cancelled loans</string>
     <string name="no_cancelled_loans_message">You have no cancelled loans</string>
     <string name="no_plans_label">No plans</string>
-    <string name="no_plans_message">You have not started any plan yet. Please start a plan to view plans.</string>
+    <string name="no_plans_message">You have not started any plan yet. Please start a plan to view
+        plans.
+    </string>
     <string name="account_label">Account</string>
+    <string name="company_description_label">The Closed Circuit is a platform that connects two
+        types of users, those seeking to raise funds and those who have the funds. It allows both
+        parties to work together. To the funder it acts as a fiduciary or a funds disbursement tool.
+        It facilitates peer to peer lending or donations in a structured way designed to reduce the
+        risk of losing the funds invested. To the fundraiser, it is a fund-raising solution that
+        allows a user to securely and easily raise funds from groups, clusters and communities on
+        users ‘Social Trust Network’ such as your family, friends, loved ones etc. in the forms of
+        donations and loans.
+    </string>
 </resources>

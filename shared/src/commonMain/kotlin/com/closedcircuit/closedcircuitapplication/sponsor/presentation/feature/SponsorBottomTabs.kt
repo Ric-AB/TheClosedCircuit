@@ -24,6 +24,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.aboutus.AboutUsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversationlist.ChatTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
@@ -55,11 +56,15 @@ class SponsorBottomTabs : Screen {
         val rootState = viewModel.state.collectAsState().value
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
-        val navigateToNotificationScreen: () -> Unit = {
+        val handleDrawerAction: (() -> Unit) -> Unit = { extraAction ->
             scope.launch {
                 drawerState.close()
-                navigator.push(NotificationScreen())
+                extraAction.invoke()
             }
+        }
+
+        val navigateToNotificationScreen: () -> Unit = {
+            handleDrawerAction { navigator.push(NotificationScreen()) }
         }
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
@@ -75,16 +80,13 @@ class SponsorBottomTabs : Screen {
             activeProfile = rootState?.activeProfile?.displayText ?: "",
             navigateToNotifications = navigateToNotificationScreen,
             navigateToSettings = {
-                scope.launch {
-                    drawerState.close()
-                    navigator.push(SettingsScreen())
-                }
+                handleDrawerAction { navigator.push(SettingsScreen()) }
+            },
+            navigateToAboutUs = {
+                handleDrawerAction { navigator.push(AboutUsScreen()) }
             },
             logout = {
-                scope.launch {
-                    drawerState.close()
-                    viewModel.onEvent(RootEvent.Logout)
-                }
+                handleDrawerAction { viewModel.onEvent(RootEvent.Logout) }
             }
         ) {
             TabNavigator(tab = SponsorDashboardTab) {
