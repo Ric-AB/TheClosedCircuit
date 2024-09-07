@@ -2,7 +2,6 @@ package com.closedcircuit.closedcircuitapplication.sponsor.data.plan
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.toBudgetEntities
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.toBudgets
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.fundrequest.toFundRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.toStepEntities
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.toSteps
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
@@ -16,14 +15,15 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.PositiveIn
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
+import com.closedcircuit.closedcircuitapplication.sponsor.data.fundrequest.toFundRequest
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.ApiPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.FundedPlanDto
 import com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto.FundedPlanPreviewDto
 import com.closedcircuit.closedcircuitapplication.sponsor.data.step.toFundedSteps
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlan
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.FundedPlanPreview
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.plan.SponsorPlan
-import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 
 fun ApiPlan.asSponsorPlan(): SponsorPlan {
     val currency = Currency(currency)

@@ -56,7 +56,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.theme.hori
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.PlanSummaryScreen
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferNavigator
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
@@ -81,7 +81,7 @@ internal class RegisterScreen(private val planID: ID? = null) : Screen, KoinComp
 
                 is RegisterResult.Success -> {
                     if (planID != null) {
-                        navigator.delayReplaceAll(PlanSummaryScreen(planID))
+                        navigator.delayReplaceAll(MakeOfferNavigator(planID))
                     } else {
                         navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
                     }

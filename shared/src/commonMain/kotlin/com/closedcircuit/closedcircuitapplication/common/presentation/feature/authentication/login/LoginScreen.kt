@@ -41,14 +41,14 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.passwordrecovery.ResetPasswordEmailScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.register.RegisterScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.onboarding.WelcomeScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayReplaceAll
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.PlanSummaryScreen
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferNavigator
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -61,6 +61,7 @@ internal class LoginScreen(private val planID: ID? = null) : Screen, KoinCompone
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val rootNavigator = findRootNavigator(navigator)
         val state = viewModel.state
         val messageBarState = rememberMessageBarState()
 
@@ -72,9 +73,9 @@ internal class LoginScreen(private val planID: ID? = null) : Screen, KoinCompone
 
                 is LoginResult.Success -> {
                     if (planID != null) {
-                        navigator.delayReplaceAll(PlanSummaryScreen(planID))
+                        rootNavigator.delayReplaceAll(MakeOfferNavigator(planID))
                     } else {
-                        navigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
+                        rootNavigator.delayReplaceAll(ProtectedNavigator(it.activeProfile))
                     }
                 }
             }
@@ -84,7 +85,6 @@ internal class LoginScreen(private val planID: ID? = null) : Screen, KoinCompone
             messageBarState = messageBarState,
             state = state,
             onEvent = viewModel::onEvent,
-            navigateToWelcomeScreen = { navigator.replaceAll(WelcomeScreen()) },
             navigateToCreateAccount = { navigator.push(RegisterScreen(planID)) },
             navigateToRecoverPassword = { navigator.push(ResetPasswordEmailScreen()) }
         )
@@ -96,14 +96,13 @@ private fun ScreenContent(
     messageBarState: MessageBarState,
     state: LoginUIState,
     onEvent: (LoginUiEvent) -> Unit,
-    navigateToWelcomeScreen: () -> Unit,
     navigateToCreateAccount: () -> Unit,
     navigateToRecoverPassword: () -> Unit
 ) {
     BaseScaffold(
         messageBarState = messageBarState,
         showLoadingDialog = state.isLoading,
-        topBar = { DefaultAppBar(mainAction = navigateToWelcomeScreen) },
+        topBar = { DefaultAppBar() },
         contentWindowInsets = WindowInsets.safeDrawing
     ) { innerPadding ->
         val (emailField, passwordField, _) = state

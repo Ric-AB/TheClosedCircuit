@@ -2,11 +2,11 @@ package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
-import com.closedcircuit.closedcircuitapplication.common.domain.fundrequest.FundRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
+import com.closedcircuit.closedcircuitapplication.sponsor.domain.fundrequest.SponsorFundRequest
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.StepItem
@@ -61,9 +61,9 @@ data class FundingItemsUiState(
     val isAboveMaximumAmount get() = totalOfSelectedItems.value > fundRequest.maximumLoanRange?.value.orZero()
     val isEnteredAmountBelowMinAmount get() = enteredAmount.value.toDouble() < fundRequest.minimumLoanRange?.value.orZero()
 
-    private lateinit var fundRequest: FundRequest
+    private lateinit var fundRequest: SponsorFundRequest
 
-    constructor(fundRequest: FundRequest) : this(
+    constructor(fundRequest: SponsorFundRequest) : this(
         minLoanAmount = fundRequest.minimumLoanRange?.getFormattedValue().orEmpty(),
         maxLoanAmount = fundRequest.maximumLoanRange?.getFormattedValue().orEmpty(),
         availableItems = SnapshotStateList(),
@@ -73,7 +73,7 @@ data class FundingItemsUiState(
     }
 
     companion object {
-        fun init(fundRequest: FundRequest): FundingItemsUiState {
+        fun init(fundRequest: SponsorFundRequest): FundingItemsUiState {
             return FundingItemsUiState(fundRequest)
         }
     }
@@ -85,7 +85,7 @@ data class LoanTermsUiState(
     val interestRate: String
 ) {
     companion object {
-        fun init(fundRequest: FundRequest?): LoanTermsUiState {
+        fun init(fundRequest: SponsorFundRequest?): LoanTermsUiState {
             return LoanTermsUiState(
                 graceDuration = fundRequest?.graceDuration?.toString().orEmpty(),
                 repaymentDuration = fundRequest?.repaymentDuration?.toString().orEmpty(),
@@ -105,7 +105,7 @@ data class LoanScheduleUiState(
     val repaymentBreakdown: ImmutableList<RepaymentItem>
 ) {
     companion object {
-        fun init(loanAmount: Double, fundRequest: FundRequest?): LoanScheduleUiState {
+        fun init(loanAmount: Double, fundRequest: SponsorFundRequest?): LoanScheduleUiState {
             val graceDuration = fundRequest?.graceDuration.orZero()
             val repaymentDuration = fundRequest?.repaymentDuration.orZero()
             val durationInMonths = graceDuration + repaymentDuration

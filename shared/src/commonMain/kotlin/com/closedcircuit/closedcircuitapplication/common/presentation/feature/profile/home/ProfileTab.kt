@@ -2,7 +2,6 @@
 
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +67,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKey
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
@@ -98,7 +97,7 @@ internal object ProfileTab : Tab, KoinComponent {
     @Composable
     override fun Content() {
         val navigator =
-            findNavigator(ScreenKey.PROTECTED_NAVIGATOR_SCREEN, LocalNavigator.currentOrThrow)
+            findNavigator(ScreenKeys.PROTECTED_NAVIGATOR, LocalNavigator.currentOrThrow)
 
         val messageBarState = rememberMessageBarState()
         val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

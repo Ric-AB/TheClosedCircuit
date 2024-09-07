@@ -29,19 +29,8 @@ import dev.theolm.rinku.compose.ext.DeepLinkListener
 
 @Composable
 internal fun AppNavigation() {
-    var planId by remember { mutableStateOf<String?>(null) }
-    DeepLinkListener {
-        planId = it.data.substringAfterLast("/")
-    }
-
     Navigator(SplashScreen()) {
         ScreenBasedTransition(it)
-
-        remember(planId) {
-            if (planId != null) {
-                it.replace(MakeOfferNavigator(planID = ID(planId!!)))
-            }
-        }
     }
 }
 

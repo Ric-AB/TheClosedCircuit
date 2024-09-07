@@ -49,13 +49,13 @@ class MakeOfferViewModel(
     lateinit var loanTermsState: MutableState<LoanTermsUiState>
     lateinit var loanScheduleState: MutableState<LoanScheduleUiState>
     lateinit var fundType: FundType; private set
+    val loading = mutableStateOf(false)
 
     private val _makeOfferResultChannel = Channel<MakeOfferResult>()
     val makeOfferResultChannel: ReceiveChannel<MakeOfferResult> = _makeOfferResultChannel
 
     init {
         fetchPlanByFundRequestId()
-        updateActiveProfile()
     }
 
     fun onEvent(event: MakeOfferEvent) {
@@ -115,15 +115,17 @@ class MakeOfferViewModel(
 
     private fun submitOffer() {
         val payload = getOfferPayload()
+        loading.value = true
         screenModelScope.launch {
             offerRepository.sendOffer(payload)
                 .onSuccess { response ->
                     if (fundType == FundType.LOAN) {
-                        _makeOfferResultChannel.send(MakeOfferResult.LoanOfferSuccess)
+                        handleLoanSuccess()
                     } else {
                         generatePaymentLink(response.id)
                     }
                 }.onError { _, message ->
+                    loading.value = false
                     _makeOfferResultChannel.send(MakeOfferResult.Error(message))
                 }
         }
@@ -134,10 +136,19 @@ class MakeOfferViewModel(
             loanID = ID(loanID),
             amount = Amount(getTotalAmount())
         ).onSuccess { paymentLink ->
+            loading.value = false
+            updateActiveProfile()
             _makeOfferResultChannel.send(MakeOfferResult.DonationOfferSuccess(paymentLink))
         }.onError { _, message ->
+            loading.value = false
             _makeOfferResultChannel.send(MakeOfferResult.Error(message))
         }
+    }
+
+    private suspend fun handleLoanSuccess() {
+        loading.value = false
+        updateActiveProfile()
+        _makeOfferResultChannel.send(MakeOfferResult.LoanOfferSuccess)
     }
 
     private fun getTotalAmount(): Double {
@@ -228,8 +239,8 @@ class MakeOfferViewModel(
         }
     }
 
-    private fun updateActiveProfile() {
-        screenModelScope.launch { settingsRepository.setActiveProfile(ProfileType.SPONSOR) }
+    private suspend fun updateActiveProfile() {
+        settingsRepository.setActiveProfile(ProfileType.SPONSOR)
     }
 
     private fun SponsorPlan.toSelectableItem(): SelectableFundingItem {

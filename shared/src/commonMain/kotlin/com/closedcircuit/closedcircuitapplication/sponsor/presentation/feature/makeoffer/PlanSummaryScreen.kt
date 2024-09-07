@@ -41,6 +41,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.SubTitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary2
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary3
@@ -57,13 +58,14 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val rootNavigator = findRootNavigator(navigator)
         val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>
         { parametersOf(planID) }
 
         ScreenContent(
             state = viewModel.planSummaryState,
             navigateToSelectFundingLevel = { navigator.push(FundingLevelScreen()) },
-            navigateToLoginScreen = { navigator.push(LoginScreen(planID)) }
+            navigateToLoginScreen = { rootNavigator.push(LoginScreen(planID)) }
         )
     }
 

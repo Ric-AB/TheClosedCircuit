@@ -44,7 +44,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKey
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
@@ -75,7 +75,7 @@ internal object AccountTab : Tab {
     @Composable
     override fun Content() {
         val navigator =
-            findNavigator(ScreenKey.PROTECTED_NAVIGATOR_SCREEN, LocalNavigator.currentOrThrow)
+            findNavigator(ScreenKeys.PROTECTED_NAVIGATOR, LocalNavigator.currentOrThrow)
         val messageBarState = rememberMessageBarState()
         val viewModel = getScreenModel<AccountTabViewModel>()
         val walletBalance = viewModel.walletBalance.collectAsState().value
