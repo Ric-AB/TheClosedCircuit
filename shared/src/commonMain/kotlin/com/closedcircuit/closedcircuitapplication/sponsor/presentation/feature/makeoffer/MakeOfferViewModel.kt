@@ -125,8 +125,7 @@ class MakeOfferViewModel(
                         generatePaymentLink(response.id)
                     }
                 }.onError { _, message ->
-                    loading.value = false
-                    _makeOfferResultChannel.send(MakeOfferResult.Error(message))
+                    handleMakeOfferError(message)
                 }
         }
     }
@@ -136,12 +135,9 @@ class MakeOfferViewModel(
             loanID = ID(loanID),
             amount = Amount(getTotalAmount())
         ).onSuccess { paymentLink ->
-            loading.value = false
-            updateActiveProfile()
-            _makeOfferResultChannel.send(MakeOfferResult.DonationOfferSuccess(paymentLink))
+            handlePaymentLinkSuccess(paymentLink)
         }.onError { _, message ->
-            loading.value = false
-            _makeOfferResultChannel.send(MakeOfferResult.Error(message))
+            handleMakeOfferError(message)
         }
     }
 
@@ -149,6 +145,17 @@ class MakeOfferViewModel(
         loading.value = false
         updateActiveProfile()
         _makeOfferResultChannel.send(MakeOfferResult.LoanOfferSuccess)
+    }
+
+    private suspend fun handlePaymentLinkSuccess(paymentLink: String) {
+        loading.value = false
+        updateActiveProfile()
+        _makeOfferResultChannel.send(MakeOfferResult.DonationOfferSuccess(paymentLink))
+    }
+
+    private suspend fun handleMakeOfferError(errorMessage: String) {
+        loading.value = false
+        _makeOfferResultChannel.send(MakeOfferResult.Error(errorMessage))
     }
 
     private fun getTotalAmount(): Double {
