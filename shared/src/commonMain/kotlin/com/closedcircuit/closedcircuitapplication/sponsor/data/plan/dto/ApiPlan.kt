@@ -2,7 +2,6 @@ package com.closedcircuit.closedcircuitapplication.sponsor.data.plan.dto
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.budget.dto.ApiBudget
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.step.dto.ApiStep
-import com.closedcircuit.closedcircuitapplication.common.data.fundrequest.dto.ApiFundRequest
 import com.closedcircuit.closedcircuitapplication.sponsor.data.fundrequest.SponsorApiFundRequest
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

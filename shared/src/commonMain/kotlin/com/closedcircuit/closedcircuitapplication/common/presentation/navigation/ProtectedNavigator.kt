@@ -15,13 +15,11 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.BeneficiaryBottomTabs
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
-import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.orDefault
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalCurrency
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys.PROTECTED_NAVIGATOR
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.MakeOfferNavigator
 import dev.theolm.rinku.compose.ext.DeepLinkListener
 import org.koin.core.component.KoinComponent
 import kotlin.random.Random
