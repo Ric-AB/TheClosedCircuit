@@ -78,13 +78,15 @@ internal class MakeOfferNavigator(private val planID: ID) : Screen,
                     }
                 }
 
-                SuccessDialog(
-                    visible = showSuccessDialog,
-                    isLoan = viewModel.fundType == FundType.LOAN,
-                    offeredAmount = viewModel.fundingItemsState.value.enteredAmount.value,
-                    beneficiaryName = (viewModel.planSummaryState as? PlanSummaryUiState.Content)?.planOwnerFullName.orEmpty(),
-                    onDismiss = { showSuccessDialog = false }
-                )
+                if (showSuccessDialog) {
+                    SuccessDialog(
+                        visible = showSuccessDialog,
+                        isLoan = viewModel.fundType == FundType.LOAN,
+                        offeredAmount = viewModel.fundingItemsState.value.enteredAmount.value,
+                        beneficiaryName = (viewModel.planSummaryState as? PlanSummaryUiState.Content)?.planOwnerFullName.orEmpty(),
+                        onDismiss = { showSuccessDialog = false }
+                    )
+                }
             }
         }
     }

@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,6 +16,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.LoanBreakdown
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.LoanBreakdownType
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
@@ -32,13 +36,22 @@ internal class LoanScheduleScreen : Screen, KoinComponent {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
 
-        ScreenContent(state = viewModel.loanScheduleState.value)
+        ScreenContent(
+            state = viewModel.loanScheduleState.value,
+            fundingItemsUiState = viewModel.fundingItemsState.value,
+            onEvent = viewModel::onEvent
+        )
     }
 
     @Composable
-    private fun ScreenContent(state: LoanScheduleUiState) {
+    private fun ScreenContent(
+        state: LoanScheduleUiState,
+        fundingItemsUiState: FundingItemsUiState,
+        onEvent: (MakeOfferEvent) -> Unit
+    ) {
         Column(
             modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = horizontalScreenPadding, vertical = verticalScreenPadding)
         ) {
             TitleText(stringResource(SharedRes.strings.loan_schedule_label))
@@ -70,6 +83,16 @@ internal class LoanScheduleScreen : Screen, KoinComponent {
                 headerTableTitles = listOf("Dates", "Repayment amount"),
                 data = state.repaymentBreakdown
             )
+
+            Spacer(Modifier.height(20.dp))
+            DefaultButton(onClick = { onEvent(MakeOfferEvent.SubmitOffer) }) {
+                Text(
+                    stringResource(
+                        SharedRes.strings.loan_x_label,
+                        fundingItemsUiState.formattedTotalOfSelectedItems
+                    )
+                )
+            }
         }
     }
 }

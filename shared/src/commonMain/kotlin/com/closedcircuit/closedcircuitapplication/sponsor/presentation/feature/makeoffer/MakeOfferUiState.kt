@@ -53,7 +53,7 @@ data class FundingItemsUiState(
 ) {
     val allItemsSelected get() = availableItems.all { it.isSelected }
     val selectedItems get() = availableItems.filter { it.isSelected }
-    val totalOfSelectedItems get() = Amount(selectedItems.sumOf { it.cost })
+    val totalOfSelectedItems get() = Amount(selectedItems.sumOf { it.cost }, fundRequest.currency)
     val formattedTotalOfSelectedItems get() = totalOfSelectedItems.getFormattedValue()
     val canProceed get() = availableItems.any { it.isSelected }
     val canOfferLoan get() = fundRequest.fundType != FundType.DONATION
@@ -105,7 +105,7 @@ data class LoanScheduleUiState(
     val repaymentBreakdown: ImmutableList<RepaymentItem>
 ) {
     companion object {
-        fun init(loanAmount: Double, fundRequest: SponsorFundRequest?): LoanScheduleUiState {
+        fun init(loanAmount: Amount, fundRequest: SponsorFundRequest?): LoanScheduleUiState {
             val graceDuration = fundRequest?.graceDuration.orZero()
             val repaymentDuration = fundRequest?.repaymentDuration.orZero()
             val durationInMonths = graceDuration + repaymentDuration
@@ -113,22 +113,40 @@ data class LoanScheduleUiState(
             else floor(durationInMonths.div(12.0)).toInt()
 
             val interestRate = fundRequest?.interestRate.orZero()
-            val interestAmount = (loanAmount * interestRate * durationInYears).div(100)
-            val repaymentAmount = (loanAmount + interestAmount)
+            val interestAmount = calculateInterestAmount(loanAmount, interestRate, durationInYears)
+            val repaymentAmount = loanAmount + interestAmount
             val totalDuration = graceDuration + repaymentDuration
-            val repaymentAmountPerMonth = Amount(repaymentAmount / totalDuration)
+            val repaymentAmountPerMonth = calculateMonthlyRepayment(repaymentAmount, totalDuration)
             val repaymentBreakdown = List(totalDuration - 1) {
                 RepaymentItem("Month ${it + 1}", repaymentAmountPerMonth.getFormattedValue())
             }.toImmutableList()
 
             return LoanScheduleUiState(
-                loanAmount = loanAmount.toString(),
-                interestAmount = interestAmount.toString(),
-                repaymentAmount = repaymentAmount.toString(),
+                loanAmount = loanAmount.getFormattedValue(),
+                interestAmount = interestAmount.getFormattedValue(),
+                repaymentAmount = repaymentAmount.getFormattedValue(),
                 graceDuration = graceDuration.toString(),
                 repaymentDuration = repaymentDuration.toString(),
                 totalDuration = totalDuration.toString(),
                 repaymentBreakdown = repaymentBreakdown
+            )
+        }
+
+        private fun calculateInterestAmount(
+            amount: Amount,
+            interestRate: Int,
+            duration: Int
+        ): Amount {
+            return Amount(
+                value = (amount.value * interestRate * duration).div(100),
+                currency = amount.currency
+            )
+        }
+
+        private fun calculateMonthlyRepayment(repaymentAmount: Amount, totalDuration: Int): Amount {
+            return Amount(
+                value = repaymentAmount.value / totalDuration,
+                currency = repaymentAmount.currency
             )
         }
     }

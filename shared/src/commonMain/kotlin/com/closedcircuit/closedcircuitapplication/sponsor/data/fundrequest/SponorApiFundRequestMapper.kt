@@ -7,8 +7,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.fundrequest.SponsorFundRequest
 
-fun SponsorApiFundRequest.toFundRequest(): SponsorFundRequest {
-    val currency = currency?.let { Currency(it) }
+fun SponsorApiFundRequest.toFundRequest(currency: Currency): SponsorFundRequest {
     return SponsorFundRequest(
         id = ID(id),
         fundType = FundType.fromText(meansOfSupport),

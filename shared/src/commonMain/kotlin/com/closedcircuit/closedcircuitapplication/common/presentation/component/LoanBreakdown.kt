@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -31,7 +32,7 @@ fun LoanBreakdown(
 ) {
 
     OutlinedCard(modifier = modifier) {
-        Column(modifier = Modifier.padding(vertical = 24.dp)) {
+        Column(modifier = Modifier.padding(vertical = 24.dp, horizontal = 12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val labels = getLabels(type)
                 labels.forEachIndexed { index, stringResource ->
@@ -68,7 +69,7 @@ fun LoanBreakdown(
 
 @Composable
 private fun LabelText(text: String, modifier: Modifier) {
-    Text(text = text, modifier = modifier, fontSize = 12.sp)
+    Text(text = text, modifier = modifier, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
 }
 
 @Composable

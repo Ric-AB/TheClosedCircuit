@@ -49,7 +49,7 @@ fun SuccessDialog(
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(horizontal = 19.dp)
+                    modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 12.dp)
                 ) {
                     IconButton(
                         onClick = { onDismiss() },
@@ -67,30 +67,22 @@ fun SuccessDialog(
                         contentDescription = ""
                     )
 
-                    if (isLoan) {
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Text(
-                            text = stringResource(
-                                SharedRes.strings.loan_offer_made_message,
-                                offeredAmount,
-                            ),
-                            style = MaterialTheme.typography.bodySmall,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 22.sp
-                        )
-                    } else {
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Text(
-                            text = stringResource(
-                                SharedRes.strings.donation_made_message,
-                                offeredAmount,
-                                beneficiaryName
-                            ),
-                            style = MaterialTheme.typography.bodySmall,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 22.sp
-                        )
-                    }
+                    val text = if (isLoan) stringResource(
+                        SharedRes.strings.loan_offer_made_message,
+                        offeredAmount,
+                    ) else stringResource(
+                        SharedRes.strings.donation_made_message,
+                        offeredAmount,
+                        beneficiaryName
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 22.sp
+                    )
                 }
             }
         }

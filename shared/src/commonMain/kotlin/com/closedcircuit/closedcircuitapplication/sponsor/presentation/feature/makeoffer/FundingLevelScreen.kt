@@ -60,7 +60,7 @@ internal class FundingLevelScreen : Screen, KoinComponent {
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(SharedRes.strings.select_funding_level_label),
                 items = state.fundingLevels,
-                itemToString = { it.requestValue.capitalizeFirstChar() },
+                itemToString = { it.label.capitalizeFirstChar() },
                 selectedItem = state.fundingLevel,
                 onItemSelected = { _, item -> onEvent(MakeOfferEvent.FundingLevelChange(item)) },
             )

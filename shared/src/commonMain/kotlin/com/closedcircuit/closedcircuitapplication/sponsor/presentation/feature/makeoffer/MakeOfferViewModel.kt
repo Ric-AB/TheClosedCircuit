@@ -119,11 +119,8 @@ class MakeOfferViewModel(
         screenModelScope.launch {
             offerRepository.sendOffer(payload)
                 .onSuccess { response ->
-                    if (fundType == FundType.LOAN) {
-                        handleLoanSuccess()
-                    } else {
-                        generatePaymentLink(response.id)
-                    }
+                    if (fundType == FundType.LOAN) handleLoanSuccess()
+                    else generatePaymentLink(response.id)
                 }.onError { _, message ->
                     handleMakeOfferError(message)
                 }
@@ -198,7 +195,7 @@ class MakeOfferViewModel(
     private fun createLoanSchedule() {
         loanScheduleState = mutableStateOf(
             LoanScheduleUiState.init(
-                loanAmount = fundingItemsState.value.totalOfSelectedItems.value,
+                loanAmount = fundingItemsState.value.totalOfSelectedItems.copy(currency = sponsoringPlan.currency),
                 fundRequest = sponsoringPlan.fundRequest
             )
         )

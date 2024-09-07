@@ -51,7 +51,7 @@ fun LoanErrorDialog(
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(horizontal = 19.dp).padding(bottom = 20.dp)
+                    modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 12.dp)
                 ) {
                     IconButton(
                         onClick = onDismiss,

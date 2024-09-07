@@ -29,6 +29,10 @@ data class Amount(val value: Double, val currency: Currency? = null) : Comparabl
         return Amount(value + other.value, currency)
     }
 
+    operator fun times(other: Amount): Amount {
+        return Amount(value * other.value, currency)
+    }
+
     override fun compareTo(other: Amount): Int {
         return compareValuesBy(this, other, Amount::value)
     }

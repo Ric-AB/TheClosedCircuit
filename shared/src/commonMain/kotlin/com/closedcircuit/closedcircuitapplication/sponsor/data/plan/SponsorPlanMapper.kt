@@ -47,7 +47,7 @@ fun ApiPlan.asSponsorPlan(): SponsorPlan {
         userID = ID(user),
         hasRequestedFund = hasRequestedFund.orFalse(),
         isSponsored = isSponsored.orFalse(),
-        fundRequest = fundRequest.toFundRequest(),
+        fundRequest = fundRequest.toFundRequest(currency),
         beneficiaryFullName = Name(beneficiaryFullName.orEmpty()),
         beneficiaryId = beneficiaryId?.let { ID(it) },
         steps = steps.toStepEntities().toSteps(),
