@@ -102,7 +102,9 @@ fun DefaultOutlinedTextField(
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
         unfocusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
         focusedContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
-        errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface
+        errorContainerColor = MaterialTheme.colorScheme.inverseOnSurface,
+        focusedPlaceholderColor = LocalContentColor.current.copy(alpha = 0.7f),
+        unfocusedPlaceholderColor = LocalContentColor.current.copy(alpha = 0.7f)
     )
 ) {
     OutlinedTextField(

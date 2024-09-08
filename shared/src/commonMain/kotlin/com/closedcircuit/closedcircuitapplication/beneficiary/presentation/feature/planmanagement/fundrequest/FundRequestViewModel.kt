@@ -71,9 +71,9 @@ class FundRequestViewModel(
     }
 
     private fun initState() {
+        maximumLoanRange.onValueChange(plan.targetAmount.intValue().toString()) // non-editable
         val lastFundRequest = plan.lastFundRequest ?: return
         selectedFundType.value = lastFundRequest.fundType
-        maximumLoanRange.onValueChange(plan.targetAmount.intValue().toString()) // non-editable
         if (lastFundRequest.fundType != FundType.DONATION) {
             minimumLoanRange.onValueChange(lastFundRequest.minimumLoanRange?.intValue().toString())
             numberOfLenders.value = lastFundRequest.maxLenders
