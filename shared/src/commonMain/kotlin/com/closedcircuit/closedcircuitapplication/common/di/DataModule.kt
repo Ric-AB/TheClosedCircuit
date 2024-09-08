@@ -60,7 +60,7 @@ val dataModule = module {
         )
     }
 
-    single<ChatRepository> { ChatRepositoryImpl(get(), get(webSocketQualifier)) }
+    single<ChatRepository> { ChatRepositoryImpl(get(), get(), get(webSocketQualifier)) }
 
     single(named(namedImageStorageReference)) { Firebase.storage.reference.child("images") }
 }

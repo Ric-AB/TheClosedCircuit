@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -39,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -334,6 +336,8 @@ fun MessageTextField(
         maxLines = maxLines,
         enabled = enabled,
         singleLine = singleLine,
+        cursorBrush = SolidColor(LocalContentColor.current),
+        textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
     ) { innerTextField ->
         TextFieldDefaults.DecorationBox(
             value = inputField.value,

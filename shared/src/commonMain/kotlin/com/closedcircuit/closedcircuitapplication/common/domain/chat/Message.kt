@@ -9,6 +9,7 @@ data class Message(
     val id: ID,
     val senderID: ID,
     val content: String,
+    val isMine: Boolean,
     val createAt: Date,
     val updatedAt: Date
 )

@@ -108,7 +108,12 @@ internal object ChatTab : Tab {
                     mainIcon = null
                 )
             },
-            floatingActionButton = { NewConversationFab(onClick = navigateToConversationPartners) }
+            floatingActionButton = {
+                NewConversationFab(
+                    onClick = navigateToConversationPartners,
+                    expanded = true
+                )
+            }
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
                 when (state) {
@@ -183,11 +188,12 @@ internal object ChatTab : Tab {
     }
 
     @Composable
-    private fun NewConversationFab(onClick: () -> Unit) {
+    private fun NewConversationFab(onClick: () -> Unit, expanded: Boolean) {
         ExtendedFloatingActionButton(
             onClick = onClick,
             text = { Text(text = stringResource(SharedRes.strings.start_chat_label)) },
-            icon = { Icon(imageVector = Icons.Default.Add, contentDescription = null) }
+            icon = { Icon(imageVector = Icons.Default.Add, contentDescription = null) },
+            expanded = expanded
         )
     }
 }

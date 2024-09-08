@@ -7,6 +7,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.chat.Conversatio
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.Message
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.Constants
 import com.closedcircuit.closedcircuitapplication.core.network.ApiErrorResponse
 import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
@@ -32,6 +33,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ChatRepositoryImpl(
+    private val userRepository: UserRepository,
     private val chatService: ChatService,
     private val webSocketHttpClient: HttpClient
 ) : ChatRepository {
@@ -96,8 +98,9 @@ class ChatRepositoryImpl(
     }
 
     override suspend fun getConversations(): ApiResponse<List<Conversation>> {
+        val currentUserId = userRepository.getCurrentUser().id
         return chatService.getConversations().mapOnSuccess {
-            it.conversations.toConversations()
+            it.conversations.toConversations(currentUserId)
         }
     }
 
@@ -108,7 +111,7 @@ class ChatRepositoryImpl(
         return chatService.getMessagesForConversation(
             userId = userID.value,
             conversationName = conversationName
-        ).mapOnSuccess { it.messages.toMessages() }
+        ).mapOnSuccess { it.messages.toMessages(userID) }
     }
 
     override fun closeSession() {
