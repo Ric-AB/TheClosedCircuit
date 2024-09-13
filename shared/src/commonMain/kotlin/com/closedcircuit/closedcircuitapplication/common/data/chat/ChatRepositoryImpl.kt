@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.data.chat
 
+import com.closedcircuit.closedcircuitapplication.common.data.chat.dto.ApiMessage
 import com.closedcircuit.closedcircuitapplication.common.data.chat.dto.TransmissionMessage
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
@@ -14,10 +15,10 @@ import com.closedcircuit.closedcircuitapplication.core.network.ApiResponse
 import com.closedcircuit.closedcircuitapplication.core.network.ApiSuccessResponse
 import com.closedcircuit.closedcircuitapplication.core.network.mapOnSuccess
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.client.request.url
 import io.ktor.websocket.Frame
+import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +39,7 @@ class ChatRepositoryImpl(
     private val webSocketHttpClient: HttpClient
 ) : ChatRepository {
 
-    private var socket: DefaultClientWebSocketSession? = null
+    private var socket: WebSocketSession? = null
 
     override suspend fun initSession(userID: ID): ApiResponse<Unit> {
         return try {
@@ -72,14 +73,15 @@ class ChatRepositoryImpl(
         }
     }
 
-    override fun getMessagesForConversationAsFlow(): Flow<TransmissionMessage> {
+    override fun getMessagesForConversationAsFlow(): Flow<Message> {
         return try {
             socket?.incoming?.receiveAsFlow()
                 ?.filter { it is Frame.Text }
                 ?.map {
                     val json = (it as Frame.Text).readText()
-                    val message = Json.decodeFromString<TransmissionMessage>(json)
-                    message
+                    val message = Json.decodeFromString<ApiMessage>(json)
+                    val currentUserId = userRepository.getCurrentUser().id
+                    message.toMessage(currentUserId)
                 } ?: flowOf()
         } catch (e: Exception) {
             flowOf()
@@ -111,7 +113,7 @@ class ChatRepositoryImpl(
         return chatService.getMessagesForConversation(
             userId = userID.value,
             conversationName = conversationName
-        ).mapOnSuccess { it.messages.toMessages(userID) }
+        ).mapOnSuccess { it.messages.reversed().toMessages(userID) }
     }
 
     override fun closeSession() {

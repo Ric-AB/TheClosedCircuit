@@ -17,15 +17,14 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import kotlin.time.Duration
 
 val noAuthQualifier = named("noAuth")
 val authQualifier = named("auth")
 val webSocketQualifier = named("websocket")
 val networkModule = module {
-    single(authQualifier) { createHttpClient(get()) }
+    single(authQualifier) { createHttpClient(sessionRepository = get()) }
     single(noAuthQualifier) { createHttpClient() }
-    single(webSocketQualifier) { createHttpClient(get(), get()) }
+    single(webSocketQualifier) { createHttpClient(httpClientEngine = get()) }
     single(authQualifier) { createKtorfit(get(authQualifier)) }
     single(noAuthQualifier) { createNoAuthKtorfit(get(noAuthQualifier)) }
 }
@@ -105,10 +104,7 @@ private fun createHttpClient(sessionRepository: SessionRepository): HttpClient {
     return client
 }
 
-private fun createHttpClient(
-    httpClientEngine: HttpClientEngine,
-    sessionRepository: SessionRepository
-): HttpClient {
+private fun createHttpClient(httpClientEngine: HttpClientEngine): HttpClient {
     val client = HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
             json(
@@ -137,9 +133,5 @@ private fun createHttpClient(
             maxFrameSize = Long.MAX_VALUE
         }
     }
-
-//    client.sendPipeline.intercept(HttpSendPipeline.State) {
-//        context.headers.append("Authorization", "Bearer ${sessionRepository.getToken()}")
-//    }
     return client
 }

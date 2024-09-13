@@ -1,6 +1,5 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation
 
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,6 +28,7 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
@@ -37,12 +37,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -54,6 +57,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
@@ -69,19 +73,8 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
         val viewModel =
             getScreenModel<ConversationViewModel> { parametersOf(otherParticipant.id) }
 
-        ScreenContent(
-            state = viewModel.state.value,
-            onEvent = viewModel::onEvent,
-            goBack = navigator::pop
-        )
-    }
-
-    @Composable
-    private fun ScreenContent(
-        state: ConversationUiState,
-        onEvent: (ConversationUiEvent) -> Unit,
-        goBack: () -> Unit,
-    ) {
+        val state = viewModel.state.value
+        val onEvent = viewModel::onEvent
         val scrollState = rememberLazyListState()
         val topBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
@@ -90,21 +83,28 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
         BaseScaffold(
             topBar = {
                 ConversationAppBar(
+                    showLoadingIndicator = state.loading,
                     otherParticipantAvatar = otherParticipant.avatar?.value.orEmpty(),
                     otherParticipantName = otherParticipant.fullName.value,
                     otherParticipantProfile = otherParticipant.profile.displayText,
-                    goBack = goBack
+                    goBack = { navigator.pop() }
                 )
             },
             contentWindowInsets = ScaffoldDefaults
                 .contentWindowInsets
                 .exclude(WindowInsets.navigationBars)
-                .exclude(WindowInsets.ime)
+                .exclude(WindowInsets.ime),
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
                     .padding(innerPadding)
             ) {
+                val messages = state.messages
+                LaunchedEffect(messages.size) {
+                    scrollState.scrollToItem(0)
+                }
+
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 8.dp),
                     reverseLayout = true,
@@ -114,10 +114,12 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
                         .weight(1f)
                         .fillMaxWidth()
                 ) {
-                    val messages = state.messages
-                    itemsIndexed(messages) { index, message ->
-                        val prevSenderId = messages.getOrNull(index - 1)?.senderID
-                        val nextSenderId = messages.getOrNull(index + 1)?.senderID
+                    itemsIndexed(
+                        items = messages,
+                        key = { _, item -> item.id.value }
+                    ) { index, message ->
+                        val prevSenderId = messages.getOrNull(index + 1)?.senderID
+                        val nextSenderId = messages.getOrNull(index - 1)?.senderID
                         val isPrevMessageByAuthor = prevSenderId == message.senderID
                         val isNextMessageByAuthor = nextSenderId == message.senderID
 
@@ -193,6 +195,7 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
         val shape = getMessageBubbleShape(isMine, isPrevMessageByAuthor, isNextMessageByAuthor)
         val backgroundColor = if (isMine) MaterialTheme.colorScheme.primary
         else MaterialTheme.colorScheme.surfaceVariant
+
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (isMine) Spacer(Modifier.weight(1f))
@@ -214,10 +217,17 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
         isPrevMessageByAuthor: Boolean,
         isNextMessageByAuthor: Boolean
     ): Shape {
-        val roundShape = RoundedCornerShape(50.dp, 50.dp, 50.dp, 50.dp)
+        val roundShape = remember { RoundedCornerShape(50.dp, 50.dp, 50.dp, 50.dp) }
         return remember(isMine, isPrevMessageByAuthor, isNextMessageByAuthor) {
             when {
-                isPrevMessageByAuthor && isNextMessageByAuthor -> roundShape
+                !isPrevMessageByAuthor && !isNextMessageByAuthor -> roundShape
+                isPrevMessageByAuthor && isNextMessageByAuthor -> RoundedCornerShape(
+                    topStart = if (isMine) 50.dp else 4.dp,
+                    topEnd = if (isMine) 4.dp else 50.dp,
+                    bottomEnd = if (isMine) 4.dp else 50.dp,
+                    bottomStart = if (isMine) 50.dp else 4.dp
+                )
+
                 !isPrevMessageByAuthor -> RoundedCornerShape(
                     topStart = if (isMine) 50.dp else 15.dp,
                     topEnd = if (isMine) 15.dp else 50.dp,
@@ -263,41 +273,55 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
 
     @Composable
     private fun ConversationAppBar(
+        showLoadingIndicator: Boolean,
         otherParticipantAvatar: String,
         otherParticipantName: String,
         otherParticipantProfile: String,
         goBack: () -> Unit
     ) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = goBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = null
-                    )
-                }
-            },
-            title = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Avatar(imageUrl = otherParticipantAvatar, size = DpSize(30.dp, 30.dp))
-
-                    Spacer(Modifier.width(8.dp))
-                    Column {
-                        Text(
-                            text = otherParticipantName,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.Black,
-                            style = MaterialTheme.typography.bodySmall
-                        )
-
-                        Spacer(Modifier.height(2.dp))
-                        Text(
-                            text = otherParticipantProfile,
-                            style = MaterialTheme.typography.labelSmall
+        Column {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = goBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = null
                         )
                     }
+                },
+                title = {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Avatar(imageUrl = otherParticipantAvatar, size = DpSize(30.dp, 30.dp))
+
+                            Spacer(Modifier.width(8.dp))
+                            Column {
+                                Text(
+                                    text = otherParticipantName,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.Black,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+
+                                Spacer(Modifier.height(2.dp))
+                                Text(
+                                    text = otherParticipantProfile,
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
+                        }
+                    }
                 }
+            )
+
+            if (showLoadingIndicator) {
+                Spacer(Modifier.height(4.dp))
+                LinearProgressIndicator(
+                    strokeCap = StrokeCap.Round,
+                    modifier = Modifier.padding(horizontal = horizontalScreenPadding)
+                        .fillMaxWidth()
+                )
             }
-        )
+        }
     }
 }

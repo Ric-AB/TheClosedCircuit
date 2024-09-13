@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.common.data.chat.dto.ApiMessag
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.Conversation
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.Message
+import com.closedcircuit.closedcircuitapplication.common.domain.chat.MessageType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
@@ -31,11 +32,13 @@ fun ApiConversation.toConversation(currentUserId: ID): Conversation {
 }
 
 fun ApiMessage.toMessage(currentUserId: ID): Message {
-    val senderID = ID(sender)
+    val senderID = ID(senderId)
     return Message(
         id = ID(id),
         senderID = senderID,
+        conversationName = conversationName,
         content = content,
+        contentType = MessageType.fromText(contentType),
         isMine = senderID == currentUserId,
         createAt = Date(createdAt),
         updatedAt = Date(updatedAt)

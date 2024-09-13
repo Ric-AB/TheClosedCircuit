@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
@@ -7,9 +8,10 @@ import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatReposit
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ConversationViewModel(
@@ -41,24 +43,23 @@ class ConversationViewModel(
     }
 
     private fun getMessages() {
+        state.value = state.value.copy(loading = true)
         screenModelScope.launch {
             chatRepository.getMessagesForConversation(
                 userID = userID,
                 conversationName = conversationName
-            ).onSuccess {
-                state.value = state.value.copy(messages = it.toImmutableList())
+            ).onSuccess { messages ->
+                state.value = state.value.copy(loading = false)
+                state.value.messages.replaceAll(messages)
             }
         }
     }
 
     private fun listenToMessageEvents() {
-//        chatRepository.getMessagesForConversationAsFlow()
-//            .debounce(1.seconds)
-//            .onEach {
-//                println("MESSAGE RECEIVED $it")
-//                getMessages()
-//            }
-//            .launchIn(screenModelScope)
+        chatRepository.getMessagesForConversationAsFlow()
+            .onEach { message ->
+                state.value.messages.add(index = 0, element = message)
+            }.launchIn(screenModelScope)
     }
 
     private fun sendNewMessage() {
@@ -83,7 +84,7 @@ class ConversationViewModel(
             loading = false,
             currentUserId = userID,
             newMessageField = InputField(),
-            messages = persistentListOf()
+            messages = mutableStateListOf()
         )
     }
 

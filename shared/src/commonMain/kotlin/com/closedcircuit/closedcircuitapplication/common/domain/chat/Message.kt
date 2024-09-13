@@ -8,7 +8,9 @@ import kotlinx.serialization.Serializable
 data class Message(
     val id: ID,
     val senderID: ID,
+    val conversationName: String,
     val content: String,
+    val contentType: MessageType,
     val isMine: Boolean,
     val createAt: Date,
     val updatedAt: Date
