@@ -5,6 +5,7 @@ package com.closedcircuit.closedcircuitapplication.common.presentation.feature.p
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -60,8 +62,11 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.kyc.KycNavigator
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
+import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.CircularIndicator
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileScreen
@@ -71,10 +76,13 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 
 internal object ProfileTab : Tab, KoinComponent {
@@ -107,8 +115,15 @@ internal object ProfileTab : Tab, KoinComponent {
             isSheetVisible = it
         }
 
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
+            when (it) {
+                is ProfileTabResult.ProfileUpdateError -> messageBarState.addError(it.message)
+            }
+        }
+
         BaseScaffold(
             messageBarState = messageBarState,
+            showLoadingDialog = uiState?.imageUploadLoading.orFalse(),
             topBar = {
                 DefaultAppBar(
                     title = stringResource(SharedRes.strings.profile),
@@ -130,7 +145,9 @@ internal object ProfileTab : Tab, KoinComponent {
                         modifier = Modifier.fillMaxWidth(),
                         firstName = state.firstName,
                         avatar = state.avatar,
-                        showStatusSheet = { setSheetVisibility(true) }
+                        showLoader = state.imageUploadLoading,
+                        showStatusSheet = { setSheetVisibility(true) },
+                        onEvent = viewModel::onEvent
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
@@ -166,7 +183,9 @@ internal object ProfileTab : Tab, KoinComponent {
         modifier: Modifier = Modifier,
         firstName: String,
         avatar: String,
-        showStatusSheet: () -> Unit
+        showLoader: Boolean,
+        showStatusSheet: () -> Unit,
+        onEvent: (ProfileUiEvent) -> Unit
     ) {
         Row(
             modifier = modifier,
@@ -205,10 +224,19 @@ internal object ProfileTab : Tab, KoinComponent {
                 }
             }
 
-            Avatar(
-                imageUrl = avatar,
-                size = DpSize(90.dp, 90.dp)
-            )
+            val imagePicker = LocalImagePicker.current
+            imagePicker.registerPicker { onEvent(ProfileUiEvent.ProfileImageChange(it)) }
+            Box(contentAlignment = Alignment.Center) {
+                Avatar(
+                    imageUrl = avatar,
+                    size = DpSize(90.dp, 90.dp),
+                    onEditClick = { imagePicker.pickImage() }
+                )
+
+                if (showLoader) {
+                    CircularIndicator(size = 40.dp)
+                }
+            }
         }
     }
 

@@ -1,9 +1,11 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home
 
-import com.closedcircuit.closedcircuitapplication.common.domain.user.User
+import androidx.compose.runtime.Immutable
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 
+@Immutable
 data class ProfileUIState(
+    val imageUploadLoading: Boolean,
     val avatar: String,
     val firstName: String,
     val fullName: String,
@@ -13,23 +15,9 @@ data class ProfileUIState(
     val isEmailVerified: Boolean,
     val phoneNumberStatus: KycStatus,
     val kycStatus: KycStatus,
-) {
-    companion object {
-        fun init(user: User?): ProfileUIState? {
-            if (user == null) return null
+)
 
-            return ProfileUIState(
-                avatar = user.avatar.value,
-                firstName = user.firstName.value,
-                fullName = user.fullName.value,
-                email = user.email.value,
-                phoneNumber = user.phoneNumber.phoneWithCode,
-                country = user.country.name,
-                isEmailVerified = user.isVerified,
-                phoneNumberStatus = user.phoneNumberStatus,
-                kycStatus = user.kycStatus,
-            )
-        }
-    }
+sealed interface ProfileTabResult {
+    data class ProfileUpdateError(val message: String) : ProfileTabResult
 }
 

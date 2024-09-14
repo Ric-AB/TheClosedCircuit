@@ -16,6 +16,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.pr
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
@@ -31,7 +32,13 @@ val viewModelModule = module {
     }
 
     // profile
-    factory { ProfileTabViewModel(get(), get()) }
+    factory {
+        ProfileTabViewModel(
+            planRepository = get(),
+            userRepository = get(),
+            imageStorageReference = get(named(namedImageStorageReference)),
+        )
+    }
     factory { EditProfileViewModel(get()) }
     factory { parameters -> ProfileVerificationViewModel(parameters.get(), get()) }
     factory { ChangePasswordViewModel(get()) }
