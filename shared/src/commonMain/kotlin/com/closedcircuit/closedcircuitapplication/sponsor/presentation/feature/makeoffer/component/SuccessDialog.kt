@@ -44,7 +44,7 @@ fun SuccessDialog(
         ) {
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = Shapes().medium,
+                shape = MaterialTheme.shapes.medium,
                 modifier = modifier.size(320.dp, 340.dp)
             ) {
                 Column(

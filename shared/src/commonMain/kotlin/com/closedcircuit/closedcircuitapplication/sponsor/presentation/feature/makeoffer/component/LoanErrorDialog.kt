@@ -46,7 +46,7 @@ fun LoanErrorDialog(
         ) {
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = Shapes().medium,
+                shape =MaterialTheme.shapes.medium,
                 modifier = Modifier.width(350.dp)
             ) {
                 Column(

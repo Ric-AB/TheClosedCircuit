@@ -63,7 +63,6 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
@@ -104,32 +103,10 @@ internal object ProfileTab : Tab, KoinComponent {
         val viewModel = getScreenModel<ProfileTabViewModel>()
         val uiState by viewModel.state.collectAsState()
         var isSheetVisible by remember { mutableStateOf(false) }
+        val setSheetVisibility: (Boolean) -> Unit = {
+            isSheetVisible = it
+        }
 
-        ScreenContent(
-            messageBarState = messageBarState,
-            uiState = uiState,
-            bottomSheetState = bottomSheetState,
-            sheetExpanded = isSheetVisible,
-            sheetExpandedChange = { isSheetVisible = it },
-            navigateToEditProfileScreen = { navigator.push(EditProfileScreen()) },
-            navigateToProfileVerificationScreen = {
-                uiState?.let { navigator.push(ProfileVerificationScreen(Email(it.email))) }
-            },
-            navigateToKycScreen = { navigator.push(KycNavigator()) }
-        )
-    }
-
-    @Composable
-    private fun ScreenContent(
-        messageBarState: MessageBarState,
-        uiState: ProfileUIState?,
-        bottomSheetState: SheetState,
-        sheetExpanded: Boolean,
-        sheetExpandedChange: (Boolean) -> Unit,
-        navigateToEditProfileScreen: () -> Unit,
-        navigateToProfileVerificationScreen: () -> Unit,
-        navigateToKycScreen: () -> Unit
-    ) {
         BaseScaffold(
             messageBarState = messageBarState,
             topBar = {
@@ -153,7 +130,7 @@ internal object ProfileTab : Tab, KoinComponent {
                         modifier = Modifier.fillMaxWidth(),
                         firstName = state.firstName,
                         avatar = state.avatar,
-                        showStatusSheet = { sheetExpandedChange(true) }
+                        showStatusSheet = { setSheetVisibility(true) }
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
@@ -163,20 +140,22 @@ internal object ProfileTab : Tab, KoinComponent {
                         email = state.email,
                         phoneNumber = state.phoneNumber,
                         country = state.country,
-                        navigateToEditProfile = navigateToEditProfileScreen
+                        navigateToEditProfile = { navigator.push(EditProfileScreen()) }
                     )
                 }
 
                 ProfileModalBottomSheet(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     bottomSheetState = bottomSheetState,
-                    isVisible = sheetExpanded,
+                    isVisible = isSheetVisible,
                     isEmailVerified = state.isEmailVerified,
                     documentStatus = state.kycStatus,
                     phoneNumberStatus = state.phoneNumberStatus,
-                    closeModal = { sheetExpandedChange(false) },
-                    navigateToProfileVerificationScreen = navigateToProfileVerificationScreen,
-                    navigateToKycScreen = navigateToKycScreen
+                    closeModal = { setSheetVisibility(false) },
+                    navigateToProfileVerificationScreen = {
+                        uiState?.let { navigator.push(ProfileVerificationScreen(Email(it.email))) }
+                    },
+                    navigateToKycScreen = { navigator.push(KycNavigator()) }
                 )
             }
         }

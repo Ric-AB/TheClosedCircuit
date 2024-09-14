@@ -469,4 +469,7 @@
         users ‘Social Trust Network’ such as your family, friends, loved ones etc. in the forms of
         donations and loans.
     </string>
+    <string name="payment_made_message">You have successfully made a payment of %1$s to receive %2$s
+        within %3$s months after a period of %4$s months.
+    </string>
 </resources>

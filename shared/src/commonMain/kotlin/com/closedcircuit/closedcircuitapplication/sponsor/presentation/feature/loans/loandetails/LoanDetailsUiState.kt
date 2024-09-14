@@ -1,7 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loandetails
 
-import com.closedcircuit.closedcircuitapplication.common.domain.loan.LoanSchedule
-import kotlinx.collections.immutable.ImmutableList
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 
 sealed interface LoanDetailsUiState {
     object Loading : LoanDetailsUiState
@@ -9,7 +8,8 @@ sealed interface LoanDetailsUiState {
         val loading: Boolean,
         val canInitiatePayment: Boolean,
         val canCancelOffer: Boolean,
-        val loanAmount: String,
+        val loanAmount: Amount,
+        val formattedLoanAmount: String,
         val interestAmount: String,
         val repaymentAmount: String,
         val graceDuration: String,

@@ -1,17 +1,38 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.loans.loandetails
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -21,15 +42,19 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.LoanBreakdown
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.LoanBreakdownType
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.payment.PaymentScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPop
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.navigationResult
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -43,6 +68,10 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = getScreenModel<LoanDetailsViewModel> { parametersOf(loanID) }
         val messageBarState = rememberMessageBarState()
+        val paymentResult = navigator.navigationResult
+            .getResult<Boolean>(PaymentScreen.PAYMENT_RESULT)
+
+        var showSuccessDialog by remember { mutableStateOf(false) }
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
@@ -51,7 +80,15 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
                 }
 
                 is LoanDetailsResult.Error -> messageBarState.addError(it.message)
-                is LoanDetailsResult.InitiatePaymentSuccess -> {}
+                is LoanDetailsResult.InitiatePaymentSuccess -> {
+                    navigator.push(PaymentScreen(it.paymentLink))
+                }
+            }
+        }
+
+        LaunchedEffect(paymentResult) {
+            if (paymentResult.value == true) {
+                showSuccessDialog = true
             }
         }
 
@@ -61,6 +98,13 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
             goBack = navigator::pop,
             onEvent = viewModel::onEvent
         )
+
+        PaymentSuccessDialog(
+            visible = showSuccessDialog,
+            state = viewModel.state as? LoanDetailsUiState.Content,
+            onDismiss = { showSuccessDialog = false; navigator.pop() }
+        )
+
     }
 
     @Composable
@@ -94,7 +138,13 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
                                 )
                         )
 
-                    is LoanDetailsUiState.Error -> {}
+                    is LoanDetailsUiState.Error -> {
+                        EmptyScreen(
+                            title = stringResource(SharedRes.strings.oops_label),
+                            message = state.message
+                        )
+                    }
+
                     LoanDetailsUiState.Loading -> BackgroundLoader()
                 }
             }
@@ -113,7 +163,7 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
                 modifier = Modifier.fillMaxWidth(),
                 type = LoanBreakdownType.LOAN,
                 data = persistentListOf(
-                    state.loanAmount,
+                    state.formattedLoanAmount,
                     state.interestAmount,
                     state.repaymentAmount
                 )
@@ -124,7 +174,7 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
                 modifier = Modifier.fillMaxWidth(),
                 type = LoanBreakdownType.DURATION,
                 data = persistentListOf(
-                    state.loanAmount,
+                    state.formattedLoanAmount,
                     state.interestAmount,
                     state.repaymentAmount
                 )
@@ -141,6 +191,65 @@ internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent
                 Spacer(Modifier.height(20.dp))
                 DefaultOutlinedButton(onClick = { onEvent(LoanDetailsUiEvent.Cancel) }) {
                     Text(stringResource(SharedRes.strings.cancel_label))
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun PaymentSuccessDialog(
+        visible: Boolean,
+        state: LoanDetailsUiState.Content?,
+        modifier: Modifier = Modifier,
+        onDismiss: () -> Unit
+    ) {
+        if (visible && state != null) {
+            Dialog(
+                onDismissRequest = { onDismiss() },
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false
+                )
+            ) {
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    shape = MaterialTheme.shapes.medium,
+                    modifier = modifier.size(320.dp, 340.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 12.dp)
+                    ) {
+                        IconButton(
+                            onClick = { onDismiss() },
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = ""
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Image(
+                            painter = painterResource(SharedRes.images.ic_thank_you_icon),
+                            contentDescription = ""
+                        )
+
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = stringResource(
+                                SharedRes.strings.payment_made_message,
+                                state.formattedLoanAmount,
+                                state.repaymentAmount,
+                                state.repaymentDuration,
+                                state.graceDuration
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 22.sp
+                        )
+                    }
                 }
             }
         }
