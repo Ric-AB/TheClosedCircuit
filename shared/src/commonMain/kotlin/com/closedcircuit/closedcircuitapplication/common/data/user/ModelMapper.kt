@@ -1,6 +1,7 @@
 package com.closedcircuit.closedcircuitapplication.common.data.user
 
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.ApiUser
+import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.country.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
@@ -10,6 +11,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
 import com.closedcircuit.closedcircuitapplication.common.domain.model.PhoneNumber
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import com.closedcircuit.closedcircuitapplication.common.domain.user.User
 
 fun ApiUser.toUser(country: Country) = User(
@@ -27,6 +29,13 @@ fun ApiUser.toUser(country: Country) = User(
     isCardTokenized = !cardToken.isNullOrBlank(),
     createdAt = Date(createdAt),
     updatedAt = Date(updatedAt)
+)
+
+fun ApiUser.toChatUser() = ChatUser(
+    id = ID(id),
+    avatar = ImageUrl(avatar),
+    fullName = Name(fullName),
+    profile = ProfileType.BENEFICIARY
 )
 
 fun User.toApiUser() = ApiUser(

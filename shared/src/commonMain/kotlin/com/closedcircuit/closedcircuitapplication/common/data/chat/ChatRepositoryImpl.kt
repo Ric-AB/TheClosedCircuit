@@ -92,7 +92,7 @@ class ChatRepositoryImpl(
         activeProfileType: ProfileType,
         currentUserId: ID
     ): ApiResponse<List<ChatUser>> {
-        return chatService.getConversationPartners(activeProfileType.value).mapOnSuccess {
+        return chatService.fetchConversationPartners(activeProfileType.value).mapOnSuccess {
             it.chatUsers.filterNot { chatUser ->
                 chatUser.id == currentUserId.value
             }.toChatUsers()
@@ -101,7 +101,7 @@ class ChatRepositoryImpl(
 
     override suspend fun getConversations(): ApiResponse<List<Conversation>> {
         val currentUserId = userRepository.getCurrentUser().id
-        return chatService.getConversations().mapOnSuccess {
+        return chatService.fetchConversations().mapOnSuccess {
             it.conversations.toConversations(currentUserId)
         }
     }
@@ -110,7 +110,7 @@ class ChatRepositoryImpl(
         userID: ID,
         conversationName: String
     ): ApiResponse<List<Message>> {
-        return chatService.getMessagesForConversation(
+        return chatService.fetchMessagesForConversation(
             userId = userID.value,
             conversationName = conversationName
         ).mapOnSuccess { it.messages.reversed().toMessages(userID) }

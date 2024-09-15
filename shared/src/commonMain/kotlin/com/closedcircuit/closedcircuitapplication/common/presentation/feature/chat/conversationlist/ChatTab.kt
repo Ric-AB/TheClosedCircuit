@@ -192,7 +192,12 @@ internal object ChatTab : Tab {
         ExtendedFloatingActionButton(
             onClick = onClick,
             text = { Text(text = stringResource(SharedRes.strings.start_chat_label)) },
-            icon = { Icon(imageVector = Icons.Default.Add, contentDescription = null) },
+            icon = {
+                Icon(
+                    painter = painterResource(SharedRes.images.ic_square_pen),
+                    contentDescription = null
+                )
+            },
             expanded = expanded
         )
     }

@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.LoginResponse
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 
@@ -24,7 +25,7 @@ class LoginUseCase(
                 fcmServerKey = it.fcmServerKey
             )
 
-            userRepository.fetchUser(it.userId).onError { code, message ->
+            userRepository.fetchLoggedInUser(ID(it.userId)).onError { code, message ->
                 loginResult = ApiErrorResponse(message, code)
             }
         }

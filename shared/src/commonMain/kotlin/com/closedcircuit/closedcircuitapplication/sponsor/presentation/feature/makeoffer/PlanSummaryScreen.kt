@@ -59,22 +59,11 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val rootNavigator = findRootNavigator(navigator)
-        val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>
-        { parametersOf(planID) }
+        val viewModel = navigator
+            .getNavigatorScreenModel<MakeOfferViewModel> { parametersOf(planID) }
 
-        ScreenContent(
-            state = viewModel.planSummaryState,
-            navigateToSelectFundingLevel = { navigator.push(FundingLevelScreen()) },
-            navigateToLoginScreen = { rootNavigator.push(LoginScreen(planID)) }
-        )
-    }
+        val state = viewModel.planSummaryState
 
-    @Composable
-    private fun ScreenContent(
-        state: PlanSummaryUiState,
-        navigateToSelectFundingLevel: () -> Unit,
-        navigateToLoginScreen: () -> Unit
-    ) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (state) {
                 is PlanSummaryUiState.Content -> {
@@ -92,13 +81,13 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
                         LoggedInContent(
                             state = state,
                             modifier = modifier,
-                            navigateToSelectFundingLevel = navigateToSelectFundingLevel,
+                            navigateToSelectFundingLevel = { navigator.push(FundingLevelScreen()) },
                         )
                     } else {
                         LoggedOutContent(
                             state = state,
                             modifier = modifier,
-                            navigateToWelcomeScreen = navigateToLoginScreen
+                            navigateToWelcomeScreen = { rootNavigator.push(LoginScreen(planID)) }
                         )
                     }
                 }

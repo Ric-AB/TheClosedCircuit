@@ -9,5 +9,6 @@ sealed interface MakeOfferEvent {
     data class ToggleFundingItem(val index: Int) : MakeOfferEvent
     object ToggleAllFundingItems : MakeOfferEvent
     object CreateSchedule : MakeOfferEvent
+    object FetchChatUser: MakeOfferEvent
     object SubmitOffer : MakeOfferEvent
 }

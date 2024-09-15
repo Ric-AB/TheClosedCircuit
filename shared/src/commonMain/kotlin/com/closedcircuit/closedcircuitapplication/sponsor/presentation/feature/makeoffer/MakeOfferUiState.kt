@@ -1,8 +1,10 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
@@ -21,6 +23,7 @@ sealed interface PlanSummaryUiState {
 
     data class Content(
         val isLoggedIn: Boolean,
+        val planOwnerId: ID,
         val planOwnerFullName: String,
         val businessSector: String,
         val planDuration: String,
@@ -175,6 +178,8 @@ sealed interface MakeOfferResult {
     object LoanOfferSuccess : MakeOfferResult
 
     data class DonationOfferSuccess(val paymentLink: String) : MakeOfferResult
+
+    data class ChatUserSuccess(val chatUser: ChatUser) : MakeOfferResult
 
     data class Error(val message: String) : MakeOfferResult
 }

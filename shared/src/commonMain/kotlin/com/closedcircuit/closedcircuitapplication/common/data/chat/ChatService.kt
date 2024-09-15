@@ -14,13 +14,13 @@ import de.jensklingenberg.ktorfit.http.Query
 interface ChatService {
 
     @GET(GET_CONVERSATION_PARTNERS)
-    suspend fun getConversationPartners(@Query("view") partnerType: String): ApiResponse<GetConversationPartnersDto>
+    suspend fun fetchConversationPartners(@Query("view") partnerType: String): ApiResponse<GetConversationPartnersDto>
 
     @GET(GET_CONVERSATIONS)
-    suspend fun getConversations(): ApiResponse<GetConversationsDto>
+    suspend fun fetchConversations(): ApiResponse<GetConversationsDto>
 
     @GET(GET_CONVERSATION_MESSAGES)
-    suspend fun getMessagesForConversation(
+    suspend fun fetchMessagesForConversation(
         @Query("name") conversationName: String,
         @Path("id") userId: String
     ): ApiResponse<ApiConversation>

@@ -56,7 +56,8 @@ class KycViewModel(
 
         screenModelScope.launch {
             delay(delayInterval)
-            userRepository.fetchUser(user?.id?.value.orEmpty())
+            val userId = userRepository.getCurrentUser().id
+            userRepository.fetchLoggedInUser(userId)
                 .onSuccess {
                     state = state?.copy(
                         kycStatus = it.kycStatus,

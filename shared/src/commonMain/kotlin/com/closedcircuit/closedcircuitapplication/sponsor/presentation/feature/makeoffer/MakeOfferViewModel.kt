@@ -16,9 +16,11 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.domain.usecase.IsLoggedInUseCase
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
 import com.closedcircuit.closedcircuitapplication.common.util.round
+import com.closedcircuit.closedcircuitapplication.core.network.onComplete
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.sponsor.data.offer.dto.OfferPayload
@@ -39,6 +41,7 @@ class MakeOfferViewModel(
     private val offerRepository: OfferRepository,
     private val settingsRepository: AppSettingsRepository,
     private val paymentRepository: PaymentRepository,
+    private val userRepository: UserRepository,
     private val isLoggedInUseCase: IsLoggedInUseCase
 ) : ScreenModel {
 
@@ -50,6 +53,7 @@ class MakeOfferViewModel(
     lateinit var loanScheduleState: MutableState<LoanScheduleUiState>
     lateinit var fundType: FundType; private set
     val loading = mutableStateOf(false)
+    val loadingUser = mutableStateOf(false)
 
     private val _makeOfferResultChannel = Channel<MakeOfferResult>()
     val makeOfferResultChannel: ReceiveChannel<MakeOfferResult> = _makeOfferResultChannel
@@ -65,6 +69,7 @@ class MakeOfferViewModel(
             MakeOfferEvent.ToggleAllFundingItems -> toggleAllFundingItems()
             is MakeOfferEvent.ToggleFundingItem -> toggleFundingItem(event.index)
             MakeOfferEvent.CreateSchedule -> createLoanSchedule()
+            MakeOfferEvent.FetchChatUser -> fetchChatUser()
             MakeOfferEvent.SubmitOffer -> submitOffer()
         }
     }
@@ -95,6 +100,7 @@ class MakeOfferViewModel(
 
                     planSummaryState = PlanSummaryUiState.Content(
                         isLoggedIn = isLoggedIn,
+                        planOwnerId = sponsorPlan.beneficiaryId!!,
                         planOwnerFullName = sponsorPlan.beneficiaryFullName.value,
                         businessSector = sponsorPlan.sector.capitalizeFirstChar(),
                         planDuration = sponsorPlan.duration.value.toString(),
@@ -199,6 +205,22 @@ class MakeOfferViewModel(
                 fundRequest = sponsoringPlan.fundRequest
             )
         )
+    }
+
+    private fun fetchChatUser() {
+        val state = planSummaryState
+        if (state is PlanSummaryUiState.Content) {
+            loadingUser.value = true
+            screenModelScope.launch {
+                userRepository.fetchChatUser(state.planOwnerId).onComplete {
+                    loadingUser.value = false
+                }.onSuccess {
+                    _makeOfferResultChannel.send(MakeOfferResult.ChatUserSuccess(it))
+                }.onError { _, message ->
+                    _makeOfferResultChannel.send(MakeOfferResult.Error(message))
+                }
+            }
+        }
     }
 
     private fun updateFundingLevel(fundingLevel: FundingLevel) {

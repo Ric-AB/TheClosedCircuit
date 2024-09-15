@@ -4,9 +4,11 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycR
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.common.data.user.dto.ChangePasswordRequest
 import com.closedcircuit.closedcircuitapplication.common.data.user.dto.UpdateUserRequest
+import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.country.CountryRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycDocumentType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
@@ -47,13 +49,21 @@ class UserRepositoryImpl(
         initialValue = null
     )
 
-    override suspend fun fetchUser(userId: String): ApiResponse<User> {
+    override suspend fun fetchLoggedInUser(userId: ID): ApiResponse<User> {
         return withContext(ioDispatcher + NonCancellable) {
-            userService.getUserDetails(userId).mapOnSuccess { apiUser ->
+            userService.getUserDetails(userId.value).mapOnSuccess { apiUser ->
                 val userCountry = countryRepository.findByName(apiUser.country)
                 val user = apiUser.toUser(userCountry)
                 saveLocally(user)
                 user
+            }
+        }
+    }
+
+    override suspend fun fetchChatUser(userId: ID): ApiResponse<ChatUser> {
+        return withContext(ioDispatcher) {
+            userService.getUserDetails(userId.value).mapOnSuccess { apiUser ->
+                apiUser.toChatUser()
             }
         }
     }
