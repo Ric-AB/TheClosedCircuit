@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.fundedplan.approval
 
+import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import kotlinx.collections.immutable.ImmutableList
 
@@ -7,7 +8,9 @@ sealed interface StepApprovalUiState {
     object Loading : StepApprovalUiState
 
     data class Content(
+        val beneficiaryId: ID,
         val loading: Boolean,
+        val loadingUser: Boolean,
         val canApproveStep: Boolean,
         val canApproveBudget: Boolean,
         val stepApprovalEnabled: Boolean,
@@ -31,6 +34,7 @@ data class ProofItem(
 )
 
 sealed interface StepApprovalResult {
+    data class ChatUserSuccess(val chatUser: ChatUser) : StepApprovalResult
     object ApproveBudgetSuccess : StepApprovalResult
 
     object ApproveStepSuccess : StepApprovalResult

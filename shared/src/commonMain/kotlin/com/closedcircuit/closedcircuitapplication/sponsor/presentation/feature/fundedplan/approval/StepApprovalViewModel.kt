@@ -7,6 +7,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.common.util.orFalse
+import com.closedcircuit.closedcircuitapplication.core.network.onComplete
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.budget.BudgetRepository
@@ -36,6 +37,7 @@ class StepApprovalViewModel(
 
     fun onEvent(event: StepApprovalUiEvent) {
         when (event) {
+            StepApprovalUiEvent.FetchChatUser -> fetchChatUser()
             is StepApprovalUiEvent.ApproveBudget -> approveBudget(event.id)
             StepApprovalUiEvent.ApproveStep -> approveStep()
         }
@@ -47,12 +49,12 @@ class StepApprovalViewModel(
                 val budgetsForStep = fundedPlan.steps.flatMap { it.budgets }
                     .filter { it.stepId == stepID }
 
-                fetchStepProofs(budgetsForStep)
+                fetchStepProofs(budgetsForStep, fundedPlan.beneficiaryId)
             }
         }
     }
 
-    private suspend fun fetchStepProofs(budgetsForStep: List<FundedBudget>) {
+    private suspend fun fetchStepProofs(budgetsForStep: List<FundedBudget>, beneficiaryId: ID) {
         stepRepository.fetchStepProofs(stepID).onSuccess { proofs ->
             val userId = userRepository.userFlow.firstOrNull()?.id ?: return@onSuccess
             val proofItems = proofs.map { proof ->
@@ -71,7 +73,9 @@ class StepApprovalViewModel(
             }.toImmutableList()
 
             state.value = StepApprovalUiState.Content(
+                beneficiaryId = beneficiaryId,
                 loading = false,
+                loadingUser = false,
                 canApproveBudget = canApprove,
                 canApproveStep = canApprove && !isStepApprovedByUser,
                 stepApprovalEnabled = proofItems.isAllApproved(),
@@ -116,6 +120,22 @@ class StepApprovalViewModel(
             }.onError { _, message ->
                 _resultChannel.send(StepApprovalResult.Error(message))
                 state.value = loadedState.copy(loading = false)
+            }
+        }
+    }
+
+    private fun fetchChatUser() {
+        val currentState = state.value
+        if (currentState is StepApprovalUiState.Content) {
+            state.value = currentState.copy(loadingUser = true)
+            screenModelScope.launch {
+                userRepository.fetchChatUser(currentState.beneficiaryId).onComplete {
+                    state.value = currentState.copy(loadingUser = false)
+                }.onSuccess {
+                    _resultChannel.send(StepApprovalResult.ChatUserSuccess(it))
+                }.onError { _, message ->
+                    _resultChannel.send(StepApprovalResult.Error(message))
+                }
             }
         }
     }

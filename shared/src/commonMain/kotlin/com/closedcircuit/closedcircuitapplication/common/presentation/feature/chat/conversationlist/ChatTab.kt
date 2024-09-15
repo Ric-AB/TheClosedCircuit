@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,6 +31,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.Conversation
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.AppExtendedFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
@@ -189,8 +187,9 @@ internal object ChatTab : Tab {
 
     @Composable
     private fun NewConversationFab(onClick: () -> Unit, expanded: Boolean) {
-        ExtendedFloatingActionButton(
+        AppExtendedFab(
             onClick = onClick,
+            autoShrink = true,
             text = { Text(text = stringResource(SharedRes.strings.start_chat_label)) },
             icon = {
                 Icon(

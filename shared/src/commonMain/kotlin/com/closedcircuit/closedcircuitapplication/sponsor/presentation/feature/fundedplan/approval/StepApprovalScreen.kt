@@ -21,6 +21,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
@@ -31,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -39,18 +42,22 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.AppExtendedFabWithLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.EmptyScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.ZoomableImage
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation.ConversationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary6
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.PlanImage
 import dev.icerock.moko.resources.compose.painterResource
@@ -89,6 +96,9 @@ internal class StepApprovalScreen(
                         navigator.pop()
                     }
 
+                is StepApprovalResult.ChatUserSuccess ->
+                    navigator.push(ConversationScreen(it.chatUser))
+
                 is StepApprovalResult.Error -> messageBarState.addError(it.message)
             }
         }
@@ -116,6 +126,12 @@ internal class StepApprovalScreen(
                     mainAction = goBack,
                     title = stringResource(SharedRes.strings.step_proofs_label)
                 )
+            },
+            floatingActionButton = {
+                StartChatFab(
+                    showLoader = (state as? StepApprovalUiState.Content)?.loadingUser.orFalse(),
+                    onClick = { onEvent(StepApprovalUiEvent.FetchChatUser) }
+                )
             }
         ) { innerPadding ->
             Column(
@@ -123,7 +139,12 @@ internal class StepApprovalScreen(
             ) {
                 when (state) {
                     is StepApprovalUiState.Content -> Body(state, onEvent)
-                    is StepApprovalUiState.Error -> {}
+                    is StepApprovalUiState.Error ->
+                        EmptyScreen(
+                            title = stringResource(SharedRes.strings.oops_label),
+                            message = state.message
+                        )
+
                     StepApprovalUiState.Loading -> BackgroundLoader()
                 }
             }
@@ -271,6 +292,29 @@ internal class StepApprovalScreen(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold
+        )
+    }
+
+    @Composable
+    private fun StartChatFab(showLoader: Boolean, onClick: () -> Unit) {
+        AppExtendedFabWithLoader(
+            onClick = onClick,
+            text = { Text(text = stringResource(SharedRes.strings.start_chat_label)) },
+            icon = {
+                if (showLoader) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeCap = StrokeCap.Round,
+                        strokeWidth = 3.dp
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(SharedRes.images.ic_square_pen),
+                        contentDescription = null
+                    )
+                }
+            },
+            showLoader = showLoader
         )
     }
 }

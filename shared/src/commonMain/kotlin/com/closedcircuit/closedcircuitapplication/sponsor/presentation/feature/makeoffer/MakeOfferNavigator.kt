@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.AppExtendedFabWithLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
@@ -121,7 +121,7 @@ internal class MakeOfferNavigator(private val planID: ID) : Screen,
     @Composable
     private fun StartChatFab(show: Boolean, showLoader: Boolean, onClick: () -> Unit) {
         if (show) {
-            ExtendedFloatingActionButton(
+            AppExtendedFabWithLoader(
                 onClick = onClick,
                 text = { Text(text = stringResource(SharedRes.strings.start_chat_label)) },
                 icon = {
@@ -138,7 +138,7 @@ internal class MakeOfferNavigator(private val planID: ID) : Screen,
                         )
                     }
                 },
-                expanded = !showLoader
+                showLoader = showLoader
             )
         }
     }
