@@ -1,0 +1,20 @@
+CREATE TABLE  ConversationEntity(
+     id TEXT NOT NULL PRIMARY KEY,
+     name TEXT NOT NULL,
+     participantId TEXT NOT NULL ,
+     lastMessage TEXT,
+     createdAt TEXT NOT NULL,
+     updateAt TEXT NOT NULL
+);
+
+getAll:
+SELECT *
+FROM ConversationEntity;
+
+upsert:
+INSERT OR REPLACE
+INTO ConversationEntity
+VALUES ?;
+
+deleteAll:
+DELETE FROM ConversationEntity;

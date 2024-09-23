@@ -1,0 +1,24 @@
+CREATE TABLE MessageEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    senderId TEXT NOT NULL,
+    conversationName TEXT NOT NULL,
+    content TEXT NOT NULL,
+    contentType TEXT NOT NULL,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL
+);
+
+upsert:
+INSERT OR REPLACE
+INTO MessageEntity
+VALUES ?;
+
+getAllByConversationName:
+SELECT *
+FROM MessageEntity
+WHERE conversationName = :conversationName
+ORDER BY createdAt DESC;
+
+deleteAll:
+DELETE FROM MessageEntity;
+
