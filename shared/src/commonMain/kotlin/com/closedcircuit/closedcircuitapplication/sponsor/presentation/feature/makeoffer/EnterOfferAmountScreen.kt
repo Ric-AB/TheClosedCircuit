@@ -98,6 +98,7 @@ internal class EnterOfferAmountScreen : Screen, KoinComponent {
             LoanErrorDialog(
                 visible = showMaxRangeErrorDialog,
                 prompt = stringResource(SharedRes.strings.loan_range_above_max_prompt),
+                donationAmount = state.formattedTotalOfSelectedItems,
                 onDismiss = { showMaxRangeErrorDialog = false },
                 onClick = null
             )

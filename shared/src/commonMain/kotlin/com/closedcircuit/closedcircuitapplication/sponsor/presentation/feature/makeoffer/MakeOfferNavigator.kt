@@ -29,6 +29,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation.ConversationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.payment.PaymentScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.navigationResult
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -50,6 +51,7 @@ internal class MakeOfferNavigator(private val planID: ID) : Screen,
         var onEvent: ((MakeOfferEvent) -> Unit)? = null
 
         Navigator(PlanSummaryScreen(planID)) { navigator ->
+            val rootNavigator = remember(navigator) { findRootNavigator(navigator) }
             BaseScaffold(
                 topBar = {
                     DefaultAppBar(
@@ -99,7 +101,7 @@ internal class MakeOfferNavigator(private val planID: ID) : Screen,
                             navigator.push(PaymentScreen(result.paymentLink))
 
                         is MakeOfferResult.ChatUserSuccess ->
-                            navigator.push(ConversationScreen(result.chatUser))
+                            rootNavigator.push(ConversationScreen(result.chatUser))
 
                         MakeOfferResult.LoanOfferSuccess -> showSuccessDialog = true
                     }

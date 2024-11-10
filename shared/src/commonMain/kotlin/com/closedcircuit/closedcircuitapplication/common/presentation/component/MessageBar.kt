@@ -287,7 +287,7 @@ private fun MessageBar(
             ) {
                 TextButton(
                     modifier = Modifier.testTag(tag = "COPY_BUTTON"),
-                    onClick = { clipboardManager.setText(AnnotatedString(text = "$error")) },
+                    onClick = { clipboardManager.setText(AnnotatedString(text = error)) },
                     contentPadding = PaddingValues(vertical = 0.dp)
                 ) {
                     Text(

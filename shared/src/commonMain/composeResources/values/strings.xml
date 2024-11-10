@@ -301,7 +301,7 @@
     </string>
     <string name="payment_summary_label">Payment summary</string>
     <string name="donate_label">Donate</string>
-    <string name="donate_x_label">Donate %1$s</string>
+    <string name="donate_x_label">Donate %s</string>
     <string name="loan_x_label">Loan %1$s</string>
     <string name="grace_label">Grace</string>
     <string name="repayment_label">Repayment</string>

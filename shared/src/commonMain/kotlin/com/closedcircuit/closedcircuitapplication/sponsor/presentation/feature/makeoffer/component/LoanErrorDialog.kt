@@ -33,6 +33,7 @@ import dev.icerock.moko.resources.compose.stringResource
 fun LoanErrorDialog(
     visible: Boolean,
     prompt: String,
+    donationAmount: String,
     onDismiss: () -> Unit,
     onClick: (() -> Unit)?
 ) {
@@ -46,7 +47,7 @@ fun LoanErrorDialog(
         ) {
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape =MaterialTheme.shapes.medium,
+                shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.width(350.dp)
             ) {
                 Column(
@@ -79,7 +80,7 @@ fun LoanErrorDialog(
                     if (onClick != null) {
                         Spacer(modifier = Modifier.height(40.dp))
                         DefaultButton(onClick = { onDismiss(); onClick() }) {
-                            Text(stringResource(SharedRes.strings.donate_x_label))
+                            Text(stringResource(SharedRes.strings.donate_x_label, donationAmount))
                         }
                     }
                 }

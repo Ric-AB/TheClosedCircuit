@@ -7,8 +7,10 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
+import com.closedcircuit.closedcircuitapplication.common.presentation.util.BaseScreenModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.replaceAll
+import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,7 +20,7 @@ class ConversationViewModel(
     private val otherParticipantID: ID,
     private val chatRepository: ChatRepository,
     userRepository: UserRepository
-) : ScreenModel {
+) : BaseScreenModel<ConversationUiState, ConversationResult>() {
     private val userID = userRepository.userFlow.value?.id!!
     private val conversationName = createConversationName()
     val state = mutableStateOf(produceState())
@@ -39,6 +41,9 @@ class ConversationViewModel(
         screenModelScope.launch {
             chatRepository.initSession(state.value.currentUserId)
                 .onSuccess { listenToMessageEvents() }
+                .onError { _, message ->
+                    _resultChannel.send(ConversationResult.ConnectionError(message))
+                }
         }
     }
 
@@ -51,6 +56,8 @@ class ConversationViewModel(
             ).onSuccess { messages ->
                 state.value = state.value.copy(loading = false)
                 state.value.messages.replaceAll(messages)
+            }.onError { _, _ ->
+                state.value = state.value.copy(loading = false)
             }
         }
     }

@@ -13,3 +13,7 @@ data class ConversationUiState(
     val newMessageField: InputField,
     val messages: SnapshotStateList<Message>
 )
+
+sealed interface ConversationResult {
+    data class ConnectionError(val message: String) : ConversationResult
+}

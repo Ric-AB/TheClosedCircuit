@@ -78,10 +78,12 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
             )
 
             Spacer(Modifier.height(40.dp))
-            DefaultButton(onClick = {
-                onEvent(MakeOfferEvent.FundTypeChange(FundType.DONATION))
-                showDonateDialog = true
-            }) {
+            DefaultButton(
+                onClick = {
+                    onEvent(MakeOfferEvent.FundTypeChange(FundType.DONATION))
+                    showDonateDialog = true
+                }
+            ) {
                 Text(
                     stringResource(
                         SharedRes.strings.donate_x_label,
@@ -124,7 +126,7 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                 } else {
                     val prompt = SharedRes.strings.loan_range_below_min_prompt
                     val onClick = {
-                        onEvent(MakeOfferEvent.FundTypeChange(FundType.LOAN))
+                        onEvent(MakeOfferEvent.FundTypeChange(FundType.DONATION))
                         showDonateDialog = true
                     }
 
@@ -139,6 +141,7 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                     state.minLoanAmount,
                     state.maxLoanAmount
                 ),
+                donationAmount = state.formattedTotalOfSelectedItems,
                 onDismiss = { showDonatePromptDialog = false },
                 onClick = onClick
             )

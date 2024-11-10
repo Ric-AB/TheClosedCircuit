@@ -57,10 +57,13 @@ import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
+import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
@@ -75,10 +78,17 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
 
         val state = viewModel.state.value
         val onEvent = viewModel::onEvent
+        val messageBarState = rememberMessageBarState()
         val scrollState = rememberLazyListState()
         val topBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
         val scope = rememberCoroutineScope()
+
+        viewModel.resultChannel.receiveAsFlow().observeWithScreen {
+            when (it) {
+                is ConversationResult.ConnectionError -> messageBarState.addError(it.message)
+            }
+        }
 
         BaseScaffold(
             topBar = {
@@ -90,6 +100,7 @@ internal class ConversationScreen(private val otherParticipant: ChatUser) : Scre
                     goBack = { navigator.pop() }
                 )
             },
+            messageBarState = messageBarState,
             contentWindowInsets = ScaffoldDefaults
                 .contentWindowInsets
                 .exclude(WindowInsets.navigationBars)
