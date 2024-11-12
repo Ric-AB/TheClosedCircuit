@@ -9,6 +9,8 @@
         android:allowBackup="false"
         android:label="@string/app_name_label"
         android:supportsRtl="true"
+        android:icon="@mipmap/ic_closed_circuit_launcher"
+        android:roundIcon="@mipmap/ic_closed_circuit_launcher_round"
         android:theme="@style/AppTheme">
         <activity
             android:name=".android.MainActivity"
