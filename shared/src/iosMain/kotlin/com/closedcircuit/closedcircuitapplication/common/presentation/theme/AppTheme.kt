@@ -12,14 +12,14 @@ actual fun AppTheme(
     dynamicColor: Boolean,
     content: @Composable () -> Unit
 ) {
-    val colors = if (!useDarkTheme) {
-        LightColorScheme
-    } else {
-        DarkColorScheme
-    }
+//    val colors = if (!useDarkTheme) {
+//        LightColorScheme
+//    } else {
+//        DarkColorScheme
+//    }
 
     MaterialTheme(
-        colorScheme = colors,
+        colorScheme = LightColorScheme,
         content = content,
         typography = getTypography()
     )

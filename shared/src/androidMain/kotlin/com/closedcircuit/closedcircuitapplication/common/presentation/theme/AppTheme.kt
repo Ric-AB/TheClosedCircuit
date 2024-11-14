@@ -28,7 +28,7 @@ actual fun AppTheme(
             if (useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        useDarkTheme -> DarkColorScheme
+//        useDarkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
 
