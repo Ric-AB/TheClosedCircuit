@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -369,61 +370,68 @@ fun OtpView(
     modifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     otpCode: String = "",
-    itemCount: Int = 4,
+    itemCount: Int = 6,
     withBorders: Boolean = true,
     isError: Boolean = false,
     borderWidth: Dp = 2.dp,
     itemSpacing: Dp = 8.dp,
-    itemWidth: Dp = 54.dp,
-    itemHeight: Dp = 54.dp,
+    desiredItemWidth: Dp = 54.dp,
     itemBackground: Color = MaterialTheme.colorScheme.inverseOnSurface,
     onOtpTextChange: (String, Boolean) -> Unit
 ) {
-    BasicTextField(
-        modifier = modifier,
-        value = otpCode,
-        onValueChange = {
-            if (it.length <= itemCount) {
-                onOtpTextChange.invoke(it, it.length == itemCount)
-            }
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Next
-        ),
-        decorationBox = {
-            Column {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    repeat(itemCount) { index ->
-                        OtpItem(
-                            index = index,
-                            text = otpCode,
-                            modifier = modifier,
-                            textStyle = textStyle,
-                            withBorder = withBorders,
-                            borderWidth = borderWidth,
-                            isError = isError,
-                            itemWidth = itemWidth,
-                            itemHeight = itemHeight,
-                            itemBackground = itemBackground
+    BoxWithConstraints(modifier) {
+        BasicTextField(
+            value = otpCode,
+            onValueChange = {
+                if (it.length <= itemCount) {
+                    onOtpTextChange.invoke(it, it.length == itemCount)
+                }
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            decorationBox = {
+                Column {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        val totalSpacing = itemSpacing * (itemCount - 1)
+                        val availableWidth = this@BoxWithConstraints.maxWidth - totalSpacing
+                        val itemWidth = (availableWidth / itemCount)
+                            .coerceAtMost(desiredItemWidth)
+
+                        repeat(itemCount) { index ->
+                            OtpItem(
+                                index = index,
+                                text = otpCode,
+                                modifier = Modifier,
+                                textStyle = textStyle,
+                                withBorder = withBorders,
+                                borderWidth = borderWidth,
+                                isError = isError,
+                                itemWidth = itemWidth,
+                                itemBackground = itemBackground
+                            )
+
+                            if (index != itemCount - 1) Spacer(modifier = Modifier.width(itemSpacing))
+                        }
+                    }
+
+                    if (isError) {
+                        Spacer(Modifier.height(8.dp))
+                        BodyText(
+                            text = stringResource(SharedRes.strings.invalid_code_try_again),
+                            color = MaterialTheme.colorScheme.error
                         )
-                        Spacer(modifier = Modifier.width(itemSpacing))
                     }
                 }
-
-                if (isError) {
-                    BodyText(
-                        text = stringResource(SharedRes.strings.invalid_code_try_again),
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
-        },
-    )
+            },
+        )
+    }
 }
+
 
 @Composable
 fun OtpItem(
@@ -436,7 +444,6 @@ fun OtpItem(
     borderWidth: Dp,
     shape: Shape = Shapes().small,
     itemWidth: Dp,
-    itemHeight: Dp,
     itemBackground: Color
 ) {
 
@@ -462,7 +469,7 @@ fun OtpItem(
     Box(
         modifier = modifier
             .width(itemWidth)
-            .height(itemHeight)
+            .height(itemWidth)
             .background(color = itemBackground, shape = shape)
             .border(
                 if (withBorder) borderWidth else 0.dp,

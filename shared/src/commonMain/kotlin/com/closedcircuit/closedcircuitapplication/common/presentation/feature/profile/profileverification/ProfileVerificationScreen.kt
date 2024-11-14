@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
@@ -125,13 +126,15 @@ private fun ScreenContent(
             Spacer(modifier = Modifier.height(8.dp))
             BodyText(text = stringResource(SharedRes.strings.verification_code_prompt))
 
+            Spacer(modifier = Modifier.height(40.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 OtpView(
+                    modifier = Modifier.fillMaxWidth(),
                     otpCode = uiState.otpCodeField.value,
-                    itemCount = 6,
+                    desiredItemWidth = 45.dp,
                     isError = otpError,
                 ) { text, codeComplete ->
                     otpChange(text, codeComplete)

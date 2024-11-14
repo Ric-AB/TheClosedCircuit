@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -124,11 +125,10 @@ private fun ScreenContent(
 
                 Spacer(modifier = Modifier.height(40.dp))
                 OtpView(
+                    modifier = Modifier.fillMaxWidth(),
                     otpCode = state.otpCodeField.value,
-                    itemCount = 6,
                     isError = otpError,
-                    itemHeight = 45.dp,
-                    itemWidth = 45.dp
+                    desiredItemWidth = 45.dp
                 ) { text, codeComplete ->
                     otpChange(text, codeComplete)
                 }
