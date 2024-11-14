@@ -86,7 +86,7 @@ class MakeOfferViewModel(
                     val estimatedProfitFraction = estimatedSellingPrice.minus(estimatedCostPrice)
                         .div(estimatedCostPrice)
                         .value
-                        .round(2)
+                        .round()
 
                     val estimatedProfitPercent = estimatedProfitFraction.times(100)
                     val stepsWithBudget = sponsorPlan.steps
@@ -250,19 +250,25 @@ class MakeOfferViewModel(
         fundingItemsState.value.availableItems.replaceAll(newList)
     }
 
-    private fun toggleFundingItem(index: Int) {
+    private fun toggleFundingItem(itemIndex: Int) {
         val availableItems = fundingItemsState.value.availableItems
-        val currentItem = availableItems[index]
+        val currentItem = availableItems[itemIndex]
+        val newSelectionState = !currentItem.isSelected
+        val deselectSubsequentItems = !newSelectionState
         val currentItemSelected = currentItem.isSelected
-        availableItems[index] = currentItem.copy(isSelected = !currentItemSelected)
+        availableItems[itemIndex] = currentItem.copy(isSelected = !currentItemSelected)
 
-        // deselect subsequent items when current item is deselected
-        if (currentItemSelected) {
-            availableItems.subList(index, availableItems.lastIndex)
-                .forEachIndexed { i, fundingItem ->
-                    availableItems[i] = fundingItem.copy(isSelected = false)
-                }
+        val updatedList = availableItems.mapIndexed { index, selectableFundingItem ->
+            when {
+                index == itemIndex -> selectableFundingItem.copy(isSelected = newSelectionState)
+                deselectSubsequentItems && index > itemIndex ->
+                    selectableFundingItem.copy(isSelected = false)
+
+                else -> selectableFundingItem
+            }
         }
+
+        availableItems.replaceAll(updatedList)
     }
 
     private suspend fun updateActiveProfile() {

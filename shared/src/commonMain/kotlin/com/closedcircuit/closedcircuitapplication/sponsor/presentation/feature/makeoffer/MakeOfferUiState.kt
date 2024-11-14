@@ -60,6 +60,7 @@ data class FundingItemsUiState(
     val formattedTotalOfSelectedItems get() = totalOfSelectedItems.getFormattedValue()
     val canProceed get() = availableItems.any { it.isSelected }
     val canOfferLoan get() = fundRequest.fundType != FundType.DONATION
+    val canOfferDonation get() = fundRequest.fundType != FundType.LOAN
     val isBelowMinimumAmount get() = totalOfSelectedItems.value < fundRequest.minimumLoanRange?.value.orZero()
     val isAboveMaximumAmount get() = totalOfSelectedItems.value > fundRequest.maximumLoanRange?.value.orZero()
     val isEnteredAmountBelowMinAmount get() = enteredAmount.value.toDouble() < fundRequest.minimumLoanRange?.value.orZero()

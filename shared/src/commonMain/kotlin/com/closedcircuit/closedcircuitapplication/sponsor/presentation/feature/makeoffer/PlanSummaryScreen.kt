@@ -243,8 +243,7 @@ internal class PlanSummaryScreen(private val planID: ID) : Screen, KoinComponent
                 }
                 CircularProgressIndicator(
                     progress = progress,
-                    modifier = Modifier
-                        .size(size),
+                    modifier = Modifier.size(size),
                     color = primary3,
                     strokeWidth = indicatorThickness
                 )

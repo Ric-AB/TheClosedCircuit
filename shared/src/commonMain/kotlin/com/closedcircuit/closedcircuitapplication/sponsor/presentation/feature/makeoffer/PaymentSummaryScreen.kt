@@ -77,19 +77,22 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                 )
             )
 
-            Spacer(Modifier.height(40.dp))
-            DefaultButton(
-                onClick = {
-                    onEvent(MakeOfferEvent.FundTypeChange(FundType.DONATION))
-                    showDonateDialog = true
-                }
-            ) {
-                Text(
-                    stringResource(
-                        SharedRes.strings.donate_x_label,
-                        state.formattedTotalOfSelectedItems
+            Spacer(Modifier.height(24.dp))
+            if (state.canOfferDonation) {
+                Spacer(Modifier.height(16.dp))
+                DefaultButton(
+                    onClick = {
+                        onEvent(MakeOfferEvent.FundTypeChange(FundType.DONATION))
+                        showDonateDialog = true
+                    }
+                ) {
+                    Text(
+                        stringResource(
+                            SharedRes.strings.donate_x_label,
+                            state.formattedTotalOfSelectedItems
+                        )
                     )
-                )
+                }
             }
 
             if (state.canOfferLoan) {

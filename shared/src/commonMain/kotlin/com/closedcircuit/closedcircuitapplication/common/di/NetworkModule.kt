@@ -54,6 +54,7 @@ private fun createHttpClient(): HttpClient {
                     prettyPrint = true
                     isLenient = true
                     ignoreUnknownKeys = true
+                    encodeDefaults = false
                 },
             )
         }
@@ -79,6 +80,7 @@ private fun createHttpClient(sessionRepository: SessionRepository): HttpClient {
                     prettyPrint = true
                     isLenient = true
                     ignoreUnknownKeys = true
+                    encodeDefaults = false
                 },
             )
         }

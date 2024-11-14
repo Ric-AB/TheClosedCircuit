@@ -25,11 +25,11 @@ val Double.Companion.Zero
 
 fun Double?.orZero() = this ?: Double.Zero
 
-fun Double.round(decimals: Int): Double {
-    return kotlin.math.round(this)
+fun Double.round(): Double {
+    return kotlin.math.round(this * 100) / 100
 }
 
-fun Boolean?.orFalse() = this ?: false
+fun Boolean?.orFalse() = this == true
 
 fun <T> MutableList<T>.replaceAll(items: Collection<T>) {
     clear()
