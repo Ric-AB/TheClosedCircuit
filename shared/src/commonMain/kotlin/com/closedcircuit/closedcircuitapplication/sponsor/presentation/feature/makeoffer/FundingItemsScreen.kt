@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -137,9 +138,28 @@ internal class FundingItemsScreen : Screen, KoinComponent {
         Column {
             items.forEachIndexed { itemIndex, fundingItem ->
                 Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-                    val rowData = listOf(fundingItem.name, fundingItem.formattedCost, "")
+                    val rowData = listOf(
+                        fundingItem.name,
+                        fundingItem.formattedCost,
+                        stringResource(SharedRes.strings.select_all_label)
+                    )
+
                     rowData.forEachIndexed { rowDataIndex, text ->
-                        val weight = if (rowDataIndex == rowData.lastIndex) 2f else 3f
+                        val isLastRowItem = rowDataIndex == rowData.lastIndex
+                        val weight = if (isLastRowItem) 2f else 3f
+                        val (color, fontSize) = if (isLastRowItem) {
+                            Pair(
+                                Color.Transparent,
+                                MaterialTheme.typography.titleSmall.fontSize
+                            )
+                        } else {
+                            Pair(
+                                MaterialTheme.typography.bodySmall.color,
+                                MaterialTheme.typography.bodySmall.fontSize
+                            )
+                        }
+
+
                         Box(
                             modifier = Modifier.weight(weight),
                             contentAlignment = contentAlignment,
@@ -153,13 +173,15 @@ internal class FundingItemsScreen : Screen, KoinComponent {
                                     text = text,
                                     style = MaterialTheme.typography.bodySmall,
                                     overflow = TextOverflow.Ellipsis,
+                                    color = color,
+                                    fontSize = fontSize,
                                     modifier = Modifier
                                         .height(38.dp)
                                         .wrapContentHeight(),
                                     textAlign = TextAlign.Start,
                                 )
 
-                                if (rowDataIndex == rowData.lastIndex) {
+                                if (isLastRowItem) {
                                     val isSelectable = remember {
                                         derivedStateOf {
                                             if (itemIndex == 0) true
@@ -178,6 +200,10 @@ internal class FundingItemsScreen : Screen, KoinComponent {
                                     )
                                 }
                             }
+                        }
+
+                        if (!isLastRowItem) {
+                            Spacer(Modifier.width(8.dp))
                         }
                     }
                 }
@@ -201,10 +227,10 @@ internal class FundingItemsScreen : Screen, KoinComponent {
                     stringResource(SharedRes.strings.select_all_label)
                 )
                 titles.forEachIndexed { index, title ->
-                    val weight = if (index == titles.lastIndex) 2f else 3f
+                    val isLastItem = index == titles.lastIndex
+                    val weight = if (isLastItem) 2f else 3f
                     Box(
-                        modifier = Modifier
-                            .weight(weight),
+                        modifier = Modifier.weight(weight),
                         contentAlignment = contentAlignment,
                     ) {
                         Row(
@@ -223,7 +249,7 @@ internal class FundingItemsScreen : Screen, KoinComponent {
                                 textAlign = TextAlign.Start,
                             )
 
-                            if (index == titles.lastIndex) {
+                            if (isLastItem) {
                                 Checkbox(
                                     checked = isAllSelected,
                                     onCheckedChange = { onToggle() },
@@ -232,12 +258,15 @@ internal class FundingItemsScreen : Screen, KoinComponent {
                             }
                         }
                     }
+
+                    if (!isLastItem) {
+                        Spacer(Modifier.width(8.dp))
+                    }
                 }
             }
 
             HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp
             )
         }
