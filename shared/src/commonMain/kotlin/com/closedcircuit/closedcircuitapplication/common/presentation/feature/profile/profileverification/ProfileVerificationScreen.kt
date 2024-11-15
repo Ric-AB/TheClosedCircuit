@@ -48,7 +48,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
-internal class ProfileVerificationScreen(val email: Email) : Screen, KoinComponent,
+internal class ProfileVerificationScreen(private val email: Email) : Screen, KoinComponent,
     CustomScreenTransition by SlideUpTransition() {
     private val viewModel: ProfileVerificationViewModel by inject { parametersOf(email) }
 
@@ -93,63 +93,68 @@ internal class ProfileVerificationScreen(val email: Email) : Screen, KoinCompone
             goBack = navigator::pop
         )
     }
-}
 
-@Composable
-private fun ScreenContent(
-    messageBarState: MessageBarState,
-    uiState: ProfileVerificationUIState,
-    otpError: Boolean,
-    otpChange: (String, Boolean) -> Unit,
-    resendOtp: () -> Unit,
-    goBack: () -> Unit
-) {
-    BaseScaffold(
-        messageBarState = messageBarState,
-        showLoadingDialog = uiState.isLoading,
-        topBar = {
-            DefaultAppBar(
-                mainIcon = Icons.Rounded.Close,
-                mainAction = goBack
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = horizontalScreenPadding)
-                .windowInsetsPadding(WindowInsets.ime)
-        ) {
-            TitleText(text = stringResource(SharedRes.strings.verify_email_address))
-
-            Spacer(modifier = Modifier.height(8.dp))
-            BodyText(text = stringResource(SharedRes.strings.verification_code_prompt))
-
-            Spacer(modifier = Modifier.height(40.dp))
+    @Composable
+    private fun ScreenContent(
+        messageBarState: MessageBarState,
+        uiState: ProfileVerificationUIState,
+        otpError: Boolean,
+        otpChange: (String, Boolean) -> Unit,
+        resendOtp: () -> Unit,
+        goBack: () -> Unit
+    ) {
+        BaseScaffold(
+            messageBarState = messageBarState,
+            showLoadingDialog = uiState.isLoading,
+            topBar = {
+                DefaultAppBar(
+                    mainIcon = Icons.Rounded.Close,
+                    mainAction = goBack
+                )
+            }
+        ) { innerPadding ->
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = horizontalScreenPadding)
+                    .windowInsetsPadding(WindowInsets.ime)
             ) {
-                OtpView(
-                    modifier = Modifier.fillMaxWidth(),
-                    otpCode = uiState.otpCodeField.value,
-                    desiredItemWidth = 45.dp,
-                    isError = otpError,
-                ) { text, codeComplete ->
-                    otpChange(text, codeComplete)
-                }
+                TitleText(text = stringResource(SharedRes.strings.verify_email_address))
 
-                Spacer(modifier = Modifier.height(12.dp))
-                Row {
-                    BodyText(text = stringResource(SharedRes.strings.didnt_receive_code))
-
-                    Spacer(modifier = Modifier.width(4.dp))
-                    BodyText(
-                        text = stringResource(SharedRes.strings.resend),
-                        color = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.clickable { resendOtp() }
+                Spacer(modifier = Modifier.height(8.dp))
+                BodyText(
+                    text = stringResource(
+                        SharedRes.strings.verification_code_prompt,
+                        email.value
                     )
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    OtpView(
+                        modifier = Modifier.fillMaxWidth(),
+                        otpCode = uiState.otpCodeField.value,
+                        desiredItemWidth = 45.dp,
+                        isError = otpError,
+                    ) { text, codeComplete ->
+                        otpChange(text, codeComplete)
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row {
+                        BodyText(text = stringResource(SharedRes.strings.didnt_receive_code))
+
+                        Spacer(modifier = Modifier.width(4.dp))
+                        BodyText(
+                            text = stringResource(SharedRes.strings.resend),
+                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.clickable { resendOtp() }
+                        )
+                    }
                 }
             }
         }
