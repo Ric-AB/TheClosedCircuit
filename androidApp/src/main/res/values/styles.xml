@@ -1,3 +1,10 @@
 <resources>
-    <style name="AppTheme" parent="android:Theme.Material.NoActionBar"/>
+
+    <style name="Theme.App.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FFFDFDF6</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_tcc_logo</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+
+    <style name="AppTheme" parent="android:Theme.Material.NoActionBar" />
 </resources>

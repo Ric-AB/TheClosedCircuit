@@ -4,6 +4,7 @@ agp = "8.1.4"
 androidx-activityCompose = "1.7.2"
 androidx-appcompat = "1.6.1"
 androidx-composeCompiler = "1.5.13"
+androidx-splash-screen = "1.0.1"
 atomicfu = "0.17.3"
 buildConfig = "3.1.0"
 compose = "1.6.1"
@@ -37,6 +38,7 @@ webview = "1.9.7"
 
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-splash-screen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splash-screen" }
 compose-m3 = { module = "androidx.compose.material3:material3", version.ref = "compose-m3" }
 compose-uitooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-uitooling" }
 firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "kotlin-firebase-sdk" }
@@ -94,7 +96,7 @@ atomicfu = { id = "org.jetbrains.kotlinx.atomicfu-gradle-plugin", version.ref = 
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
-googleServices = {id = "com.google.gms.google-services", version.ref = "googleServices"}
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }

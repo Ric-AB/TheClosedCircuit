@@ -1,7 +1,9 @@
 package com.closedcircuit.closedcircuitapplication.common.presentation.feature
 
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,11 +36,11 @@ class SplashScreen : Screen, KoinComponent {
                     AuthenticationState.LOGGED_IN ->
                         navigator.replace(ProtectedNavigator(rootState.activeProfile))
 
-                    else ->navigator.replace(AuthNavigator(isFirstTime = rootState.authState == AuthenticationState.FIRST_TIME))
+                    else -> navigator.replace(AuthNavigator(isFirstTime = rootState.authState == AuthenticationState.FIRST_TIME))
                 }
             }
         }
 
-        Spacer(Modifier.fillMaxSize())
+        Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
     }
 }
