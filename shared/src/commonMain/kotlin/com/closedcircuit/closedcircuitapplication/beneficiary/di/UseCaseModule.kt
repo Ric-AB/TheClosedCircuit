@@ -17,7 +17,8 @@ val useCaseModule = module {
         IsLoggedInUseCase(
             firebaseAuth = Firebase.auth,
             sessionRepository = get(),
-            appSettingsRepository = get()
+            appSettingsRepository = get(),
+            logoutUseCase = get()
         )
     }
     single { CreatePlanUseCase(get(), get(), get()) }

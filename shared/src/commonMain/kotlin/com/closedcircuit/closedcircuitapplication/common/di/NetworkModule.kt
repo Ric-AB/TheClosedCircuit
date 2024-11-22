@@ -91,7 +91,7 @@ private fun createHttpClient(sessionRepository: SessionRepository): HttpClient {
         }
 
         install(HttpTimeout) {
-            val timeout = 30_000L
+            val timeout = 60_000L
             requestTimeoutMillis = timeout
             connectTimeoutMillis = timeout
             socketTimeoutMillis = timeout
@@ -124,7 +124,7 @@ private fun createHttpClient(httpClientEngine: HttpClientEngine): HttpClient {
         }
 
         install(HttpTimeout) {
-            val timeout = 30_000L
+            val timeout = 60_000L
             requestTimeoutMillis = timeout
             connectTimeoutMillis = timeout
             socketTimeoutMillis = timeout

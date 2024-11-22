@@ -8,7 +8,8 @@ import dev.gitlive.firebase.auth.FirebaseAuth
 class IsLoggedInUseCase(
     private val firebaseAuth: FirebaseAuth,
     private val sessionRepository: SessionRepository,
-    private val appSettingsRepository: AppSettingsRepository
+    private val appSettingsRepository: AppSettingsRepository,
+    private val logoutUseCase: LogoutUseCase
 ) {
 
     suspend operator fun invoke(): AuthenticationState {
@@ -16,10 +17,17 @@ class IsLoggedInUseCase(
         val currentSession = sessionRepository.get()
         return when {
             !hasOnboarded -> AuthenticationState.FIRST_TIME
-            hasOnboarded && currentSession == null -> AuthenticationState.LOGGED_OUT
+            hasOnboarded && currentSession == null -> {
+                logoutUseCase()
+                AuthenticationState.LOGGED_OUT
+            }
+
             currentSession != null -> {
-                if (currentSession.hasExpired(firebaseAuth.currentUser)) AuthenticationState.LOGGED_OUT
-                else AuthenticationState.LOGGED_IN
+                if (currentSession.hasExpired(firebaseAuth.currentUser)) {
+                    logoutUseCase()
+                    AuthenticationState.LOGGED_OUT
+                } else
+                    AuthenticationState.LOGGED_IN
             }
 
             else -> AuthenticationState.FIRST_TIME
