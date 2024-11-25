@@ -1,9 +1,11 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
@@ -27,6 +30,7 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.account.AccountTab
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard.DashboardTab
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.planlist.PlanListScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.aboutus.AboutUsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversationlist.ChatTab
@@ -78,9 +82,9 @@ internal class BeneficiaryBottomTabs : Screen {
 
         NavigationDrawer(
             drawerState = drawerState,
-            profileUrl = rootState?.profileUrl ?: "",
+            profileUrl = rootState?.profileUrl.orEmpty(),
             fullName = rootState?.fullName ?: "__",
-            activeProfile = rootState?.activeProfile?.displayText ?: "",
+            activeProfile = rootState?.activeProfile?.displayText.orEmpty(),
             navigateToNotifications = navigateToNotificationScreen,
             navigateToSettings = {
                 handleDrawerAction { navigator.push(SettingsScreen()) }
@@ -97,7 +101,8 @@ internal class BeneficiaryBottomTabs : Screen {
                     contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
                     topBar = {
                         BeneficiaryTopAppBar(
-                            openDrawer = { scope.launch { drawerState.open() } },
+                            profileUrl = rootState?.profileUrl.orEmpty(),
+                            navigationIconClick = { scope.launch { drawerState.open() } },
                             navigateToNotificationScreen = navigateToNotificationScreen
                         )
                     },
@@ -133,13 +138,14 @@ internal class BeneficiaryBottomTabs : Screen {
 
     @Composable
     private fun BeneficiaryTopAppBar(
-        openDrawer: () -> Unit,
+        profileUrl: String,
+        navigationIconClick: () -> Unit,
         navigateToNotificationScreen: () -> Unit
     ) {
         if (LocalTabNavigator.current.current == DashboardTab)
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = openDrawer) {
+                    IconButton(onClick = navigationIconClick) {
                         Icon(
                             painter = painterResource(SharedRes.images.ic_hamburger),
                             contentDescription = "hamburger menu"
@@ -154,6 +160,13 @@ internal class BeneficiaryBottomTabs : Screen {
                             contentDescription = "notifications"
                         )
                     }
+
+                    Avatar(
+                        imageUrl = profileUrl,
+                        size = DpSize(24.dp, 24.dp)
+                    )
+
+                    Spacer(Modifier.width(8.dp))
                 }
             )
     }

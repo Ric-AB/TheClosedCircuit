@@ -35,8 +35,8 @@ import com.skydoves.landscapist.coil3.CoilImage
 @Composable
 fun Avatar(
     modifier: Modifier = Modifier,
-    imageUrl: String,
     shape: Shape = CircleShape,
+    imageUrl: String,
     size: DpSize,
     onEditClick: (() -> Unit)? = null
 ) {
