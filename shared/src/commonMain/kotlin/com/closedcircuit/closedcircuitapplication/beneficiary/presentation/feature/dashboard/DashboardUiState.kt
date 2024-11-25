@@ -1,5 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.dashboard
 
+import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donation
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.donation.Donations
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email

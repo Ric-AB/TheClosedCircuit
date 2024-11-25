@@ -8,6 +8,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.util.TypeWithStringProperties
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.orZero
+import com.closedcircuit.closedcircuitapplication.common.util.toAmount
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.fundrequest.SponsorFundRequest
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.component.BudgetItem
@@ -57,13 +58,14 @@ data class FundingItemsUiState(
     val allItemsSelected get() = availableItems.all { it.isSelected }
     val selectedItems get() = availableItems.filter { it.isSelected }
     val totalOfSelectedItems get() = Amount(selectedItems.sumOf { it.cost }, fundRequest.currency)
-    val formattedTotalOfSelectedItems get() = totalOfSelectedItems.getFormattedValue()
     val canProceed get() = availableItems.any { it.isSelected }
     val canOfferLoan get() = fundRequest.fundType != FundType.DONATION
     val canOfferDonation get() = fundRequest.fundType != FundType.LOAN
     val isBelowMinimumAmount get() = totalOfSelectedItems.value < fundRequest.minimumLoanRange?.value.orZero()
     val isAboveMaximumAmount get() = totalOfSelectedItems.value > fundRequest.maximumLoanRange?.value.orZero()
-    val isEnteredAmountBelowMinAmount get() = enteredAmount.value.toDouble() < fundRequest.minimumLoanRange?.value.orZero()
+    val isEnteredAmountBelowMinAmount
+        get() = enteredAmount.value.ifBlank { "0" }
+            .toDouble() < fundRequest.minimumLoanRange?.value.orZero()
 
     private lateinit var fundRequest: SponsorFundRequest
 
@@ -74,6 +76,12 @@ data class FundingItemsUiState(
         enteredAmount = InputField()
     ) {
         this.fundRequest = fundRequest
+    }
+
+    fun formattedTotal(fundingLevel: FundingLevel?): String {
+        return if (fundingLevel == FundingLevel.OTHER)
+            enteredAmount.value.toAmount(fundRequest.currency).getFormattedValue()
+        else totalOfSelectedItems.getFormattedValue()
     }
 
     companion object {

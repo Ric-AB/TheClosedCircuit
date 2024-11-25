@@ -66,8 +66,9 @@ class MakeOfferViewModel(
         when (event) {
             is MakeOfferEvent.FundingLevelChange -> updateFundingLevel(event.fundingLevel)
             is MakeOfferEvent.FundTypeChange -> updateFundType(event.fundType)
-            MakeOfferEvent.ToggleAllFundingItems -> toggleAllFundingItems()
             is MakeOfferEvent.ToggleFundingItem -> toggleFundingItem(event.index)
+            is MakeOfferEvent.EnterAmount -> updateEnteredAmount(event.amount)
+            MakeOfferEvent.ToggleAllFundingItems -> toggleAllFundingItems()
             MakeOfferEvent.CreateSchedule -> createLoanSchedule()
             MakeOfferEvent.FetchChatUser -> fetchChatUser()
             MakeOfferEvent.SubmitOffer -> submitOffer()
@@ -199,9 +200,16 @@ class MakeOfferViewModel(
     }
 
     private fun createLoanSchedule() {
+        val currency = sponsoringPlan.currency
+        val loanAmount = if (fundingLevelState.fundingLevel == FundingLevel.OTHER)
+            Amount(fundingItemsState.value.enteredAmount.value.toDouble(), currency)
+        else {
+            fundingItemsState.value.totalOfSelectedItems.copy(currency = currency)
+        }
+
         loanScheduleState = mutableStateOf(
             LoanScheduleUiState.init(
-                loanAmount = fundingItemsState.value.totalOfSelectedItems.copy(currency = sponsoringPlan.currency),
+                loanAmount = loanAmount,
                 fundRequest = sponsoringPlan.fundRequest
             )
         )
@@ -221,6 +229,10 @@ class MakeOfferViewModel(
                 }
             }
         }
+    }
+
+    private fun updateEnteredAmount(amount: String) {
+        fundingItemsState.value.enteredAmount.onValueChange(amount)
     }
 
     private fun updateFundingLevel(fundingLevel: FundingLevel) {

@@ -1,5 +1,8 @@
 package com.closedcircuit.closedcircuitapplication.common.util
 
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
+
 expect fun String.Companion.format(format: String, vararg args: Any?): String
 
 expect fun randomUUID(): String
@@ -13,6 +16,14 @@ fun String.capitalizeFirstChar(): String {
 
 fun String.trimDuplicateSpace(): String {
     return this.replace("\\s+".toRegex(), " ")
+}
+
+fun String.toAmount(currency: Currency? = null): Amount {
+    return try {
+        Amount(toDouble(), currency)
+    } catch (e: NumberFormatException) {
+        Amount(0.0, currency)
+    }
 }
 
 fun Int?.orZero() = this ?: Int.Zero

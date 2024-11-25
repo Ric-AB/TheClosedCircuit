@@ -420,7 +420,7 @@ internal object DashboardTab : Tab, KoinComponent {
 
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            text = it.amount.value.toString(),
+                            text = it.amount.getFormattedValue(),
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.SemiBold
                         )

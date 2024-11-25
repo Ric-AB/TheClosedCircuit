@@ -39,22 +39,10 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+        val selectedFundingLevel = viewModel.fundingLevelState.fundingLevel!!
+        val state = viewModel.fundingItemsState.value
+        val onEvent = viewModel::onEvent
 
-        ScreenContent(
-            selectedFundingLevel = viewModel.fundingLevelState.fundingLevel!!,
-            state = viewModel.fundingItemsState.value,
-            onEvent = viewModel::onEvent,
-            navigateToLoanTerms = { navigator.push(LoanTermsScreen()) }
-        )
-    }
-
-    @Composable
-    private fun ScreenContent(
-        selectedFundingLevel: FundingLevel,
-        state: FundingItemsUiState,
-        onEvent: (MakeOfferEvent) -> Unit,
-        navigateToLoanTerms: () -> Unit
-    ) {
         Column(
             modifier = Modifier.fillMaxSize()
                 .verticalScroll(rememberScrollState())
@@ -73,7 +61,7 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                 ),
                 footerTableTitles = listOf(
                     stringResource(SharedRes.strings.total_label),
-                    state.formattedTotalOfSelectedItems
+                    state.formattedTotal(selectedFundingLevel)
                 )
             )
 
@@ -89,7 +77,7 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                     Text(
                         stringResource(
                             SharedRes.strings.donate_x_label,
-                            state.formattedTotalOfSelectedItems
+                            state.formattedTotal(selectedFundingLevel)
                         )
                     )
                 }
@@ -109,13 +97,13 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                             return@DefaultOutlinedButton
                         }
                         onEvent(MakeOfferEvent.FundTypeChange(FundType.LOAN))
-                        navigateToLoanTerms()
+                        navigator.push(LoanTermsScreen())
                     }
                 ) {
                     Text(
                         stringResource(
                             SharedRes.strings.loan_x_label,
-                            state.formattedTotalOfSelectedItems
+                            state.formattedTotal(selectedFundingLevel)
                         )
                     )
                 }
@@ -144,17 +132,27 @@ internal class PaymentSummaryScreen : Screen, KoinComponent {
                     state.minLoanAmount,
                     state.maxLoanAmount
                 ),
-                donationAmount = state.formattedTotalOfSelectedItems,
+                donationAmount = state.formattedTotal(selectedFundingLevel),
                 onDismiss = { showDonatePromptDialog = false },
                 onClick = onClick
             )
 
             DonateDialog(
                 visible = showDonateDialog,
-                amount = state.formattedTotalOfSelectedItems,
+                amount = state.formattedTotal(selectedFundingLevel),
                 onDismiss = { showDonateDialog = false },
                 onPrimaryClick = { onEvent(MakeOfferEvent.SubmitOffer) }
             )
         }
+    }
+
+    @Composable
+    private fun ScreenContent(
+        selectedFundingLevel: FundingLevel,
+        state: FundingItemsUiState,
+        onEvent: (MakeOfferEvent) -> Unit,
+        navigateToLoanTerms: () -> Unit
+    ) {
+
     }
 }

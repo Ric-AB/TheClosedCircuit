@@ -35,20 +35,11 @@ internal class LoanScheduleScreen : Screen, KoinComponent {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+        val state = viewModel.loanScheduleState.value
+        val fundingItemsUiState = viewModel.fundingItemsState.value
+        val fundingLevel = viewModel.fundingLevelState.fundingLevel
+        val onEvent = viewModel::onEvent
 
-        ScreenContent(
-            state = viewModel.loanScheduleState.value,
-            fundingItemsUiState = viewModel.fundingItemsState.value,
-            onEvent = viewModel::onEvent
-        )
-    }
-
-    @Composable
-    private fun ScreenContent(
-        state: LoanScheduleUiState,
-        fundingItemsUiState: FundingItemsUiState,
-        onEvent: (MakeOfferEvent) -> Unit
-    ) {
         Column(
             modifier = Modifier.fillMaxSize()
                 .verticalScroll(rememberScrollState())
@@ -89,7 +80,7 @@ internal class LoanScheduleScreen : Screen, KoinComponent {
                 Text(
                     stringResource(
                         SharedRes.strings.loan_x_label,
-                        fundingItemsUiState.formattedTotalOfSelectedItems
+                        fundingItemsUiState.formattedTotal(fundingLevel)
                     )
                 )
             }

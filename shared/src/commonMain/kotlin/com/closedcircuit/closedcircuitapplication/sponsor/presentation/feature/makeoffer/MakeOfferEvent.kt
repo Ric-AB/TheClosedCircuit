@@ -7,8 +7,9 @@ sealed interface MakeOfferEvent {
     data class FundingLevelChange(val fundingLevel: FundingLevel) : MakeOfferEvent
     data class FundTypeChange(val fundType: FundType) : MakeOfferEvent
     data class ToggleFundingItem(val index: Int) : MakeOfferEvent
+    data class EnterAmount(val amount: String) : MakeOfferEvent
     object ToggleAllFundingItems : MakeOfferEvent
     object CreateSchedule : MakeOfferEvent
-    object FetchChatUser: MakeOfferEvent
+    object FetchChatUser : MakeOfferEvent
     object SubmitOffer : MakeOfferEvent
 }

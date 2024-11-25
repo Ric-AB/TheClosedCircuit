@@ -9,7 +9,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,20 +21,28 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
+import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
+import com.closedcircuit.closedcircuitapplication.common.domain.model.orDefault
+import com.closedcircuit.closedcircuitapplication.common.presentation.LocalCurrency
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.AppExtendedFabWithLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation.ConversationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.payment.PaymentScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.navigationResult
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
+import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.component.SuccessDialog
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
@@ -45,76 +55,85 @@ internal class MakeOfferNavigator(private val planID: ID) : Screen,
     @Composable
     override fun Content() {
         val messageBarState = rememberMessageBarState()
+        val rootViewModel = LocalNavigator.currentOrThrow.getNavigatorScreenModel<RootViewModel>()
+        val rootState = rootViewModel.state.collectAsState().value
+        val currency = remember(rootState?.currency) { rootState?.currency.orDefault() }
         var showSuccessDialog by remember { mutableStateOf(false) }
         var loading by remember { mutableStateOf(false) }
         var loadingUser by remember { mutableStateOf(false) }
         var onEvent: ((MakeOfferEvent) -> Unit)? = null
 
-        Navigator(PlanSummaryScreen(planID)) { navigator ->
-            val rootNavigator = remember(navigator) { findRootNavigator(navigator) }
-            BaseScaffold(
-                topBar = {
-                    DefaultAppBar(
-                        mainAction = navigator::pop,
-                        mainIcon = navigator.takeIf { it.canPop }
-                            ?.let { Icons.AutoMirrored.Rounded.ArrowBack }
-                    )
-                },
-                showLoadingDialog = loading,
-                messageBarState = messageBarState,
-                floatingActionButton = {
-                    StartChatFab(
-                        show = navigator.lastItem is PlanSummaryScreen || navigator.lastItem is LoanTermsScreen,
-                        showLoader = loadingUser,
-                        onClick = { onEvent?.invoke(MakeOfferEvent.FetchChatUser) }
-                    )
-                }
-            ) { innerPadding ->
-                ScreenBasedTransition(
-                    navigator = navigator,
-                    modifier = Modifier.fillMaxSize().padding(innerPadding)
-                )
-
-                val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
-                onEvent = viewModel::onEvent
-                val paymentResult = navigator.navigationResult
-                    .getResult<Boolean>(PaymentScreen.PAYMENT_RESULT)
-                val loadingState = remember(viewModel.loading.value, viewModel.loadingUser.value) {
-                    Pair(viewModel.loading.value, viewModel.loadingUser.value)
-                }
-
-                LaunchedEffect(loadingState) {
-                    loading = loadingState.first
-                    loadingUser = loadingState.second
-                }
-
-                LaunchedEffect(paymentResult) {
-                    if (paymentResult.value == true) {
-                        showSuccessDialog = true
+        CompositionLocalProvider(LocalCurrency provides currency) {
+            Navigator(PlanSummaryScreen(planID)) { navigator ->
+                val rootNavigator = remember(navigator) { findRootNavigator(navigator) }
+                BaseScaffold(
+                    topBar = {
+                        DefaultAppBar(
+                            mainAction = navigator::pop,
+                            mainIcon = navigator.takeIf { it.canPop }
+                                ?.let { Icons.AutoMirrored.Rounded.ArrowBack }
+                        )
+                    },
+                    showLoadingDialog = loading,
+                    messageBarState = messageBarState,
+                    floatingActionButton = {
+                        StartChatFab(
+                            show = navigator.lastItem is PlanSummaryScreen || navigator.lastItem is LoanTermsScreen,
+                            showLoader = loadingUser,
+                            onClick = { onEvent?.invoke(MakeOfferEvent.FetchChatUser) }
+                        )
                     }
-                }
-
-                viewModel.makeOfferResultChannel.receiveAsFlow().observeWithScreen { result ->
-                    when (result) {
-                        is MakeOfferResult.Error -> messageBarState.addError(result.message)
-                        is MakeOfferResult.DonationOfferSuccess ->
-                            navigator.push(PaymentScreen(result.paymentLink))
-
-                        is MakeOfferResult.ChatUserSuccess ->
-                            rootNavigator.push(ConversationScreen(result.chatUser))
-
-                        MakeOfferResult.LoanOfferSuccess -> showSuccessDialog = true
-                    }
-                }
-
-                if (showSuccessDialog) {
-                    SuccessDialog(
-                        visible = showSuccessDialog,
-                        isLoan = viewModel.fundType == FundType.LOAN,
-                        offeredAmount = viewModel.fundingItemsState.value.enteredAmount.value,
-                        beneficiaryName = (viewModel.planSummaryState as? PlanSummaryUiState.Content)?.planOwnerFullName.orEmpty(),
-                        onDismiss = { showSuccessDialog = false }
+                ) { innerPadding ->
+                    ScreenBasedTransition(
+                        navigator = navigator,
+                        modifier = Modifier.fillMaxSize().padding(innerPadding)
                     )
+
+                    val viewModel = navigator.getNavigatorScreenModel<MakeOfferViewModel>()
+                    onEvent = viewModel::onEvent
+                    val paymentResult = navigator.navigationResult
+                        .getResult<Boolean>(PaymentScreen.PAYMENT_RESULT)
+                    val loadingState =
+                        remember(viewModel.loading.value, viewModel.loadingUser.value) {
+                            Pair(viewModel.loading.value, viewModel.loadingUser.value)
+                        }
+
+                    LaunchedEffect(loadingState) {
+                        loading = loadingState.first
+                        loadingUser = loadingState.second
+                    }
+
+                    LaunchedEffect(paymentResult) {
+                        if (paymentResult.value == true) {
+                            showSuccessDialog = true
+                        }
+                    }
+
+                    viewModel.makeOfferResultChannel.receiveAsFlow().observeWithScreen { result ->
+                        when (result) {
+                            is MakeOfferResult.Error -> messageBarState.addError(result.message)
+                            is MakeOfferResult.DonationOfferSuccess ->
+                                navigator.push(PaymentScreen(result.paymentLink))
+
+                            is MakeOfferResult.ChatUserSuccess ->
+                                rootNavigator.push(ConversationScreen(result.chatUser))
+
+                            MakeOfferResult.LoanOfferSuccess -> showSuccessDialog = true
+                        }
+                    }
+
+                    if (showSuccessDialog) {
+                        SuccessDialog(
+                            visible = showSuccessDialog,
+                            isLoan = viewModel.fundType == FundType.LOAN,
+                            offeredAmount = viewModel.fundingItemsState.value.enteredAmount.value,
+                            beneficiaryName = (viewModel.planSummaryState as? PlanSummaryUiState.Content)?.planOwnerFullName.orEmpty(),
+                            onDismiss = {
+                                showSuccessDialog = false
+                                rootNavigator.replaceAll(ProtectedNavigator(ProfileType.SPONSOR))
+                            }
+                        )
+                    }
                 }
             }
         }
