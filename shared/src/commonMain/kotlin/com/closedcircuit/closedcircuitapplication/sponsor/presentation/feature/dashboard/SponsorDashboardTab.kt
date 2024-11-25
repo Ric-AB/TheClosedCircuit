@@ -35,7 +35,6 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
@@ -71,22 +70,8 @@ object SponsorDashboardTab : Tab, KoinComponent {
         val navigator = findRootNavigator(LocalNavigator.currentOrThrow)
         val messageBarState = rememberMessageBarState()
         val viewModel = getScreenModel<SponsorDashboardViewModel>()
+        val state = viewModel.state
 
-        ScreenContent(
-            messageBarState = messageBarState,
-            state = viewModel.state,
-            navigateToPlanListScreen = { navigator.push(FundedPlanListScreen()) },
-            navigateToFundedPlanDetails = { navigator.push(FundedPlanDetailsScreen(it)) }
-        )
-    }
-
-    @Composable
-    private fun ScreenContent(
-        messageBarState: MessageBarState,
-        state: SponsorDashboardUiState,
-        navigateToPlanListScreen: () -> Unit,
-        navigateToFundedPlanDetails: (FundedPlanPreview) -> Unit
-    ) {
         BaseScaffold(messageBarState = messageBarState) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize()
@@ -105,8 +90,14 @@ object SponsorDashboardTab : Tab, KoinComponent {
                             modifier = Modifier.fillMaxWidth()
                                 .padding(horizontal = horizontalScreenPadding),
                             state = state,
-                            navigateToPlanListScreen = navigateToPlanListScreen,
-                            navigateToFundedPlanDetails = navigateToFundedPlanDetails
+                            navigateToPlanListScreen = { navigator.push(FundedPlanListScreen()) },
+                            navigateToFundedPlanDetails = {
+                                navigator.push(
+                                    FundedPlanDetailsScreen(
+                                        it
+                                    )
+                                )
+                            }
                         )
                     }
 
@@ -128,6 +119,7 @@ object SponsorDashboardTab : Tab, KoinComponent {
             }
         }
     }
+
 
     @Composable
     private fun Body(
@@ -159,6 +151,8 @@ object SponsorDashboardTab : Tab, KoinComponent {
                         taskCompletedPercent = fundedPlanPreview.tasksCompletedPercent,
                         onClick = { navigateToFundedPlanDetails(fundedPlanPreview) }
                     )
+
+                    Spacer(Modifier.height(8.dp))
                 }
             } else {
                 NoPlan(modifier = Modifier.fillMaxWidth(), userFirstName = state.userFirstName)
