@@ -163,7 +163,7 @@ internal class BeneficiaryBottomTabs : Screen {
 
                     Avatar(
                         imageUrl = profileUrl,
-                        size = DpSize(24.dp, 24.dp)
+                        size = DpSize(28.dp, 28.dp)
                     )
 
                     Spacer(Modifier.width(8.dp))
