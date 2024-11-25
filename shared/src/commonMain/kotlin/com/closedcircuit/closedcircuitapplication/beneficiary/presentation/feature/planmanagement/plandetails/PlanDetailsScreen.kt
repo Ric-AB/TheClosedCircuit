@@ -93,6 +93,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
+import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
@@ -206,7 +207,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                 Avatar(
                     imageUrl = plan.avatar.value,
                     size = DpSize(80.dp, 80.dp),
-                    shape = Shapes().large
+                    shape = MaterialTheme.shapes.large
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -218,7 +219,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                     )
 
                     Text(
-                        text = plan.sector,
+                        text = plan.sector.capitalizeFirstChar(),
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.W400
                     )
