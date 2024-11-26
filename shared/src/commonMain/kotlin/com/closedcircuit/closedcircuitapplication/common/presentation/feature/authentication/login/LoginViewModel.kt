@@ -37,7 +37,7 @@ class LoginViewModel(
         screenModelScope.launch {
             state = state.copy(isLoading = true)
 
-            val email = state.emailField.value
+            val email = state.emailField.value.trim()
             val password = state.passwordField.value
             loginUseCase(email, password).onSuccess {
                 val activeProfile = appSettingsRepository.getActiveProfile()

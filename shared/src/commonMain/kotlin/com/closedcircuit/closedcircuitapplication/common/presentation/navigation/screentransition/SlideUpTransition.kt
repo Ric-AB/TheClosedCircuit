@@ -12,7 +12,6 @@ import androidx.compose.animation.togetherWith
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.stack.StackEvent.Pop
 import cafe.adriel.voyager.navigator.Navigator
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
 import kotlinx.serialization.Serializable
 
 @Serializable
