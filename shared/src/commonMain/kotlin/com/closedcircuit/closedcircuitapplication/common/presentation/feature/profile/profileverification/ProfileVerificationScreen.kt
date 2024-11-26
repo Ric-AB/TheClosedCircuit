@@ -36,7 +36,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.SuccessScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPush
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding

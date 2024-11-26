@@ -28,13 +28,13 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PasswordOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.authentication.login.LoginScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayReplaceAll
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent

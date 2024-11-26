@@ -24,7 +24,7 @@ import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.ScreenBasedTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
@@ -42,7 +42,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.navigation
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.navigationResult
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
-import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.makeoffer.component.SuccessDialog
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource

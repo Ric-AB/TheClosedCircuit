@@ -1,4 +1,4 @@
-package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition
+package com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope

@@ -18,12 +18,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.navigation.transition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.LocalCurrencyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldAffix
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.NumberCommaTransformation
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
