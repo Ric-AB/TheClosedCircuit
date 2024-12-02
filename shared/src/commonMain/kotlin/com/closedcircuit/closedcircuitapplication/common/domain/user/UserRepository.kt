@@ -30,5 +30,7 @@ interface UserRepository {
         confirmPassword: String
     ): ApiResponse<Unit>
 
+    suspend fun deleteAccount(): ApiResponse<Unit>
+
     suspend fun clear()
 }

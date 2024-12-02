@@ -3,6 +3,7 @@ package com.closedcircuit.closedcircuitapplication.common.data.user
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.KycRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.sponsor.Sponsor
 import com.closedcircuit.closedcircuitapplication.common.data.user.dto.ChangePasswordRequest
+import com.closedcircuit.closedcircuitapplication.common.data.user.dto.DeleteAccountRequest
 import com.closedcircuit.closedcircuitapplication.common.data.user.dto.UpdateUserRequest
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.country.CountryRepository
@@ -143,6 +144,14 @@ class UserRepositoryImpl(
 
             userService.changePassword(request, userId)
         }
+    }
+
+    override suspend fun deleteAccount(): ApiResponse<Unit> {
+        val currentUser = userFlow.value
+        val id = currentUser?.id?.value.orEmpty()
+        val email = currentUser?.email?.value.orEmpty()
+        val request = DeleteAccountRequest(email)
+        return userService.deleteAccount(id, request)
     }
 
     override suspend fun clear() {

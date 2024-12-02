@@ -38,7 +38,7 @@ fun PromptDialog(
     message: String,
     buttonText: String,
     onDismiss: () -> Unit,
-    onButtonClick: () -> Unit
+    onConfirm: () -> Unit
 ) {
     if (visible) {
         Dialog(
@@ -71,11 +71,9 @@ fun PromptDialog(
 
                 Spacer(Modifier.height(24.dp))
                 DefaultButton(
-                    modifier = Modifier.fillMaxWidth(0.5F).align(Alignment.CenterHorizontally),
-                    onClick = {
-                        onDismiss()
-                        onButtonClick()
-                    }
+                    onClick = { onDismiss(); onConfirm() },
+                    modifier = Modifier.fillMaxWidth(0.5F)
+                        .align(Alignment.CenterHorizontally),
                 ) {
                     Text(text = buttonText)
                 }

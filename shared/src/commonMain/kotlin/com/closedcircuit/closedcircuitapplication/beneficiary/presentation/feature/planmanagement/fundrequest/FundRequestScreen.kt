@@ -242,7 +242,7 @@ internal class FundRequestScreen(private val plan: Plan, private val steps: Step
                     message = stringResource(SharedRes.strings.tokenize_card_prompt),
                     buttonText = stringResource(SharedRes.strings.okay_label),
                     onDismiss = { showDialog = false },
-                    onButtonClick = { onEvent(FundRequestUiEvent.TokenizeCard) }
+                    onConfirm = { onEvent(FundRequestUiEvent.TokenizeCard) }
                 )
             }
         }

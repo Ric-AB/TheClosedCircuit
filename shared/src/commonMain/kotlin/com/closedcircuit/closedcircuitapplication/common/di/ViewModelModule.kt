@@ -47,7 +47,7 @@ val viewModelModule = module {
     factory { NotificationViewModel(get()) }
 
     // settings
-    factory { SettingsViewModel(get()) }
+    factory { SettingsViewModel(get(), get(), get()) }
 
     // payment
     factory { PaymentViewModel() }

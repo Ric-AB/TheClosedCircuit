@@ -14,6 +14,7 @@ object ClosedCircuitApiEndpoints {
     const val PLAN_DETAILS_NO_AUTH = "v1/plan_details/{id}"
     const val PLAN_BY_FUND_REQUEST_ID = "v1/fund_request/{id}/"
     const val SAVE_FCM_TOKEN = "v1/registration_tokens/"
+    const val DELETE_ACCOUNT = "user/{id}/request-account-deletion/"
 
 
     //beneficiary

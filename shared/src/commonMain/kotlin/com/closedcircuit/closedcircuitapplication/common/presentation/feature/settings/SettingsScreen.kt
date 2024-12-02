@@ -21,6 +21,8 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,7 +46,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -54,14 +60,18 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileTyp
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.changepassword.ChangePasswordScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.AuthNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.conditional
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.common.util.orFalse
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
 import dev.icerock.moko.resources.compose.painterResource
@@ -75,10 +85,14 @@ import org.koin.core.component.KoinComponent
 internal class SettingsScreen : Screen, KoinComponent {
     @Composable
     override fun Content() {
+        val rootNavigator = findRootNavigator(LocalNavigator.currentOrThrow)
         val navigator =
             findNavigator(ScreenKeys.PROTECTED_NAVIGATOR, LocalNavigator.currentOrThrow)
 
+        val messageBarState = rememberMessageBarState()
         val viewModel = getScreenModel<SettingsViewModel>()
+        val uiState = viewModel.state.collectAsState().value
+        val onEvent = viewModel::onEvent
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
@@ -87,38 +101,28 @@ internal class SettingsScreen : Screen, KoinComponent {
                         navigator.replaceAll(BeneficiaryBottomTabs())
                     else navigator.replaceAll(SponsorBottomTabs())
                 }
+
+                is SettingResult.DeleteAccountError -> messageBarState.addError(it.message)
+                SettingResult.DeleteAccountSuccess -> rootNavigator.replaceAll(AuthNavigator(false))
             }
         }
 
-        ScreenContent(
-            state = viewModel.state.collectAsState().value,
-            onEvent = viewModel::onEvent,
-            goBack = navigator::pop,
-            navigateToChangePassword = { navigator.push(ChangePasswordScreen()) }
-        )
-    }
-
-    @Composable
-    private fun ScreenContent(
-        state: SettingsUiState,
-        onEvent: (SettingsUiEvent) -> Unit,
-        goBack: () -> Unit,
-        navigateToChangePassword: () -> Unit
-    ) {
         BaseScaffold(
+            messageBarState = messageBarState,
+            showLoadingDialog = (uiState as? SettingsUiState.Content)?.loading.orFalse(),
             topBar = {
                 DefaultAppBar(
                     title = stringResource(SharedRes.strings.settings_label),
-                    mainAction = goBack
+                    mainAction = navigator::pop
                 )
             }
         ) { innerPadding ->
-            when (state) {
+            when (uiState) {
                 is SettingsUiState.Content -> Body(
                     innerPadding = innerPadding,
-                    state = state,
+                    uiState = uiState,
                     onEvent = onEvent,
-                    navigateToChangePassword = navigateToChangePassword
+                    navigateToChangePassword = { navigator.push(ChangePasswordScreen()) }
                 )
 
                 SettingsUiState.Loading -> BackgroundLoader()
@@ -129,7 +133,7 @@ internal class SettingsScreen : Screen, KoinComponent {
     @Composable
     private fun Body(
         innerPadding: PaddingValues,
-        state: SettingsUiState.Content,
+        uiState: SettingsUiState.Content,
         onEvent: (SettingsUiEvent) -> Unit,
         navigateToChangePassword: () -> Unit
     ) {
@@ -152,10 +156,13 @@ internal class SettingsScreen : Screen, KoinComponent {
 
             Spacer(Modifier.height(40.dp))
             UserProfileSection(
-                activeProfile = state.activeProfile,
-                profileTypes = state.profileTypes,
+                activeProfile = uiState.activeProfile,
+                profileTypes = uiState.profileTypes,
                 onEvent = onEvent
             )
+
+            Spacer(Modifier.height(40.dp))
+            AccountSection(onEvent)
         }
     }
 
@@ -360,6 +367,47 @@ internal class SettingsScreen : Screen, KoinComponent {
     }
 
     @Composable
+    private fun AccountSection(onEvent: (SettingsUiEvent) -> Unit) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            var showDialog1 by remember { mutableStateOf(false) }
+            var showDialog2 by remember { mutableStateOf(false) }
+            var showDialog3 by remember { mutableStateOf(false) }
+
+            SectionTitle(stringResource(SharedRes.strings.account_label))
+            SectionItem(
+                icon = painterResource(SharedRes.images.ic_outline_delete),
+                text = stringResource(SharedRes.strings.delete_account_label),
+                trailingIcon = {},
+                modifier = Modifier.clickable { showDialog1 = true }
+            )
+
+            DeleteDialog(
+                visible = showDialog1,
+                message = stringResource(SharedRes.strings.delete_account_prompt_one),
+                onDismiss = { showDialog1 = false },
+                onConfirm = { showDialog2 = true }
+            )
+
+            DeleteDialog(
+                visible = showDialog2,
+                message = stringResource(SharedRes.strings.delete_account_prompt_two),
+                onDismiss = { showDialog2 = false },
+                onConfirm = { showDialog3 = true }
+            )
+
+            DeleteDialog(
+                visible = showDialog3,
+                message = stringResource(SharedRes.strings.delete_account_prompt_three),
+                onDismiss = { showDialog3 = false },
+                onConfirm = { onEvent(SettingsUiEvent.DeleteAccount) }
+            )
+        }
+    }
+
+    @Composable
     private fun SectionTitle(text: String) {
         Text(
             text = text,
@@ -389,6 +437,71 @@ internal class SettingsScreen : Screen, KoinComponent {
 
             Spacer(Modifier.width(12.dp))
             trailingIcon()
+        }
+    }
+
+    @Composable
+    private fun DeleteDialog(
+        visible: Boolean,
+        message: String,
+        onDismiss: () -> Unit,
+        onConfirm: () -> Unit
+    ) {
+        if (visible) {
+            Dialog(
+                onDismissRequest = onDismiss,
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false
+                )
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.background(
+                        color = Color.White,
+                        shape = MaterialTheme.shapes.medium
+                    ).padding(24.dp)
+                ) {
+                    Text(
+                        text = stringResource(SharedRes.strings.delete_account_label),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.align(Alignment.Start),
+                        lineHeight = 15.sp,
+                        color = Color.Gray
+                    )
+
+                    Spacer(Modifier.height(24.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        val buttonShape = MaterialTheme.shapes.small
+                        Button(
+                            onClick = onDismiss,
+                            shape = buttonShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                        ) {
+                            Text(text = stringResource(SharedRes.strings.cancel_label))
+                        }
+
+                        Spacer(Modifier.width(16.dp))
+                        Button(
+                            onClick = { onDismiss(); onConfirm() },
+                            shape = buttonShape,
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        ) {
+                            Text(text = stringResource(SharedRes.strings.continue_label))
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -472,4 +472,20 @@
     <string name="payment_made_message">You have successfully made a payment of %1$s to receive %2$s
         within %3$s months after a period of %4$s months.
     </string>
+    <string name="delete_account_label">Delete account</string>
+    <string name="continue_label">Continue</string>
+    <string name="delete_account_prompt_one">Are you sure you want to delete your account? Deleting
+        your account will permanently remove your personal data and cannot be undone.
+    </string>
+    <string name="delete_account_prompt_two">
+        <b>Please note that closing your account will:</b>
+        \n \u2022 Permanently delete all your data.\n \u2022 Cancel any active loans and pending
+        transactions.\n \u2022 Remove access to all app features.\n
+    </string>
+    <string name="delete_account_prompt_three"><b>Caution!</b>\n \u2022 You must complete all
+        pending transactions before your account can be permanently deleted. \n \u2022 Our support
+        team will confirm any pending transaction has been reconciled before completing the deletion
+        process. \n\nFor more information on data retention and compliance, please review our Data
+        Retention Policy.
+    </string>
 </resources>
