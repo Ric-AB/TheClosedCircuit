@@ -283,21 +283,21 @@
     <string name="select_funding_level_label">Select funding level</string>
     <string name="other_amount_label">Other amount</string>
     <string name="what_is_a_plan_label">What is a plan?</string>
-    <string name="what_is_a_plan_description_label">A plan is an entire project or business that a
+    <string name="what_is_a_plan_description">A plan is an entire project or business that a
         Beneficiary creates to actualise an Idea. A plan is broken down into steps and budgets. The
         amount is the total cost of the project or business plan.
     </string>
     <string name="what_is_a_step_label">What is a step?</string>
-    <string name="what_is_a_step_description_label">A Step is an actionable milestone of the project
+    <string name="what_is_a_step_description">A Step is an actionable milestone of the project
         or business plan. A step consists of budget items needed to complete the step.You can decide
         to fund a step and all the associated budget items under it.
     </string>
     <string name="what_is_a_budget_label">What is a budget?</string>
-    <string name="what_is_a_budget_description_label">A budget is the cost of a particular item or
+    <string name="what_is_a_budget_description">A budget is the cost of a particular item or
         action in a step.
     </string>
     <string name="what_is_other_amount_label">What is other amount?</string>
-    <string name="what_is_other_amount_description_label">You can loan or donate any amount of your
+    <string name="what_is_other_amount_description">You can loan or donate any amount of your
         choice that is not the plan, step or budget amount.
     </string>
     <string name="plan_summary_label">Plan summary</string>

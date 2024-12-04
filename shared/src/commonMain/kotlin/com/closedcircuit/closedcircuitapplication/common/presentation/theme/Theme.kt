@@ -134,7 +134,7 @@ val DarkColorScheme = darkColorScheme(
 )
 
 val screenContentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 24.dp)
-val horizontalScreenPadding = 20.dp
+val horizontalScreenPadding = 16.dp
 val verticalScreenPadding = 20.dp
 fun PaddingValues.calculateHorizontalPadding(): Dp {
     return this.calculateStartPadding(LayoutDirection.Ltr)

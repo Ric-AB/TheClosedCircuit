@@ -2,8 +2,13 @@
 
 package com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.planmanagement.plandetails
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +34,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Card
@@ -38,9 +46,9 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Tab
@@ -48,8 +56,10 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,6 +74,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -89,7 +100,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BudgetItem
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.component.SubTitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
@@ -98,20 +109,25 @@ import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
+import kotlin.time.Duration.Companion.seconds
 
 internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
 
     @Composable
     override fun Content() {
-        var showDeleteDialog by remember { mutableStateOf(false) }
         val navigator = LocalNavigator.currentOrThrow
         val messageBarState = rememberMessageBarState()
         val viewModel = getScreenModel<PlanDetailsViewModel> { parametersOf(plan) }
         val uiState by viewModel.state.collectAsState()
+        val onEvent = viewModel::onEvent
+        var isDeleteDialogVisible by remember { mutableStateOf(false) }
+        var isExtraInfoVisible by remember { mutableStateOf(false) }
+        var isExplanationCardVisible by remember { mutableStateOf(false) }
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
@@ -123,45 +139,32 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
             }
         }
 
-        ScreenContent(
-            uiState = uiState,
-            messageBarState = messageBarState,
-            showDeleteDialog = showDeleteDialog,
-            toggleDeleteDialog = { showDeleteDialog = false },
-            goBack = navigator::pop,
-            onEvent = viewModel::onEvent,
-            navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
-            navigateToFundRequest = { navigator.push(FundRequestScreen(plan, uiState.steps)) },
-            navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) },
-            navigateToSaveStep = { navigator.push(SaveStepScreen(plan.id)) }
-        )
-    }
+        LaunchedEffect(isExtraInfoVisible) {
+            if (isExtraInfoVisible) {
+                delay(3.seconds)
+                isExtraInfoVisible = false
+            }
+        }
 
-    @Composable
-    private fun ScreenContent(
-        uiState: PlanDetailsUiState,
-        messageBarState: MessageBarState,
-        showDeleteDialog: Boolean,
-        toggleDeleteDialog: (Boolean) -> Unit,
-        goBack: () -> Unit,
-        onEvent: (PlanDetailsUiEvent) -> Unit,
-        navigateToStepDetails: (Step) -> Unit,
-        navigateToFundRequest: () -> Unit,
-        navigateToEditPlan: () -> Unit,
-        navigateToSaveStep: () -> Unit
-    ) {
         BaseScaffold(
             topBar = {
                 PlanDetailsAppBar(
                     lastFundRequestId = uiState.plan.lastFundRequest?.id?.value,
                     canEditPlan = uiState.canEditPlan,
-                    onNavClick = goBack,
-                    toggleDeleteDialog = { toggleDeleteDialog(true) },
-                    navigateToFundRequest = navigateToFundRequest,
-                    navigateToEditPlan = navigateToEditPlan
+                    onNavClick = navigator::pop,
+                    toggleDeleteDialog = { isDeleteDialogVisible = true },
+                    navigateToFundRequest = {
+                        navigator.push(
+                            FundRequestScreen(
+                                plan,
+                                uiState.steps
+                            )
+                        )
+                    },
+                    navigateToEditPlan = { navigator.push(EditPlanScreen(uiState.plan)) },
                 )
             },
-            floatingActionButton = { PlanDetailsExtendedFab(navigateToSaveStep) },
+            floatingActionButton = { PlanDetailsExtendedFab { navigator.push(SaveStepScreen(plan.id)) } },
             messageBarState = messageBarState,
             showLoadingDialog = uiState.isLoading
         ) { innerPadding ->
@@ -174,7 +177,12 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                     modifier = Modifier.fillMaxSize()
                         .verticalScroll(state = scrollState)
                 ) {
-                    Header(plan = uiState.plan, screenWidth = screenWidth)
+                    Header(
+                        plan = uiState.plan,
+                        isExtraInfoVisible = isExtraInfoVisible,
+                        screenWidth = screenWidth,
+                        showExtraInfo = { isExtraInfoVisible = true; isExplanationCardVisible = true }
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
                     ActionItemsTabs(
@@ -182,15 +190,17 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                         scrollState = scrollState,
                         steps = uiState.steps,
                         budgets = uiState.budgets,
-                        navigateToStepDetails = navigateToStepDetails,
-                        navigateToSaveStep = navigateToSaveStep
+                        isExplanationCardVisible = isExplanationCardVisible,
+                        navigateToStepDetails = { navigator.push(StepDetailsScreen(it)) },
+                        navigateToSaveStep = { navigator.push(SaveStepScreen(plan.id)) },
+                        closeInfoCard = { isExplanationCardVisible = false }
                     )
                 }
             }
 
             AppAlertDialog(
-                visible = showDeleteDialog,
-                onDismissRequest = { toggleDeleteDialog(false) },
+                visible = isDeleteDialogVisible,
+                onDismissRequest = { isDeleteDialogVisible = false },
                 onConfirm = { onEvent(PlanDetailsUiEvent.Delete) },
                 confirmTitle = stringResource(SharedRes.strings.confirm_label),
                 title = stringResource(SharedRes.strings.delete_plan),
@@ -199,9 +209,13 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
         }
     }
 
-
     @Composable
-    private fun Header(plan: Plan, screenWidth: Dp) {
+    private fun Header(
+        plan: Plan,
+        isExtraInfoVisible: Boolean,
+        screenWidth: Dp,
+        showExtraInfo: () -> Unit
+    ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(modifier = Modifier.padding(horizontal = horizontalScreenPadding)) {
                 Avatar(
@@ -211,17 +225,36 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                 )
 
                 Spacer(modifier = Modifier.width(12.dp))
-                Column(modifier = Modifier.padding(top = 8.dp)) {
+                Column(modifier = Modifier.padding(top = 8.dp).weight(1f)) {
                     Text(
                         text = plan.name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold
                     )
 
+                    Spacer(Modifier.height(4.dp))
                     Text(
                         text = plan.sector.capitalizeFirstChar(),
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.W400
+                    )
+                }
+
+                IconButton(
+                    onClick = showExtraInfo,
+                    modifier = Modifier.layout { measurable, constraints ->
+                        val placeable = measurable.measure(
+                            constraints.copy(maxWidth = constraints.maxWidth + horizontalScreenPadding.roundToPx())
+                        )
+
+                        layout(placeable.width, placeable.height) {
+                            placeable.place(horizontalScreenPadding.roundToPx(), 0)
+                        }
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(SharedRes.images.ic_info),
+                        contentDescription = "info"
                     )
                 }
             }
@@ -231,6 +264,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                 planDuration = plan.duration,
                 targetAmount = plan.targetAmount,
                 amountRaised = plan.totalFundsRaised,
+                isExtraInfoVisible = isExtraInfoVisible,
                 screenWidth = screenWidth
             )
 
@@ -247,12 +281,14 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
         planDuration: TaskDuration,
         targetAmount: Amount,
         amountRaised: Amount,
+        isExtraInfoVisible: Boolean,
         screenWidth: Dp,
     ) {
         @Composable
         fun Item(
             imagePainter: Painter,
             text: String,
+            label: String,
             contentDescription: String? = null,
             modifier: Modifier
         ) {
@@ -267,6 +303,11 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
 
                 Spacer(Modifier.height(4.dp))
                 Text(text = text, style = MaterialTheme.typography.labelLarge)
+
+                Spacer(Modifier.height(4.dp))
+                AnimatedVisibility(isExtraInfoVisible) {
+                    Text(text = label, style = MaterialTheme.typography.labelLarge)
+                }
             }
         }
 
@@ -274,31 +315,33 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
         val horizontalPadding = 8.dp
         val itemWidth = remember { (screenWidth - (dividerWidth * 2 + horizontalPadding * 2)) / 3 }
         val dividerModifier = Modifier.fillMaxHeight(.5f).width(dividerWidth)
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
-                .height(IntrinsicSize.Min)
                 .horizontalScroll(rememberScrollState())
                 .padding(horizontal = horizontalPadding)
         ) {
-
             Item(
                 imagePainter = painterResource(SharedRes.images.ic_calendar),
                 text = stringResource(SharedRes.strings.x_months, planDuration.value),
+                label = stringResource(SharedRes.strings.plan_duration),
                 modifier = Modifier.width(itemWidth)
             )
 
-            HorizontalDivider(modifier = dividerModifier)
+            VerticalDivider(modifier = dividerModifier)
             Item(
                 imagePainter = painterResource(SharedRes.images.ic_target_arrow),
                 text = targetAmount.getFormattedValue(),
+                label = stringResource(SharedRes.strings.target_amount),
                 modifier = Modifier.width(itemWidth)
             )
 
-            HorizontalDivider(modifier = dividerModifier)
+            VerticalDivider(modifier = dividerModifier)
             Item(
                 imagePainter = painterResource(SharedRes.images.ic_rising_arrow),
                 text = amountRaised.getFormattedValue(),
+                label = stringResource(SharedRes.strings.total_funds_raised),
                 modifier = Modifier.width(itemWidth)
             )
         }
@@ -310,8 +353,10 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
         scrollState: ScrollState,
         steps: Steps,
         budgets: Budgets,
+        isExplanationCardVisible: Boolean,
         navigateToStepDetails: (Step) -> Unit,
-        navigateToSaveStep: () -> Unit
+        navigateToSaveStep: () -> Unit,
+        closeInfoCard: () -> Unit
     ) {
         val list = listOf(
             stringResource(SharedRes.strings.steps),
@@ -335,6 +380,13 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                         text = { Text(text = text, color = Color(0xff6FAAEE)) }
                     )
                 }
+            }
+
+            AnimatedVisibility(isExplanationCardVisible) {
+                ActionableItemsInfoCard(
+                    modifier = Modifier.padding(horizontal = horizontalScreenPadding),
+                    closeCard = closeInfoCard
+                )
             }
 
             HorizontalPager(
@@ -370,6 +422,92 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                     }
 
                     page == 1 -> BudgetList(modifier = listModifier, budgets = budgets)
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ActionableItemsInfoCard(modifier: Modifier, closeCard: () -> Unit) {
+        val questionsToAnswersPair = remember {
+            listOf(
+                SharedRes.strings.what_is_a_step_label to SharedRes.strings.what_is_a_step_description,
+                SharedRes.strings.what_is_a_budget_label to SharedRes.strings.what_is_a_budget_description,
+            )
+        }
+
+        val pagerState = rememberPagerState(initialPage = 0) { questionsToAnswersPair.size }
+        val scope = rememberCoroutineScope()
+        Card(
+            shape = MaterialTheme.shapes.medium,
+            modifier = modifier.animateContentSize(
+                spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMediumLow
+                )
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(
+                    vertical = 12.dp,
+                    horizontal = horizontalScreenPadding
+                )
+            ) {
+                HorizontalPager(state = pagerState, userScrollEnabled = false) {
+                    val (question, answer) = questionsToAnswersPair[it]
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            SubTitleText(
+                                text = stringResource(question),
+                                modifier = Modifier.weight(1f)
+                            )
+
+                            IconButton(onClick = closeCard) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "close"
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.height(8.dp))
+                        BodyText(stringResource(answer))
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+                Column(
+                    modifier = Modifier.align(Alignment.End),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    BodyText("${pagerState.currentPage.plus(1)}/${pagerState.pageCount}")
+                    Row {
+                        val pageOne = 0
+                        val pageTwo = 1
+                        val previousIconEnabled = pagerState.currentPage != pageOne
+                        val nextIconEnabled = pagerState.currentPage != pageTwo
+
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                            contentDescription = "previous",
+                            tint = LocalContentColor.current.copy(alpha = if (previousIconEnabled) 1f else 0.5f),
+                            modifier = Modifier.clickable(
+                                enabled = previousIconEnabled,
+                                onClick = { scope.launch { pagerState.animateScrollToPage(pageOne) } }
+                            )
+                        )
+
+                        Spacer(Modifier.width(4.dp))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                            contentDescription = "next",
+                            tint = LocalContentColor.current.copy(alpha = if (nextIconEnabled) 1f else 0.5f),
+                            modifier = Modifier.clickable(
+                                enabled = nextIconEnabled,
+                                onClick = { scope.launch { pagerState.animateScrollToPage(pageTwo) } }
+                            )
+                        )
+                    }
                 }
             }
         }
