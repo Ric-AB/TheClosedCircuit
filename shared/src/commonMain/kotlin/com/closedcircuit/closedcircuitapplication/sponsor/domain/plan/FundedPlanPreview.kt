@@ -7,6 +7,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Name
+import com.closedcircuit.closedcircuitapplication.core.serialization.JavaSerializable
 import com.closedcircuit.closedcircuitapplication.sponsor.domain.model.FundingLevel
 
 data class FundedPlanPreview(
@@ -22,4 +23,4 @@ data class FundedPlanPreview(
     val fundingDate: Date,
     val fundsRaisedPercent: Double,
     val tasksCompletedPercent: Double
-)
+): JavaSerializable

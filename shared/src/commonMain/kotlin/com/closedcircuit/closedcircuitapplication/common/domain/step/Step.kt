@@ -9,6 +9,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.StepStatus
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
+import com.closedcircuit.closedcircuitapplication.core.serialization.JavaSerializable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -27,7 +28,7 @@ data class Step(
     val status: StepStatus,
     val createdAt: Date,
     val updatedAt: Date
-) {
+): JavaSerializable {
 
     val isComplete: Boolean get() = status == StepStatus.COMPLETED
     val hasReceivedFunds: Boolean get() = totalFundsRaised.value > Double.Zero

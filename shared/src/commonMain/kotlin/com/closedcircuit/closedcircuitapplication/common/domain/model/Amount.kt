@@ -1,10 +1,12 @@
 package com.closedcircuit.closedcircuitapplication.common.domain.model
 
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.formatNumberToCurrency
+import com.closedcircuit.closedcircuitapplication.core.serialization.JavaSerializable
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Amount(val value: Double, val currency: Currency? = null) : Comparable<Amount> {
+data class Amount(val value: Double, val currency: Currency? = null) : Comparable<Amount>,
+    JavaSerializable {
 
     init {
         require(value >= 0.toDouble()) { "Price ($value) cannot be less than 0.0" }

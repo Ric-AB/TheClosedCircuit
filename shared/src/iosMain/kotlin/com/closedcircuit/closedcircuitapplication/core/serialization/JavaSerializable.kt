@@ -1,0 +1,3 @@
+package com.closedcircuit.closedcircuitapplication.core.serialization
+
+actual interface JavaSerializable

@@ -5,6 +5,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.FundType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
+import com.closedcircuit.closedcircuitapplication.core.serialization.JavaSerializable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,7 +23,7 @@ data class FundRequest(
     val interestRate: Int?,
     val createdAt: Date,
     val updatedAt: Date
-) {
+) : JavaSerializable {
     companion object {
         fun buildFundRequest(
             id: ID = ID.generateRandomUUID(),

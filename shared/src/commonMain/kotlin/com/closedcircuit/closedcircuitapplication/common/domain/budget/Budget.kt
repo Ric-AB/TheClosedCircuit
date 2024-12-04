@@ -6,6 +6,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Date
 import com.closedcircuit.closedcircuitapplication.common.domain.model.File
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
+import com.closedcircuit.closedcircuitapplication.core.serialization.JavaSerializable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,7 +26,7 @@ data class Budget(
     val approvers: List<ID>,
     val createdAt: Date,
     val updatedAt: Date
-) {
+): JavaSerializable {
 
     val fundsRaised: Amount
         get() {

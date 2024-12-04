@@ -33,12 +33,14 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -81,6 +83,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent1
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent2
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.accent3
@@ -340,7 +343,13 @@ internal object DashboardTab : Tab, KoinComponent {
                     contentPadding = PaddingValues(horizontal = horizontalScreenPadding)
                 ) {
                     items(topSponsors) {
-                        Card(modifier = modifier.width(250.dp)) {
+                        Card(
+                            modifier = modifier.width(250.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme
+                                    .surfaceColorAtElevation(Elevation.Level1)
+                            )
+                        ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth()
                                     .padding(horizontal = 12.dp, vertical = 16.dp),

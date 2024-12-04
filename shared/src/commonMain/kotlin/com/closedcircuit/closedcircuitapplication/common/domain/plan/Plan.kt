@@ -8,6 +8,7 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.ImageUrl
 import com.closedcircuit.closedcircuitapplication.common.domain.model.TaskDuration
 import com.closedcircuit.closedcircuitapplication.common.util.Empty
 import com.closedcircuit.closedcircuitapplication.common.util.Zero
+import com.closedcircuit.closedcircuitapplication.core.serialization.JavaSerializable
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -33,7 +34,7 @@ data class Plan(
     val hasRequestedFund: Boolean,
     val isSponsored: Boolean,
     val accountabilityPartners: List<ID>,
-) {
+) : JavaSerializable {
 
     fun hasReceivedFunds(): Boolean {
         return totalFundsRaised.value > Double.Zero
