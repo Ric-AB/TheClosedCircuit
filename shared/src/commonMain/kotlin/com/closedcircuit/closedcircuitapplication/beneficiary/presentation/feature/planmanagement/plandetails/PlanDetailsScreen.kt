@@ -181,7 +181,10 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                         plan = uiState.plan,
                         isExtraInfoVisible = isExtraInfoVisible,
                         screenWidth = screenWidth,
-                        showExtraInfo = { isExtraInfoVisible = true; isExplanationCardVisible = true }
+                        showExtraInfo = {
+                            isExtraInfoVisible = true
+                            isExplanationCardVisible = true
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -486,11 +489,17 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                         val pageTwo = 1
                         val previousIconEnabled = pagerState.currentPage != pageOne
                         val nextIconEnabled = pagerState.currentPage != pageTwo
+                        val getAlpha: (Boolean) -> Float = {
+                            if (it) 1f
+                            else 0.5f
+                        }
 
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
                             contentDescription = "previous",
-                            tint = LocalContentColor.current.copy(alpha = if (previousIconEnabled) 1f else 0.5f),
+                            tint = LocalContentColor.current.copy(
+                                alpha = getAlpha(previousIconEnabled)
+                            ),
                             modifier = Modifier.clickable(
                                 enabled = previousIconEnabled,
                                 onClick = { scope.launch { pagerState.animateScrollToPage(pageOne) } }
@@ -501,7 +510,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
                             contentDescription = "next",
-                            tint = LocalContentColor.current.copy(alpha = if (nextIconEnabled) 1f else 0.5f),
+                            tint = LocalContentColor.current.copy(alpha = getAlpha(nextIconEnabled)),
                             modifier = Modifier.clickable(
                                 enabled = nextIconEnabled,
                                 onClick = { scope.launch { pagerState.animateScrollToPage(pageTwo) } }
