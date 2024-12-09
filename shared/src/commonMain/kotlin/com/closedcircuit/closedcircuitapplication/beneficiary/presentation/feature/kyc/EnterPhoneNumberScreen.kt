@@ -18,6 +18,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlaceHolderText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
@@ -25,7 +27,8 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
 
-internal class EnterPhoneNumberScreen : Screen, KoinComponent {
+internal class EnterPhoneNumberScreen : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

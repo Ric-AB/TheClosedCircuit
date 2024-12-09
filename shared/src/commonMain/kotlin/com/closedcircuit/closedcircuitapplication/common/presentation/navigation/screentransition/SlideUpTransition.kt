@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class SlideUpTransition : CustomScreenTransition {
 
-    private val risingScale = 1.2f
+    private val RISING_SCALE = 1.2f
     override fun screenTransition(
         scope: AnimatedContentTransitionScope<Screen>,
         navigator: Navigator
@@ -26,11 +26,11 @@ class SlideUpTransition : CustomScreenTransition {
             Pop -> scaleIn(initialScale = .9f) +
                     fadeIn(initialAlpha = .8f) +
                     slideInVertically { -it / 10 } togetherWith
-                    slideOutVertically { (it * risingScale).toInt() } +
-                    scaleOut(targetScale = risingScale)
+                    slideOutVertically { (it * RISING_SCALE).toInt() } +
+                    scaleOut(targetScale = RISING_SCALE)
 
-            else -> slideInVertically { (it * risingScale).toInt() } +
-                    scaleIn(initialScale = risingScale) togetherWith
+            else -> slideInVertically { (it * RISING_SCALE).toInt() } +
+                    scaleIn(initialScale = RISING_SCALE) togetherWith
                     scaleOut(targetScale = .9f) +
                     fadeOut(targetAlpha = .8f) +
                     slideOutVertically { -it / 10 }

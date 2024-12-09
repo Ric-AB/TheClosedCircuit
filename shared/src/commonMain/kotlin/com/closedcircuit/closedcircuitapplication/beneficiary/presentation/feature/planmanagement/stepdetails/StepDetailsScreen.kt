@@ -55,6 +55,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.icon.rememberTask
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -64,7 +66,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
-internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent {
+internal data class StepDetailsScreen(val step: Step) : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
 
     @Composable
     override fun Content() {

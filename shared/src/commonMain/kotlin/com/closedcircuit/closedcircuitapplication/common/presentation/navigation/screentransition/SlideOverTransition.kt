@@ -5,7 +5,9 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -14,27 +16,31 @@ import androidx.compose.ui.unit.IntOffset
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.stack.StackEvent.Pop
 import cafe.adriel.voyager.navigator.Navigator
-import kotlinx.serialization.Serializable
 
-@Serializable
 object SlideOverTransition : CustomScreenTransition {
-    //Fixme ugly transition
+    private const val SLIDING_SCALE = 1.2f
     override fun screenTransition(
         scope: AnimatedContentTransitionScope<Screen>,
         navigator: Navigator
     ): ContentTransform {
-        val (initialOffset, targetOffset) = when (navigator.lastEvent) {
-            Pop -> ({ size: Int -> -size }) to ({ size: Int -> size })
-            else -> ({ size: Int -> size }) to ({ size: Int -> -size })
-        }
-
         val animationSpec = spring(
             stiffness = Spring.StiffnessMediumLow,
-            visibilityThreshold = IntOffset.VisibilityThreshold
+            visibilityThreshold = IntOffset.VisibilityThreshold,
         )
 
-        return slideInHorizontally(animationSpec, initialOffset) togetherWith
-                slideOutHorizontally(animationSpec, targetOffset) +
-                scaleOut(tween(300), targetScale = 0.7F)
+        return when (navigator.lastEvent) {
+            Pop -> slideInHorizontally(animationSpec) { -it / 10 } +
+                    scaleIn(initialScale = .9f) +
+                    fadeIn(initialAlpha = .8f) togetherWith
+                    slideOutHorizontally(animationSpec) { (it * SLIDING_SCALE).toInt() } +
+                    scaleOut(targetScale = SLIDING_SCALE)
+
+            else -> slideInHorizontally(animationSpec) { (it * SLIDING_SCALE).toInt() } +
+                    scaleIn(initialScale = .5F) togetherWith
+                    scaleOut(targetScale = .95f) +
+                    fadeOut(targetAlpha = .8f) +
+                    slideOutHorizontally { -it / 10 }
+        }
+
     }
 }

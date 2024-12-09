@@ -44,6 +44,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.au
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ProtectedNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayReplaceAll
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
@@ -55,7 +57,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal class LoginScreen(private val planID: ID? = null) : Screen, KoinComponent {
+internal class LoginScreen(private val planID: ID? = null) : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     private val viewModel: LoginViewModel by inject()
 
     @Composable

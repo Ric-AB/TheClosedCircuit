@@ -102,6 +102,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BudgetItem
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.SubTitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.capitalizeFirstChar
@@ -116,7 +118,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 import kotlin.time.Duration.Companion.seconds
 
-internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent {
+internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
 
     @Composable
     override fun Content() {

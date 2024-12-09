@@ -16,7 +16,6 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +40,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findRootNavigator
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.secondary3
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
@@ -52,8 +53,7 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-internal class KycStatusScreen : Screen, KoinComponent {
+internal class KycStatusScreen : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

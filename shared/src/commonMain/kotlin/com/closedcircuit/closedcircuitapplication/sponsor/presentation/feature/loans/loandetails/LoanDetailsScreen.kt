@@ -50,6 +50,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.payment.PaymentScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPop
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.navigationResult
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
@@ -62,7 +64,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
 
-internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent {
+internal class LoanDetailsScreen(private val loanID: ID) : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

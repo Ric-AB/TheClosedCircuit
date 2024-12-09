@@ -19,11 +19,13 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImage
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.EditableAvatar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TextFieldDialogMenu
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
-internal class PlanClassificationScreen : Screen, KoinComponent {
+internal class PlanClassificationScreen : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
 
     @Composable
     override fun Content() {

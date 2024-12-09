@@ -34,6 +34,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.PlanDetailsGrid
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -46,7 +48,7 @@ internal class FundRequestSummaryScreen(
     private val modeOfSupport: FundType,
     private val plan: Plan,
     private val steps: Steps
-) : Screen, KoinComponent {
+) : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

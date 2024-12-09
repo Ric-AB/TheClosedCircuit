@@ -35,6 +35,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BodyText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.resources.SharedRes
@@ -47,7 +49,7 @@ import org.koin.core.parameter.parametersOf
 internal class CompleteStepScreen(
     private val planID: ID,
     private val stepID: ID
-) : Screen, KoinComponent {
+) : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
     private var shouldRefresh = false
 
     @Composable

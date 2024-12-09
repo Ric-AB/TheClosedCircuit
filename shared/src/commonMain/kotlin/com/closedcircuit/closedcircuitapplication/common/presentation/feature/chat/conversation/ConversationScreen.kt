@@ -58,6 +58,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.MessageTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.InputField
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
@@ -69,7 +71,8 @@ import org.koin.core.parameter.parametersOf
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-internal class ConversationScreen(private val otherParticipant: ChatUser) : Screen, KoinComponent {
+internal class ConversationScreen(private val otherParticipant: ChatUser) : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow

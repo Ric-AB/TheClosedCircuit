@@ -25,6 +25,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedButton
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultOutlinedTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.LocalCurrencyText
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.NumberCommaTransformation
@@ -36,7 +38,8 @@ import dev.icerock.moko.resources.compose.stringResource
 import org.koin.core.component.KoinComponent
 
 
-internal class EnterOfferAmountScreen : Screen, KoinComponent {
+internal class EnterOfferAmountScreen : Screen, KoinComponent,
+    CustomScreenTransition by SlideOverTransition {
 
     @Composable
     override fun Content() {

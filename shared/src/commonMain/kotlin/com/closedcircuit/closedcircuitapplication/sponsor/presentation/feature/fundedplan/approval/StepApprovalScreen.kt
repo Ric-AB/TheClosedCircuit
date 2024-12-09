@@ -53,6 +53,8 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.ZoomableImage
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversation.ConversationScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.primary6
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
@@ -72,7 +74,7 @@ internal class StepApprovalScreen(
     private val stepID: ID,
     private val canApprove: Boolean,
     private val isStepApprovedByUser: Boolean
-) : Screen, KoinComponent {
+) : Screen, KoinComponent, CustomScreenTransition by SlideOverTransition {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
