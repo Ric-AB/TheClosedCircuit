@@ -51,6 +51,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.common.domain.model.Amount
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
 import com.closedcircuit.closedcircuitapplication.common.domain.step.Step
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
@@ -61,7 +62,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TopLabeledTextField
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideOverTransition
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideUpTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.verticalScreenPadding
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.NumberCommaTransformation
@@ -73,7 +74,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 
 internal data class SaveStepScreen(val planId: ID, val step: Step? = null) : Screen, KoinComponent,
-    CustomScreenTransition by SlideOverTransition {
+    CustomScreenTransition by SlideUpTransition {
 
     @Composable
     override fun Content() {
@@ -219,7 +220,7 @@ private fun ScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                uiState.budgetItemStates.forEachIndexed { index, budgetItemState ->
+                uiState.budgetItemsState.forEachIndexed { index, budgetItemState ->
                     BudgetItem(
                         modifier = Modifier.fillMaxWidth(),
                         budgetItemState = budgetItemState,
@@ -239,7 +240,7 @@ private fun ScreenContent(
         }
 
         if (uiState.currentBudgetItem != null) {
-            SaveStepModal(
+            SaveBudgetModal(
                 bottomSheetState = bottomSheetState,
                 currentBudgetItemState = uiState.currentBudgetItem,
                 onEvent = onEvent
@@ -255,6 +256,10 @@ private fun BudgetItem(
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
+    val formattedAmount = remember(budgetItemState.budgetCostField.value) {
+        Amount(budgetItemState.budgetCostField.value.toDouble()).getFormattedValue()
+    }
+
     Card(modifier = modifier) {
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -267,7 +272,7 @@ private fun BudgetItem(
             )
 
             Text(
-                text = budgetItemState.budgetCostField.value,
+                text = formattedAmount,
                 style = MaterialTheme.typography.bodySmall
             )
 
@@ -320,7 +325,7 @@ private fun BudgetItem(
 }
 
 @Composable
-private fun SaveStepModal(
+private fun SaveBudgetModal(
     bottomSheetState: SheetState,
     currentBudgetItemState: BudgetItemState,
     onEvent: (SaveStepUiEvent) -> Unit

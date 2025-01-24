@@ -52,7 +52,7 @@ import org.koin.core.component.KoinComponent
 internal class EditProfileScreen :
     Screen,
     KoinComponent,
-    CustomScreenTransition by SlideUpTransition() {
+    CustomScreenTransition by SlideUpTransition {
 
     @Composable
     override fun Content() {

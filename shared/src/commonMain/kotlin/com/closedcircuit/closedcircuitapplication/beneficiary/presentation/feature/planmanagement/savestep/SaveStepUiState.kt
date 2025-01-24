@@ -18,12 +18,12 @@ data class SaveStepUIState(
     ),
     val stepDurationField: InputField = InputField("stepDuration", validator = TextValidator()),
     val currentBudgetItem: BudgetItemState? = null,
-    val budgetItemStates: SnapshotStateList<BudgetItemState> = mutableStateListOf()
+    val budgetItemsState: SnapshotStateList<BudgetItemState> = mutableStateListOf()
 ) {
 
     val fieldsToValidate = listOf(stepNameField, stepDescriptionField, stepDurationField)
     val canSubmit: Boolean
-        get() = budgetItemStates.isNotEmpty()
+        get() = budgetItemsState.isNotEmpty()
 
     companion object {
         fun init(step: Step?): SaveStepUIState {

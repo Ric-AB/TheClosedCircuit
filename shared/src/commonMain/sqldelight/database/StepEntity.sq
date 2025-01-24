@@ -34,7 +34,8 @@ WHERE id = :id;
 getStepEntitiesForPlan:
 SELECT *
 FROM StepEntity
-WHERE planID = :planID;
+WHERE planID = :planID
+ORDER BY createdAt ASC;
 
 getPrecedingStepFor:
 SELECT *

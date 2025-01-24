@@ -35,13 +35,13 @@ getBudgetEntitiesForPlan:
 SELECT *
 FROM BudgetEntity
 WHERE planID = :planID
-ORDER BY createdAt DESC;
+ORDER BY createdAt ASC;
 
 getBudgetEntitiesForStep:
 SELECT *
 FROM BudgetEntity
 WHERE stepID = :stepID
-ORDER BY createdAt DESC;
+ORDER BY createdAt ASC;
 
 deleteBudgetEntity:
 DELETE FROM BudgetEntity

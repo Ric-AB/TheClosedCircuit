@@ -12,10 +12,8 @@ import androidx.compose.animation.togetherWith
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.stack.StackEvent.Pop
 import cafe.adriel.voyager.navigator.Navigator
-import kotlinx.serialization.Serializable
 
-@Serializable
-class SlideUpTransition : CustomScreenTransition {
+object SlideUpTransition : CustomScreenTransition {
 
     private val RISING_SCALE = 1.2f
     override fun screenTransition(

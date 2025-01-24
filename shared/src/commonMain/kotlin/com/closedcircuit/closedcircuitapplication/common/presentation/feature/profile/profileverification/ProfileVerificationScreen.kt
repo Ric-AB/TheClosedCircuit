@@ -49,7 +49,7 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 internal class ProfileVerificationScreen(private val email: Email) : Screen, KoinComponent,
-    CustomScreenTransition by SlideUpTransition() {
+    CustomScreenTransition by SlideUpTransition {
     private val viewModel: ProfileVerificationViewModel by inject { parametersOf(email) }
 
     @Composable

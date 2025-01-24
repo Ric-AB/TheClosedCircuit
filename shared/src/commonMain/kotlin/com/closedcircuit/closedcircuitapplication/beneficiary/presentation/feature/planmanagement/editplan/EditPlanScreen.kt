@@ -49,7 +49,7 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 internal data class EditPlanScreen(val plan: Plan) : Screen, KoinComponent,
-    CustomScreenTransition by SlideUpTransition() {
+    CustomScreenTransition by SlideUpTransition {
     private val viewModel: EditPlanViewModel by inject { parametersOf(plan) }
 
     @Composable

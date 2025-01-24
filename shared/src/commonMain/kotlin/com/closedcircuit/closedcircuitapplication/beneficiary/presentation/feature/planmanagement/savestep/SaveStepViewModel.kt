@@ -78,6 +78,30 @@ class SaveStepViewModel(
 
         val (stepAction, step) = buildStep()
         screenModelScope.launch {
+//            val postResults = buildBudgets(step.id).map {
+//                val (budgetAction, budget) = it
+//                when (budgetAction) {
+//                    Action.CREATE -> budgetRepository.createBudget(budget)
+//                    Action.UPDATE -> budgetRepository.updateBudget(budget)
+//                }
+//            }
+//
+//            val deleteResults = budgetsToDelete.map { budget ->
+//                budgetRepository.deleteBudget(budget.id)
+//            }
+//
+//            val allResults = postResults + deleteResults
+//            val completedSuccessfully = allResults.all { it is ApiSuccessResponse }
+//            if (completedSuccessfully) {
+//                state = state.copy(loading = false)
+//                _saveStepResult.send(SaveStepResult.Success)
+//            } else {
+//                state = state.copy(loading = false)
+//                val errorResult = allResults.find { it is ApiErrorResponse }
+//                _saveStepResult.send(SaveStepResult.Failure((errorResult as ApiErrorResponse).errorMessage))
+//            }
+
+            //
             val stepResult = if (stepAction == Action.CREATE) stepRepository.createStep(step)
             else stepRepository.updateStep(step)
 
@@ -137,7 +161,7 @@ class SaveStepViewModel(
     }
 
     private fun buildBudgets(stepID: ID): List<Pair<Action, Budget>> {
-        return state.budgetItemStates.map {
+        return state.budgetItemsState.map {
             val budgetName = it.budgetNameField.value
             val budgetCost = it.budgetCostField.value.toDouble()
 
@@ -146,12 +170,14 @@ class SaveStepViewModel(
                     planID = planID,
                     stepID = stepID,
                     name = budgetName,
+                    description = budgetName,
                     cost = Amount(budgetCost)
                 )
                 Pair(Action.CREATE, budget)
             } else {
                 val budget = it.budget.copy(
                     name = budgetName,
+                    description = budgetName,
                     cost = Amount(budgetCost)
                 )
                 Pair(Action.UPDATE, budget)
@@ -176,7 +202,7 @@ class SaveStepViewModel(
     }
 
     private fun setCurrentBudgetItem(index: Int) {
-        val currentBudgetItem = state.budgetItemStates[index].copy(indexOfItem = index)
+        val currentBudgetItem = state.budgetItemsState[index].copy(indexOfItem = index)
         state = state.copy(currentBudgetItem = currentBudgetItem)
     }
 
@@ -189,8 +215,8 @@ class SaveStepViewModel(
     }
 
     private fun removeBudgetItem(index: Int) {
-        val itemToRemove = state.budgetItemStates[index]
-        state.budgetItemStates.remove(itemToRemove)
+        val itemToRemove = state.budgetItemsState[index]
+        state.budgetItemsState.remove(itemToRemove)
 
         if (itemToRemove.budget != null)
             budgetsToDelete.add(itemToRemove.budget)
@@ -216,15 +242,15 @@ class SaveStepViewModel(
     }
 
     private fun addBudgetItemToList(newItem: BudgetItemState) {
-        state.budgetItemStates.add(newItem)
+        state.budgetItemsState.add(newItem)
     }
 
     private fun replaceBudgetItem(item: BudgetItemState) {
-        state.budgetItemStates[item.indexOfItem] = item
+        state.budgetItemsState[item.indexOfItem] = item
     }
 
     private fun setBudgetItemsInState(items: Budgets) {
-        items.forEach { state.budgetItemStates.add(BudgetItemState.init(it)) }
+        items.forEach { state.budgetItemsState.add(BudgetItemState.init(it)) }
     }
 
     private fun updateLastFocusedField(fieldName: String) {
