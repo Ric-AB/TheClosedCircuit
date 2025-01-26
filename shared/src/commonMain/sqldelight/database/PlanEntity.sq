@@ -25,12 +25,60 @@ CREATE TABLE PlanEntity (
 );
 
 getPlanEntities:
-SELECT *
+SELECT PlanEntity.id,
+       PlanEntity.avatar,
+       PlanEntity.category,
+       PlanEntity.sector,
+       PlanEntity.type,
+       PlanEntity.name,
+       PlanEntity.description,
+       PlanEntity.duration,
+       PlanEntity.estimatedSellingPrice,
+       PlanEntity.estimatedCostPrice,
+       PlanEntity.currency,
+       PlanEntity.fundsRaisedPercent,
+       PlanEntity.tasksCompletedPercent,
+       (SELECT SUM(cost) FROM BudgetEntity WHERE BudgetEntity.planID = PlanEntity.id) AS targetAmount,
+       PlanEntity.totalFundsRaised,
+       PlanEntity.analytics,
+       PlanEntity.userID,
+       PlanEntity.hasRequestedFund,
+       PlanEntity.isSponsored,
+       PlanEntity.createdAt,
+       PlanEntity.updatedAt,
+       FundRequestEntity.*
 FROM PlanEntity
-ORDER BY updatedAt DESC;
+LEFT JOIN FundRequestEntity
+  ON PlanEntity.id = FundRequestEntity.planId
+  AND FundRequestEntity.createdAt = (
+      SELECT MAX(createdAt)
+      FROM FundRequestEntity
+      WHERE FundRequestEntity.planId = PlanEntity.id
+  )
+ORDER BY PlanEntity.updatedAt DESC;
 
 getRecentPlanEntities:
-SELECT *
+SELECT PlanEntity.id,
+       PlanEntity.avatar,
+       PlanEntity.category,
+       PlanEntity.sector,
+       PlanEntity.type,
+       PlanEntity.name,
+       PlanEntity.description,
+       PlanEntity.duration,
+       PlanEntity.estimatedSellingPrice,
+       PlanEntity.estimatedCostPrice,
+       PlanEntity.currency,
+       PlanEntity.fundsRaisedPercent,
+       PlanEntity.tasksCompletedPercent,
+       (SELECT SUM(cost) FROM BudgetEntity WHERE BudgetEntity.planID = PlanEntity.id) AS targetAmount,
+       PlanEntity.totalFundsRaised,
+       PlanEntity.analytics,
+       PlanEntity.userID,
+       PlanEntity.hasRequestedFund,
+       PlanEntity.isSponsored,
+       PlanEntity.createdAt,
+       PlanEntity.updatedAt
 FROM PlanEntity
 ORDER BY updatedAt DESC
 LIMIT :amount;
@@ -45,9 +93,37 @@ DELETE FROM PlanEntity
 WHERE id = :id;
 
 getPlanEntityByID:
-SELECT *
+SELECT PlanEntity.id,
+       PlanEntity.avatar,
+       PlanEntity.category,
+       PlanEntity.sector,
+       PlanEntity.type,
+       PlanEntity.name,
+       PlanEntity.description,
+       PlanEntity.duration,
+       PlanEntity.estimatedSellingPrice,
+       PlanEntity.estimatedCostPrice,
+       PlanEntity.currency,
+       PlanEntity.fundsRaisedPercent,
+       PlanEntity.tasksCompletedPercent,
+       (SELECT SUM(cost) FROM BudgetEntity WHERE BudgetEntity.planID = PlanEntity.id) AS targetAmount,
+       PlanEntity.totalFundsRaised,
+       PlanEntity.analytics,
+       PlanEntity.userID,
+       PlanEntity.hasRequestedFund,
+       PlanEntity.isSponsored,
+       PlanEntity.createdAt,
+       PlanEntity.updatedAt,
+       FundRequestEntity.*
 FROM PlanEntity
-WHERE id = :id;
+LEFT JOIN FundRequestEntity
+  ON PlanEntity.id = FundRequestEntity.planId
+  AND FundRequestEntity.createdAt = (
+      SELECT MAX(createdAt)
+      FROM FundRequestEntity
+      WHERE FundRequestEntity.planId = PlanEntity.id
+  )
+WHERE PlanEntity.id = :id;
 
 deleteAll:
 DELETE FROM PlanEntity;
