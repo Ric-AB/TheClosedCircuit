@@ -159,7 +159,7 @@ internal data class PlanDetailsScreen(val plan: Plan) : Screen, KoinComponent,
                     navigateToFundRequest = {
                         navigator.push(
                             FundRequestScreen(
-                                plan,
+                                plan.copy(targetAmount = uiState.plan.targetAmount), //todo pass just plan id
                                 uiState.steps
                             )
                         )
