@@ -257,7 +257,7 @@ private fun BudgetItem(
     onDeleteClick: () -> Unit
 ) {
     val formattedAmount = remember(budgetItemState.budgetCostField.value) {
-        Amount(budgetItemState.budgetCostField.value.toDouble()).getFormattedValue()
+        Amount(budgetItemState.budgetCostField.value.ifEmpty { "0" }.toDouble()).getFormattedValue()
     }
 
     Card(modifier = modifier) {

@@ -35,7 +35,6 @@ FROM PlanEntity
 ORDER BY updatedAt DESC
 LIMIT :amount;
 
-
 upsertPlanEntity:
 INSERT OR REPLACE
 INTO PlanEntity

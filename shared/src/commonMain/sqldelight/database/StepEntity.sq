@@ -16,29 +16,60 @@ CREATE TABLE StepEntity (
     updatedAt TEXT NOT NULL
 );
 
-getStepEntities:
-SELECT *
-FROM StepEntity
-ORDER BY createdAt DESC;
-
 upsertStepEntity:
 INSERT OR REPLACE
 INTO StepEntity
 VALUES ?;
 
 getStepEntityByID:
-SELECT *
+SELECT StepEntity.id,
+       StepEntity.name,
+       StepEntity.description,
+       StepEntity.duration,
+       (SELECT SUM(cost) FROM BudgetEntity WHERE BudgetEntity.stepID = StepEntity.id) AS targetFunds,
+       StepEntity.totalFundsRaised,
+       StepEntity.currency,
+       StepEntity.planID,
+       StepEntity.userID,
+       StepEntity.isSponsored,
+       StepEntity.status,
+       StepEntity.createdAt,
+       StepEntity.updatedAt
 FROM StepEntity
 WHERE id = :id;
 
 getStepEntitiesForPlan:
-SELECT *
+SELECT StepEntity.id,
+       StepEntity.name,
+       StepEntity.description,
+       StepEntity.duration,
+       (SELECT SUM(cost) FROM BudgetEntity WHERE BudgetEntity.stepID = StepEntity.id) AS targetFunds,
+       StepEntity.totalFundsRaised,
+       StepEntity.currency,
+       StepEntity.planID,
+       StepEntity.userID,
+       StepEntity.isSponsored,
+       StepEntity.status,
+       StepEntity.createdAt,
+       StepEntity.updatedAt
 FROM StepEntity
 WHERE planID = :planID
 ORDER BY createdAt ASC;
 
 getPrecedingStepFor:
-SELECT *
+SELECT StepEntity.id,
+       StepEntity.name,
+       StepEntity.description,
+       StepEntity.duration,
+       (SELECT SUM(cost) FROM BudgetEntity WHERE BudgetEntity.stepID = StepEntity.id) AS targetFunds,
+       StepEntity.totalFundsRaised,
+       StepEntity.currency,
+       StepEntity.planID,
+       StepEntity.userID,
+       StepEntity.isSponsored,
+       StepEntity.status,
+       StepEntity.createdAt,
+       StepEntity.updatedAt
 FROM StepEntity
 WHERE createdAt < (
     SELECT createdAt

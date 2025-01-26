@@ -22,7 +22,7 @@ interface StepRepository {
 
     fun getStepsForPlanAsFlow(planID: ID): Flow<Steps>
 
-    fun getStepByIDAsFlow(id: ID): Flow<Step?>
+    fun getStepByIDAsFlow(stepID: ID): Flow<Step?>
 
     fun getPrecedingStepAsFlowFor(stepID: ID, planID: ID): Flow<Step?>
 

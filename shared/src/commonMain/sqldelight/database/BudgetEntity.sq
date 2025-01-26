@@ -16,11 +16,6 @@ CREATE TABLE BudgetEntity (
     updatedAt TEXT NOT NULL
 );
 
-getBudgetEntities:
-SELECT *
-FROM BudgetEntity
-ORDER BY createdAt DESC;
-
 upsertBudgetEntity:
 INSERT OR REPLACE
 INTO BudgetEntity
