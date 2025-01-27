@@ -27,7 +27,6 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -64,13 +63,12 @@ import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.common.domain.model.KycStatus
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.Avatar
-import com.closedcircuit.closedcircuitapplication.common.presentation.component.BackgroundLoader
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.BaseScaffold
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.CircularIndicator
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.DefaultAppBar
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileScreen
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.EmailVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
@@ -170,7 +168,7 @@ internal object ProfileTab : Tab, KoinComponent {
                     phoneNumberStatus = state.phoneNumberStatus,
                     closeModal = { setSheetVisibility(false) },
                     navigateToProfileVerificationScreen = {
-                        uiState?.let { navigator.push(ProfileVerificationScreen(Email(it.email))) }
+                        uiState?.let { navigator.push(EmailVerificationScreen(Email(it.email))) }
                     },
                     navigateToKycScreen = { navigator.push(KycNavigator()) }
                 )

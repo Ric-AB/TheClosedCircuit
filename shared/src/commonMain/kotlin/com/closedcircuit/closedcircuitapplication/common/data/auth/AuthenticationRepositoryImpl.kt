@@ -8,7 +8,7 @@ import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.Logi
 import com.closedcircuit.closedcircuitapplication.common.data.auth.dto.RegisterRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.ResetPasswordRequest
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.auth.dto.VerifyOtpRequest
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.auth.AuthenticationRepository
 import com.closedcircuit.closedcircuitapplication.common.data.auth.dto.SaveFcmTokenRequest
 import com.closedcircuit.closedcircuitapplication.core.network.ApiErrorResponse
 import com.closedcircuit.closedcircuitapplication.core.network.ApiSuccessResponse

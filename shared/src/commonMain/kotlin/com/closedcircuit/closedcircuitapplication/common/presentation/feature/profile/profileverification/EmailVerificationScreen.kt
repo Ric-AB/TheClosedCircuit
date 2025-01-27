@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
@@ -36,43 +37,42 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.SuccessScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPush
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.CustomScreenTransition
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.SlideUpTransition
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.delayPush
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.horizontalScreenPadding
-import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import com.closedcircuit.closedcircuitapplication.common.util.observeWithScreen
+import com.closedcircuit.closedcircuitapplication.resources.SharedRes
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
-internal class ProfileVerificationScreen(private val email: Email) : Screen, KoinComponent,
+internal class EmailVerificationScreen(private val email: Email) : Screen, KoinComponent,
     CustomScreenTransition by SlideUpTransition {
-    private val viewModel: ProfileVerificationViewModel by inject { parametersOf(email) }
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = getScreenModel<EmailVerificationViewModel> { parametersOf(email) }
         val uiState = viewModel.state
         val messageBarState = rememberMessageBarState()
         val onEvent = viewModel::onEvent
         var otpError by remember { mutableStateOf(false) }
         val onOtpChange: (String, Boolean) -> Unit = { text, codeComplete ->
             otpError = false
-            onEvent(ProfileVerificationUiEvent.OtpChange(text))
+            onEvent(EmailVerificationUiEvent.OtpChange(text))
             if (codeComplete) {
-                onEvent(ProfileVerificationUiEvent.Submit)
+                onEvent(EmailVerificationUiEvent.Submit)
             }
         }
 
         viewModel.resultChannel.receiveAsFlow().observeWithScreen {
             when (it) {
-                is ProfileVerificationResult.RequestOtpFailure -> messageBarState.addError(it.message)
-                ProfileVerificationResult.RequestOtpSuccess -> messageBarState.addSuccess("Otp code has been sent to ${email.value}")
-                is ProfileVerificationResult.VerifyOtpFailure -> otpError = true
-                ProfileVerificationResult.VerifyOtpSuccess -> {
+                is EmailVerificationResult.RequestOtpFailure -> messageBarState.addError(it.message)
+                EmailVerificationResult.RequestOtpSuccess -> messageBarState.addSuccess("Otp code has been sent to ${email.value}")
+                is EmailVerificationResult.VerifyOtpFailure -> otpError = true
+                EmailVerificationResult.VerifyOtpSuccess -> {
                     navigator.delayPush(
                         SuccessScreen(
                             title = "Email verification successful",
@@ -89,7 +89,7 @@ internal class ProfileVerificationScreen(private val email: Email) : Screen, Koi
             uiState = uiState,
             otpError = otpError,
             otpChange = onOtpChange,
-            resendOtp = { onEvent(ProfileVerificationUiEvent.RequestOtp(isResend = true)) },
+            resendOtp = { onEvent(EmailVerificationUiEvent.RequestOtp(isResend = true)) },
             goBack = navigator::pop
         )
     }
@@ -97,7 +97,7 @@ internal class ProfileVerificationScreen(private val email: Email) : Screen, Koi
     @Composable
     private fun ScreenContent(
         messageBarState: MessageBarState,
-        uiState: ProfileVerificationUIState,
+        uiState: EmailVerificationUIState,
         otpError: Boolean,
         otpChange: (String, Boolean) -> Unit,
         resendOtp: () -> Unit,

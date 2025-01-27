@@ -13,7 +13,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.pa
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.changepassword.ChangePasswordViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.edit.EditProfileViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileTabViewModel
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationViewModel
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.EmailVerificationViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsViewModel
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.RootViewModel
 import org.koin.core.qualifier.named
@@ -40,7 +40,7 @@ val viewModelModule = module {
         )
     }
     factory { EditProfileViewModel(get()) }
-    factory { parameters -> ProfileVerificationViewModel(parameters.get(), get()) }
+    factory { parameters -> EmailVerificationViewModel(parameters.get(), get()) }
     factory { ChangePasswordViewModel(get()) }
 
     // notification

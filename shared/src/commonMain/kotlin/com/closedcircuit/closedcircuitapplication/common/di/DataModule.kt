@@ -4,7 +4,7 @@ import com.closedcircuit.closedcircuitapplication.common.data.auth.Authenticatio
 import com.closedcircuit.closedcircuitapplication.common.data.notification.NotificationRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.beneficiary.data.payment.PaymentRepositoryImpl
 import com.closedcircuit.closedcircuitapplication.common.data.user.UserRepositoryImpl
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.auth.AuthenticationRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.notification.NotificationRepository
 import com.closedcircuit.closedcircuitapplication.beneficiary.domain.payment.PaymentRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.session.SessionRepository

@@ -80,7 +80,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.component.
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.TitleText
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.WalletCard
 import com.closedcircuit.closedcircuitapplication.common.presentation.component.rememberMessageBarState
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.EmailVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.findNavigator
 import com.closedcircuit.closedcircuitapplication.common.presentation.theme.Elevation
@@ -135,7 +135,7 @@ internal object DashboardTab : Tab, KoinComponent {
                     if (state.hasVerifiedEmail) {
                         navigator.push(CreatePlanNavigator())
                     } else {
-                        navigator.push(ProfileVerificationScreen(state.email))
+                        navigator.push(EmailVerificationScreen(state.email))
                     }
                 }
             },

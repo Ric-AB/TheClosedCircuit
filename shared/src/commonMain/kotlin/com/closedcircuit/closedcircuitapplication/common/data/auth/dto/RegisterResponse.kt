@@ -7,5 +7,7 @@ import kotlinx.serialization.Serializable
 data class RegisterResponse(
     val email: String,
     @SerialName("phone_number")
-    val phoneNumber: String
+    val phoneNumber: String,
+    val name: String? = null,
+    val roles: String? = null
 )

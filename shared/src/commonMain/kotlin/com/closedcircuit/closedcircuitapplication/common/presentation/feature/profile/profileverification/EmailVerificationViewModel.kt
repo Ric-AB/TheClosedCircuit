@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.closedcircuit.closedcircuitapplication.beneficiary.domain.auth.AuthenticationRepository
+import com.closedcircuit.closedcircuitapplication.common.domain.auth.AuthenticationRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
 import com.closedcircuit.closedcircuitapplication.core.network.onComplete
 import com.closedcircuit.closedcircuitapplication.core.network.onError
@@ -14,25 +14,25 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
 
-class ProfileVerificationViewModel(
+class EmailVerificationViewModel(
     private val email: Email,
     private val authenticationRepository: AuthenticationRepository
 ) : ScreenModel {
 
-    var state by mutableStateOf(ProfileVerificationUIState())
+    var state by mutableStateOf(EmailVerificationUIState())
 
-    private val _resultChannel: Channel<ProfileVerificationResult> = Channel()
-    val resultChannel: ReceiveChannel<ProfileVerificationResult> = _resultChannel
+    private val _resultChannel: Channel<EmailVerificationResult> = Channel()
+    val resultChannel: ReceiveChannel<EmailVerificationResult> = _resultChannel
 
     init {
         requestOtp()
     }
 
-    fun onEvent(event: ProfileVerificationUiEvent) {
+    fun onEvent(event: EmailVerificationUiEvent) {
         when (event) {
-            is ProfileVerificationUiEvent.OtpChange -> updateOtp(event.otp)
-            is ProfileVerificationUiEvent.RequestOtp -> requestOtp(event.isResend)
-            ProfileVerificationUiEvent.Submit -> submitOtp()
+            is EmailVerificationUiEvent.OtpChange -> updateOtp(event.otp)
+            is EmailVerificationUiEvent.RequestOtp -> requestOtp(event.isResend)
+            EmailVerificationUiEvent.Submit -> submitOtp()
         }
     }
 
@@ -49,9 +49,9 @@ class ProfileVerificationViewModel(
                     state = state.copy(isLoading = false)
                 }.onSuccess {
                     if (resend)
-                        _resultChannel.send(ProfileVerificationResult.RequestOtpSuccess)
+                        _resultChannel.send(EmailVerificationResult.RequestOtpSuccess)
                 }.onError { _, message ->
-                    _resultChannel.send(ProfileVerificationResult.RequestOtpFailure(message))
+                    _resultChannel.send(EmailVerificationResult.RequestOtpFailure(message))
                 }
         }
     }
@@ -66,9 +66,9 @@ class ProfileVerificationViewModel(
                 .onComplete {
                     state = state.copy(isLoading = false)
                 }.onSuccess {
-                    _resultChannel.send(ProfileVerificationResult.VerifyOtpSuccess)
+                    _resultChannel.send(EmailVerificationResult.VerifyOtpSuccess)
                 }.onError { _, message ->
-                    _resultChannel.send(ProfileVerificationResult.VerifyOtpFailure(message))
+                    _resultChannel.send(EmailVerificationResult.VerifyOtpFailure(message))
                 }
         }
     }

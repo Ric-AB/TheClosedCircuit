@@ -36,7 +36,7 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.feature.au
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.chat.conversationlist.ChatTab
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.notification.NotificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.home.ProfileTab
-import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.ProfileVerificationScreen
+import com.closedcircuit.closedcircuitapplication.common.presentation.feature.profile.profileverification.EmailVerificationScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.feature.settings.SettingsScreen
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.BottomNavFab
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.NavigationDrawer
@@ -122,7 +122,7 @@ internal class BeneficiaryBottomTabs : Screen {
                                         navigator.push(PlanListScreen())
                                     } else {
                                         rootState?.email?.let {
-                                            navigator.push(ProfileVerificationScreen(it))
+                                            navigator.push(EmailVerificationScreen(it))
                                         }
                                     }
                                 }
