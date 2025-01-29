@@ -40,7 +40,7 @@ val viewModelModule = module {
         )
     }
     factory { EditProfileViewModel(get()) }
-    factory { parameters -> EmailVerificationViewModel(parameters.get(), get()) }
+    factory { parameters -> EmailVerificationViewModel(parameters.get(), get(), get()) }
     factory { ChangePasswordViewModel(get()) }
 
     // notification

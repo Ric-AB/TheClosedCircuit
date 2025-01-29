@@ -7,6 +7,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.closedcircuit.closedcircuitapplication.common.domain.auth.AuthenticationRepository
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Email
+import com.closedcircuit.closedcircuitapplication.common.domain.user.UserRepository
 import com.closedcircuit.closedcircuitapplication.core.network.onComplete
 import com.closedcircuit.closedcircuitapplication.core.network.onError
 import com.closedcircuit.closedcircuitapplication.core.network.onSuccess
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class EmailVerificationViewModel(
     private val email: Email,
-    private val authenticationRepository: AuthenticationRepository
+    private val authenticationRepository: AuthenticationRepository,
+    private val userRepository: UserRepository
 ) : ScreenModel {
 
     var state by mutableStateOf(EmailVerificationUIState())
@@ -63,13 +65,23 @@ class EmailVerificationViewModel(
         state = state.copy(isLoading = true)
         screenModelScope.launch {
             authenticationRepository.verifyOtp(otpCode = otpCode, email = email)
-                .onComplete {
-                    state = state.copy(isLoading = false)
-                }.onSuccess {
-                    _resultChannel.send(EmailVerificationResult.VerifyOtpSuccess)
+                .onSuccess {
+                    refreshUser()
                 }.onError { _, message ->
                     _resultChannel.send(EmailVerificationResult.VerifyOtpFailure(message))
                 }
         }
+    }
+
+    private suspend fun refreshUser() {
+        val user = userRepository.getCurrentUser()
+        userRepository.fetchLoggedInUser(userId = user.id)
+            .onComplete {
+                state = state.copy(isLoading = false)
+            }.onSuccess {
+                _resultChannel.send(EmailVerificationResult.VerifyOtpSuccess)
+            }.onError { _, message ->
+                _resultChannel.send(EmailVerificationResult.VerifyOtpFailure(message))
+            }
     }
 }
