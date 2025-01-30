@@ -41,7 +41,7 @@ class SettingsViewModel(
         when (event) {
             is SettingsUiEvent.ProfileTypeChange -> setActiveProfile(event.profileType)
             is SettingsUiEvent.TogglePrompt -> {}
-            SettingsUiEvent.DeleteAccount -> {}
+            SettingsUiEvent.DeleteAccount -> deleteAccount()
         }
     }
 
