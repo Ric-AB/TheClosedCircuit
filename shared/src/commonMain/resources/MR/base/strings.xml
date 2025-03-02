@@ -474,18 +474,25 @@
     </string>
     <string name="delete_account_label">Delete account</string>
     <string name="continue_label">Continue</string>
-    <string name="delete_account_prompt_one">Are you sure you want to delete your account? Deleting
-        your account will permanently remove your personal data and cannot be undone.
+    <string name="are_you_sure_you_want_to_delete_account_prompt">Are you sure you want to delete
+        your account? Deleting
+        your account will permanently remove your personal data and this process cannot be undone.
     </string>
-    <string name="delete_account_prompt_two">
-        <b>Please note that closing your account will:</b>
-        \n \u2022 Permanently delete all your data.\n \u2022 Cancel any active loans and pending
-        transactions.\n \u2022 Remove access to all app features.\n
+    <string name="sponsors_will_be_informed_of_delete_request">Be aware that the Sponsors involved
+        with funding your plan will be informed of your account delete request, if your account has
+        any active plans.
     </string>
-    <string name="delete_account_prompt_three"><b>Caution!</b>\n \u2022 You must complete all
-        pending transactions before your account can be permanently deleted. \n \u2022 Our support
-        team will confirm any pending transaction has been reconciled before completing the deletion
-        process. \n\nFor more information on data retention and compliance, please review our Data
-        Retention Policy.
+    <string name="you_must_complete_pending_transactions_before_deleting_prompt">You must complete
+        all pending transactions including outstanding loan(s) before your account can be deleted.
+    </string>
+    <string name="our_team_will_confirm_pending_transactions_before_deleting_prompt">Our support
+        team will confirm that all pending transaction(s) have been reconciled before completing the
+        deletion process.
+    </string>
+    <string name="delete_account_data_retention_policy_prompt">For more information on data
+        retention and compliance, please review our Data Retention Policy
+    </string>
+    <string name="return_label">Return</string>
+    <string name="caution_label">Caution!
     </string>
 </resources>

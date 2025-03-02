@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -45,8 +46,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -374,7 +383,6 @@ internal class SettingsScreen : Screen, KoinComponent {
         ) {
             var showDialog1 by remember { mutableStateOf(false) }
             var showDialog2 by remember { mutableStateOf(false) }
-            var showDialog3 by remember { mutableStateOf(false) }
 
             SectionTitle(stringResource(SharedRes.strings.account_label))
             SectionItem(
@@ -384,24 +392,81 @@ internal class SettingsScreen : Screen, KoinComponent {
                 modifier = Modifier.clickable { showDialog1 = true }
             )
 
+            val promptOne = buildAnnotatedString {
+                append(stringResource(SharedRes.strings.are_you_sure_you_want_to_delete_account_prompt))
+                append("\n\n")
+                withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
+                    append(stringResource(SharedRes.strings.sponsors_will_be_informed_of_delete_request))
+                }
+            }
+
             DeleteDialog(
                 visible = showDialog1,
-                message = stringResource(SharedRes.strings.delete_account_prompt_one),
+                message = promptOne,
                 onDismiss = { showDialog1 = false },
                 onConfirm = { showDialog2 = true }
             )
 
-            DeleteDialog(
-                visible = showDialog2,
-                message = stringResource(SharedRes.strings.delete_account_prompt_two),
-                onDismiss = { showDialog2 = false },
-                onConfirm = { showDialog3 = true }
-            )
+            val promptTwo = buildAnnotatedString {
+                append(stringResource(SharedRes.strings.caution_label))
+                append("\n")
+
+                val bulletOne =
+                    stringResource(SharedRes.strings.you_must_complete_pending_transactions_before_deleting_prompt)
+
+                withStyle(
+                    ParagraphStyle(
+                        textIndent = TextIndent(
+                            firstLine = 0.sp,
+                            restLine = 16.sp
+                        )
+                    )
+                ) {
+                    append("•\t\t")
+                    append(bulletOne)
+                    append("\n")
+                }
+
+                val bulletTwo =
+                    stringResource(SharedRes.strings.our_team_will_confirm_pending_transactions_before_deleting_prompt)
+
+                withStyle(
+                    ParagraphStyle(
+                        textIndent = TextIndent(
+                            firstLine = 0.sp,
+                            restLine = 16.sp
+                        )
+                    )
+                ) {
+                    append("•\t\t")
+                    append(bulletTwo)
+                    append("\n")
+                }
+
+                val dataRetentionString =
+                    stringResource(SharedRes.strings.delete_account_data_retention_policy_prompt)
+
+                val beforeMatch =
+                    dataRetentionString.substring(0, dataRetentionString.indexOf("Data"))
+
+                append(beforeMatch)
+                pushStringAnnotation(
+                    tag = "data policy",
+                    annotation = "https://theclosedcircuit.info/privacy-policy"
+                )
+
+                withStyle(style = SpanStyle(color = Color.Blue)) {
+                    append(dataRetentionString.drop(beforeMatch.length))
+                }
+
+                pop()
+            }
+
 
             DeleteDialog(
-                visible = showDialog3,
-                message = stringResource(SharedRes.strings.delete_account_prompt_three),
-                onDismiss = { showDialog3 = false },
+                visible = showDialog2,
+                message = promptTwo,
+                onDismiss = { showDialog2 = false },
                 onConfirm = { onEvent(SettingsUiEvent.DeleteAccount) }
             )
         }
@@ -443,11 +508,12 @@ internal class SettingsScreen : Screen, KoinComponent {
     @Composable
     private fun DeleteDialog(
         visible: Boolean,
-        message: String,
+        message: AnnotatedString,
         onDismiss: () -> Unit,
         onConfirm: () -> Unit
     ) {
         if (visible) {
+            val uriHandler = LocalUriHandler.current
             Dialog(
                 onDismissRequest = onDismiss,
                 properties = DialogProperties(
@@ -472,12 +538,17 @@ internal class SettingsScreen : Screen, KoinComponent {
                     )
 
                     Spacer(Modifier.height(16.dp))
-                    Text(
+                    ClickableText(
                         text = message,
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.align(Alignment.Start),
-                        lineHeight = 15.sp,
-                        color = Color.Gray
+                        onClick = {
+                            message.getStringAnnotations(tag = "data policy", start = it, end = it)
+                                .firstOrNull()
+                                ?.let { stringAnnotation ->
+                                    uriHandler.openUri(stringAnnotation.item)
+                                }
+                        }
                     )
 
                     Spacer(Modifier.height(24.dp))
