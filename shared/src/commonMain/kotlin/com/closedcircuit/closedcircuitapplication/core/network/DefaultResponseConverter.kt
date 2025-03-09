@@ -33,7 +33,7 @@ class DefaultResponseConverter : SuspendResponseConverter {
         ktorfit: Ktorfit
     ): Any {
         return try {
-            val (info, response) = requestFunction()
+            val (_, response) = requestFunction()
             if (response.status.isSuccess()) {
                 val dataSerializer = typeData.typeArgs.first().typeInfo.type.serializer()
                 val json = Json { ignoreUnknownKeys = true }

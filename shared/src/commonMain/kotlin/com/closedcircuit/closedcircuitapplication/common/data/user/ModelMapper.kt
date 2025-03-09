@@ -1,6 +1,6 @@
 package com.closedcircuit.closedcircuitapplication.common.data.user
 
-import com.closedcircuit.closedcircuitapplication.beneficiary.data.user.dto.ApiUser
+import com.closedcircuit.closedcircuitapplication.common.data.user.dto.ApiUser
 import com.closedcircuit.closedcircuitapplication.common.domain.chat.ChatUser
 import com.closedcircuit.closedcircuitapplication.common.domain.country.Country
 import com.closedcircuit.closedcircuitapplication.common.domain.model.Currency
