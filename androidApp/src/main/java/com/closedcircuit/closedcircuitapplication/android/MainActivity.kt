@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.closedcircuit.closedcircuitapplication.EntryPoint
+import com.closedcircuit.closedcircuitapplication.ExternalUriHandler
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalImagePicker
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalShareHandler
 import com.closedcircuit.closedcircuitapplication.common.presentation.util.AndroidShareHandler
@@ -20,7 +21,6 @@ import com.closedcircuit.closedcircuitapplication.common.presentation.util.Image
 import com.closedcircuit.closedcircuitapplication.core.storage.storageDir
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
-import dev.theolm.rinku.compose.ext.Rinku
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,27 +33,23 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         storageDir = filesDir.path
         Firebase.initialize(applicationContext)
+        handleIntent(intent)
 
         setContent {
-            Rinku {
-                CompositionLocalProvider(
-                    LocalImagePicker provides ImagePickerFactory().createPicker(),
-                    LocalShareHandler provides AndroidShareHandler(LocalContext.current as ComponentActivity)
-                ) {
-                    EntryPoint(
-                        useDarkTheme = isSystemInDarkTheme(),
-                        dynamicColors = false,
-                    )
-                }
+            CompositionLocalProvider(
+                LocalImagePicker provides ImagePickerFactory().createPicker(),
+                LocalShareHandler provides AndroidShareHandler(LocalContext.current as ComponentActivity)
+            ) {
+                EntryPoint(
+                    useDarkTheme = isSystemInDarkTheme(),
+                    dynamicColors = false,
+                )
             }
         }
     }
 
     private fun handleIntent(intent: Intent) {
-//        val appLinkIntent: Intent = intent
-//        val appLinkData: Uri? = appLinkIntent.data
-//        val planId = appLinkData?.lastPathSegment
-
+        intent.data?.let { ExternalUriHandler.onNewUri(it.toString()) }
     }
 
     override fun onNewIntent(intent: Intent) {

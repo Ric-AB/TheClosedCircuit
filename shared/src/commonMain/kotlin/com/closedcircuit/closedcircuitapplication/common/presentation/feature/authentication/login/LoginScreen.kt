@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ID
@@ -55,16 +56,15 @@ import dev.icerock.moko.resources.compose.painterResource
 import dev.icerock.moko.resources.compose.stringResource
 import kotlinx.coroutines.flow.receiveAsFlow
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 internal class LoginScreen(private val planID: ID? = null) : Screen, KoinComponent,
     CustomScreenTransition by SlideOverTransition {
-    private val viewModel: LoginViewModel by inject()
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val rootNavigator = findRootNavigator(navigator)
+        val viewModel = getScreenModel<LoginViewModel>()
         val state = viewModel.state
         val messageBarState = rememberMessageBarState()
 

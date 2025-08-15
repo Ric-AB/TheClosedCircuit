@@ -27,9 +27,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="https" />
-                <data android:host="theclosedcircuit.com" />
-                <data android:pathPrefix="/plans/" />
+                <data
+                    android:host="theclosedcircuit.com"
+                    android:pathPrefix="/plans"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
     </application>

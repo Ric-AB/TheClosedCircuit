@@ -11,17 +11,14 @@ import SwiftUI
 import shared
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    let rinku = RinkuWrapper()
     
         func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-            rinku.onDeepLinkReceived(url: url.absoluteString)
             return true
         }
         
         func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
             if userActivity.activityType == NSUserActivityTypeBrowsingWeb, let url = userActivity.webpageURL {
                 let urlString = url.absoluteString
-                rinku.onDeepLinkReceivedActivity(userActivity: userActivity)
             }
             return true
         }

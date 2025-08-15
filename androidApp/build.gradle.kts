@@ -8,7 +8,7 @@ android {
     namespace = "com.closedcircuit.closedcircuitapplication"
     compileSdk = 34
     defaultConfig {
-        applicationId = "com.closedcircuit.closedcircuitapplication.new"
+        applicationId = "com.closedcircuit.closedcircuitapplication"
         minSdk = 26
         targetSdk = 33
         versionCode = 1

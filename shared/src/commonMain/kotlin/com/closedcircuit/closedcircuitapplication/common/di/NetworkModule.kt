@@ -32,7 +32,7 @@ val networkModule = module {
 private fun createKtorfit(client: HttpClient): Ktorfit {
     return Ktorfit.Builder()
         .httpClient(client)
-        .baseUrl("https://theclosedcircuit-staging.herokuapp.com/api/")
+        .baseUrl("https://theclosedcircuit-prod.herokuapp.com/api/") //https://theclosedcircuit-staging.herokuapp.com/api/
         .responseConverter(DefaultResponseConverter())
         .build()
 }
@@ -40,7 +40,7 @@ private fun createKtorfit(client: HttpClient): Ktorfit {
 private fun createNoAuthKtorfit(client: HttpClient): Ktorfit {
     return Ktorfit.Builder()
         .httpClient(client)
-        .baseUrl("https://theclosedcircuit-staging.herokuapp.com/api/")
+        .baseUrl("https://theclosedcircuit-prod.herokuapp.com/api/")
         .responseConverter(DefaultResponseConverter())
         .build()
 }

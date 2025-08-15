@@ -2,6 +2,7 @@ package com.closedcircuit.closedcircuitapplication.common.presentation.navigatio
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,14 +14,14 @@ import cafe.adriel.voyager.koin.getNavigatorScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.closedcircuit.closedcircuitapplication.ExternalUriHandler
 import com.closedcircuit.closedcircuitapplication.beneficiary.presentation.feature.BeneficiaryBottomTabs
-import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.common.domain.model.ProfileType
 import com.closedcircuit.closedcircuitapplication.common.domain.model.orDefault
 import com.closedcircuit.closedcircuitapplication.common.presentation.LocalCurrency
 import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.ScreenKeys.PROTECTED_NAVIGATOR
+import com.closedcircuit.closedcircuitapplication.common.presentation.navigation.screentransition.ScreenBasedTransition
 import com.closedcircuit.closedcircuitapplication.sponsor.presentation.feature.SponsorBottomTabs
-import dev.theolm.rinku.compose.ext.DeepLinkListener
 import org.koin.core.component.KoinComponent
 import kotlin.random.Random
 
@@ -45,9 +46,16 @@ internal class ProtectedNavigator(private val activeProfile: ProfileType) : Scre
         val currency = remember(rootState?.currency) { rootState?.currency.orDefault() }
 
         var planId by remember { mutableStateOf<String?>(null) }
-        DeepLinkListener {
-            planId = it.data.substringAfterLast("/")
+        DisposableEffect(Unit) {
+            ExternalUriHandler.listener = { uri ->
+                planId = uri.substringAfterLast("/")
+            }
+
+            onDispose {
+                ExternalUriHandler.listener = null
+            }
         }
+
 
         CompositionLocalProvider(LocalCurrency provides currency) {
             Navigator(initialScreen, key = PROTECTED_NAVIGATOR) { navigator ->
