@@ -32,7 +32,6 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            export(libs.rinku)
             baseName = "shared"
         }
     }
@@ -84,10 +83,6 @@ kotlin {
                 implementation(libs.ktor.client.logging)
 
                 api(libs.napier)
-
-                // deeplink
-                api(libs.rinku)
-                implementation(libs.rinku.compose.ext)
 
                 // kotlin ext
                 implementation(libs.kotlinx.collections)

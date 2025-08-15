@@ -44,7 +44,6 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.compose)
 
-    implementation(libs.rinku.compose.ext)
     implementation(libs.androidx.splash.screen)
     implementation(project(":shared"))
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
